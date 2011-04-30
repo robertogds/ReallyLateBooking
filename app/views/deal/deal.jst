@@ -1,0 +1,17 @@
+<div id="dialog" title="new task">
+<form>
+    <label for='title'>Title</label>
+    <input name='title' type='text' /> 
+    <label for='content'> Content</label>
+    <textarea name='content'><%= model.get('content') %></textarea>
+    <laber for='estimate'>Estimate</laber>
+     <select name='estimate'>
+        <option value="1">1</option>
+        <option value="3">3</option>
+        <option value="5">5</option>
+        <option value="8">8</option>
+        <option value="16">16</option>
+     </select>
+    <button><%= model.isNew() ? 'Create' : 'Save' %></button>
+</form>
+</div>

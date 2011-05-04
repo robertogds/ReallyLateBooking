@@ -5,7 +5,7 @@ var App = {
     init: function() {
         // Create our global collection of Deals.
         App.Deals = new App.Collections.Deals();
-        new App.Controllers.BacklogCtrl();
+        new App.Controllers.dealCtrl();
         Backbone.history.start();
     }
 };

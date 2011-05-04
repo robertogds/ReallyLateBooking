@@ -1,3 +1,13 @@
 # You can specialize this file for each language.
 # For example, for French create a messages.fr file
 #
+hotelName= Hotel Name
+active = Active
+city = City
+salePriceCents = Sale Price (In cents)
+priceCents = Normal Price (In cents)
+quantity = Quantity
+description = Description
+roomType = Room Type
+hotelCategory = Hotel Category
+address = Hotel Address

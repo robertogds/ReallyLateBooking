@@ -6,8 +6,8 @@ import play.*;
 import models.crudsiena.SienaSupport;
 import siena.*;
 
-@Table("tasks")
-public class Task extends SienaSupport {
+@Table("deals")
+public class Deal extends SienaSupport {
 	
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
@@ -22,12 +22,12 @@ public class Task extends SienaSupport {
 	public Integer hotelCategory;
 	public String address;
 	
-	public Task(String hotelName) {
+	public Deal(String hotelName) {
 		this.hotelName = hotelName;
 	}
 	
-	public static Query<Task> all() {
-    	return Model.all(Task.class);
+	public static Query<Deal> all() {
+    	return Model.all(Deal.class);
     }
 	
 	public String toString() {

@@ -1,0 +1,10 @@
+hotelName= Hotel
+active = Activa
+city = Ciudad
+salePriceCents = Precio Oferta (En céntimos)
+priceCents = Precio normal (En céntimos)
+quantity = Cantidad
+description = Descripción
+roomType = Tipo de Habitación
+hotelCategory = Categoría del hotel
+address = Dirección del hotel

@@ -9,8 +9,24 @@ import models.*;
 
 public class Application extends Controller {
 	
-	public static void index() {	   
-        render();
-    }
+	public static void index() { 
+		render(); 
+	} 
+	
+	public static void inline() { 
+		render(); 
+	}
+
+	public static void include() {
+		render();
+	}
+
+	public static void includeError() {
+		render();
+	}
+	
+	public static void inlineError() {
+		render();
+	}
 	
 }

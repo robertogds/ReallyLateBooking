@@ -7,6 +7,11 @@ GET     /                                       Application.index
 
 GET 	/admin									module:crudsiena
 
+# Deals
+
+GET 	/deals									Deals.listado(format:'json')
+
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
@@ -17,3 +22,5 @@ GET		/coffee/								module:coffee
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}
+
+

@@ -21,6 +21,7 @@ public class Deal extends SienaSupport {
 	public String roomType;
 	public Integer hotelCategory;
 	public String address;
+    public String image1;
 	
 	public Deal(String hotelName) {
 		this.hotelName = hotelName;

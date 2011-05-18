@@ -9,7 +9,7 @@ GET 	/admin									module:crudsiena
 
 # Deals
 
-GET 	/deals									Deals.listado(format:'json')
+GET 	/deals									Deals.iPhoneList(format:'json')
 
 
 # Ignore favicon requests

@@ -5,11 +5,17 @@ import play.mvc.*;
 
 import java.util.*;
 
+import jobs.Bootstrap;
+
+
 import models.*;
 
 public class Application extends Controller {
 	
 	public static void index() { 
+		//Workaround needed because jobs dont work on gae
+		Bootstrap job = new Bootstrap();
+		job.doJob();
 		render(); 
 	} 
 	

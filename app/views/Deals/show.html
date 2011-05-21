@@ -8,7 +8,20 @@
 	
 	<div class="objectForm">
 	#{form action:@save(keyVal), enctype:'multipart/form-data'}
-		#{crud.form /}
+		#{crud.form}
+		#{crud.custom 'city'}
+				    <label for="object_author">
+				        &{'city'}
+				    </label>
+				    <select id="object_city" name="object.city.id">
+				          <option value="">(Please select a value)</option>
+				         #{list items:models.City.all().fetch(), as:'city'}
+				          	<option value="${city.id}"  ${object.city.id == city.id ? 'selected':''}>${city.name}</option>
+						 #{/list}
+				    </select>
+		    #{/crud.custom}
+		    
+	    #{/crud.form}
 		<p class="crudButtons">
 			<input type="submit" name="_save" value="&{'crud.save', type.modelName}" />
 			<input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />

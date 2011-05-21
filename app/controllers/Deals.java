@@ -10,18 +10,19 @@ import siena.*;
 @CRUD.For(Deal.class)
 public class Deals extends controllers.CRUD {
 	
-	public static void iPhoneList() {
-	        Collection<Deal> deals = fetchDeals();
+	public static void iPhoneList(String city) {
+	        Collection<Deal> deals = fetchDeals(city);
+	        
 			for (Deal deal: deals){
+				Logger.info("deal" + deal.hotelName , deal);
 				prepareImagesRoutes(deal);
 			}
 	        renderJSON(deals);
 	}
 	
-	private static Collection<Deal> fetchDeals() {
-	        Collection<Deal> deals = Deal.all()
-				.filter("active", true)
-				.fetch(3);
+	private static Collection<Deal> fetchDeals(String cityName) {
+			City city = City.findByName(cityName);
+	        Collection<Deal> deals = Deal.findActiveDealsByCity(city);
 	        return deals;
 	}
 
@@ -36,27 +37,31 @@ public class Deals extends controllers.CRUD {
 		String imgDirUrl = Play.configuration.getProperty("img.dir.url");
 		
 		//Concatenate the url to the image with the appropiate size
-		deal.mainImageBig = imgDirUrl + concatImageSize(deal.mainImageBig, detailSize);
-		deal.mainImageSmall = imgDirUrl + concatImageSize(deal.mainImageSmall, listSize);
-		deal.image1 = imgDirUrl + concatImageSize(deal.image1, completeSize);
-		deal.image2 = imgDirUrl + concatImageSize(deal.image2, completeSize);
-		deal.image3 = imgDirUrl + concatImageSize(deal.image3, completeSize);
-		deal.image4 = imgDirUrl + concatImageSize(deal.image4, completeSize);
-		deal.image5 = imgDirUrl + concatImageSize(deal.image5, completeSize);
+		deal.mainImageBig = deal.mainImageBig != null ? imgDirUrl + concatImageSize(deal.mainImageBig, detailSize) : null;
+		deal.mainImageSmall = deal.mainImageSmall != null ? imgDirUrl + concatImageSize(deal.mainImageSmall, listSize) : null;
+		deal.image1 = deal.image1 != null ? imgDirUrl + concatImageSize(deal.image1, completeSize) : null;
+		deal.image2 = deal.image2 != null ? imgDirUrl + concatImageSize(deal.image2, completeSize) : null;
+		deal.image3 = deal.image3 != null ? imgDirUrl + concatImageSize(deal.image3, completeSize) : null;
+		deal.image4 = deal.image4 != null ? imgDirUrl + concatImageSize(deal.image4, completeSize) : null;
+		deal.image5 = deal.image5 != null ? imgDirUrl + concatImageSize(deal.image5, completeSize) : null;
 	}
     
 	/*
 	 * Modify the image name to fit the required size
 	 * */
 	private static String concatImageSize(String image, String size){
-			String[] temp;
-		  	String delimiter = "\\.";
-		  	temp = image.split(delimiter);
-		  	try {
-				image = temp[0] + size + "." + temp[1];
-			} catch (ArrayIndexOutOfBoundsException e) {
-				Logger.error(e, "Incorrect image format, be sure it has the image format extension");
+			if (!image.isEmpty()){
+				String[] temp;
+			  	String delimiter = "\\.";
+			  	temp = image.split(delimiter);
+			  	System.out.println("Imagen:" + image);
+			  	try {
+					image = temp[0] + size + "." + temp[1];
+				} catch (Exception e) {
+					Logger.error("Incorrect image format, be sure it has the image format extension", e);
+				}
 			}
+			
 			return image;
 	}
 	

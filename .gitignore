@@ -41,3 +41,4 @@ eclipse
 .settings
 .project
 .classpath
+war/WEB-INF/appengine-generated/datastore-indexes-auto.xml

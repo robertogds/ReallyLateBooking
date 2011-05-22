@@ -1,6 +1,10 @@
 package models;
 
 import java.util.*;
+
+import play.data.validation.Email;
+import play.data.validation.Password;
+import play.data.validation.Required;
 import models.crudsiena.SienaSupport;
 import siena.Generator;
 import siena.Id;
@@ -13,12 +17,19 @@ public class User extends SienaSupport {
  
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
+	
+	@Required
+    @Email
     public String email;
+	@Required
+    @Password
     public String password;
     public String firstName;
     public String lastName;
     public boolean isAdmin;
     public Date created;
+   
+    
     
     public User(String email, String password, String firstName, String lastName) {
         this.email = email;

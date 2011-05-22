@@ -16,7 +16,7 @@
 				    <select id="object_city" name="object.city.id">
 				          <option value="">(Please select a value)</option>
 				         #{list items:models.City.all().fetch(), as:'city'}
-				          	<option value="${city.id}"  ${object.city.id == city.id ? 'selected':''}>${city.name}</option>
+				          	<option value="${city.id}"  ${(object.city != null && object.city.id == city.id) ? 'selected':''}>${city.name}</option>
 						 #{/list}
 				    </select>
 		    #{/crud.custom}

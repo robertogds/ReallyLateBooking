@@ -9,7 +9,11 @@
 	</div>
 
 	<div id="crudListTable">
-		#{crud.table fields:['hotelName', 'city', 'salePriceCents'] /}
+		#{crud.table fields:['hotelName', 'city', 'priceCents', 'salePriceCents', 'quantity', 'active'] }
+		  #{crud.custom 'city'}
+		  	 ${models.City.findById(object.city.id) }
+		   #{/crud.custom}
+   		#{/crud.table}
 	</div>
 	
 	<div id="crudListPagination">

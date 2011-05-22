@@ -2,9 +2,11 @@ package models;
 
 import java.util.*;
 
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import play.*;
+import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import models.crudsiena.SienaSupport;
 import siena.*;
@@ -18,19 +20,24 @@ public class Deal extends SienaSupport {
 	@Required
 	public String hotelName;
 	public boolean active;
-	@Required
 	@Index("city_index")
     public City city;
+	@Required
 	public Integer salePriceCents;
 	public Integer priceCents;
 	public Integer quantity;
+	@Lob
+    @Required
+    @MaxSize(10000)
 	public String description;
 	public String roomType;
 	public Integer hotelCategory;
 	public String address;
 	public String latitude;
 	public String longitude;
+	@Required
     public String mainImageBig;
+	@Required
     public String mainImageSmall;
 	public String image1;
 	public String image2;

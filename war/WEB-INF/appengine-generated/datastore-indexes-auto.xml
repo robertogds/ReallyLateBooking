@@ -1,12 +1,4 @@
-<!-- Indices written at Sat, 21 May 2011 12:31:10 CEST -->
+<!-- Indices written at Sat, 21 May 2011 17:25:37 CEST -->
 
-<datastore-indexes>
+<datastore-indexes/>
 
-    <!-- Used 4 times in query history -->
-    <datastore-index kind="deals" ancestor="false" source="auto">
-        <property name="active" direction="asc"/>
-        <property name="id" direction="asc"/>
-        <property name="priceCents" direction="desc"/>
-    </datastore-index>
-
-</datastore-indexes>

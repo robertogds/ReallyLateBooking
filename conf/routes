@@ -5,6 +5,8 @@
 # Import Secure routes
 *       /                                       module:secure
 
+
+
 # Home page
 GET     /                                       Application.index
 
@@ -16,6 +18,13 @@ GET 	/deals/{city}							Deals.iPhoneList(format:'json')
 
 # Cities
 GET 	/cities							        Cities.cityList(format:'json')
+
+# Users Rest
+GET     /users                					Users.list
+GET     /user/{id}            					Users.show
+POST    /users                					Users.create
+PUT     /user/{id}            					Users.update
+DELETE  /user/{id}            					Users.delete
 
 
 # Ignore favicon requests

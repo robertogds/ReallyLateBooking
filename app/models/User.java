@@ -2,6 +2,7 @@ package models;
 
 import java.util.*;
 
+
 import play.data.validation.Email;
 import play.data.validation.Password;
 import play.data.validation.Required;
@@ -11,9 +12,9 @@ import siena.Id;
 import siena.Model;
 import siena.Query;
 import siena.Table;
- 
+
 @Table("users")
-public class User extends SienaSupport {
+public class User extends SienaSupport{
  
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
@@ -57,9 +58,24 @@ public class User extends SienaSupport {
     public static User findById(Long id) {
         return all().filter("id", id).get();
     }
+    
+    public static User connect(String email, String password) {
+        return findByEmailAndPassword(email, password);
+    }
+    
+    private static User findByEmailAndPassword(String email, String password){
+    	return User.all().filter("email", email).filter("password", password).get();
+    }
  
     public String toString() {
         return email;
     }
- 
+
+	public void updateDetails(User user) {
+		this.email = user.email.trim().isEmpty() ? this.email : user.email;
+		this.password = user.password.trim().isEmpty() ? this.password : user.password;
+		this.firstName = user.firstName.trim().isEmpty() ? this.firstName : user.firstName;
+		this.lastName = user.lastName.trim().isEmpty() ? this.lastName : user.lastName;
+	}
+
 }

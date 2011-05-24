@@ -2,13 +2,11 @@ package controllers;
 
 import java.util.*;
 import models.*;
-import models.crudsiena.*;
 import play.*;
-import play.mvc.*;
-import siena.*;
+import play.mvc.Controller;
 
-@CRUD.For(City.class)
-public class Cities extends controllers.CRUD {
+
+public class Cities  extends Controller {
 	
 	public static void cityList() {
 	        Collection<City> cities = City.all().fetch();

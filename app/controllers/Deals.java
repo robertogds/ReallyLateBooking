@@ -2,13 +2,11 @@ package controllers;
 
 import java.util.*;
 import models.*;
-import models.crudsiena.*;
 import play.*;
-import play.mvc.*;
-import siena.*;
+import play.mvc.Controller;
 
-@CRUD.For(Deal.class)
-public class Deals extends controllers.CRUD {
+
+public class Deals extends Controller {
 	
 	public static void iPhoneList(String city) {
 	        Collection<Deal> deals = fetchDeals(city);

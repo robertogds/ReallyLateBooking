@@ -30,6 +30,9 @@ public class Deal extends SienaSupport {
     @Required
     @MaxSize(10000)
 	public String description;
+	@Required
+    @MaxSize(500)
+	public String shortDescription;
 	public String roomType;
 	public Integer hotelCategory;
 	public String address;

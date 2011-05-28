@@ -6,6 +6,7 @@ import java.util.*;
 import play.data.validation.Email;
 import play.data.validation.Password;
 import play.data.validation.Required;
+import play.libs.OAuth.TokenPair;
 import models.crudsiena.SienaSupport;
 import siena.Generator;
 import siena.Id;
@@ -29,8 +30,10 @@ public class User extends SienaSupport{
     public String lastName;
     public boolean isAdmin;
     public Date created;
-   
     
+    public String token;
+    public String secret;   
+
     
     public User(String email, String password, String firstName, String lastName) {
         this.email = email;
@@ -77,5 +80,15 @@ public class User extends SienaSupport{
 		this.firstName = user.firstName.trim().isEmpty() ? this.firstName : user.firstName;
 		this.lastName = user.lastName.trim().isEmpty() ? this.lastName : user.lastName;
 	}
+	
+    public TokenPair getTokenPair() {
+        return new TokenPair(token, secret);
+    }
+
+    public void setTokenPair(TokenPair tokens) {
+        this.token = tokens.token;
+        this.secret = tokens.secret;
+        this.update();
+    }
 
 }

@@ -1,11 +1,14 @@
 import org.junit.*;
 
+import com.google.gson.JsonObject;
+
 import controllers.Deals;
 
 import java.util.*;
 
 import play.Logger;
 import play.db.Model;
+import play.libs.WS;
 import play.test.*;
 import models.*;
 
@@ -23,6 +26,7 @@ public class BasicTest extends UnitTest {
 			city.delete();
 		}
 	}
+	
 	
 	 
 	@Test

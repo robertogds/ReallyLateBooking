@@ -1,5 +1,6 @@
 package controllers;
 
+import play.Logger;
 import models.*;
 
 public class Security extends Secure.Security {

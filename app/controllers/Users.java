@@ -30,4 +30,6 @@ public class Users extends Controller {
 	    User user = User.findById(id);
 	    renderJSON(user);
 	}
+	
+	
 }

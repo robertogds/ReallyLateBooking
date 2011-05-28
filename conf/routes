@@ -5,8 +5,6 @@
 # Import Secure routes
 *       /                                       module:secure
 
-
-
 # Home page
 GET     /                                       Application.index
 
@@ -20,6 +18,7 @@ GET 	/deals/{city}							Deals.iPhoneList(format:'json')
 GET 	/cities							        Cities.cityList(format:'json')
 
 # Users Rest
+POST    /users/login                            Application.login
 GET     /users                					Users.list
 GET     /user/{id}            					Users.show
 POST    /users                					Users.create
@@ -33,7 +32,6 @@ GET     /favicon.ico                            404
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
-GET		/coffee/								module:coffee
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}

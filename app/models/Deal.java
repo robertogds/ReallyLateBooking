@@ -1,5 +1,7 @@
 package models;
 
+import helper.ImageHelper;
+
 import java.util.*;
 
 import javax.persistence.Lob;
@@ -74,6 +76,14 @@ public class Deal extends SienaSupport {
 	
 	public String toString() {
 		return hotelName;
+	}
+	
+	public void fecthCity(){
+		this.city = City.findById(this.city.id);
+	}
+	
+	public void prepareImages(){
+		ImageHelper.prepareImagesRoutes(this);
 	}
 }
 

@@ -45,26 +45,6 @@ public class ApplicationTest extends FunctionalTest {
     }
     
     @Test
-	public void loginUser(){    	
-    	// Create a new user and save it
-	    User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
-	    user.insert();	    
-	    String url = Router.reverse("Application.login").url;
-	    //Test correct login
-	    Response response = POST(url+"?json=" + userJson);
-	    String json = response.out.toString();
-	    StatusMessage message = new Gson().fromJson(json, StatusMessage.class);
-	    assertEquals((Integer)Http.StatusCode.OK,(Integer) response.status);
-	    assertEquals((Integer)Http.StatusCode.OK,(Integer) message.status);
-	    //Test incorrect login
-	    response = POST(url+"?json=" + userJsonB);
-	    json = response.out.toString();
-	    message = new Gson().fromJson(json, StatusMessage.class);
-	    assertEquals((Integer)Http.StatusCode.OK,(Integer) response.status);
-	    assertEquals((Integer)Http.StatusCode.NOT_FOUND,(Integer) message.status);
-	}
-    
-    @Test
 	public void getDealListForIphone(){
     	City madrid = new City("Madrid");
     	madrid.insert();
@@ -83,5 +63,60 @@ public class ApplicationTest extends FunctionalTest {
         assertContentType("application/json", response);
         assertCharset("utf-8", response);
 	}
+    
+    @Test
+	public void loginUser(){    	
+    	// Create a new user and save it
+	    User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
+	    user.insert();	    
+	    String url = Router.reverse("Application.login").url;
+	    //Test correct login
+	    Response response = POST(url+"?json=" + userJson);
+	    String json = response.out.toString();
+	    StatusMessage message = new Gson().fromJson(json, StatusMessage.class);
+	    assertIsOk(response);
+	    assertContentType("application/json", response);
+	    assertEquals((Integer)Http.StatusCode.OK,(Integer) message.status);
+	    //Test incorrect login
+	    response = POST(url+"?json=" + userJsonB);
+	    json = response.out.toString();
+	    message = new Gson().fromJson(json, StatusMessage.class);
+	    assertIsOk(response);
+	    assertContentType("application/json", response);
+	    assertEquals((Integer)Http.StatusCode.NOT_FOUND,(Integer) message.status);
+	}
+    
+    @Test
+    public void createUserFromJson(){
+    	// Create a new user and save it
+	    User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
+	    String json = new Gson().toJson(user);	    
+	    String url = Router.reverse("Users.create").url;
+	    //Test correct creation
+	    Response response = POST(url+"?json=" + json);
+	    String jsonResponse = response.out.toString();
+	    User newUser = new Gson().fromJson(jsonResponse, User.class);
+	    assertIsOk(response);
+	    assertContentType("application/json", response);
+	    assertNotNull(newUser.id);
+	    assertEquals("bob@gmail.com", newUser.email);
+    }
+    
+    @Test
+    public void updateUserFromJson(){
+    	// Create a new user and save it
+	    new User("bob@gmail.com", "secret", "Bob", "Smith").insert();
+	    User user = User.findByEmail("bob@gmail.com");
+	    user.firstName = "Pablo";
+	    String json = new Gson().toJson(user);	    
+	    String url = Router.reverse("Users.update").url;
+	    //Test correct update
+	    Response response = POST(url+"?json=" + json);
+	    String jsonResponse = response.out.toString();
+	    User newUser = new Gson().fromJson(jsonResponse, User.class);
+	    assertIsOk(response);
+	    assertContentType("application/json", response);
+	    assertEquals("Pablo", newUser.firstName);
+    }
     
 }

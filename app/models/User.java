@@ -13,19 +13,23 @@ import siena.Id;
 import siena.Model;
 import siena.Query;
 import siena.Table;
+import siena.Unique;
+
 
 @Table("users")
 public class User extends SienaSupport{
  
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
-	
+   
+	@Unique("email")
 	@Required
     @Email
     public String email;
 	@Required
     @Password
     public String password;
+    
     public String firstName;
     public String lastName;
     public boolean isAdmin;
@@ -33,7 +37,6 @@ public class User extends SienaSupport{
     
     public String token;
     public String secret;   
-
     
     public User(String email, String password, String firstName, String lastName) {
         this.email = email;

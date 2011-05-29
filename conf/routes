@@ -11,18 +11,18 @@ GET     /                                       Application.index
 GET 	/admin									module:crudsiena
 
 # Deals
-
+GET 	/deals/list/{city}						Deals.list
 GET 	/deals/{city}							Deals.iPhoneList(format:'json')
 
 # Cities
-GET 	/cities							        Cities.cityList(format:'json')
+GET 	/cities							    	Cities.cityList(format:'json')
 
 # Users Rest
 POST    /users/login                            Application.login
-GET     /users                					Users.list
-GET     /user/{id}            					Users.show
-POST    /users                					Users.create
-PUT     /user/{id}            					Users.update
+GET     /users                					Users.list(format:'json')
+GET     /user/{id}            					Users.show(format:'json')
+POST    /users               					Users.create(format:'json')
+PUT     /user/{id}            					Users.update(format:'json')
 DELETE  /user/{id}            					Users.delete
 
 
@@ -35,5 +35,4 @@ GET     /public/                                staticDir:public
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}
-
 

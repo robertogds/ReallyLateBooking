@@ -63,7 +63,7 @@ public class Deal extends SienaSupport {
 	}
 	
 	public static List<Deal> findActiveDealsByCity(City city){
-		return Deal.all().filter("city", city).filter("active", Boolean.TRUE).order("-priceCents").fetch(3);
+		return all().filter("city", city).filter("active", Boolean.TRUE).order("-priceCents").fetch(3);
 	}
 	
 	public static List<Deal> findByCity(City city) {
@@ -71,7 +71,7 @@ public class Deal extends SienaSupport {
     }
 	
 	public static Query<Deal> all() {
-    	return Model.all(Deal.class);
+    	return Deal.all(Deal.class);
     }
 	
 	public String toString() {

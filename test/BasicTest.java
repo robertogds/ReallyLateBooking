@@ -44,18 +44,6 @@ public class BasicTest extends UnitTest {
 	    assertEquals("Hotel Ritz", hotel.hotelName);
 	}
 	
-	@Test
-	public void createAndRetrieveUser() {
-	    // Create a new user and save it
-	    new User("bob@gmail.com", "secret", "Bob", "Smith").insert();
-	    
-	    // Retrieve the user with e-mail address bob@gmail.com
-	    User bob = User.findByEmail("bob@gmail.com");
-	    
-	    // Test 
-	    assertNotNull(bob);
-	    assertEquals("Bob", bob.firstName);
-	}
 	
 	@Test
 	public void findDealsFromCity() {

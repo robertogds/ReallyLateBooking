@@ -1,19 +1,13 @@
 #{extends 'main.html' /}
-#{set title:'Home' /}
+#{set title: 'Ofertas' /}
 
 <section id="list">
 		<div class="toolbar">
-			<!-- <a href="#cities" class="button">Cities</a> -->
-			<h1>Ciudades</h1>
+			<a href="/" class="button">Cities</a>
+			<h1>${city}</h1>
 		</div>
 				
 		<ul id="items_list" class="list">
-			#{list items:cities, as:'city' }
-		        <h1>${city.name}</h1>
-				<p>
-				   <a href="@{Deals.list(city.name)}">Ver hoteles</a>
-				</p>
-		    #{/list}
 		</ul>
 		<div class="footer">
 			<ul>
@@ -36,9 +30,10 @@
 		</div>
 </section>
 	<div id="endOfPage"></div> <!-- I need it to add items details -->
-
-<script>
+	
+		<script>
 			$(document).ready(function(){	
+				loadItemsList('@{Deals.iPhoneList()}','${city}');
 				
 				$("body > section").first().addClass("current");
 	
@@ -48,5 +43,22 @@
 					$(current).addClass("current");
 				});
 	
+				// go to item detail when clicking on a item list element
+				$("#items_list li").live('tap click', function(e){
+					e.preventDefault();
+					e.stopPropagation();
+					
+					var curTaget = $(e.currentTarget);
+					var section = curTaget.closest('section');
+					var link = curTaget.find("a.moreInfo");
+					var prev_element = "#"+(section.removeClass("current").addClass("reverse").attr("id"));
+					var t = $(link.attr("href"));
+					var t_id = link.attr("rel");
+					
+					
+					loadItemDetail(t_id);
+					
+					setBackButton(prev_element, t);
+				});
 			});
 		</script>

@@ -8,6 +8,10 @@ import play.mvc.Controller;
 
 public class Deals extends Controller {
 	
+	public static void list(String city) {
+        render(city);
+	}
+	
 	public static void iPhoneList(String city) {
 	        Collection<Deal> deals = fetchDeals(city);	        
 			for (Deal deal: deals){

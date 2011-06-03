@@ -65,12 +65,32 @@ public class ApplicationTest extends FunctionalTest {
 	}
     
     @Test
+    public void validateUser(){
+    	// Create a new user and save it
+	    User user = new User("pablopr@gmail.com", "secret", "Bob", "Smith");
+	    user.insert();	
+	    user = User.findById(user.id);
+	    assertFalse(user.validated);
+	    String url = Router.reverse("Application.validate").url;
+	    //Test correct validation
+	    Response response = GET(url +"/" + user.validationCode);
+	    assertIsOk(response);
+	    User userValidated = User.findById(user.id);
+	    
+	    assertTrue(userValidated.validated);
+    }
+    
+    @Test
 	public void loginUser(){    	
     	// Create a new user and save it
 	    User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
-	    user.insert();	    
-	    String url = Router.reverse("Application.login").url;
+	    user.insert();	
+	    //We need to validate email before login
+	    String validateUrl = Router.reverse("Application.activate").url + "/" + user.validationCode;
+	    Logger.debug("Validation code: " + validateUrl);
+	    GET(validateUrl);
 	    //Test correct login
+	    String url = Router.reverse("Application.login").url;
 	    Response response = POST(url+"?json=" + userJson);
 	    String json = response.out.toString();
 	    StatusMessage message = new Gson().fromJson(json, StatusMessage.class);
@@ -89,7 +109,7 @@ public class ApplicationTest extends FunctionalTest {
     @Test
     public void createUserFromJson(){
     	// Create a new user and save it
-	    User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
+	    User user = new User("pablopr@gmail.com", "secret", "Bob", "Smith");
 	    String json = new Gson().toJson(user);	    
 	    String url = Router.reverse("Users.create").url;
 	    //Test correct creation
@@ -99,7 +119,7 @@ public class ApplicationTest extends FunctionalTest {
 	    assertIsOk(response);
 	    assertContentType("application/json", response);
 	    assertNotNull(newUser.id);
-	    assertEquals("bob@gmail.com", newUser.email);
+	    assertEquals("pablopr@gmail.com", newUser.email);
     }
     
     @Test

@@ -26,6 +26,8 @@ public class User extends SienaSupport{
 	@Required
     @Email
     public String email;
+	public String validationCode;
+	public boolean validated;
 	@Required
     @Password
     public String password;
@@ -52,6 +54,15 @@ public class User extends SienaSupport{
         this.lastName = lastName;
         this.isAdmin = isAdmin;
     }
+       
+    
+    @Override
+	public void insert() {
+    	this.validated = false;
+        this.validationCode = UUID.randomUUID().toString();
+        this.token = UUID.randomUUID().toString();
+    	super.insert();
+	}
     
     public static User findByEmail(String email){
     	return User.all().filter("email", email).get();
@@ -70,7 +81,7 @@ public class User extends SienaSupport{
     }
     
     private static User findByEmailAndPassword(String email, String password){
-    	return User.all().filter("email", email).filter("password", password).get();
+    	return User.all().filter("email", email).filter("validated", true).filter("password", password).get();
     }
  
     public String toString() {
@@ -83,15 +94,5 @@ public class User extends SienaSupport{
 		this.firstName = user.firstName.trim().isEmpty() ? this.firstName : user.firstName;
 		this.lastName = user.lastName.trim().isEmpty() ? this.lastName : user.lastName;
 	}
-	
-    public TokenPair getTokenPair() {
-        return new TokenPair(token, secret);
-    }
-
-    public void setTokenPair(TokenPair tokens) {
-        this.token = tokens.token;
-        this.secret = tokens.secret;
-        this.update();
-    }
 
 }

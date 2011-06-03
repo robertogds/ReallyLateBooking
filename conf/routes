@@ -19,6 +19,7 @@ GET 	/cities							    	Cities.cityList(format:'json')
 
 # Users Rest
 POST    /users/login                            Application.login
+GET     /users/activate/{code}                  Application.activate
 GET     /users                					Users.list(format:'json')
 GET     /user/{id}            					Users.show(format:'json')
 POST    /users               					Users.create(format:'json')

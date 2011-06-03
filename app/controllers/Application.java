@@ -5,6 +5,7 @@ import play.exceptions.UnexpectedException;
 import play.mvc.*;
 import play.mvc.Http.Request;
 import play.mvc.Http.Response;
+import play.mvc.results.Ok;
 import play.mvc.results.Result;
 
 
@@ -12,6 +13,8 @@ import helper.StatusMessage;
 
 import java.lang.reflect.Method;
 import java.util.*;
+
+import notifiers.Mails;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -37,17 +40,32 @@ public class Application extends Controller {
 	} 
 	
 	public static void login(String json) { 
-		Logger.debug(json);
-		User user = new Gson().fromJson(json, User.class);
+		String body = json != null ? json : params.get("body");
+		Logger.debug("JSON received: " + body);
 		
-		Logger.debug("Authenticate result: " + Security.authenticate(user.email, user.password));
+		if (body != null){
+			User user = new Gson().fromJson(body, User.class);
+			
+			Logger.debug("Authenticate result: " + Security.authenticate(user.email, user.password));
+			
+			if (Security.authenticate(user.email, user.password)){
+				renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", "user is logged"));
+			}
+		}
 		
-		if (Security.authenticate(user.email, user.password)){
-			renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", "user is logged"));
+		renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", "user or password incorrect"));
+	}
+	
+	public static void activate(String code){
+		Logger.debug("validatind user with code: " + code);
+		User user = User.all().filter("validationCode", code).get();
+		if (user != null){
+			Logger.debug("User is not null");
+			user.validated = true;
+			user.update();
+			Mails.welcome(user);
 		}
-		else{
-			renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", "user or password incorrect"));
-		}
+		render(user);
 	}
 	
 	

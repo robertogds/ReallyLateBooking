@@ -1,0 +1,15 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+<h1>Maquetar e internacionalizar esto</h1>
+%{
+     if (user != null) { 
+}%
+     <p>El email ${user.email} ha sido validado</p>
+%{
+     }else{
+}%
+	<p>C—digo de validaci—n incorrecto</p>
+%{
+     }
+}%

@@ -42,7 +42,7 @@ function fillItemsList(d){
 	for (i=0;i<d.length;i++){
 		itemHTML 	+= 	"<li class='pf type_" + d[i].roomType + "'>";
 		itemHTML 	+=	"	<div class='pf_l'>";
-		itemHTML	+=	"		<div><img src='img/hotels/" + d[i].mainImageBig +".jpg'/></div>";
+		itemHTML	+=	"		<div><img src='" + d[i].mainImageSmall +"'/></div>";
 		itemHTML	+=	"  	</div>";
 		itemHTML	+=	"  	<div class='pf_r'>";
 		itemHTML 	+=	"	  <h2><a href='#item_" + d[i].id + "' rel='"+d[i].id+"' class='moreInfo'>" + d[i].hotelName + "</a></h2>";

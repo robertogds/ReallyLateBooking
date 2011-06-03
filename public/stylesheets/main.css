@@ -204,8 +204,8 @@ right: auto;
 	height:25px;
 	background: url(../images/layout/sp.png) 0 -44px no-repeat;
 }
-	.type_2 .arrow{	background-position: -26px -44px; }
-	.type_3 .arrow{	background-position: -52px -44px; }
+	.type_elegante .arrow{	background-position: -26px -44px; }
+	.type_comfort .arrow{	background-position: -52px -44px; }
 
 .type {
 	display:block;
@@ -219,8 +219,8 @@ right: auto;
 	border-top-left-radius: 4px 4px;
 	border-top-right-radius: 4px 4px;
 }
-	.type_2 .type { background-color:#C6BCD1;}
-	.type_3 .type { background-color:#A3C0D3;}
+	.type_elegante .type { background-color:#C6BCD1;}
+	.type_comfort .type { background-color:#A3C0D3;}
 	
 	.type span {
 		background: url(../images/layout/sp.png) 0 -20px no-repeat;
@@ -229,8 +229,8 @@ right: auto;
 		display:block;
 		margin-left:10px;
 	}
-		.type_1 .type span { background-position: -116px -20px; width:32px; margin-left:23px;}
-		.type_3 .type span { background-position: -59px -20px;}
+		.type_lujo .type span { background-position: -116px -20px; width:32px; margin-left:23px;}
+		.type_comfort .type span { background-position: -59px -20px;}
 	
 #items_list .price_mod {
 	float:left;

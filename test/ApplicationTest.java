@@ -9,11 +9,14 @@ import org.junit.Before;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import controllers.Deals;
 import play.Logger;
 import play.test.*;
 import play.libs.WS;
+import play.libs.WS.HttpResponse;
+import play.libs.WS.WSRequest;
 import play.mvc.*;
 import play.mvc.Http.*;
 import models.*;
@@ -70,13 +73,12 @@ public class ApplicationTest extends FunctionalTest {
 	    User user = new User("pablopr@gmail.com", "secret", "Bob", "Smith");
 	    user.insert();	
 	    user = User.findById(user.id);
-	    assertFalse(user.validated);
-	    String url = Router.reverse("Application.validate").url;
+	    //assertFalse(user.validated); Not now because we've disabled validation
+	    String activateUrl = Router.reverse("Users.activate").url;
+	    GET(activateUrl+"/" +  user.validationCode);
+	    Logger.debug("### Validating: " + activateUrl+"/" +  user.validationCode);
 	    //Test correct validation
-	    Response response = GET(url +"/" + user.validationCode);
-	    assertIsOk(response);
 	    User userValidated = User.findById(user.id);
-	    
 	    assertTrue(userValidated.validated);
     }
     
@@ -86,9 +88,9 @@ public class ApplicationTest extends FunctionalTest {
 	    User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
 	    user.insert();	
 	    //We need to validate email before login
-	    String validateUrl = Router.reverse("Application.activate").url + "/" + user.validationCode;
-	    Logger.debug("Validation code: " + validateUrl);
-	    GET(validateUrl);
+	    String activateUrl = Router.reverse("Users.activate").url;
+	    GET(activateUrl+"/" +  user.validationCode);
+	    Logger.debug("### Validating: " + activateUrl+"/" +  user.validationCode);
 	    //Test correct login
 	    String url = Router.reverse("Application.login").url;
 	    Response response = POST(url+"?json=" + userJson);
@@ -110,12 +112,13 @@ public class ApplicationTest extends FunctionalTest {
     public void createUserFromJson(){
     	// Create a new user and save it
 	    User user = new User("pablopr@gmail.com", "secret", "Bob", "Smith");
-	    String json = new Gson().toJson(user);	    
+	    String json = new Gson().toJson(user,User.class);	    
 	    String url = Router.reverse("Users.create").url;
 	    //Test correct creation
 	    Response response = POST(url+"?json=" + json);
 	    String jsonResponse = response.out.toString();
-	    User newUser = new Gson().fromJson(jsonResponse, User.class);
+	    StatusMessage message = new Gson().fromJson(jsonResponse, StatusMessage.class);
+	    User newUser = (User) message.content;
 	    assertIsOk(response);
 	    assertContentType("application/json", response);
 	    assertNotNull(newUser.id);

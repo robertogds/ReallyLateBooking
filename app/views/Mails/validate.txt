@@ -1,5 +1,5 @@
 Hello ${user.firstName}, 
 
-Validate your account clicking this link: @@{application.validate}/${user.validationCode}
+Validate your account clicking this link: @@{application.activate}/${user.validationCode}
 
 thanks!

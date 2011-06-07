@@ -2,20 +2,19 @@ package models;
 
 import helper.ImageHelper;
 
-import java.util.*;
+import java.util.List;
 
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-
-import play.*;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
-import models.crudsiena.SienaSupport;
-import siena.*;
-import siena.embed.*;
+import siena.Generator;
+import siena.Id;
+import siena.Index;
+import siena.Model;
+import siena.Query;
+import siena.Table;
 
 @Table("deals")
-public class Deal extends SienaSupport {
+public class Deal extends Model {
 	
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
@@ -28,7 +27,6 @@ public class Deal extends SienaSupport {
 	public Integer salePriceCents;
 	public Integer priceCents;
 	public Integer quantity;
-	@Lob
     @Required
     @MaxSize(10000)
 	public String description;

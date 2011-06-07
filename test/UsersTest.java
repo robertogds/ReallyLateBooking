@@ -15,6 +15,8 @@ import com.google.gson.Gson;
 import controllers.oauth.ApiSecurer;
 
 import play.Logger;
+import play.data.validation.Valid;
+import play.data.validation.Validation;
 import play.test.UnitTest;
 
 
@@ -37,6 +39,21 @@ public class UsersTest  extends UnitTest {
 	    // Test 
 	    assertNotNull(bob);
 	    assertEquals("Bob", bob.firstName);
+	}
+	
+	@Test
+	public void createIdenticalUsers() {
+	    // Create a new user and save it
+	    new User("bob@gmail.com", "secret", "Bob", "Smith").insert();
+	    User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
+	    if (user.emailValid()){
+	    	user.insert();
+	    }
+	    // Retrieve number of users with e-mail address bob@gmail.com
+	    int count = User.all().filter("email", "bob@gmail.com").count();
+	   
+	    // Test 
+	    assertEquals(1, count);
 	}
 	
 	@Test

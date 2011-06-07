@@ -1,5 +1,7 @@
 package helper;
 
+import models.User;
+
 
 /**
  * @author pablopr
@@ -9,11 +11,19 @@ public class StatusMessage {
 	   public int status;
 	   public String message;
 	   public String detail;
+	   public User content;
 
 	   public StatusMessage(int status, String message, String detail) {
 	      this.status = status;
 	      this.message = message;
 	      this.detail = detail;
 	   }
+	   
+	   public StatusMessage(int status, String message, String detail, User content) {
+		      this.status = status;
+		      this.message = message;
+		      this.detail = detail;
+		      this.content = content;
+		   }
 	   
 }

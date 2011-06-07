@@ -6,7 +6,6 @@ import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
 import models.*;
-import models.crudsiena.*;
 import play.*;
 import play.modules.crudsiena.CrudUnique;
 import play.mvc.*;

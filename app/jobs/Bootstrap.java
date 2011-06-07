@@ -23,8 +23,14 @@ public class Bootstrap extends Job {
     }
 
 	private void initializeUsers() {
-		 new User("pablo@iipir.com", "iipir11", "Pablo", "Pazos", Boolean.TRUE).insert();
-		 new User("roberto@iipir.com", "iipir11", "Roberto", "Gil", Boolean.TRUE).insert();
+		 User pablo = new User("pablo@iipir.com", "iipir11", "Pablo", "Pazos",true, true);
+		 pablo.insert();
+		 pablo.validated = true;
+		 pablo.update();
+		 User roberto = new User("roberto@iipir.com", "iipir11", "Roberto", "Gil", true, true);
+		 roberto.insert();
+		 roberto.validated = true;
+		 roberto.update();
 	}
 
 	private void initializeDeals() {

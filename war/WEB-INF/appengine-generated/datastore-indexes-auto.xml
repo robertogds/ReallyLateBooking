@@ -1,11 +1,11 @@
-<!-- Indices written at Fri, 3 Jun 2011 18:58:14 CEST -->
+<!-- Indices written at Tue, 7 Jun 2011 11:00:28 CEST -->
 
 <datastore-indexes>
 
     <!-- Used 1 time in query history -->
     <datastore-index kind="deals" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
-        <property name="id" direction="asc"/>
+        <property name="city" direction="asc"/>
         <property name="priceCents" direction="desc"/>
     </datastore-index>
 

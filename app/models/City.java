@@ -1,6 +1,5 @@
 package models;
 
-import models.crudsiena.SienaSupport;
 import siena.Generator;
 import siena.Id;
 import siena.Model;
@@ -8,7 +7,7 @@ import siena.Query;
 import siena.Table;
 
 @Table("cities")
-public class City extends SienaSupport {
+public class City extends Model {
 
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;

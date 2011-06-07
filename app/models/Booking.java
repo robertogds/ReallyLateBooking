@@ -13,9 +13,8 @@ import siena.Id;
 import siena.Index;
 import siena.Model;
 import siena.Query;
-import models.crudsiena.SienaSupport;
 
-public class Booking extends SienaSupport {
+public class Booking extends Model {
     
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
@@ -81,10 +80,6 @@ public class Booking extends SienaSupport {
         return deal==null ? null : deal.hotelName + 
             ", " + df.format( checkinDate ) + 
             " to " + df.format( checkoutDate );
-    }
-
-    public String toString() {
-        return "Booking(" + user + ","+ deal.hotelName + ")";
     }
 
 }

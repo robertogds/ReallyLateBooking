@@ -1,2 +1,2 @@
-Welcome ${user.name},
+Welcome ${user.firstName},
 que ponemos aqui?

@@ -28,6 +28,14 @@ import models.*;
 
 public class Application extends Controller {
 	
+	public static void mail(){
+		Logger.debug("##### testing mail: " );
+		User user = User.all().filter("validated", true).filter("isAdmin",true).get();
+		Mails.welcome(user);
+
+	}
+	
+	
 	public static void index() { 
 		//Workaround needed because jobs dont work on gae
 		Bootstrap job = new Bootstrap();
@@ -49,7 +57,7 @@ public class Application extends Controller {
 			Logger.debug("Authenticate result: " + Security.authenticate(user.email, user.password));
 			
 			if (Security.authenticate(user.email, user.password)){
-				renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", "user is logged"));
+				renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", "user is logged", user));
 			}
 		}
 		
@@ -57,7 +65,7 @@ public class Application extends Controller {
 	}
 	
 	public static void activate(String code){
-		Logger.debug("validatind user with code: " + code);
+		Logger.debug("##### Validatind user with code: " + code);
 		User user = User.all().filter("validationCode", code).get();
 		if (user != null){
 			Logger.debug("User is not null");
@@ -67,69 +75,5 @@ public class Application extends Controller {
 		}
 		render(user);
 	}
-	
-	
-	/*
-	 * This is a workaround to solve an issue from siena. 
-	 * Not necessary with the next version of siena-play
-	 */
-	public static class MyRenderJson extends Result {
-
-	    String json;
-
-	    public MyRenderJson(Object o, Class<?>... classesToIgnore) {
-
-	        MyExclusionStrategy[] strats = new
-	        MyExclusionStrategy[classesToIgnore.length];
-	        for(int i=0; i<classesToIgnore.length;i++) {
-	            strats[i] = new MyExclusionStrategy(classesToIgnore[i]);
-	        }
-	        Gson gson = new GsonBuilder()
-	            .setExclusionStrategies(strats)
-	            .create();
-	        json = gson.toJson(o);
-	    }
-
-	    public MyRenderJson(String jsonString) {
-	        json = jsonString;
-	    }
-
-	    public void apply(Request request, Response response) {
-	        try {
-	            setContentTypeIfNotSet(response, "application/json;charset=utf-8");
-	            response.out.write(json.getBytes("utf-8"));
-	        } catch (Exception e) {
-	            throw new UnexpectedException(e);
-	        }
-	    }
-
-	    //
-
-	    static Method getMethod(Class<?> clazz, String name) {
-	        for(Method m : clazz.getDeclaredMethods()) {
-	            if(m.getName().equals(name)) {
-	                return m;
-	            }
-	        }
-	        return null;
-	    }
-
-	    public class MyExclusionStrategy implements ExclusionStrategy {
-	        private final Class<?> typeToSkip;
-
-	        private MyExclusionStrategy(Class<?> typeToSkip) {
-	          this.typeToSkip = typeToSkip;
-	        }
-
-	        public boolean shouldSkipClass(Class<?> clazz) {
-	          return (clazz == typeToSkip);
-	        }
-
-	        public boolean shouldSkipField(FieldAttributes f) {
-	          return false;
-	        }
-	      }
-
-	} 
 	
 }

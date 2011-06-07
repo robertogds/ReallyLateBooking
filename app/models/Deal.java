@@ -77,7 +77,9 @@ public class Deal extends Model {
 	}
 	
 	public void fecthCity(){
-		this.city = City.findById(this.city.id);
+		if (this.city != null){
+			this.city = City.findById(this.city.id);
+		}	
 	}
 	
 	public void prepareImages(){

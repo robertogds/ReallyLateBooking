@@ -1,13 +1,19 @@
 package models;
 
 import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.RandomStringUtils;
+
+import play.Logger;
 import play.data.validation.Match;
 import play.data.validation.MaxSize;
 import play.data.validation.MinSize;
 import play.data.validation.Required;
+import play.data.validation.Validation;
+import play.data.validation.Validation.Validator;
 import siena.Generator;
 import siena.Id;
 import siena.Index;
@@ -27,14 +33,11 @@ public class Booking extends Model {
     @Index("deal_index")
     public Deal deal;
     
-    @Required
     public Date checkinDate;
-    
-    @Required
-    public Date checkoutDate;
+    public Integer nights;
+    public Integer rooms;
     
     @Required(message="Credit card number is required")
-    @Match(value="^\\d{16}$", message="Credit card number must be numeric and 16 digits long")
     public String creditCard;
     
     @Required(message="Credit card name is required")
@@ -43,13 +46,18 @@ public class Booking extends Model {
     public String creditCardName;
     public int creditCardExpiryMonth;
     public int creditCardExpiryYear;
-    public boolean smoking;
-    public int beds;
+    public int creditCardSecureCode;
 
     public Booking(Deal deal, User user) {
         this.deal = deal;
         this.user = user;
     }
+    
+    @Override
+	public void insert() {
+    	this.checkinDate = Calendar.getInstance().getTime();
+    	super.insert();
+	}
     
     public static Booking findById(Long id) {
         return all().filter("id", id).get();
@@ -68,18 +76,32 @@ public class Booking extends Model {
     }
    
     public Integer getTotal() {
-        return deal.salePriceCents * getNights();
+        return deal.salePriceCents * nights;
     }
-
-    public int getNights() {
-        return (int) ( checkoutDate.getTime() - checkinDate.getTime() ) / 1000 / 60 / 60 / 24;
-    }
+    
+    public boolean creditCardValid(){
+		return Validation.valid("creditCard", this).ok;
+	}
+    
+	public boolean valid() {
+		Deal deal = Deal.findById(this.deal.id);
+		Logger.debug("Validating booking, we have: " + deal.quantity  + " and we book: " + this.getRooms());
+		//can't book if there are no enough rooms available
+		if (deal != null && this.getRooms() <= deal.quantity){
+			return creditCardValid();
+		}
+		return false;
+	}
 
     public String getDescription() {
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
         return deal==null ? null : deal.hotelName + 
-            ", " + df.format( checkinDate ) + 
-            " to " + df.format( checkoutDate );
+            ", " + df.format( checkinDate ) ;
+    }
+    
+    public Integer getRooms(){
+    	//if we are not using number of rooms means is always just 1 per booking
+    	return  this.rooms != null ? this.rooms : 1;
     }
 
 }

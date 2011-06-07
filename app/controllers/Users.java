@@ -2,6 +2,7 @@ package controllers;
 
 import notifiers.Mails;
 import helper.StatusMessage;
+import helper.UserStatusMessage;
 
 import com.google.gson.Gson;
 
@@ -31,10 +32,10 @@ public class Users extends Application {
 		if (!validation.hasErrors() && user.emailValid()){
 			user.insert();
 			//Mails.validate(user);
-			renderJSON(new StatusMessage(Http.StatusCode.CREATED, "CREATED", "user created correctly", user));
+			renderJSON(new UserStatusMessage(Http.StatusCode.CREATED, "CREATED", "user created correctly", user));
 		}
 		else{
-			renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "email is not available", user));
+			renderJSON(new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "email is not available", user));
 		}
 	}
 

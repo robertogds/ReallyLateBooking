@@ -1,5 +1,8 @@
+import helper.BookingStatusMessage;
 import helper.StatusMessage;
+import helper.UserStatusMessage;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +22,7 @@ import play.libs.WS.HttpResponse;
 import play.libs.WS.WSRequest;
 import play.mvc.*;
 import play.mvc.Http.*;
+import sun.util.calendar.CalendarUtils;
 import models.*;
 
 public class ApplicationTest extends FunctionalTest {
@@ -49,7 +53,7 @@ public class ApplicationTest extends FunctionalTest {
     
     @Test
 	public void getDealListForIphone(){
-    	City madrid = new City("Madrid");
+    	City madrid = new City("Madrid", "madrid");
     	madrid.insert();
 		Deal ritz = new Deal("Hotel Ritz", madrid, Boolean.TRUE);
 		ritz.address = "castellana 43";
@@ -117,7 +121,7 @@ public class ApplicationTest extends FunctionalTest {
 	    //Test correct creation
 	    Response response = POST(url+"?json=" + json);
 	    String jsonResponse = response.out.toString();
-	    StatusMessage message = new Gson().fromJson(jsonResponse, StatusMessage.class);
+	    UserStatusMessage message = new Gson().fromJson(jsonResponse, UserStatusMessage.class);
 	    User newUser = (User) message.content;
 	    assertIsOk(response);
 	    assertContentType("application/json", response);
@@ -140,6 +144,71 @@ public class ApplicationTest extends FunctionalTest {
 	    assertIsOk(response);
 	    assertContentType("application/json", response);
 	    assertEquals("Pablo", newUser.firstName);
+    }
+    
+    @Test
+    public void createBookingFromJson(){
+    	User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
+    	user.insert();
+    	City madrid = new City("Madrid", "madrid");
+    	madrid.insert();
+		Deal deal = new Deal("Hotel Ritz", madrid, Boolean.TRUE);
+		deal.mainImageBig = "mainImage.jpg";
+		deal.mainImageSmall = "mainImageSmall.jpg";
+		deal.quantity = 1 ; 
+		deal.insert();
+    	// Create a new booking and save it
+	    Booking booking = new Booking(deal, user);
+	    booking.creditCard = "12345678912345679";
+	    booking.creditCardName = "Pablo Pazos";
+	    booking.nights = 1 ; 
+	    String json = new Gson().toJson(booking,Booking.class);	    
+	    String url = Router.reverse("Bookings.create").url;
+	    //Test correct creation
+	    Response response = POST(url+"?json=" + json);
+	    String jsonResponse = response.out.toString();
+	    Logger.debug("JSON received: " + jsonResponse);
+	    BookingStatusMessage message = new Gson().fromJson(jsonResponse, BookingStatusMessage.class);
+	    Booking newBooking = (Booking) message.content;
+	    assertIsOk(response);
+	    Calendar date = Calendar.getInstance();
+	    date.setTime(newBooking.checkinDate);
+	    assertEquals(Calendar.getInstance().get(Calendar.DAY_OF_MONTH), date.get(Calendar.DAY_OF_MONTH));
+	    Deal dealAfterBooking = Deal.findById(deal.id);
+	    assertEquals(dealAfterBooking.quantity.intValue(), deal.quantity - 1);
+	    //Second 
+	    response = POST(url+"?json=" + json);
+	    jsonResponse = response.out.toString();
+	    message = new Gson().fromJson(jsonResponse, BookingStatusMessage.class);
+	    assertEquals(Http.StatusCode.INTERNAL_ERROR, message.status);
+    }
+    
+    @Test
+    public void createNotValidBookingFromJson(){
+    	User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
+    	user.insert();
+    	City madrid = new City("Madrid", "madrid");
+    	madrid.insert();
+		Deal deal = new Deal("Hotel Ritz", madrid, Boolean.TRUE);
+		deal.mainImageBig = "mainImage.jpg";
+		deal.mainImageSmall = "mainImageSmall.jpg";
+		deal.quantity = 2 ;
+		deal.insert();
+    	// Create a new booking and try to save it
+		// Its not valid because credit card is mandatory
+	    Booking booking = new Booking(deal, user);
+	    booking.creditCardName = "Pablo Pazos";
+	    booking.nights = 1 ; 
+	    String json = new Gson().toJson(booking,Booking.class);	    
+	    String url = Router.reverse("Bookings.create").url;
+	    //Test incorrect creation
+	    Response response = POST(url+"?json=" + json);
+	    String jsonResponse = response.out.toString();
+	    Logger.debug("JSON received: " + jsonResponse);
+	    BookingStatusMessage message = new Gson().fromJson(jsonResponse, BookingStatusMessage.class);
+	    assertIsOk(response);
+	    assertContentType("application/json", response);
+	    assertEquals( Http.StatusCode.INTERNAL_ERROR, message.status);
     }
     
 }

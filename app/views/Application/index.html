@@ -11,7 +11,7 @@
 			#{list items:cities, as:'city' }
 		        <h1>${city.name}</h1>
 				<p>
-				   <a href="@{Deals.list(city.name)}">Ver hoteles</a>
+				   <a href="@{Deals.list(city.url)}">Ver hoteles</a>
 				</p>
 		    #{/list}
 		</ul>

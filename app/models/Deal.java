@@ -19,7 +19,7 @@ public class Deal extends Model {
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
 	@Required
-	public String hotelName;
+	public String hotelName;	
 	public boolean active;
 	@Index("city_index")
     public City city;
@@ -84,6 +84,11 @@ public class Deal extends Model {
 	
 	public void prepareImages(){
 		ImageHelper.prepareImagesRoutes(this);
+	}
+	
+
+	public static Deal findById(Long id) {
+		return all().filter("id", id).get();
 	}
 }
 

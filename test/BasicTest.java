@@ -27,11 +27,10 @@ public class BasicTest extends UnitTest {
 		}
 	}
 	
-	
 	 
 	@Test
 	public void createAndRetrieveDeal() {
-		City madrid = new City("Madrid");
+		City madrid = new City("Madrid", "madrid");
 		madrid.insert();
 	    // Create a new deal and save it
 	    new Deal("Hotel Ritz", madrid).insert();
@@ -47,9 +46,9 @@ public class BasicTest extends UnitTest {
 	
 	@Test
 	public void findDealsFromCity() {
-		City madrid = new City("Madrid");
+		City madrid = new City("Madrid", "madrid");
 		madrid.insert();
-		City barcelona = new City("Barcelona");
+		City barcelona = new City("Barcelona", "barcelona");
 		barcelona.insert();
 	    // Create some new deals and save it
 	    new Deal("Hotel Ritz", madrid, Boolean.TRUE).insert();

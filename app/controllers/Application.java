@@ -10,6 +10,7 @@ import play.mvc.results.Result;
 
 
 import helper.StatusMessage;
+import helper.UserStatusMessage;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -57,7 +58,7 @@ public class Application extends Controller {
 			Logger.debug("Authenticate result: " + Security.authenticate(user.email, user.password));
 			
 			if (Security.authenticate(user.email, user.password)){
-				renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", "user is logged", user));
+				renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", "user is logged", user));
 			}
 		}
 		

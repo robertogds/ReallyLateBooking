@@ -1,4 +1,4 @@
-package helper;
+package helper.dto;
 
 import models.User;
 

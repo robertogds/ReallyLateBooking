@@ -1,6 +1,8 @@
-import helper.BookingStatusMessage;
-import helper.StatusMessage;
-import helper.UserStatusMessage;
+import helper.dto.BookingDTO;
+import helper.dto.BookingStatusMessage;
+import helper.dto.StatusMessage;
+import helper.dto.UserDTO;
+import helper.dto.UserStatusMessage;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -122,7 +124,7 @@ public class ApplicationTest extends FunctionalTest {
 	    Response response = POST(url+"?json=" + json);
 	    String jsonResponse = response.out.toString();
 	    UserStatusMessage message = new Gson().fromJson(jsonResponse, UserStatusMessage.class);
-	    User newUser = (User) message.content;
+	    UserDTO newUser =  message.content;
 	    assertIsOk(response);
 	    assertContentType("application/json", response);
 	    assertNotNull(newUser.id);
@@ -156,24 +158,27 @@ public class ApplicationTest extends FunctionalTest {
 		deal.mainImageBig = "mainImage.jpg";
 		deal.mainImageSmall = "mainImageSmall.jpg";
 		deal.quantity = 1 ; 
+		deal.contactEmail = "pablo@iipir.com";
 		deal.insert();
     	// Create a new booking and save it
 	    Booking booking = new Booking(deal, user);
-	    booking.creditCard = "12345678912345679";
+	    booking.creditCard = "4214730854508021";
 	    booking.creditCardName = "Pablo Pazos";
+	    booking.creditCardCVC= 565;
+	    booking.creditCardExpiry ="01/01/2012";
+	    booking.creditCardType = "visa";
 	    booking.nights = 1 ; 
-	    String json = new Gson().toJson(booking,Booking.class);	    
+	    String json = new Gson().toJson(new BookingDTO(booking),BookingDTO.class);	    
 	    String url = Router.reverse("Bookings.create").url;
 	    //Test correct creation
 	    Response response = POST(url+"?json=" + json);
 	    String jsonResponse = response.out.toString();
 	    Logger.debug("JSON received: " + jsonResponse);
 	    BookingStatusMessage message = new Gson().fromJson(jsonResponse, BookingStatusMessage.class);
-	    Booking newBooking = (Booking) message.content;
+	    Booking newBooking = ((BookingDTO) message.content).toBooking();
 	    assertIsOk(response);
-	    Calendar date = Calendar.getInstance();
-	    date.setTime(newBooking.checkinDate);
-	    assertEquals(Calendar.getInstance().get(Calendar.DAY_OF_MONTH), date.get(Calendar.DAY_OF_MONTH));
+	    assertNotNull(newBooking);
+	    assertFalse(newBooking.code == null);
 	    Deal dealAfterBooking = Deal.findById(deal.id);
 	    assertEquals(dealAfterBooking.quantity.intValue(), deal.quantity - 1);
 	    //Second 
@@ -195,11 +200,15 @@ public class ApplicationTest extends FunctionalTest {
 		deal.quantity = 2 ;
 		deal.insert();
     	// Create a new booking and try to save it
-		// Its not valid because credit card is mandatory
+		// Its not valid because credit card is not correct
 	    Booking booking = new Booking(deal, user);
 	    booking.creditCardName = "Pablo Pazos";
+	    booking.creditCard = "12345678912345679";
+	    booking.creditCardCVC= 565;
+	    booking.creditCardExpiry ="10/12";
+	    booking.creditCardType = "visa";
 	    booking.nights = 1 ; 
-	    String json = new Gson().toJson(booking,Booking.class);	    
+	    String json = new Gson().toJson(new BookingDTO(booking),BookingDTO.class);	    
 	    String url = Router.reverse("Bookings.create").url;
 	    //Test incorrect creation
 	    Response response = POST(url+"?json=" + json);

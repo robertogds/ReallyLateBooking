@@ -63,7 +63,11 @@ public class User extends Model{
     }
        
     
-    @Override
+    public User(Long id) {
+    	this.id = id;
+    }
+
+	@Override
 	public void insert() {
     	this.validated =  true;
         this.validationCode = RandomStringUtils.randomAlphanumeric(12);
@@ -90,7 +94,7 @@ public class User extends Model{
     }
     
     private static User findByEmailAndPassword(String email, String password){
-    	return User.all().filter("email", email.toLowerCase()).filter("validated", true).filter("password", password).get();
+    	return User.all().filter("email", email.trim().toLowerCase()).filter("validated", true).filter("password", password.trim()).get();
     }
  
     public String toString() {
@@ -98,10 +102,10 @@ public class User extends Model{
     }
 
 	public void updateDetails(User user) {
-		this.email = user.email.trim().isEmpty() ? this.email : user.email.toLowerCase();
-		this.password = user.password.trim().isEmpty() ? this.password : user.password;
-		this.firstName = user.firstName.trim().isEmpty() ? this.firstName : user.firstName;
-		this.lastName = user.lastName.trim().isEmpty() ? this.lastName : user.lastName;
+		this.email = user.email.trim().isEmpty() ? this.email : user.email.trim().toLowerCase();
+		this.password = user.password.trim().isEmpty() ? this.password : user.password.trim();
+		this.firstName = user.firstName.trim().isEmpty() ? this.firstName : user.firstName.trim();
+		this.lastName = user.lastName.trim().isEmpty() ? this.lastName : user.lastName.trim();
 	}
 
 	public Boolean emailValid(){

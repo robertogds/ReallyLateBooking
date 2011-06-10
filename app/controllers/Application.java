@@ -9,8 +9,8 @@ import play.mvc.results.Ok;
 import play.mvc.results.Result;
 
 
-import helper.StatusMessage;
-import helper.UserStatusMessage;
+import helper.dto.StatusMessage;
+import helper.dto.UserStatusMessage;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -58,7 +58,8 @@ public class Application extends Controller {
 			Logger.debug("Authenticate result: " + Security.authenticate(user.email, user.password));
 			
 			if (Security.authenticate(user.email, user.password)){
-				renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", "user is logged", user));
+				User dbUser = User.findByEmail(user.email);
+				renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", "user is logged", dbUser));
 			}
 		}
 		

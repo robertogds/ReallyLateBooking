@@ -1,14 +1,14 @@
-package helper;
+package helper.dto;
 
 import models.User;
 
 public class UserStatusMessage extends StatusMessage {
 	
-	 public User content;
+	 public UserDTO content;
 
      public UserStatusMessage(int status, String message, String detail, User content) {
 	      super(status, message, detail);
-	      this.content = content;
+	      this.content = new UserDTO(content);
 	}
 
 }

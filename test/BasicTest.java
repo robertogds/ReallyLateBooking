@@ -4,6 +4,10 @@ import com.google.gson.JsonObject;
 
 import controllers.Deals;
 
+import helper.CreditCardHelper;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 import play.Logger;
@@ -67,6 +71,32 @@ public class BasicTest extends UnitTest {
 	    assertEquals(1, countBcn);
 	}
 	
+	@Test
+	public void validateCreditCard(){
+	    String aCard = "4214730854508021";
+	    assertTrue(CreditCardHelper.getCardID(aCard) > -1);
+	    Logger.debug("This a " + CreditCardHelper.getCardName(CreditCardHelper.getCardID(aCard)));
+	    try {
+			boolean isValid = CreditCardHelper.validCC(aCard);
+			assertTrue(isValid);
+		} catch (Exception e) {
+			Logger.error("Exception validating credit card ", e);
+		}
+	    
+	}
 	
+	@Test
+	public void validateInvalidCreditCard(){
+	    String aCard = "4211720854408021";
+	    assertTrue(CreditCardHelper.getCardID(aCard) > -1);
+	    Logger.debug("This a " + CreditCardHelper.getCardName(CreditCardHelper.getCardID(aCard)));
+	    try {
+			boolean isValid = CreditCardHelper.validCC(aCard);
+			assertFalse(isValid);
+		} catch (Exception e) {
+			Logger.error("Exception validating credit card ", e);
+		}
+	    
+	}
 
 }

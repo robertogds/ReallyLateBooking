@@ -1,8 +1,9 @@
 package controllers;
 
 import notifiers.Mails;
-import helper.StatusMessage;
-import helper.UserStatusMessage;
+import helper.dto.StatusMessage;
+import helper.dto.UserDTO;
+import helper.dto.UserStatusMessage;
 
 import com.google.gson.Gson;
 
@@ -48,7 +49,7 @@ public class Users extends Application {
 		    User dbUser = User.findById(user.id);
 		    dbUser.updateDetails(user);
 		    dbUser.update();
-		    renderJSON(dbUser);
+		    renderJSON(new UserDTO(dbUser));
 		}
 	}
 
@@ -59,7 +60,7 @@ public class Users extends Application {
 
 	public static void show(Long id)  {
 	    User user = User.findById(id);
-	    renderJSON(user);
+	    renderJSON(new UserDTO(user));
 	}
 	
 }

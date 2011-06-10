@@ -4,6 +4,7 @@ import helper.ImageHelper;
 
 import java.util.List;
 
+import play.data.validation.Email;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import siena.Generator;
@@ -23,6 +24,8 @@ public class Deal extends Model {
 	public boolean active;
 	@Index("city_index")
     public City city;
+	@Email
+	public String contactEmail;
 	@Required
 	public Integer salePriceCents;
 	public Integer priceCents;
@@ -33,6 +36,49 @@ public class Deal extends Model {
 	@Required
     @MaxSize(500)
 	public String shortDescription;
+	@MaxSize(500)
+	public String detailText;
+	@MaxSize(500)
+	public String hotelText;
+	@MaxSize(500)
+	public String roomText;
+	@MaxSize(500)
+	public String foodDrinkText;
+	@MaxSize(500)
+	public String aroundText;
+	@Required
+    @MaxSize(10000)
+	public String descriptionEN;
+	@Required
+    @MaxSize(500)
+	public String shortDescriptionEN;
+	@MaxSize(500)
+	public String detailTextEN;
+	@MaxSize(500)
+	public String hotelTextEN;
+	@MaxSize(500)
+	public String roomTextEN;
+	@MaxSize(500)
+	public String foodDrinkTextEN;
+	@MaxSize(500)
+	public String aroundTextEN;
+	@Required
+    @MaxSize(10000)
+	public String descriptionFR;
+	@Required
+    @MaxSize(500)
+	public String shortDescriptionFR;
+	@MaxSize(500)
+	public String detailTextFR;
+	@MaxSize(500)
+	public String hotelTextFR;
+	@MaxSize(500)
+	public String roomTextFR;
+	@MaxSize(500)
+	public String foodDrinkTextFR;
+	@MaxSize(500)
+	public String aroundTextFR;
+
 	public String roomType;
 	public Integer hotelCategory;
 	public String address;
@@ -47,6 +93,7 @@ public class Deal extends Model {
 	public String image3;
 	public String image4;
 	public String image5;	
+	public Integer position;
 	
 	
 	public Deal(String hotelName, City city) {
@@ -60,12 +107,16 @@ public class Deal extends Model {
 		this.active = active;
 	}
 	
+	public Deal(Long id) {
+		this.id = id;
+	}
+
 	public static List<Deal> findActiveDealsByCity(City city){
-		return all().filter("city", city).filter("active", Boolean.TRUE).order("-priceCents").fetch(3);
+		return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(3);
 	}
 	
 	public static List<Deal> findByCity(City city) {
-        return all().filter("city", city).order("-priceCents").fetch();
+        return all().filter("city", city).order("position").order("-priceCents").fetch();
     }
 	
 	public static Query<Deal> all() {

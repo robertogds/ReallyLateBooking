@@ -1,5 +1,7 @@
 package models;
 
+import helper.CreditCardHelper;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,16 +39,22 @@ public class Booking extends Model {
     public Integer nights;
     public Integer rooms;
     
-    @Required(message="Credit card number is required")
+    @Required
+    public String creditCardType;
+    @Required
     public String creditCard;
-    
-    @Required(message="Credit card name is required")
-    @MinSize(value=3, message="Credit card name is required")
-    @MaxSize(value=70, message="Credit card name is required")
+    @Required
+    @MinSize(value=3)
+    @MaxSize(value=70)
     public String creditCardName;
-    public int creditCardExpiryMonth;
-    public int creditCardExpiryYear;
-    public int creditCardSecureCode;
+    @Required
+    public String creditCardExpiry;
+    @Required
+    @MinSize(value=3)
+    @MaxSize(value=3)
+    public int creditCardCVC;
+    
+    public String code;
 
     public Booking(Deal deal, User user) {
         this.deal = deal;
@@ -56,6 +64,7 @@ public class Booking extends Model {
     @Override
 	public void insert() {
     	this.checkinDate = Calendar.getInstance().getTime();
+    	this.code = RandomStringUtils.randomAlphanumeric(8);
     	super.insert();
 	}
     
@@ -79,18 +88,35 @@ public class Booking extends Model {
         return deal.salePriceCents * nights;
     }
     
-    public boolean creditCardValid(){
-		return Validation.valid("creditCard", this).ok;
+    public void creditCardValid(){
+    	if (Validation.valid("creditCard", this).ok &&
+    			Validation.valid("creditCardName", this).ok &&
+    			Validation.valid("creditCardType", this).ok &&
+    			Validation.valid("creditCardExpiry", this).ok){
+    		if (!CreditCardHelper.validCC(this.creditCard)){
+    			Validation.addError("creditCard", "Not a correct credit card number", creditCard);
+    		}
+    		else{
+    			//TODO this validation is not working
+    			//Validation.future("creditCardExpiry", this.creditCardExpiry);
+    		}
+    	}
 	}
     
-	public boolean valid() {
+	@SuppressWarnings("unused")
+	public void validate() {
 		Deal deal = Deal.findById(this.deal.id);
 		Logger.debug("Validating booking, we have: " + deal.quantity  + " and we book: " + this.getRooms());
 		//can't book if there are no enough rooms available
-		if (deal != null && this.getRooms() <= deal.quantity){
-			return creditCardValid();
+		if (deal == null){
+			Validation.addError("deal", "Deal cannot be null");
+		} 
+		else if (this.getRooms() > deal.quantity){
+			Validation.addError("rooms", "not enough rooms fo tonight");
+		} 
+		else {
+			creditCardValid();
 		}
-		return false;
 	}
 
     public String getDescription() {

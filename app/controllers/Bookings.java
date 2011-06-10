@@ -1,7 +1,9 @@
 package controllers;
 
-import helper.BookingStatusMessage;
-import helper.StatusMessage;
+import notifiers.Mails;
+import helper.dto.BookingDTO;
+import helper.dto.BookingStatusMessage;
+import helper.dto.StatusMessage;
 
 import com.google.gson.Gson;
 
@@ -30,28 +32,36 @@ public class Bookings extends Controller{
 		String body = json != null ? json : params.get("body");
 		Logger.debug("Create booking " + body);	
 		if (body != null){
-			Booking booking = new Gson().fromJson(body, Booking.class);
-			validateAndSave(booking);
+			BookingDTO bookingDto = new Gson().fromJson(body, BookingDTO.class);
+			validateAndSave(bookingDto.toBooking());
 		}
 	}
 	
-	private static void validateAndSave(@Valid Booking booking){	
-		if (booking.valid()){ 
+	private static void validateAndSave(@Valid Booking booking){
+		booking.validate(); //validate object and fill errors map if exist
+		if (!validation.hasErrors()){ 
 			Logger.debug("Valid booking");
 			booking.insert();
-			Logger.debug("Deal id: " + booking.deal.id);
-			
-			Deal deal = Deal.findById(booking.deal.id);
-			deal.quantity = deal.quantity - booking.getRooms();
-			deal.update();
-			
+			updateDealRooms(booking.deal.id, booking.rooms);
+			//we need to fetch all the info form user and deal 
+			booking.deal = Deal.findById(booking.deal.id);
+			booking.user = User.findById(booking.user.id);
+			Mails.hotelBookingConfirmation(booking);
+			Mails.userBookingConfirmation(booking);
 			
 			renderJSON(new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", "booking created correctly", booking));
 		}
 		else{
-			Logger.debug("Invalid booking: " + validation.error("creditCard"));
+			Logger.debug("Invalid booking: " + validation.errors().toString());
 			renderJSON(new BookingStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "booking could not be made", booking));
 		}
+	}
+	
+	private static void updateDealRooms(Long dealId, Integer rooms){
+		Logger.debug("Deal id: " + dealId);
+		Deal deal = Deal.findById(dealId);
+		deal.quantity = deal.quantity - rooms;
+		deal.update();
 	}
 	
 

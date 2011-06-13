@@ -31,6 +31,7 @@ public class ApplicationTest extends FunctionalTest {
 
 	String userJson = "{\"email\":\"bob@gmail.com\",\"password\":\"secret\"}";
 	String userJsonB = "{\"email\":\"bob@gmaasil.com\",\"password\":\"incorrect\"}";
+
 	
 	@Before @After
 	public void setup() {
@@ -218,6 +219,41 @@ public class ApplicationTest extends FunctionalTest {
 	    assertIsOk(response);
 	    assertContentType("application/json", response);
 	    assertEquals( Http.StatusCode.INTERNAL_ERROR, message.status);
+    }
+    
+    @Test
+    public void listBookingsByUser(){
+    	User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
+    	user.insert();
+    	City madrid = new City("Madrid", "madrid");
+    	madrid.insert();
+		Deal deal = new Deal("Hotel Ritz", madrid, Boolean.TRUE);
+		deal.mainImageBig = "mainImage.jpg";
+		deal.mainImageSmall = "mainImageSmall.jpg";
+		deal.quantity = 1 ; 
+		deal.contactEmail = "pablo@iipir.com";
+		deal.insert();
+    	// Create a new booking and save it
+	    Booking booking = new Booking(deal, user);
+	    booking.creditCard = "4214730854508021";
+	    booking.creditCardName = "Pablo Pazos";
+	    booking.creditCardCVC= 565;
+	    booking.creditCardExpiry ="01/01/2012";
+	    booking.creditCardType = "visa";
+	    booking.nights = 1 ; 
+	    String json = new Gson().toJson(new BookingDTO(booking),BookingDTO.class);	    
+	    String url = Router.reverse("Bookings.create").url;
+	    //Test correct creation
+	    Response response = POST(url+"?json=" + json);
+	    String jsonResponse = response.out.toString();
+	    Logger.debug("JSON received: " + jsonResponse);
+	    //Test correct creation
+	    response = GET("/user/" + user.id + "/bookings");
+	    jsonResponse = response.out.toString();
+	    Logger.debug("Booking list JSON received: " + jsonResponse);
+	    
+	    
+    	
     }
     
 }

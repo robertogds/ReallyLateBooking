@@ -19,8 +19,7 @@ GET 	/cities							    	Cities.cityList(format:'json')
 
 
 # Bookings Rest
-GET     /user/{id}/bookings                		Bookings.listByUser(format:'json')
-GET     /booking/{id}            				Bookings.show(format:'json')
+GET     /user/{userId}/bookings                		Bookings.listByUser(format:'json')
 POST    /booking               					Bookings.create(format:'json')
 PUT     /booking/{id}            				Bookings.update(format:'json')
 

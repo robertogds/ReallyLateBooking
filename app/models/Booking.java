@@ -55,16 +55,23 @@ public class Booking extends Model {
     public int creditCardCVC;
     
     public String code;
+	public Integer salePriceCents;
+	public Integer priceCents;
+	public String hotelName;
 
     public Booking(Deal deal, User user) {
         this.deal = deal;
         this.user = user;
     }
     
-    @Override
+	@Override
 	public void insert() {
     	this.checkinDate = Calendar.getInstance().getTime();
     	this.code = RandomStringUtils.randomAlphanumeric(8);
+    	this.deal = Deal.findById(this.deal.id); //fetch deal from datastore
+    	this.priceCents = this.deal.priceCents; //save actual deal price
+    	this.salePriceCents = this.deal.salePriceCents;
+    	this.hotelName = this.deal.hotelName;
     	super.insert();
 	}
     

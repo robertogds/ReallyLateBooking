@@ -50,6 +50,7 @@ public class DealDTO {
 		this.hotelName = deal.hotelName;
 		this.city = deal.city;
 		this.salePriceCents = deal.salePriceCents;
+		this.priceCents = deal.priceCents;
 		this.quantity = deal.quantity;
 		this.hotelCategory = deal.hotelCategory;
 		this.roomType = deal.roomType;

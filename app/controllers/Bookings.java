@@ -1,5 +1,8 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import notifiers.Mails;
 import helper.dto.BookingDTO;
 import helper.dto.BookingStatusMessage;
@@ -19,7 +22,13 @@ public class Bookings extends Controller{
 	
 	public static void listByUser(Long userId){
 		User user = User.findById(userId);
-		renderJSON(Booking.findByUser(user));
+		List<Booking> bookingList = Booking.findByUser(user);
+		Logger.debug("Bookings for user: " + userId + " are : " + bookingList.size());
+		List<BookingDTO> bookingDtoList = new ArrayList<BookingDTO>();
+		for(Booking booking : bookingList){
+			bookingDtoList.add(new BookingDTO(booking));
+		}
+		renderJSON(bookingDtoList);
 	}
 	
 	public static void listByDeal(Long dealId){
@@ -53,7 +62,7 @@ public class Bookings extends Controller{
 		}
 		else{
 			Logger.debug("Invalid booking: " + validation.errors().toString());
-			renderJSON(new BookingStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "booking could not be made", booking));
+			renderJSON(new BookingStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), booking));
 		}
 	}
 	
@@ -65,9 +74,5 @@ public class Bookings extends Controller{
 	}
 	
 
-	public static void show(Long id)  {
-	    Booking booking = Booking.findById(id);
-	    renderJSON(booking);
-	}
 	
 }

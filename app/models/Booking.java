@@ -52,7 +52,7 @@ public class Booking extends Model {
     @Required
     @MinSize(value=3)
     @MaxSize(value=3)
-    public int creditCardCVC;
+    public Integer creditCardCVC;
     
     public String code;
 	public Integer salePriceCents;

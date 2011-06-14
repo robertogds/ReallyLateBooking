@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 
 import models.Booking;
 import models.Deal;
@@ -20,19 +21,26 @@ import java.lang.reflect.Modifier;
 
 public class BookingDTO {
 	
-	public  Long dealId;
-	public  Long userId;
+	public Long dealId;
+	public Long userId;
+	@Expose
     public Long id;
+	@Expose
     public Integer nights;
+	@Expose
     public Integer rooms;
-    public  String creditCard;
-    public  String creditCardName;
-    public  String creditCardExpiry;
-    public  Integer creditCardCVC;
-    public  String creditCardType;
+    public String creditCard;
+    public String creditCardName;
+    public String creditCardExpiry;
+    public Integer creditCardCVC;
+    public String creditCardType;
+    @Expose
 	public Integer salePriceCents;
+    @Expose
 	public Integer priceCents;
+    @Expose
     public String code;
+    @Expose
     public String hotelName;
     
     

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import notifiers.Mails;
+import helper.JsonHelper;
 import helper.dto.BookingDTO;
 import helper.dto.BookingStatusMessage;
 import helper.dto.StatusMessage;
@@ -28,12 +29,8 @@ public class Bookings extends Controller{
 		for(Booking booking : bookingList){
 			bookingDtoList.add(new BookingDTO(booking));
 		}
-		renderJSON(bookingDtoList);
-	}
-	
-	public static void listByDeal(Long dealId){
-		Deal deal = Deal.findById(dealId);
-		renderJSON(Booking.findByDeal(deal));
+		String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(bookingDtoList);
+		renderJSON(json);
 	}
 	
 	
@@ -58,11 +55,15 @@ public class Bookings extends Controller{
 			Mails.hotelBookingConfirmation(booking);
 			Mails.userBookingConfirmation(booking);
 			
-			renderJSON(new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", "booking created correctly", booking));
+			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
+					new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", "booking created correctly", booking));
+			renderJSON(json);
 		}
 		else{
 			Logger.debug("Invalid booking: " + validation.errors().toString());
-			renderJSON(new BookingStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), booking));
+			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
+					new BookingStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), booking));
+			renderJSON(json);
 		}
 	}
 	

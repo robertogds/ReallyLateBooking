@@ -1,7 +1,10 @@
 package helper.dto;
 
 import java.security.InvalidParameterException;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,10 +13,12 @@ import com.google.gson.annotations.Expose;
 import models.Booking;
 import models.Deal;
 import models.User;
+import play.Logger;
 import play.data.validation.Match;
 import play.data.validation.MaxSize;
 import play.data.validation.MinSize;
 import play.data.validation.Required;
+import play.i18n.Lang;
 import siena.Generator;
 import siena.Id;
 import siena.Index;
@@ -42,6 +47,8 @@ public class BookingDTO {
     public String code;
     @Expose
     public String hotelName;
+    @Expose
+    public String checkinDate;
     
     
 	public BookingDTO(Booking booking) {
@@ -60,6 +67,10 @@ public class BookingDTO {
 		this.salePriceCents = booking.salePriceCents;
 		this.priceCents = booking.priceCents;
 		this.hotelName = booking.hotelName;
+		Logger.debug("Formating booking date with locale: " + Lang.getLocale());
+		this.checkinDate = booking.checkinDate!= null ? 
+					DateFormat.getDateInstance(DateFormat.LONG, Lang.getLocale()).format(booking.checkinDate):
+					"";
 	}
     
 	public BookingDTO() {
@@ -70,7 +81,8 @@ public class BookingDTO {
 			throw new InvalidParameterException("Object booking cannot be null");
 		}
 	}
-    
+
+	
 	public Booking toBooking(){
 		Deal deal = new Deal(dealId);
 		User user = new User(userId);

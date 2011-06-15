@@ -29,14 +29,19 @@ public class Users extends Application {
 		}
 	}
 	
-	private static void validateAndSave(@Valid User user){	
-		if (!validation.hasErrors() && user.emailValid()){
+	private static void validateAndSave(@Valid User user){
+		user.validate();
+		if (!validation.hasErrors()){
 			user.insert();
+			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.CREATED, "CREATED", "user created correctly", user);
+			Logger.debug("User correctly created " + new Gson().toJson(message));	
 			//Mails.validate(user);
-			renderJSON(new UserStatusMessage(Http.StatusCode.CREATED, "CREATED", "user created correctly", user));
+			renderJSON(message);
 		}
 		else{
-			renderJSON(new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "email is not available", user));
+			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "email is not available", user);
+			Logger.debug("User couldnt be created " + new Gson().toJson(message));	
+			renderJSON(message);
 		}
 	}
 

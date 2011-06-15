@@ -74,11 +74,12 @@ public class User extends Model{
         this.token = RandomStringUtils.randomAlphanumeric(12);
         this.secret = RandomStringUtils.randomAlphanumeric(24);
         this.email = this.email.toLowerCase();
+        this.created = Calendar.getInstance().getTime();
     	super.insert();
 	}
     
     public static User findByEmail(String email){
-    	return User.all().filter("email", email.toLowerCase()).get();
+    	return User.all().filter("email", email.trim().toLowerCase()).get();
     }
     
     public static Query<User> all() {
@@ -108,7 +109,10 @@ public class User extends Model{
 		this.lastName = user.lastName.trim().isEmpty() ? this.lastName : user.lastName.trim();
 	}
 
-	public Boolean emailValid(){
-		return Validation.valid("email", this).ok;
+
+	public void validate() {
+		if (User.findByEmail(this.email) != null){
+			Validation.addError("email", "Email is not avaliable");
+		}
 	}
 }

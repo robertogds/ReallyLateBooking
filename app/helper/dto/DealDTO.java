@@ -5,6 +5,7 @@ import java.security.InvalidParameterException;
 import models.City;
 import models.Deal;
 import models.User;
+import play.Logger;
 import play.data.validation.Email;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
@@ -71,6 +72,8 @@ public class DealDTO {
 		this.roomText = deal.roomText;
 		this.aroundText = deal.aroundText;
 		this.foodDrinkText = deal.foodDrinkText;
+		
+		Logger.debug("Filling deal info with locale: " + Lang.get());
 		
 		String lang = Lang.get();
 		if (lang.equals(Lang.getLocale().ENGLISH)){

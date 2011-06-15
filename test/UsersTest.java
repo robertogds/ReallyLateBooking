@@ -46,7 +46,8 @@ public class UsersTest  extends UnitTest {
 	    // Create a new user and save it
 	    new User("bob@gmail.com", "secret", "Bob", "Smith").insert();
 	    User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
-	    if (user.emailValid()){
+	    user.validate();
+	    if (!Validation.hasErrors()){
 	    	user.insert();
 	    }
 	    // Retrieve number of users with e-mail address bob@gmail.com

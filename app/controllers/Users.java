@@ -72,7 +72,6 @@ public class Users extends Application {
 			User user = new Gson().fromJson(body, User.class);
 		    User dbUser = User.findById(id);
 		    dbUser.updateDetails(user);
-		    dbUser.validate();
 		    if (!validation.hasErrors()){
 			    dbUser.update();
 			    UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "OK", "user updated correctly", dbUser);

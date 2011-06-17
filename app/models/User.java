@@ -105,7 +105,10 @@ public class User extends Model{
     }
 
 	public void updateDetails(User user) {
-		this.email = user.email.trim().isEmpty() ? this.email : user.email.trim().toLowerCase();
+		if (!this.email.equalsIgnoreCase(user.email.trim())){
+			this.email = user.email.trim().isEmpty() ? this.email : user.email.trim().toLowerCase();
+			this.validateEmail();
+		}
 		this.password = user.password.trim().isEmpty() ? this.password : user.password.trim();
 		this.firstName = user.firstName.trim().isEmpty() ? this.firstName : user.firstName.trim();
 		this.lastName = user.lastName.trim().isEmpty() ? this.lastName : user.lastName.trim();
@@ -113,11 +116,15 @@ public class User extends Model{
 
 
 	public void validate() {
+		validateEmail();
+	}
+	
+	private void validateEmail(){
 		if (User.findByEmail(this.email) != null){
 			Validation.addError("email", "Email is not avaliable");
 		}
 	}
-
+	
 	public String resetPassword() {
 		String password = RandomStringUtils.randomAlphanumeric(6);
 		this.password = DigestUtils.md5Hex(password);

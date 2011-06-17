@@ -65,27 +65,28 @@ public class DealDTO {
 		this.image3 = deal.image3;
 		this.image4 = deal.image4;
 		this.image5 = deal.image5;
-		this.description = deal.description;
-		this.shortDescription = deal.shortDescription;
-		this.detailText = deal.detailText;
-		this.hotelText = deal.hotelText;
-		this.roomText = deal.roomText;
-		this.aroundText = deal.aroundText;
-		this.foodDrinkText = deal.foodDrinkText;
-		
-		Logger.debug("Filling deal info with locale: " + Lang.get());
+		this.description = deal.descriptionEN;
+		this.shortDescription = deal.shortDescriptionEN;
+		this.detailText = deal.detailTextEN;
+		this.hotelText = deal.hotelTextEN;
+		this.roomText = deal.roomTextEN;
+		this.aroundText = deal.aroundTextEN;
+		this.foodDrinkText = deal.foodDrinkTextEN;
 		
 		String lang = Lang.get();
-		if (lang.equals(Lang.getLocale().ENGLISH)){
-			this.description = deal.descriptionEN;
-			this.shortDescription = deal.shortDescriptionEN;
-			this.detailText = deal.detailTextEN;
-			this.hotelText = deal.hotelTextEN;
-			this.roomText = deal.roomTextEN;
-			this.aroundText = deal.aroundTextEN;
-			this.foodDrinkText = deal.foodDrinkTextEN;
+		Logger.debug("Filling deal info with locale: " + lang);
+		if (lang.equals("es")){
+			Logger.debug("Filling deal info with Spanish ");
+			this.description = deal.description;
+			this.shortDescription = deal.shortDescription;
+			this.detailText = deal.detailText;
+			this.hotelText = deal.hotelText;
+			this.roomText = deal.roomText;
+			this.aroundText = deal.aroundText;
+			this.foodDrinkText = deal.foodDrinkText;
 		}
-		else if (lang.equals(Lang.getLocale().FRENCH)){
+		else if (lang.equals(Lang.getLocale().FRENCH.getLanguage())){
+			Logger.debug("Filling deal info with French ");
 			this.description = deal.descriptionFR;
 			this.shortDescription = deal.shortDescriptionFR;
 			this.detailText = deal.detailTextFR;

@@ -19,18 +19,22 @@ GET 	/cities							    	Cities.cityList(format:'json')
 
 
 # Bookings Rest
-GET     /user/{userId}/bookings                		Bookings.listByUser(format:'json')
+GET     /user/{userId}/bookings                	Bookings.listByUser(format:'json')
 POST    /booking               					Bookings.create(format:'json')
 PUT     /booking/{id}            				Bookings.update(format:'json')
 
 # Users Rest
-POST    /users/login                            Application.login
+POST    /users/login                            Application.login(format:'json')
+POST	/users/remember							Users.rememberPassword(format:'json')
 GET     /users/activate/{code}                  Application.activate
 GET     /users                					Users.list(format:'json')
 GET     /user/{id}            					Users.show(format:'json')
 POST    /users               					Users.create(format:'json')
 PUT     /user/{id}            					Users.update(format:'json')
-DELETE  /user/{id}            					Users.delete
+
+# Info text
+GET     /info/{key}            					InfoTexts.show(format:'json')
+
 
 
 

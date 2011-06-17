@@ -20,6 +20,24 @@ public class Users extends Application {
 	  renderJSON(User.all().fetch());
 	}
 	
+	public static void rememberPassword(String json){
+		String body = json != null ? json : params.get("body");
+		Logger.debug("Remember password " + body);	
+		if (body != null){
+			User user = new Gson().fromJson(body, User.class);
+			user = User.findByEmail(user.email);
+			if (user != null){
+				String newPassword = user.resetPassword();
+				Mails.lostPassword(user, newPassword);
+				renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", "User password reseted correctly"));
+			}
+			else{
+				renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "Email not found"));
+			}
+		}
+		
+	}
+	
 	public static void create(String json) {
 		String body = json != null ? json : params.get("body");
 		Logger.debug("Create user " + body);	
@@ -35,26 +53,37 @@ public class Users extends Application {
 			user.insert();
 			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.CREATED, "CREATED", "user created correctly", user);
 			Logger.debug("User correctly created " + new Gson().toJson(message));	
+			Mails.welcome(user);
 			//Mails.validate(user);
 			renderJSON(message);
 		}
 		else{
-			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "email is not available", user);
+			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), user);
 			Logger.debug("User couldnt be created " + new Gson().toJson(message));	
 			renderJSON(message);
 		}
 	}
 
-	public static void update(String json) {
-		String body = json != null ? json : params.get("body");
+	public static void update(Long id) {
+		String body = params.get("body");
 		Logger.debug("Update user " + body);
 		
 		if (body != null){
 			User user = new Gson().fromJson(body, User.class);
-		    User dbUser = User.findById(user.id);
+		    User dbUser = User.findById(id);
 		    dbUser.updateDetails(user);
-		    dbUser.update();
-		    renderJSON(new UserDTO(dbUser));
+		    dbUser.validate();
+		    if (!validation.hasErrors()){
+			    dbUser.update();
+			    UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "OK", "user updated correctly", dbUser);
+				Logger.debug("User updated " + new Gson().toJson(message));	
+				renderJSON(message);
+		    }
+		    else{
+				UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), dbUser);
+				Logger.debug("User couldnt be updated " + new Gson().toJson(message));	
+				renderJSON(message);
+			}
 		}
 	}
 

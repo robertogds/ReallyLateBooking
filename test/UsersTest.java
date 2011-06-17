@@ -6,6 +6,7 @@ import models.City;
 import models.Deal;
 import models.User;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import controllers.oauth.ApiSecurer;
 import play.Logger;
 import play.data.validation.Valid;
 import play.data.validation.Validation;
+import play.libs.Crypto;
 import play.test.UnitTest;
 
 
@@ -37,6 +39,27 @@ public class UsersTest  extends UnitTest {
 	    User bob = User.findByEmail("bob@gmail.com");
 	   
 	    // Test 
+	    assertNotNull(bob);
+	    assertEquals("Bob", bob.firstName);
+	}
+	
+	@Test
+	public void rememberPassword() {
+	    // Create a new user and save it
+	    User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
+	    user.insert();
+	    Logger.debug("User password: " + user.password);
+	    Logger.debug("Crypto password: " + DigestUtils.md5Hex("secret"));
+
+	    // Retrieve the user with e-mail address bob@gmail.com and pass smith
+	    User bob = User.findByEmailAndPassword("bob@gmail.com", DigestUtils.md5Hex("secret"));
+	    // Test 
+	    assertNotNull(bob);
+	    
+	    String newPassword = bob.resetPassword();
+	    Logger.debug("User password after reset: " + newPassword);
+	    // Retrieve the user with e-mail address bob@gmail.com and th enew password
+	    bob = User.findByEmailAndPassword("bob@gmail.com", DigestUtils.md5Hex(newPassword));
 	    assertNotNull(bob);
 	    assertEquals("Bob", bob.firstName);
 	}

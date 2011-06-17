@@ -13,6 +13,7 @@ public class UserDTO {
 	 public String lastName;
 	 public String token;
 	 public String secret;
+	 public String password;
 	
 	 public UserDTO(User user) {
 		 validateUser(user);
@@ -22,6 +23,7 @@ public class UserDTO {
 		 lastName = user.lastName;
 		 token = user.token;
 		 secret = user.secret;
+		 password = user.password;
 	 }
 
 	private void validateUser(User user) {

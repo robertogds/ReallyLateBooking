@@ -3,6 +3,7 @@ package models;
 import java.io.Serializable;
 import java.util.*;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
 
 
@@ -11,6 +12,7 @@ import play.data.validation.Email;
 import play.data.validation.Password;
 import play.data.validation.Required;
 import play.data.validation.Validation;
+import play.libs.Crypto;
 import play.libs.OAuth.TokenPair;
 import play.modules.crudsiena.CrudUnique;
 import siena.Column;
@@ -48,14 +50,14 @@ public class User extends Model{
     
     public User(String email, String password, String firstName, String lastName) {
         this.email = email;
-        this.password = password;
+        this.password =  DigestUtils.md5Hex(password);
         this.firstName = firstName;
         this.lastName = lastName;
     }
     
     public User(String email, String password, String firstName, String lastName, boolean isAdmin, boolean validated) {
         this.email = email;
-        this.password = password;
+        this.password =  DigestUtils.md5Hex(password);
         this.firstName = firstName;
         this.lastName = lastName;
         this.isAdmin = isAdmin;
@@ -94,7 +96,7 @@ public class User extends Model{
         return findByEmailAndPassword(email, password);
     }
     
-    private static User findByEmailAndPassword(String email, String password){
+    public static User findByEmailAndPassword(String email, String password){
     	return User.all().filter("email", email.trim().toLowerCase()).filter("validated", true).filter("password", password.trim()).get();
     }
  
@@ -114,5 +116,12 @@ public class User extends Model{
 		if (User.findByEmail(this.email) != null){
 			Validation.addError("email", "Email is not avaliable");
 		}
+	}
+
+	public String resetPassword() {
+		String password = RandomStringUtils.randomAlphanumeric(6);
+		this.password = DigestUtils.md5Hex(password);
+		this.update();
+		return password;
 	}
 }

@@ -148,7 +148,7 @@ public class ApplicationTest extends FunctionalTest {
 	    assertContentType("application/json", response);
 	    assertEquals((Integer)Http.StatusCode.OK,(Integer) message.status);
     }
-    
+    @Test
     public void createBookingFromJson(){
     	User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
     	user.insert();
@@ -187,7 +187,7 @@ public class ApplicationTest extends FunctionalTest {
 	    message = new Gson().fromJson(jsonResponse, BookingStatusMessage.class);
 	    assertEquals(Http.StatusCode.INTERNAL_ERROR, message.status);
     }
-    
+    @Test
     public void createNotValidBookingFromJson(){
     	User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
     	user.insert();
@@ -218,7 +218,7 @@ public class ApplicationTest extends FunctionalTest {
 	    assertContentType("application/json", response);
 	    assertEquals( Http.StatusCode.INTERNAL_ERROR, message.status);
     }
-    
+    @Test
     public void listBookingsByUser(){
     	User user = new User("bob@gmail.com", "secret", "Bob", "Smith");
     	user.insert();

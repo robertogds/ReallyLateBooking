@@ -69,7 +69,7 @@ public class BookingDTO {
 		this.hotelName = booking.hotelName;
 		Logger.debug("Formating booking date with locale: " + Lang.getLocale());
 		this.checkinDate = booking.checkinDate!= null ? 
-					DateFormat.getDateInstance(DateFormat.LONG, Lang.getLocale()).format(booking.checkinDate):
+					DateFormat.getDateInstance(DateFormat.MEDIUM, Lang.getLocale()).format(booking.checkinDate):
 					"";
 	}
     

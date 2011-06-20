@@ -24,6 +24,8 @@ public class Deal extends Model {
 	public boolean active;
 	@Index("city_index")
     public City city;
+	@Index("owner_index")
+    public User owner;
 	@Email
 	public String contactEmail;
 	@Required
@@ -111,6 +113,10 @@ public class Deal extends Model {
 		this.id = id;
 	}
 
+	public static List<Deal> findActiveDealsByOwner(User owner){
+		return all().filter("owner", owner).order("position").fetch();
+	}
+	
 	public static List<Deal> findActiveDealsByCity(City city){
 		return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(3);
 	}

@@ -1,5 +1,6 @@
 package models;
 
+import play.Logger;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.i18n.Lang;
@@ -28,6 +29,7 @@ public class InfoText extends Model {
     }
 	
 	public static InfoText findByKey(String key){
+		Logger.debug("InfoTexts: looking fo text for key " + key + " with locale " + Lang.get());
     	return InfoText.all().filter("key", key).filter("locale", Lang.get()).get();
 
 	}

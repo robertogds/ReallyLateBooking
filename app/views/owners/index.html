@@ -1,0 +1,54 @@
+#{extends 'owners/layout.html' /}
+
+<div id="crudList" >
+	
+	<h2 id="crudListTitle">&{'extranet.list.title'}</h2>
+	
+
+	<div id="crudListTable">
+		<table>
+        <thead>
+                <tr>
+                        <th width="400">
+                        	Hotel Name
+                        </th>
+                         <th width="200">
+                        	City
+                        </th>
+                         <th width="150">
+                        	Price
+                        </th>
+                         <th width="150">
+                        	Sale Price
+                        </th>
+                         <th width="100">
+                        	Disponibilidad
+                        </th>
+                </tr>
+        </thead>
+	    
+	       #{list items:deals, as:'deal' }
+	        <tr class="${deal_index % 2 ? 'even' : 'odd'}">
+	             <td>
+	                 #{a @Owners.edit(deal.id)} ${deal.hotelName}  #{/a}       
+	             </td>
+	              <td>
+	              	 ${models.City.findById(deal.city.id).name }
+	             </td>
+	              <td>
+	                  ${deal.priceCents}      
+	             </td>
+	             <td>
+	                  ${deal.salePriceCents}      
+	             </td>
+	             <td>
+	                  ${deal.quantity}      
+	             </td>
+	              
+	        </tr>
+	       #{/list}
+	</table>
+	</div>
+	
+	
+</div>

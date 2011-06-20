@@ -42,7 +42,8 @@ public class User extends Model{
     
     public String firstName;
     public String lastName;
-    public boolean isAdmin;
+    public Boolean isAdmin;
+    public Boolean isOwner;
     public Date created;
     
     public String token;
@@ -61,6 +62,7 @@ public class User extends Model{
         this.firstName = firstName;
         this.lastName = lastName;
         this.isAdmin = isAdmin;
+        this.isOwner = isAdmin;
         this.validated = validated;
     }
        
@@ -120,7 +122,7 @@ public class User extends Model{
 	}
 	
 	private void validateEmail(){
-		if (User.findByEmail(this.email) != null){
+		if (Validation.valid("email", this).ok && User.findByEmail(this.email) != null){
 			Validation.addError("email", "Email is not avaliable");
 		}
 	}

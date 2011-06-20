@@ -18,7 +18,7 @@ import play.mvc.results.Result;
  * @author pablopr
  *
  */
-public class JsonHelper {
+public final class JsonHelper {
 
 	public static String jsonExcludeFieldsWithoutExposeAnnotation(Object content){
 	    Gson gson = new GsonBuilder()

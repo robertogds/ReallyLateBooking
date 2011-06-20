@@ -2,6 +2,7 @@ package controllers;
 
 import play.*;
 import play.exceptions.UnexpectedException;
+import play.i18n.Messages;
 import play.mvc.*;
 import play.mvc.Http.Request;
 import play.mvc.Http.Response;
@@ -29,13 +30,10 @@ import models.*;
 
 public class Application extends Controller {
 	
-	public static void mail(){
-		Logger.debug("##### testing mail: " );
-		User user = User.all().filter("validated", true).filter("isAdmin",true).get();
-		Mails.welcome(user);
-
+	@Before
+	public static void checkLanguage(){
+		Logger.debug("### Accept-language: " + request.acceptLanguage().toString());
 	}
-	
 	
 	public static void index() { 
 		//Workaround needed because jobs dont work on gae
@@ -57,13 +55,13 @@ public class Application extends Controller {
 			
 			Logger.debug("Authenticate result: " + Security.authenticate(user.email, user.password));
 			
-			if (Security.authenticate(user.email, user.password)){
+			if (Security.authenticateJson(user.email, user.password)){
 				User dbUser = User.findByEmail(user.email);
-				renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", "user is logged", dbUser));
+				renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.login.correct"), dbUser));
 			}
 		}
 		
-		renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", "user or password incorrect"));
+		renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("user.login.incorrect")));
 	}
 	
 	public static void activate(String code){

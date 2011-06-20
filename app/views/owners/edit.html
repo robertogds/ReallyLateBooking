@@ -1,0 +1,32 @@
+#{extends 'owners/layout.html' /}
+
+<div id="crudShow">
+
+        <h2 id="crudShowTitle">&{'crud.show.title', deal.hotelName}</h2>
+
+        <div class="objectForm">
+        
+        #{form @save(deal.id)}
+ 
+		    #{ifErrors}
+		        <p class="error">
+		            Please correct these errors.
+		        </p>
+		    #{/ifErrors}
+		     
+		    <p>
+		        #{field 'quantity'}
+		        <label>Rooms available:</label>
+		        <input type="text" name="${field.name}" 
+		            value="${deal.quantity}" class="${field.errorClass}" />
+		        #{/field}
+		    </p>
+		 
+		    
+		    <p>
+		        <input type="submit" value="Save changes" />
+		    </p>
+		    
+		#{/form}
+        </div>
+</div>

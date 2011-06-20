@@ -1,1 +1,31 @@
-este seria el email de confirmacion de reserva al hotel
+Hola,
+
+${user.firstName} ha hecho una reserva:
+
+Su codigo de resserva es: ${booking.code}
+
+Los datos de la reserva son los siguientes:
+	Hotel: ${booking.hotelName}
+	1 habitacion doble 
+	Fecha de entrada: ${booking.checkinDate.format('dd MMMM yyyy') }
+	Numero de noches: ${booking.nights}
+	Precio: ${booking.salePriceCents} €
+
+
+Los datos del cliente:
+	Nombre: ${user.firstName}
+	Apellidos:${user.lastName}
+	Email: ${user.email}
+	Tipo de tarjeta: ${booking.creditCardType}
+	Tarjeta de credito: ${booking.creditCard}
+	cvc: ${booking.creditCardCVC}
+	Nombre que figura en la tarjeta: ${booking.creditCardName}
+	Fecha de caducidad: ${booking.creditCardExpiry}
+
+
+texto de recordatorio al hotel de que esta reserva es efectiva y que es su reponsabilidad asegurar la habitacion del cliente
+
+texto legal de privacidad de datos y demas
+
+
+Firma RLB

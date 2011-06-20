@@ -10,12 +10,19 @@ import com.google.gson.Gson;
 import models.User;
 import play.Logger;
 import play.data.validation.Valid;
+import play.i18n.Messages;
+import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;
 import siena.PersistenceManager;
 
 public class Users extends Application {
-
+	
+	@Before
+	public static void checkLanguage(){
+		Logger.debug("### Accept-language: " + request.acceptLanguage().toString());
+	}
+	
 	public static void list(){
 	  renderJSON(User.all().fetch());
 	}
@@ -29,10 +36,10 @@ public class Users extends Application {
 			if (user != null){
 				String newPassword = user.resetPassword();
 				Mails.lostPassword(user, newPassword);
-				renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", "User password reseted correctly"));
+				renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.remember.correct")));
 			}
 			else{
-				renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "Email not found"));
+				renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("user.remember.incorrect")));
 			}
 		}
 		
@@ -51,7 +58,7 @@ public class Users extends Application {
 		user.validate();
 		if (!validation.hasErrors()){
 			user.insert();
-			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.CREATED, "CREATED", "user created correctly", user);
+			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "CREATED", Messages.get("user.create.correct"), user);
 			Logger.debug("User correctly created " + new Gson().toJson(message));	
 			Mails.welcome(user);
 			//Mails.validate(user);
@@ -74,7 +81,7 @@ public class Users extends Application {
 		    dbUser.updateDetails(user);
 		    if (!validation.hasErrors()){
 			    dbUser.update();
-			    UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "OK", "user updated correctly", dbUser);
+			    UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.update.correct"), dbUser);
 				Logger.debug("User updated " + new Gson().toJson(message));	
 				renderJSON(message);
 		    }
@@ -88,7 +95,7 @@ public class Users extends Application {
 
 	public static void delete(Long id) {
 	    User.findById(id).delete();
-	    renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", "User deleted correctly"));
+	    renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.delete.correct")));
 	}
 
 	public static void show(Long id)  {

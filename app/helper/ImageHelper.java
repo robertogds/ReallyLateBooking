@@ -4,9 +4,13 @@ import models.Deal;
 import play.Logger;
 import play.Play;
 
+/** 
+ * Prepare images to fit to the required size
+ *
+ * @author pablopr
+ *
+ */
 public final class ImageHelper {
-	
-	
 
 	public static void prepareImagesRoutes(Deal deal){
 		//Size of the images for the required system, iphone, ipad , etc.
@@ -35,7 +39,7 @@ public final class ImageHelper {
 				String[] temp;
 			  	String delimiter = "\\.";
 			  	temp = image.split(delimiter);
-			  	System.out.println("Imagen:" + image);
+			  	Logger.debug("Imagen:" + image);
 			  	try {
 					image = temp[0] + size + "." + temp[1];
 				} catch (Exception e) {

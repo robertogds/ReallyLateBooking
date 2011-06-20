@@ -3,11 +3,14 @@ package models;
 import helper.CreditCardHelper;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 
 import play.Logger;
 import play.data.validation.Match;
@@ -16,6 +19,7 @@ import play.data.validation.MinSize;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.data.validation.Validation.Validator;
+import play.i18n.Messages;
 import siena.Generator;
 import siena.Id;
 import siena.Index;
@@ -51,7 +55,7 @@ public class Booking extends Model {
     public String creditCardExpiry;
     @Required
     @MinSize(value=3)
-    @MaxSize(value=3)
+    @MaxSize(value=4)
     public Integer creditCardCVC;
     
     public String code;
@@ -96,30 +100,39 @@ public class Booking extends Model {
     }
     
     public void creditCardValid(){
-    	if (Validation.valid("creditCard", this).ok &&
-    			Validation.valid("creditCardName", this).ok &&
-    			Validation.valid("creditCardType", this).ok &&
-    			Validation.valid("creditCardExpiry", this).ok){
+    	if (Validation.valid("creditCard", this).message("booking.validation.creditcard").ok &&
+    			Validation.valid("creditCardName", this).message("booking.validation.creditcardname").ok &&
+    			Validation.valid("creditCardType", this).message("booking.validation.creditcardtype").ok){
     		if (!CreditCardHelper.validCC(this.creditCard)){
-    			Validation.addError("creditCard", "Not a correct credit card number", creditCard);
+    			Validation.addError("creditCard", Messages.get("booking.validation.creditcard"), creditCard);
     		}
     		else{
-    			//TODO this validation is not working
-    			//Validation.future("creditCardExpiry", this.creditCardExpiry);
+    			creditCardExpiryValid();
     		}
     	}
 	}
     
-	@SuppressWarnings("unused")
+	private void creditCardExpiryValid() {
+		 String[] parsers = new String[] {"M/yyyy", "M'/'yyyy"};
+		 Date date ;
+		 try {
+			 date = DateUtils.parseDate(this.creditCardExpiry, parsers);
+			 Logger.debug("Validating expiration date " + date.toString());
+			 Validation.future("creditCardExpiry", date, Calendar.getInstance().getTime()).message("booking.validation.creditcardexpiry");	
+		} catch (ParseException e) {
+			Logger.error("Error parsing expiration date ", e);
+		}
+	}
+
 	public void validate() {
 		Deal deal = Deal.findById(this.deal.id);
 		Logger.debug("Validating booking, we have: " + deal.quantity  + " and we book: " + this.getRooms());
 		//can't book if there are no enough rooms available
-		if (deal == null){
-			Validation.addError("deal", "Deal cannot be null");
+		if (deal == null || !deal.active){
+			Validation.addError("deal", Messages.get("booking.validation.expired"));
 		} 
 		else if (this.getRooms() > deal.quantity){
-			Validation.addError("rooms", "not enough rooms fo tonight");
+			Validation.addError("rooms", Messages.get("booking.validation.over"));
 		} 
 		else {
 			creditCardValid();

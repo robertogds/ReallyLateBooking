@@ -6,10 +6,16 @@ import java.util.*;
 
 import models.*;
 import play.*;
+import play.mvc.Before;
 import play.mvc.Controller;
 
 
 public class Deals extends Controller {
+	
+	@Before
+	public static void checkLanguage(){
+		Logger.debug("### HEADERS : " + request.headers.toString());
+	}
 	
 	public static void list(String city) {
         render(city);

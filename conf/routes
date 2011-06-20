@@ -35,7 +35,9 @@ PUT     /user/{id}            					Users.update(format:'json')
 # Info text
 GET     /info/{key}            					InfoTexts.show(format:'json')
 
-
+#Owners
+GET	   	/extranet								Owners.index
+GET	   	/extranet/edit							Owners.edit
 
 
 

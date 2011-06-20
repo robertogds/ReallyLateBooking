@@ -1,5 +1,26 @@
 <html><body>
-<p>Hola <b>${user.firstName}</b>, has hecho una reserva en un hotel muy guapo, gracias</p>
-<p>que ponemos aqui? </p>
+<p>Hola <b>${user.firstName}</b>, has hecho una reserva en ${booking.hotelName}</p>
+<p>Ense–a tu reserva en la aplicaci—n m—vil o este email en la recepci—n del hotel<p>
+<p>CODIGO DE RESERVA: ${booking.code}</p>
+Los datos de la reserva son los siguientes:
+Hotel: ${booking.hotelName}
+1 habitacion doble 
+Fecha de entrada: ${booking.checkinDate.format('dd MMMM yyyy') }
+Numero de noches: ${booking.nights}
+Precio: ${booking.salePriceCents} Û
+Precio habitual:  ${booking.priceCents} Û
+
+Muchas gracias por confiar en nosotros para tus reservas de œltima hora. 
+Esperamos que disfrutes la estancia y vuelvas a visitarnos pronto.
+
+Para estar al d’a de todas nuestras ofertas y las nuevas ciudades abre la aplicaci—n en tu m—vil con frecuencia ,
+ visita nuestra p‡gina de Facebook o s’guenos en Twitter.
+
+
+Firma de RLB
+
 </body>
 </html>
+
+
+

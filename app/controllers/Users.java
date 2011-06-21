@@ -1,5 +1,7 @@
 package controllers;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import notifiers.Mails;
 import helper.dto.StatusMessage;
 import helper.dto.UserDTO;
@@ -34,8 +36,8 @@ public class Users extends Application {
 			User user = new Gson().fromJson(body, User.class);
 			user = User.findByEmail(user.email);
 			if (user != null){
-				String newPassword = user.resetPassword();
-				Mails.lostPassword(user, newPassword);
+				user.setPasswordResetCode();
+				Mails.lostPassword(user);
 				renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.remember.correct")));
 			}
 			else{
@@ -101,6 +103,18 @@ public class Users extends Application {
 	public static void show(Long id)  {
 	    User user = User.findById(id);
 	    renderJSON(new UserDTO(user));
+	}
+	
+	public static void resetPasswordForm(String code){
+		User user = User.findByResetCode(code);
+		render(user);
+	}
+	
+	public static void saveNewPassword(Long id, String password){
+		User user = User.findById(id);
+		user.password = DigestUtils.md5Hex(password);
+		user.update();
+		render();
 	}
 	
 }

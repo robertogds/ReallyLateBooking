@@ -12,11 +12,14 @@ address = Hotel Address
 
 user.login.correct = User is logged
 user.login.incorrect = Username or password incorrect
-user.remember.correct = User password correctly reseted 
+user.remember.correct = You will receive an email to change your password
 user.remember.incorrect = Email not found
 user.create.correct = User correctly created 
 user.update.correct = User correctly updated
 user.delete.correct = User correctly deleted
+user.validation.email.invalid = Invalid email
+user.validation.email.unavailable = Email not available
+
 
 booking.create.correct = Booking created correctly
 booking.validation.creditcard = Invalid credit card number
@@ -25,3 +28,14 @@ booking.validation.over = No more available rooms for tonight
 booking.validation.creditcardname = Invalid credit card name
 booking.validation.creditcardtype = Invalid credit card type
 booking.validation.creditcardexpiry = Expiration date must be in the future
+booking.validation.cvc = Invalid cvc code
+booking.validation.all.required = All fields are required
+
+mail.welcome.subject = Welcome
+
+mail.remember.subject = Password recovery
+
+mail.bookinghotel.subject = Booking comfirmation at
+
+mail.bookinguser.subject = Booking comfirmation at
+

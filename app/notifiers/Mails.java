@@ -22,6 +22,7 @@ import play.Logger;
 import play.exceptions.MailException;
 import play.exceptions.TemplateNotFoundException;
 import play.exceptions.UnexpectedException;
+import play.i18n.Messages;
 import play.libs.Mail;
 import play.mvc.Mailer;
 import play.templates.Template;
@@ -31,8 +32,8 @@ public class Mails extends MailServiceFactory {
 	 
    public static void welcome(User user) {
 	   	  Message message = new Message();
-	   	  message.setSubject("Welcome " + user.firstName);
-	   	  message.setSender("Me <pablo@iipir.com>");
+	   	  message.setSubject(Messages.get("mail.welcome.subject") + " " + user.firstName);
+	   	  message.setSender("Rlb <hola@reallylatebooking.com>");
 	   	  message.setTo(user.email);
 	   	  String template = "Mails/welcome";
 	   	  Map<String, Object> params = new HashMap<String, Object>();
@@ -48,22 +49,21 @@ public class Mails extends MailServiceFactory {
 //	      send(user);
 //   }
 // 
-   public static void lostPassword(User user, String newPassword) {
+   public static void lostPassword(User user) {
 	      Message message = new Message();
-	   	  message.setSubject("Password recovery " + user.firstName);
-	   	  message.setSender("Me <pablo@iipir.com>");
+	   	  message.setSubject(Messages.get("mail.remember.subject") + " "  + user.firstName);
+	   	  message.setSender("Rlb <hola@reallylatebooking.com>");
 	   	  message.setTo(user.email);
 	   	  String template = "Mails/lostPassword";
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", user);
-	   	  params.put("password", newPassword);
 	   	  send(message, template, params);
    }
    
    public static void userBookingConfirmation(Booking booking) {
 	   	  Message message = new Message();
-	   	  message.setSubject("Booking comfirmation at " + booking.deal.hotelName);
-	   	  message.setSender("Me <pablo@iipir.com>");
+	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.deal.hotelName);
+	   	  message.setSender("Rlb <hola@reallylatebooking.com>");
 	   	  message.setTo(booking.user.email);
 	   	  String template = "Mails/userBookingConfirmation";
 	   	  Map<String, Object> params = new HashMap<String, Object>();
@@ -74,8 +74,8 @@ public class Mails extends MailServiceFactory {
    
    public static void hotelBookingConfirmation(Booking booking) {
 	   Message message = new Message();
-	   	  message.setSubject("Booking comfirmation at " + booking.deal.hotelName);
-	   	  message.setSender("Me <pablo@iipir.com>");
+	   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.deal.hotelName);
+	   	  message.setSender("Rlb <hola@reallylatebooking.com>");
 	   	  message.setTo(booking.deal.contactEmail);
 	   	  String template = "Mails/hotelBookingConfirmation";
 	   	  Map<String, Object> params = new HashMap<String, Object>();

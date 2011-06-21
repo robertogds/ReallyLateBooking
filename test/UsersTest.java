@@ -56,10 +56,10 @@ public class UsersTest  extends UnitTest {
 	    // Test 
 	    assertNotNull(bob);
 	    
-	    String newPassword = bob.resetPassword();
-	    Logger.debug("User password after reset: " + newPassword);
-	    // Retrieve the user with e-mail address bob@gmail.com and th enew password
-	    bob = User.findByEmailAndPassword("bob@gmail.com", DigestUtils.md5Hex(newPassword));
+	    bob.setPasswordResetCode();
+	    Logger.debug("User password code after reset: " + bob.resetCode);
+	    // Retrieve the user by reset code
+	    bob = User.findByResetCode(bob.resetCode);
 	    assertNotNull(bob);
 	    assertEquals("Bob", bob.firstName);
 	}

@@ -102,7 +102,8 @@ public class Booking extends Model {
     public void creditCardValid(){
     	if (Validation.valid("creditCard", this).message("booking.validation.creditcard").ok &&
     			Validation.valid("creditCardName", this).message("booking.validation.creditcardname").ok &&
-    			Validation.valid("creditCardType", this).message("booking.validation.creditcardtype").ok){
+    			Validation.valid("creditCardType", this).message("booking.validation.creditcardtype").ok&&
+    			Validation.valid("creditCardCVC", this).message("booking.validation.cvc").ok){
     		if (!CreditCardHelper.validCC(this.creditCard)){
     			Validation.addError("creditCard", Messages.get("booking.validation.creditcard"), creditCard);
     		}

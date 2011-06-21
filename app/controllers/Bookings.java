@@ -10,6 +10,8 @@ import helper.dto.BookingStatusMessage;
 import helper.dto.StatusMessage;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 
 import models.Booking;
 import models.Deal;
@@ -45,8 +47,17 @@ public class Bookings extends Controller{
 		String body = json != null ? json : params.get("body");
 		Logger.debug("Create booking " + body);	
 		if (body != null){
-			BookingDTO bookingDto = new Gson().fromJson(body, BookingDTO.class);
-			validateAndSave(bookingDto.toBooking());
+			BookingDTO bookingDto;
+			try {
+				bookingDto = new Gson().fromJson(body, BookingDTO.class);
+				validateAndSave(bookingDto.toBooking());
+			} catch (JsonParseException e) {
+				Logger.error("Error parsing booking json", e);
+				String messageJson = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
+						new BookingStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("booking.validation.all.required"), null));
+				renderJSON(messageJson);
+			}
+			
 		}
 	}
 	

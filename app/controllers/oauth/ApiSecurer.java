@@ -9,6 +9,8 @@ import java.util.Calendar;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import play.Logger;
 import play.libs.Codec;
 
@@ -75,10 +77,9 @@ public class ApiSecurer {
     public static String calculateMD5(String data, String key, long timestamp, String secret){
         	
         	String signature =  data  + key  + timestamp + secret;
-            String dataMd5 = Codec.hexMD5(signature);
-            
+
             // base64-encode the md5
-            String result = Codec.encodeBASE64(dataMd5);
+            String result = DigestUtils.md5Hex(signature);
 
         return result;
     }

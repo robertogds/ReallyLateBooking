@@ -31,6 +31,7 @@ GET     /users                					Users.list(format:'json')
 GET     /user/{id}            					Users.show(format:'json')
 POST    /users               					Users.create(format:'json')
 PUT     /user/{id}            					Users.update(format:'json')
+GET 	/users/resetpasswordform/{code}			Users.resetPasswordForm
 
 # Info text
 GET     /info/{key}            					InfoTexts.show(format:'json')

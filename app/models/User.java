@@ -12,6 +12,7 @@ import play.data.validation.Email;
 import play.data.validation.Password;
 import play.data.validation.Required;
 import play.data.validation.Validation;
+import play.i18n.Messages;
 import play.libs.Crypto;
 import play.libs.OAuth.TokenPair;
 import play.modules.crudsiena.CrudUnique;
@@ -39,6 +40,7 @@ public class User extends Model{
 	@Required
     @Password
     public String password;
+	public String resetCode;
     
     public String firstName;
     public String lastName;
@@ -122,15 +124,18 @@ public class User extends Model{
 	}
 	
 	private void validateEmail(){
-		if (Validation.valid("email", this).ok && User.findByEmail(this.email) != null){
-			Validation.addError("email", "Email is not avaliable");
+		if (Validation.valid("email", this).message(Messages.get("user.validation.email.invalid")).ok && User.findByEmail(this.email) != null){
+			Validation.addError("email", Messages.get("user.validation.email.unavailable"));
 		}
 	}
 	
-	public String resetPassword() {
-		String password = RandomStringUtils.randomAlphanumeric(6);
-		this.password = DigestUtils.md5Hex(password);
+	public void setPasswordResetCode() {
+		this.resetCode = RandomStringUtils.randomAlphanumeric(10);
 		this.update();
-		return password;
 	}
+	
+    public static User findByResetCode(String resertCode){
+    	return User.all().filter("resetCode", resertCode.trim()).get();
+    }
+    
 }

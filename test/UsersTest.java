@@ -80,15 +80,5 @@ public class UsersTest  extends UnitTest {
 	    assertEquals(1, count);
 	}
 	
-	@Test
-	public void testTimestamp(){
-	    long now = Calendar.getInstance().getTimeInMillis() / 1000;
-	    long seconds = 11 * 1000;
-	    long after = now + seconds; 
-
-		assertTrue(ApiSecurer.checkValidTimestamp(now));
-		assertFalse(ApiSecurer.checkValidTimestamp(after));
-    	
-	}
 	
 }

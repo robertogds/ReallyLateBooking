@@ -9,6 +9,8 @@ import java.util.Calendar;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import models.User;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
 import play.Logger;
@@ -27,6 +29,11 @@ public class ApiSecurer {
 	
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	
+	public static Boolean validateSignature(String token, String message, String timestamp){
+		
+		return Boolean.FALSE;
+	}
+	
     /**
      * Check that the given message with the given secret is valid.
      * 
@@ -35,14 +42,21 @@ public class ApiSecurer {
      * @throws URISyntaxException
      *             the message URL is invalid.
      */
-    public static Boolean validateMessage(String message, String signedMessage, long timestamp, String key, String secret)
-            throws IOException, URISyntaxException{
+    public static Boolean validateMessage(String baseUrl, String signedMessage, long timestamp, String key){
     	
+    	User user = User.findByToken(key);
+    	if (user == null){
+    		Logger.debug("User not found with token: " + key);
+    		return Boolean.FALSE;
+    	}
     	if (!checkValidTimestamp(timestamp)){
     		return Boolean.FALSE;
     	}
     	
-    	String signed = calculateMD5(message, key, timestamp, secret);
+    	Logger.debug("APISECURER validate url: " + baseUrl);
+    	String signed = calculateMD5(baseUrl, user.secret);
+    	
+    	Logger.debug("URL SIGNED: " + signed);
     	
     	return signedMessage.equals(signed);
     }
@@ -50,8 +64,11 @@ public class ApiSecurer {
     
     public static Boolean checkValidTimestamp(long timestamp){
     	long miliseconds = Calendar.getInstance().getTimeInMillis();
-    	long seconds = miliseconds / 1000;
-    	if (seconds + 10 > timestamp){
+    	//we add 10 hours 
+    	long seconds = miliseconds + 64000000;
+    	
+    	Logger.debug("Timestamp now: " + seconds + " timestamp iphone:" + timestamp);
+    	if (seconds > timestamp){
     		return Boolean.TRUE;
     	}
     	return Boolean.FALSE;
@@ -61,12 +78,9 @@ public class ApiSecurer {
     /**
      * Computes MD5 signature.
      * 
-     * @param data
-     *     The data to be signed.
-     * @param key
-     *     The signing key.
-     * @param timestamp
-     * 		The timestamp
+
+     * @param url
+     * 		The url
      * @param  secret
      * 		The private secret
      * @return
@@ -74,9 +88,9 @@ public class ApiSecurer {
      * @throws
      *     java.security.SignatureException when signature generation fails
      */
-    public static String calculateMD5(String data, String key, long timestamp, String secret){
+    public static String calculateMD5(String url, String secret){
         	
-        	String signature =  data  + key  + timestamp + secret;
+        	String signature =  url + secret;
 
             // base64-encode the md5
             String result = DigestUtils.md5Hex(signature);

@@ -40,6 +40,38 @@ mail.bookinghotel.subject = Booking comfirmation at
 mail.bookinguser.subject = Booking comfirmation at
 
 
+mails.booking.hotel.hi = Hi
+mails.booking.hotel.justbooked = have just made a reservation
+mails.booking.code = Reservation code
+mails.booking.data = Booking data
+mails.booking.room = Room
+mails.booking.checkin = Checkin date:
+mails.booking.nights = Nights
+mails.booking.price = Price
+mails.booking.hotel.client.data = Client data
+mails.booking.client.name = Name
+mails.booking.client.email = Email
+mails.booking.client.creditcard = Credit card
+mails.booking.client.cvc = cvc
+mails.booking.client.creditcardname = Credit Card Owner
+mails.booking.client.creditCardExpiry = Expiration date
+mails.booking.hotel.remember = Remember
+mails.booking.hotel.remember.li1 = This reservation is already confirmed
+mails.booking.hotel.remember.li2 = For any doubt contact ReallyLateBooking
+mails.rlb.booking.department = Booking department
+mails.rlb.footer = ReallyLateBooking is a registered brand propriety of IIPIR Software Development S.L. 
+
+mails.booking.client.title = Booking confirmation
+mails.booking.client.justbooked =  you've just made a reservation
+mails.booking.client.showreceipt = Show the booking receipt screen on your mobile or this email at the hotel.
+mails.booking.client.thanks = Thanks a lot for choosing us as your really last minute hotel reservation platform. Enjoy your stay and come visit us soon!.
+mails.booking.client.social = If you dont want to loose any of our deals, visit us at 
+
+mails.welcome.welcome = welcome to ReallyLateBooking
+mails.welcome.p1 = Book same-day hotel rooms from your mobile phone and get really big discounts.
+mails.welcome.p2 = Why only 3 hotels per city? So we can choose only the best quality hotels and negotiate with them to get you the best deal possible.
+mails.welcome.p3 = Trust ReallyLateBooking to plan your travels. You'll always find a room for the same day.
+mails.welcome.p4 = Enjoy ReallyLateBooking way of traveling! Book in the moment, anywhere. Get a hotel, tonight! 
 
 
 

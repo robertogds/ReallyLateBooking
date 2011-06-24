@@ -138,4 +138,8 @@ public class User extends Model{
     	return User.all().filter("resetCode", resertCode.trim()).get();
     }
     
+    public static User findByToken(String token){
+    	return User.all().filter("token", token.trim()).get();
+    }
+    
 }

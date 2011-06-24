@@ -3,6 +3,8 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import notifiers.Mails;
 import helper.JsonHelper;
 import helper.dto.BookingDTO;
@@ -12,6 +14,8 @@ import helper.dto.StatusMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+
+import controllers.oauth.ApiSecurer;
 
 import models.Booking;
 import models.Deal;
@@ -26,8 +30,23 @@ import play.mvc.Http;
 public class Bookings extends Controller{
 	
 	@Before
-	public static void checkLanguage(){
+	static void checkSignature(){
 		Logger.debug("### HEADERS : " + request.headers.toString());
+		String token = request.params.get("token");
+		String signature = request.params.get("signature");
+		Long timestamp = Long.decode(request.params.get("timestamp"));
+		String baseUrl = request.url;
+		baseUrl = StringUtils.remove(baseUrl, "/"+signature);
+		
+		Logger.debug("Checking signature: " + baseUrl+"#");
+		Boolean correct = ApiSecurer.validateMessage(baseUrl, signature, timestamp, token);
+		
+		if (!correct){
+			Logger.debug("Invalid signature ");
+			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
+					new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "Invalid api signature. Contact hola@reallylatebooking.com"));
+			renderJSON(json);
+		}
 	}
 	
 	public static void listByUser(Long userId){
@@ -54,7 +73,7 @@ public class Bookings extends Controller{
 			} catch (JsonParseException e) {
 				Logger.error("Error parsing booking json", e);
 				String messageJson = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
-						new BookingStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("booking.validation.all.required"), null));
+						new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("booking.validation.all.required")));
 				renderJSON(messageJson);
 			}
 			
@@ -70,8 +89,8 @@ public class Bookings extends Controller{
 			//we need to fetch all the info form user and deal 
 			booking.deal = Deal.findById(booking.deal.id);
 			booking.user = User.findById(booking.user.id);
-			Mails.hotelBookingConfirmation(booking);
 			Mails.userBookingConfirmation(booking);
+			Mails.hotelBookingConfirmation(booking);
 			
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 					new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", Messages.get("booking.create.correct"), booking));

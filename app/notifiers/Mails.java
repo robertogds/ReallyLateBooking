@@ -22,6 +22,7 @@ import play.Logger;
 import play.exceptions.MailException;
 import play.exceptions.TemplateNotFoundException;
 import play.exceptions.UnexpectedException;
+import play.i18n.Lang;
 import play.i18n.Messages;
 import play.libs.Mail;
 import play.mvc.Mailer;
@@ -73,7 +74,11 @@ public class Mails extends MailServiceFactory {
    }
    
    public static void hotelBookingConfirmation(Booking booking) {
-	   Message message = new Message();
+	      String lang = Lang.get(); 
+	   	  //We want hotels email to be rendered in Spanish
+	   	  Lang.set("es");
+	   	  
+	   	  Message message = new Message();
 	   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.deal.hotelName);
 	   	  message.setSender("Rlb <hola@reallylatebooking.com>");
 	   	  message.setTo(booking.deal.contactEmail);
@@ -81,7 +86,10 @@ public class Mails extends MailServiceFactory {
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", booking.user);
 	   	  params.put("booking", booking);
+	   	  
 	   	  send(message, template, params);
+	   	  //set language to client original language
+	   	  Lang.set(lang);
    }
    
    protected static void send(Message message, String template, Map<String, Object> params) {

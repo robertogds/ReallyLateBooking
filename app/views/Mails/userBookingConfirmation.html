@@ -1,24 +1,122 @@
-<html><body>
-<p>Hola <b>${user.firstName}</b>, has hecho una reserva en ${booking.hotelName}</p>
-<p>Ense–a tu reserva en la aplicaci—n m—vil o este email en la recepci—n del hotel<p>
-<p>CODIGO DE RESERVA: ${booking.code}</p>
-Los datos de la reserva son los siguientes:
-Hotel: ${booking.hotelName}
-1 habitacion doble 
-Fecha de entrada: ${booking.checkinDate.format('dd MMMM yyyy') }
-Numero de noches: ${booking.nights}
-Precio: ${booking.salePriceCents} Û
-Precio habitual:  ${booking.priceCents} Û
+<html>
+<body>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<style>
+	html, body { margin:0; padding:0;}
+</style>
+<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#0D1E28">
+	<tr><td>
+	<table width="450px">
+	<tr>
+		<td style="padding:5px;">
+			<img src="@@{'/public/images/logo_top.gif'}" width="309" height="40"/>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding:5px;">
+			<table width="100%" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;">
+				<tr>
+					<td colspan="2">
+						<h1 style="font-size:16px; color:#0098CB;">&{'mails.booking.client.title'}</h1>
+						<p>&{'mails.booking.hotel.hi'} <strong>${user.firstName}</strong>, &{'mails.booking.client.justbooked'} <strong>${booking.hotelName}</strong></p>
+						<p>&{'mails.booking.client.showreceipt'}</p>
+						<table width="200px" bgcolor="#0098CB">
+							<tr><td style="text-align:center;">
+								<span style="font-size:11px;">&{'mails.booking.code'}</span><br/>
+								<strong style="font-size:16px;">${booking.code}</strong>
+							</td></tr>
+						</table>
+						<br/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="top">
+						<strong style="font-size:14px;margin-bottom:5px; float:left; color:#0098CB;">&{'mails.booking.data'}:</strong>
+						<br/><br/>
+						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
+							<tr>
+								<td style="color:#858C92;">Hotel:</td>
+								<td><strong>${booking.hotelName}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.room'}:</td>
+								<td><strong>Doble</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.checkin'}:</td>
+								<td><strong>${booking.checkinDate.format('dd MMMM yyyy') }</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.nights'}:</td>
+								<td><strong>${booking.nights}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.price'}:</td>
+								<td><strong>${booking.salePriceCents}&euro;</strong></td>
+							</tr>
+						</table>
+						<br/><br/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="top">
+						<strong style="font-size:14px; margin-bottom:5px; float:left;color:#0098CB;">&{'mails.booking.hotel.client.data'}:</strong>
+						<br/><br/>
+						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.name'}:</td>
+								<td><strong>${user.lastName}, ${user.firstName}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.email'}:</td>
+								<td><strong>${user.email}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.creditcard'}:</td>
+								<td><strong>${booking.creditCardType},  ${booking.creditCard}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.cvc'}:</td>
+								<td><strong>${booking.creditCardCVC}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.creditcardname'}:</td>
+								<td><strong>${booking.creditCardName}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.creditCardExpiry'}:</td>
+								<td><strong>${booking.creditCardExpiry}</strong></td>
+							</tr>
+						</table>
+						<br/><br/>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding:5px; font-family:arial, sans-serif; color:#F1F1F2; color:#ffffff; font-size:12px;">
+			<p>&{'mails.booking.client.thanks'}</p>
 
-Muchas gracias por confiar en nosotros para tus reservas de œltima hora. 
-Esperamos que disfrutes la estancia y vuelvas a visitarnos pronto.
+			<p>&{'mails.booking.client.social'} <a href="http://www.facebook.com/ReallyLateBooking" style="color:#0098CB;">Facebook</a>, <a href="http://twitter.com/#!/rlatebooking/" style="color:#0098CB;">Twitter</a>.</p>
 
-Para estar al d’a de todas nuestras ofertas y las nuevas ciudades abre la aplicaci—n en tu m—vil con frecuencia ,
- visita nuestra p‡gina de Facebook o s’guenos en Twitter.
-
-
-Firma de RLB
-
+			<img src="@@{'/public/images/logo_small.gif'}" style="margin-top:3px;" width="166" height="22"/><br/>
+			<strong style="padding-left:2px;">&{'mails.rlb.booking.department'}</strong><br/>
+			<span style="padding-left:2px;">616 975 363</span><br/>
+			<a href="http://www.reallylatebooking.com style="color:#0098CB; padding-left:2px;">reallylatebooking.com</a><br/>
+			
+		</td>
+	</tr>
+	<tr>
+		<td style="font-family:arial, sans-serif; padding:20px 5px;; font-size:11px; color:#ccc;">
+			&{'mails.rlb.footer'}
+		</td>
+	</tr>
+	</table>
+	</td></tr>
+</table>
 </body>
 </html>
 

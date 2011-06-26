@@ -16,6 +16,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.mail.MailService.Message;
 import com.google.appengine.api.mail.MailServiceFactory;
+import com.google.apphosting.api.ApiProxy.ApiDeadlineExceededException;
+
 import models.Booking;
 import models.User;
 import play.Logger;
@@ -124,6 +126,8 @@ public class Mails extends MailServiceFactory {
    			getMailService().send(message);
    		} catch (IOException e) {
    			Logger.error("Error Sending email", e);
+   		} catch (ApiDeadlineExceededException e){
+   			Logger.error("Error Sending email took too long. usually the mail is sent anyway", e);
    		}
        }
 	   

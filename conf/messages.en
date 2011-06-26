@@ -73,5 +73,9 @@ mails.welcome.p2 = Why only 3 hotels per city? So we can choose only the best qu
 mails.welcome.p3 = Trust ReallyLateBooking to plan your travels. You'll always find a room for the same day.
 mails.welcome.p4 = Enjoy ReallyLateBooking way of traveling! Book in the moment, anywhere. Get a hotel, tonight! 
 
+mails.recoverpass.p1 = You've just requested to recover your password.
+mails.recoverpass.p2 = Click the next link and set your new password:
+mails.recoverpass.link = Recover my password
+
 
 

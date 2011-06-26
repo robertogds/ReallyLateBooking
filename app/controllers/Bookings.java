@@ -10,6 +10,7 @@ import helper.JsonHelper;
 import helper.dto.BookingDTO;
 import helper.dto.BookingStatusMessage;
 import helper.dto.StatusMessage;
+import helper.dto.UserStatusMessage;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -31,16 +32,7 @@ public class Bookings extends Controller{
 	
 	@Before
 	static void checkSignature(){
-		Logger.debug("### HEADERS : " + request.headers.toString());
-		String token = request.params.get("token");
-		String signature = request.params.get("signature");
-		Long timestamp = Long.decode(request.params.get("timestamp"));
-		String baseUrl = request.url;
-		baseUrl = StringUtils.remove(baseUrl, "/"+signature);
-		
-		Logger.debug("Checking signature: " + baseUrl+"#");
-		Boolean correct = ApiSecurer.validateMessage(baseUrl, signature, timestamp, token);
-		
+		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
 			Logger.debug("Invalid signature ");
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
@@ -111,6 +103,5 @@ public class Bookings extends Controller{
 		deal.update();
 	}
 	
-
 	
 }

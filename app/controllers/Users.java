@@ -3,11 +3,14 @@ package controllers;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import notifiers.Mails;
+import helper.JsonHelper;
 import helper.dto.StatusMessage;
 import helper.dto.UserDTO;
 import helper.dto.UserStatusMessage;
 
 import com.google.gson.Gson;
+
+import controllers.oauth.ApiSecurer;
 
 import models.User;
 import play.Logger;
@@ -18,15 +21,17 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import siena.PersistenceManager;
 
-public class Users extends Application {
+public class Users extends Controller {
 	
-	@Before
-	public static void checkLanguage(){
-		Logger.debug("### Accept-language: " + request.acceptLanguage().toString());
-	}
-	
-	public static void list(){
-	  renderJSON(User.all().fetch());
+	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword"})
+	public static void checkSignature(){
+		Boolean correct = ApiSecurer.checkApiSignature(request);
+		if (!correct){
+			Logger.debug("Invalid signature ");
+			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
+					new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "Invalid api signature. Contact hola@reallylatebooking.com"));
+			renderJSON(json);
+		}
 	}
 	
 	public static void rememberPassword(String json){
@@ -95,11 +100,6 @@ public class Users extends Application {
 		}
 	}
 
-	public static void delete(Long id) {
-	    User.findById(id).delete();
-	    renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.delete.correct")));
-	}
-
 	public static void show(Long id)  {
 	    User user = User.findById(id);
 	    renderJSON(new UserDTO(user));
@@ -107,13 +107,24 @@ public class Users extends Application {
 	
 	public static void resetPasswordForm(String code){
 		User user = User.findByResetCode(code);
-		render(user);
+		render(user, code);
 	}
 	
-	public static void saveNewPassword(Long id, String password){
-		User user = User.findById(id);
-		user.password = DigestUtils.md5Hex(password);
-		user.update();
+	public static void saveNewPassword(String code, String password){
+		Logger.debug("User recovery password code " + code);	
+		if( password == null || code==null){
+			flash.error("password cannot be empty");
+		}
+		else{
+			User user = User.findByResetCode(code);
+			if (user != null){
+				user.password = DigestUtils.md5Hex(password);
+				user.update();
+			}
+			else{
+		         flash.error("Account not found");
+			}
+		}
 		render();
 	}
 	

@@ -1,5 +1,8 @@
 package controllers.oauth;
 
+import helper.JsonHelper;
+import helper.dto.StatusMessage;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.SignatureException;
@@ -12,9 +15,12 @@ import javax.crypto.spec.SecretKeySpec;
 import models.User;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import play.libs.Codec;
+import play.mvc.Http;
+import play.mvc.Http.Request;
 
 import siena.sdb.ws.Base64;
 
@@ -28,6 +34,22 @@ import siena.sdb.ws.Base64;
 public class ApiSecurer {
 	
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+	
+	public static Boolean checkApiSignature(Request request){
+		Logger.debug("### HEADERS : " + request.headers.toString());
+		String token = request.params.get("token");
+		String signature = request.params.get("signature");
+		Long timestamp = request.params.get("timestamp") != null ? Long.decode(request.params.get("timestamp")) : null;
+		Logger.debug("### Token # signature # timestamp : " + token + "#" + signature + "#" + timestamp);
+		Boolean correct = Boolean.FALSE;
+		if (token != null && signature!= null && timestamp != null){
+			String baseUrl = request.url;
+			baseUrl = StringUtils.remove(baseUrl, "/"+signature);
+			Logger.debug("Checking signature: " + baseUrl+"#");
+			correct = ApiSecurer.validateMessage(baseUrl, signature, timestamp, token);
+		}
+		return correct;
+	}
 	
 	public static Boolean validateSignature(String token, String message, String timestamp){
 		

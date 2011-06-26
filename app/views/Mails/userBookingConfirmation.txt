@@ -1,1 +1,34 @@
-este seria el email de confirmacion de reserva al usuario
+&{'mails.booking.hotel.hi'} ${user.firstName}, &{'mails.booking.client.justbooked'} ${booking.hotelName}
+
+	&{'mails.booking.client.showreceipt'}
+		&{'mails.booking.code'} ${booking.code}
+		
+		&{'mails.booking.data'}:
+			Hotel: ${booking.hotelName}
+			&{'mails.booking.room'}: Doble
+			&{'mails.booking.checkin'}: ${booking.checkinDate.format('dd MMMM yyyy') }
+			&{'mails.booking.nights'}: ${booking.nights}
+			&{'mails.booking.price'}: ${booking.salePriceCents}&euro;
+			
+		&{'mails.booking.hotel.client.data'}:
+			&{'mails.booking.client.name'}: ${user.lastName}, ${user.firstName}
+			&{'mails.booking.client.email'}: ${user.email}
+			&{'mails.booking.client.creditcard'}: ${booking.creditCardType},  ${booking.creditCard}
+			&{'mails.booking.client.cvc'}: ${booking.creditCardCVC}
+			&{'mails.booking.client.creditcardname'}: ${booking.creditCardName}
+			&{'mails.booking.client.creditCardExpiry'}: ${booking.creditCardExpiry}
+			
+			
+		&{'mails.booking.client.thanks'}
+
+
+		http://www.reallylatebooking.com 
+		&{'mails.booking.client.social'} 
+		http://www.facebook.com/ReallyLateBooking 
+		http://twitter.com/#!/rlatebooking/
+			
+
+&{'mails.rlb.footer'}
+
+
+

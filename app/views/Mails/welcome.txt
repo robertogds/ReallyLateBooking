@@ -1,2 +1,15 @@
-Welcome ${user.firstName},
-que ponemos aqui?
+&{'mails.booking.hotel.hi'} ${user.firstName}, 
+	&{'mails.welcome.welcome'}
+	
+	&{'mails.welcome.p1'}
+	&{'mails.welcome.p2'}
+	&{'mails.welcome.p3'}
+	&{'mails.welcome.p4'}
+	
+	http://www.reallylatebooking.com 
+	&{'mails.booking.client.social'} 
+	http://www.facebook.com/ReallyLateBooking 
+	http://twitter.com/#!/rlatebooking/
+			
+
+&{'mails.rlb.footer'}

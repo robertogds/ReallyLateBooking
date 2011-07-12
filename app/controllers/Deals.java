@@ -8,8 +8,9 @@ import models.*;
 import play.*;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 
-
+@With(Secure.class)
 public class Deals extends Controller {
 	
 	@Before
@@ -17,6 +18,7 @@ public class Deals extends Controller {
 		Logger.debug("### HEADERS : " + request.headers.toString());
 	}
 	
+	@Check("admin")
 	public static void list(String city) {
         render(city);
 	}

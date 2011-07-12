@@ -22,8 +22,10 @@ public class Deal extends Model {
 	@Required
 	public String hotelName;	
 	public boolean active;
+	@Required
 	@Index("city_index")
     public City city;
+	@Required
 	@Index("owner_index")
     public User owner;
 	@Email
@@ -32,10 +34,9 @@ public class Deal extends Model {
 	public Integer salePriceCents;
 	public Integer priceCents;
 	public Integer quantity;
-    @Required
+	public Integer position;
     @MaxSize(10000)
 	public String description;
-	@Required
     @MaxSize(500)
 	public String shortDescription;
 	@MaxSize(500)
@@ -48,10 +49,8 @@ public class Deal extends Model {
 	public String foodDrinkText;
 	@MaxSize(500)
 	public String aroundText;
-	@Required
     @MaxSize(10000)
 	public String descriptionEN;
-	@Required
     @MaxSize(500)
 	public String shortDescriptionEN;
 	@MaxSize(500)
@@ -64,10 +63,8 @@ public class Deal extends Model {
 	public String foodDrinkTextEN;
 	@MaxSize(500)
 	public String aroundTextEN;
-	@Required
     @MaxSize(10000)
 	public String descriptionFR;
-	@Required
     @MaxSize(500)
 	public String shortDescriptionFR;
 	@MaxSize(500)
@@ -95,7 +92,7 @@ public class Deal extends Model {
 	public String image3;
 	public String image4;
 	public String image5;	
-	public Integer position;
+	
 	
 	
 	public Deal(String hotelName, City city) {

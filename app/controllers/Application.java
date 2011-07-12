@@ -28,6 +28,7 @@ import jobs.Bootstrap;
 
 import models.*;
 
+@With(Secure.class)
 public class Application extends Controller {
 	
 	@Before
@@ -35,6 +36,7 @@ public class Application extends Controller {
 		Logger.debug("### Accept-language: " + request.acceptLanguage().toString());
 	}
 	
+	@Check("admin")
 	public static void index() { 
 		//Workaround needed because jobs dont work on gae
 		Bootstrap job = new Bootstrap();

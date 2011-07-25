@@ -6,6 +6,8 @@ import java.util.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
 
+import controllers.CRUD.Hidden;
+
 
 import play.Logger;
 import play.data.validation.Email;
@@ -17,6 +19,7 @@ import play.libs.Crypto;
 import play.libs.OAuth.TokenPair;
 import play.modules.crudsiena.CrudUnique;
 import siena.Column;
+import siena.DateTime;
 import siena.Generator;
 import siena.Id;
 import siena.Model;
@@ -46,6 +49,7 @@ public class User extends Model{
     public String lastName;
     public Boolean isAdmin;
     public Boolean isOwner;
+	@DateTime
     public Date created;
     
     public String token;

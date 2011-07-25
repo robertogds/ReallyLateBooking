@@ -1,0 +1,13 @@
+Que suerte tenemos,
+
+
+El responsable del ${deal.hotelName} acaba de actualizar los precios para hoy:
+	Precio oferta: ${deal.salePriceCents}
+	Disponibilidad: ${deal.quantity}
+	
+Más datos del hotel:
+	Activo: ${deal.active}
+	Position: ${deal.position}
+									
+		
+&{'mails.rlb.footer'}

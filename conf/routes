@@ -8,10 +8,14 @@
 # Home page
 GET     /                                       Application.index
 
+GET     /mobile                                 Application.mobile
+
 GET 	/admin									module:crudsiena
 
+GET     /freeNightEmails						admin.Users.freeNightEmails
+
 # Deals
-GET 	/deals/list/{city}						Deals.list
+# GET 	/deals/list/{city}						Deals.list
 GET 	/deals/{city}							Deals.iPhoneList(format:'json')
 
 # Cities

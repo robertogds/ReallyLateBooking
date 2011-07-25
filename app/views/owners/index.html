@@ -1,4 +1,4 @@
-#{extends 'owners/layout.html' /}
+#{extends 'Owners/layout.html' /}
 
 <div id="crudList" >
 	
@@ -9,20 +9,26 @@
 		<table>
         <thead>
                 <tr>
-                        <th width="400">
+                        <th width="300">
                         	Hotel Name
                         </th>
                          <th width="200">
                         	City
                         </th>
-                         <th width="150">
+                         <th width="100">
                         	Price
                         </th>
-                         <th width="150">
+                         <th width="100">
                         	Sale Price
                         </th>
                          <th width="100">
                         	Disponibilidad
+                        </th>
+                         <th width="100">
+                        	Activo
+                        </th>
+                        <th width="100">
+                        	Actualizado
                         </th>
                 </tr>
         </thead>
@@ -43,6 +49,12 @@
 	             </td>
 	             <td>
 	                  ${deal.quantity}      
+	             </td>
+	              <td>
+	                  ${deal.active}      
+	             </td>
+	               <td>
+	                  ${deal.updated}      
 	             </td>
 	              
 	        </tr>

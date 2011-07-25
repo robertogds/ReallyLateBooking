@@ -13,7 +13,7 @@
 	</div>
 
 	<div id="crudListTable">
-		#{crud.table fields:['hotelName', 'city', 'priceCents', 'salePriceCents', 'quantity','position','active'] }
+		#{crud.table fields:['hotelName', 'city', 'priceCents', 'salePriceCents', 'quantity','position','active', 'updated'] }
 		  #{crud.custom 'city'}
 		  	 ${models.City.findById(object.city.id) }
 		   #{/crud.custom}

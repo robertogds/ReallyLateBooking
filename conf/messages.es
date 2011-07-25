@@ -75,3 +75,8 @@ mails.recoverpass.p1 = Recibes este email porque has solicitado recuperar tu pas
 mails.recoverpass.p2 = Haz clic en el siguiente enlace e introduce tu nuevo password:
 mails.recoverpass.link = recuperar password
 						
+mails.freenight.h1 = ¡Duerme esta noche gratis en Madrid!
+mails.freenight.p1 = ¿Quieres una habitacion para dos en un hotelazo de 4* en el centro de Madrid para esta noche TOTALMENTE GRATIS?!
+mails.freenight.p2 = El primero que nos envie a info@reallylatebooking.com los emails de 5 amigos suyos que se descarguen nuestra aplicacion iphone y se registren se la lleva!
+mails.freenight.p3 = Seguro que tienes 5 amigos con IPhone, ¡no pierdas esta oportunidad y date un capricho!
+mail.freenight.subject = Hotel 4* Gratis esta noche en Madrid

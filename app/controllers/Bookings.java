@@ -100,6 +100,9 @@ public class Bookings extends Controller{
 		Logger.debug("Deal id: " + dealId);
 		Deal deal = Deal.findById(dealId);
 		deal.quantity = deal.quantity - rooms;
+		if (deal.quantity == 0){
+			deal.active = Boolean.FALSE;
+		}
 		deal.update();
 	}
 	

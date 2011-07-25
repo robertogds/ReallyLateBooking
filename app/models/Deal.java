@@ -2,11 +2,22 @@ package models;
 
 import helper.ImageHelper;
 
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import controllers.CRUD.Hidden;
+
+import play.Logger;
 import play.data.validation.Email;
+import play.data.validation.Max;
 import play.data.validation.MaxSize;
+import play.data.validation.Min;
 import play.data.validation.Required;
+import siena.DateTime;
 import siena.Generator;
 import siena.Id;
 import siena.Index;
@@ -35,54 +46,47 @@ public class Deal extends Model {
 	public Integer priceCents;
 	public Integer quantity;
 	public Integer position;
-    @MaxSize(10000)
-	public String description;
-    @MaxSize(500)
-	public String shortDescription;
-	@MaxSize(500)
-	public String detailText;
-	@MaxSize(500)
-	public String hotelText;
-	@MaxSize(500)
-	public String roomText;
-	@MaxSize(500)
-	public String foodDrinkText;
-	@MaxSize(500)
-	public String aroundText;
-    @MaxSize(10000)
-	public String descriptionEN;
-    @MaxSize(500)
-	public String shortDescriptionEN;
-	@MaxSize(500)
-	public String detailTextEN;
-	@MaxSize(500)
-	public String hotelTextEN;
-	@MaxSize(500)
-	public String roomTextEN;
-	@MaxSize(500)
-	public String foodDrinkTextEN;
-	@MaxSize(500)
-	public String aroundTextEN;
-    @MaxSize(10000)
-	public String descriptionFR;
-    @MaxSize(500)
-	public String shortDescriptionFR;
-	@MaxSize(500)
-	public String detailTextFR;
-	@MaxSize(500)
-	public String hotelTextFR;
-	@MaxSize(500)
-	public String roomTextFR;
-	@MaxSize(500)
-	public String foodDrinkTextFR;
-	@MaxSize(500)
-	public String aroundTextFR;
-
+	@Min(0)
+	@Max(23)
+	public Integer limitHour;
 	public String roomType;
 	public Integer hotelCategory;
 	public String address;
 	public String latitude;
 	public String longitude;
+	@DateTime
+	public Date updated;
+	@MaxSize(10000)
+	public String detailText;
+	@MaxSize(10000)
+	public String hotelText;
+	@MaxSize(10000)
+	public String roomText;
+	@MaxSize(10000)
+	public String foodDrinkText;
+	@MaxSize(10000)
+	public String aroundText;
+	@MaxSize(10000)
+	public String detailTextEN;
+	@MaxSize(10000)
+	public String hotelTextEN;
+	@MaxSize(10000)
+	public String roomTextEN;
+	@MaxSize(10000)
+	public String foodDrinkTextEN;
+	@MaxSize(10000)
+	public String aroundTextEN;
+    @MaxSize(10000)
+	public String detailTextFR;
+	@MaxSize(10000)
+	public String hotelTextFR;
+	@MaxSize(10000)
+	public String roomTextFR;
+	@MaxSize(10000)
+	public String foodDrinkTextFR;
+	@MaxSize(10000)
+	public String aroundTextFR;
+
 	@Required
     public String mainImageBig;
 	@Required
@@ -115,7 +119,20 @@ public class Deal extends Model {
 	}
 	
 	public static List<Deal> findActiveDealsByCity(City city){
-		return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(3);
+		Calendar now = Calendar.getInstance();
+		Integer hour = now.get(Calendar.HOUR_OF_DAY);
+		hour = hour + 2; //we are utc+2
+		Logger.info("Hour time right now is: " + hour);
+		//If hour is between 6am and 12pm we return an empty list
+		if (hour >= 6 && hour < 12){
+			return new ArrayList<Deal>();
+		}
+		// between 12 and 23 all deals are open
+		else if (hour >= 12){
+			return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(3);
+		}
+		// after 00 we check the limitHour
+		return all().filter("city", city).filter("active", Boolean.TRUE).filter("limitHour>", hour).order("limitHour").order("position").order("-priceCents").fetch(3);
 	}
 	
 	public static List<Deal> findByCity(City city) {

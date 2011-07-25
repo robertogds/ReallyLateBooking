@@ -1,4 +1,4 @@
-#{extends 'owners/layout.html' /}
+#{extends 'Owners/layout.html' /}
 
 <div id="crudShow">
 
@@ -16,15 +16,25 @@
 		     
 		    <p>
 		        #{field 'quantity'}
-		        <label>Rooms available:</label>
+		        <label>Habitaciones disponibles:</label>
 		        <input type="text" name="${field.name}" 
 		            value="${deal.quantity}" class="${field.errorClass}" />
 		        #{/field}
 		    </p>
-		 
 		    
 		    <p>
-		        <input type="submit" value="Save changes" />
+		        #{field 'salePriceCents'}
+		        <label>Precio de Oferta:</label>
+		        <input type="text" name="${field.name}" 
+		            value="${deal.salePriceCents}" class="${field.errorClass}" />
+		        #{/field}
+		    </p>
+		 
+		    
+		    <p>Recuerda pulsar "Guardar cambios" aunque los datos sean iguales para activar la oferta hoy.</p>
+		    
+		    <p>
+		        <input type="submit" value="Guardar cambios" />
 		    </p>
 		    
 		#{/form}

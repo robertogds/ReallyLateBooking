@@ -13,10 +13,8 @@
 		&{'mails.booking.hotel.client.data'}:
 			&{'mails.booking.client.name'}: ${user.lastName}, ${user.firstName}
 			&{'mails.booking.client.email'}: ${user.email}
-			&{'mails.booking.client.creditcard'}: ${booking.creditCardType},  ${booking.creditCard}
-			&{'mails.booking.client.cvc'}: ${booking.creditCardCVC}
+			&{'mails.booking.client.creditcard'}: ${booking.creditCardType}
 			&{'mails.booking.client.creditcardname'}: ${booking.creditCardName}
-			&{'mails.booking.client.creditCardExpiry'}: ${booking.creditCardExpiry}
 			
 			
 		&{'mails.booking.client.thanks'}

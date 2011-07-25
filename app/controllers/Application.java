@@ -28,7 +28,6 @@ import jobs.Bootstrap;
 
 import models.*;
 
-@With(Secure.class)
 public class Application extends Controller {
 	
 	@Before
@@ -36,17 +35,21 @@ public class Application extends Controller {
 		Logger.debug("### Accept-language: " + request.acceptLanguage().toString());
 	}
 	
-	@Check("admin")
 	public static void index() { 
+		//redirect to the extranet
+		Owners.index();
+	} 
+	
+	public static void mobile(){
 		//Workaround needed because jobs dont work on gae
 		Bootstrap job = new Bootstrap();
 		job.doJob();
 		//End of workaround
 		
-		Collection<City> cities = City.all().fetch();
+		Collection<City> cities = City.findActiveCities();
 		Logger.debug("Number of cities: " + cities.size());
 		render(cities); 
-	} 
+	}
 	
 	public static void login(String json) { 
 		String body = json != null ? json : params.get("body");

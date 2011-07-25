@@ -27,7 +27,7 @@ public class Bootstrap extends Job {
 		 pablo.insert();
 		 pablo.validated = true;
 		 pablo.update();
-		 User roberto = new User("roberto@iipir.com", "iipir11", "Roberto", "Gil", true, true);
+		 User roberto = new User("roberto@iipir.com", "iipir11", "Roberto", "Gil", false, false);
 		 roberto.insert();
 		 roberto.validated = true;
 		 roberto.update();

@@ -1,7 +1,10 @@
 package controllers;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+
+import notifiers.Mails;
 
 import jobs.Bootstrap;
 import models.City;
@@ -28,12 +31,14 @@ public class Owners extends Controller{
 		render(deal);
 	}
 	
-	public static void save(Long id, Integer quantity) {
+	public static void save(Long id, Integer quantity, Integer salePriceCents) {
 	    Deal deal;
 	    // Retrieve post
 	    deal = Deal.findById(id);
 	    // Edit
 	    deal.quantity = quantity;
+	    deal.salePriceCents = salePriceCents;
+	    deal.updated = Calendar.getInstance().getTime();
 
 	    // Validate
 	    validation.valid(deal);
@@ -42,6 +47,8 @@ public class Owners extends Controller{
 	    }
 	    // Save
 	    deal.update();
+	    //Notify RLB of the updated prices
+	    Mails.ownerUpdatedDeal(deal);
 	    index();
 	}
 

@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Collection;
+
 import play.data.validation.Required;
 import siena.Generator;
 import siena.Id;
@@ -16,6 +18,7 @@ public class City extends Model {
 	public String name;
 	@Required
 	public String url;
+	public boolean active;
 	
 	public City(String name, String url){
 		this.name = name;
@@ -36,5 +39,9 @@ public class City extends Model {
 	
 	public String toString() {
 		return name;
+	}
+
+	public static Collection<City> findActiveCities() {
+		return all().filter("active", true).order("name").fetch();
 	}
 }

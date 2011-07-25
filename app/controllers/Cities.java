@@ -9,7 +9,7 @@ import play.mvc.Controller;
 public class Cities  extends Controller {
 	
 	public static void cityList() {
-	        Collection<City> cities = City.all().order("name").fetch();
+	        Collection<City> cities = City.findActiveCities();
 	        
 	        renderJSON(cities);
 	}

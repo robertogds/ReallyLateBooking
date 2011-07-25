@@ -10,7 +10,6 @@ import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
 
-@With(Secure.class)
 public class Deals extends Controller {
 	
 	@Before
@@ -18,7 +17,6 @@ public class Deals extends Controller {
 		Logger.debug("### HEADERS : " + request.headers.toString());
 	}
 	
-	@Check("admin")
 	public static void list(String city) {
         render(city);
 	}
@@ -32,6 +30,25 @@ public class Deals extends Controller {
 				dealsDtos.add(new DealDTO(deal));
 			}
 	        renderJSON(dealsDtos);
+	}
+	
+	public static void sendStatusEmailToOwners(){
+		Collection<City> cities = City.all().fetch();
+		for (City city : cities){
+			sendStatusEmailToOwnersByCity(city);
+		}
+	}
+	
+	private static void sendStatusEmailToOwnersByCity(City city){
+		Collection<Deal> deals = Deal.findActiveDealsByCity(city);
+		for (Deal deal: deals){
+			if (deal.active){
+				//send an email if deal is active
+			}
+			else{
+				//send a different email if deal is inactive
+			}
+		}
 	}
 	
 	private static Collection<Deal> fetchDeals(String cityName) {

@@ -65,8 +65,6 @@ public class DealDTO {
 		this.image3 = deal.image3;
 		this.image4 = deal.image4;
 		this.image5 = deal.image5;
-		this.description = deal.descriptionEN;
-		this.shortDescription = deal.shortDescriptionEN;
 		this.detailText = deal.detailTextEN;
 		this.hotelText = deal.hotelTextEN;
 		this.roomText = deal.roomTextEN;
@@ -77,8 +75,6 @@ public class DealDTO {
 		Logger.debug("Filling deal info with locale: " + lang);
 		if (lang.equals("es")){
 			Logger.debug("Filling deal info with Spanish ");
-			this.description = deal.description;
-			this.shortDescription = deal.shortDescription;
 			this.detailText = deal.detailText;
 			this.hotelText = deal.hotelText;
 			this.roomText = deal.roomText;
@@ -87,8 +83,6 @@ public class DealDTO {
 		}
 		else if (lang.equals(Lang.getLocale().FRENCH.getLanguage())){
 			Logger.debug("Filling deal info with French ");
-			this.description = deal.descriptionFR;
-			this.shortDescription = deal.shortDescriptionFR;
 			this.detailText = deal.detailTextFR;
 			this.hotelText = deal.hotelTextFR;
 			this.roomText = deal.roomTextFR;

@@ -1,0 +1,108 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+	<section id="login">
+		<img src=@{'/public/images/layout/bg_image.jpg'} class="welcome_bg_img"/>
+		<h1>ReallyLateBooking</h1>
+		<div class="loginPanel">
+			<div class="loginError">
+				<span class="icon"></span><p>Mail o contrase&ntilde;a incorrecta</p>
+			</div>
+			<div class="loginForm">
+				<label>Mail</label>
+				<input type="text"/>
+				<label>Password</label>
+				<input type="password"/>
+				
+				<a id="loginAccess" href="#cities" class="bt" href="#"><span>Acceder</span></a>
+			</div>
+			
+			<div class="invitation">
+				<p>Si todavia no eres usuario, y quiers formar parte de nuestro selecto club......</p>
+				<a class="bt" href="#"><span>Recibir Invitaci&oacute;n</span></a>
+			</div>
+		</div>
+	</section>
+	<section id="cities">
+		<div class="toolbar">
+			<!-- <a href="#cities" class="button">Cities</a> -->
+			<h1>Ciudades</h1>
+		</div>
+		<ul id="cities_list" class="list">
+			
+		</ul>
+	</section>
+	
+	<div id="endOfPage"></div> <!-- I need it to add items details -->
+	
+<script>
+			$(document).ready(function(){	
+				
+				var cities_url = '@{Cities.cityList}';
+				loadCitiesList(cities_url);
+				
+				var window_height = window.innerHeight;
+				
+				$('body').css('height', (window_height-65)+'px');
+				
+				insertFooter('list');
+				
+				$("body > section").first().addClass("current");
+				
+				//showWelcomeScreen(window_height);
+				
+				$('#loginAccess').live('tap click', function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+					var curTaget = $(e.currentTarget);
+					var section = curTaget.closest('section');
+					var link = $(this);
+					var prev_element = "#"+(section.removeClass("current").addClass("reverse").attr("id"));
+					
+					var t = $(link.attr("href"));
+					var t_id = link.attr("rel");
+					$(t_id).addClass("current");
+					setBackButton(prev_element, t);
+				});
+				$("a.back").live('tap click', function(e) {
+					var current = $(e.currentTarget).attr("href");
+					$(".current").removeClass("current").addClass("reverse");
+					$(current).addClass("current");
+				});
+				
+				$("#cities_list li").live('tap click', function(e){
+					e.preventDefault();
+					e.stopPropagation();
+					
+					var curTaget = $(e.currentTarget);
+					var section = curTaget.closest('section');
+					var link = curTaget.find("a.moreInfo");
+					var prev_element = "#"+(section.removeClass("current").addClass("reverse").attr("id"));
+					var t = $(link.attr("href"));
+					var t_url = link.attr("rel");
+					
+					var deals_url = '@{Deals.iPhoneList}';
+					loadItemsList(deals_url, t_url);
+					setBackButton(prev_element, t);
+				});
+				
+				
+				// go to item detail when clicking on a item list element
+				$(".items_list li").live('tap click', function(e){
+					e.preventDefault();
+					e.stopPropagation();
+					
+					var curTaget = $(e.currentTarget);
+					var section = curTaget.closest('section');
+					var link = curTaget.find("a.moreInfo");
+					var prev_element = "#"+(section.removeClass("current").addClass("reverse").attr("id"));
+					var t = $(link.attr("href"));
+					var t_id = link.attr("rel");
+					
+					loadItemDetail(t_id);
+					
+					setBackButton(prev_element, t);
+				});
+				
+			});
+		</script>

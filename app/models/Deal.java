@@ -49,6 +49,7 @@ public class Deal extends Model {
 	@Min(0)
 	@Max(23)
 	public Integer limitHour;
+	public Boolean breakfastIncluded;
 	public String roomType;
 	public Integer hotelCategory;
 	public String address;

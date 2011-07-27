@@ -8,7 +8,7 @@
 # Home page
 GET     /                                       Application.index
 
-GET     /mobile                                 Application.mobile
+GET     /mobile                                 Mobile.main
 
 GET 	/admin									module:crudsiena
 

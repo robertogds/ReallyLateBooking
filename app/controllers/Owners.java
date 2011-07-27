@@ -31,7 +31,7 @@ public class Owners extends Controller{
 		render(deal);
 	}
 	
-	public static void save(Long id, Integer quantity, Integer salePriceCents) {
+	public static void save(Long id, Integer quantity, Integer salePriceCents, Boolean breakfastIncluded) {
 	    Deal deal;
 	    // Retrieve post
 	    deal = Deal.findById(id);
@@ -39,6 +39,7 @@ public class Owners extends Controller{
 	    deal.quantity = quantity;
 	    deal.salePriceCents = salePriceCents;
 	    deal.updated = Calendar.getInstance().getTime();
+	    deal.breakfastIncluded = breakfastIncluded;
 
 	    // Validate
 	    validation.valid(deal);

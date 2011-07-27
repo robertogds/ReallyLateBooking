@@ -35,8 +35,10 @@ public class Bootstrap extends Job {
 
 	private void initializeDeals() {
 		City madrid = new City("Madrid", "madrid");
+		madrid.active = Boolean.TRUE;
 		madrid.insert();
 		City barcelona = new City("Barcelona", "barcelona");
+		barcelona.active = Boolean.TRUE;
 		barcelona.insert();
 		Deal ritz = new Deal("Hotel Ritz", madrid, Boolean.TRUE);
 		ritz.address = "castellana 43";

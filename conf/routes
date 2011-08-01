@@ -10,9 +10,8 @@ GET     /                                       Application.index
 
 GET     /mobile                                 Mobile.main
 
+GET     /admin/users/freeNightEmails			admin.Users.freeNightEmails
 GET 	/admin									module:crudsiena
-
-GET     /freeNightEmails						admin.Users.freeNightEmails
 
 # Deals
 # GET 	/deals/list/{city}						Deals.list
@@ -27,7 +26,7 @@ GET     /user/{userId}/bookings/{token}/{timestamp}/{signature}     Bookings.lis
 POST    /booking/{token}/{timestamp}/{signature}         			Bookings.create(format:'json')
 
 # Users Rest
-POST    /users/login                            					Application.login(format:'json')
+POST    /users/login                            				    Users.login(format:'json')
 POST	/users/remember 											Users.rememberPassword(format:'json')
 GET     /users/activate/{code}                  					Application.activate
 GET     /user/{id}/{token}/{timestamp}/{signature}            		Users.show(format:'json')

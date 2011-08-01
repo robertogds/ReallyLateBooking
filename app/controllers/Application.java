@@ -51,23 +51,6 @@ public class Application extends Controller {
 		render(cities); 
 	}
 	
-	public static void login(String json) { 
-		String body = json != null ? json : params.get("body");
-		Logger.debug("JSON received: " + body);
-		
-		if (body != null){
-			User user = new Gson().fromJson(body, User.class);
-			
-			Logger.debug("Authenticate result: " + Security.authenticate(user.email, user.password));
-			
-			if (Security.authenticateJson(user.email, user.password)){
-				User dbUser = User.findByEmail(user.email);
-				renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.login.correct"), dbUser));
-			}
-		}
-		
-		renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("user.login.incorrect")));
-	}
 	
 	public static void activate(String code){
 		Logger.debug("##### Validatind user with code: " + code);

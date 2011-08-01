@@ -1,5 +1,6 @@
 #{extends 'CRUD/layout.html' /}
 
+
 <div id="crudList" class="${type.name}">
 	
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
@@ -13,7 +14,7 @@
 	</div>
 
 	<div id="crudListTable">
-		#{crud.table fields:['email', 'firstName' , 'lastName','isAdmin','isOwner'] /}
+		#{crud.table fields:['email', 'firstName' , 'lastName','isAdmin','isOwner','isFacebook','created'] /}
 	</div>
 	
 	<div id="crudListPagination">
@@ -23,5 +24,10 @@
 	<p id="crudListAdd">
 		<a href="@{blank()}">&{'crud.add', type.modelName}</a>
 	</p>
-
+	<p class="crudListExport"  >
+		<a href="@{admin.Users.exportClientsCSV}">Export clients as CSV </a>
+	</p>
+	<p class="crudListExport"  id="exportAll">
+		<a href="@{admin.Users.exportAllCSV}">Export all users as CSV </a>
+	</p>
 </div>

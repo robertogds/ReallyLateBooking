@@ -96,7 +96,12 @@ public class Deal extends Model {
 	public String image2;
 	public String image3;
 	public String image4;
-	public String image5;	
+	public String image5;
+	public String image6;
+	public String image7;
+	public String image8;
+	public String image9;
+	public String image10;
 	
 	
 	

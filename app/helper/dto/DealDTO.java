@@ -38,6 +38,11 @@ public class DealDTO {
 	public String image3;
 	public String image4;
 	public String image5;
+	public String image6;
+	public String image7;
+	public String image8;
+	public String image9;
+	public String image10;
 	public String detailText;
 	public String hotelText;
 	public String roomText;
@@ -65,6 +70,11 @@ public class DealDTO {
 		this.image3 = deal.image3;
 		this.image4 = deal.image4;
 		this.image5 = deal.image5;
+		this.image6 = deal.image6;
+		this.image7 = deal.image7;
+		this.image8 = deal.image8;
+		this.image9 = deal.image9;
+		this.image10 = deal.image10;
 		this.detailText = deal.detailTextEN;
 		this.hotelText = deal.hotelTextEN;
 		this.roomText = deal.roomTextEN;

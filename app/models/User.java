@@ -49,11 +49,14 @@ public class User extends Model{
     public String lastName;
     public Boolean isAdmin;
     public Boolean isOwner;
+    public Boolean isFacebook;
 	@DateTime
     public Date created;
-    
     public String token;
-    public String secret;   
+    public String secret;  
+    public Integer credit;
+    public String inviteByCode;
+    public String inviteCode;
     
     public User(String email, String password, String firstName, String lastName) {
         this.email = email;
@@ -85,6 +88,9 @@ public class User extends Model{
         this.secret = RandomStringUtils.randomAlphanumeric(24);
         this.email = this.email.toLowerCase();
         this.created = Calendar.getInstance().getTime();
+        this.isAdmin = this.isAdmin!=null ? this.isAdmin : Boolean.FALSE;
+		this.isOwner = this.isOwner!=null ? this.isOwner : Boolean.FALSE;
+		this.isFacebook = this.isFacebook!=null ? this.isFacebook : Boolean.FALSE;
     	super.insert();
 	}
     
@@ -145,5 +151,12 @@ public class User extends Model{
     public static User findByToken(String token){
     	return User.all().filter("token", token.trim()).get();
     }
+
+	public Boolean checkFacebookUserExists() {
+		if (this.isFacebook != null && this.isFacebook && User.findByEmail(this.email) != null){
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
     
 }

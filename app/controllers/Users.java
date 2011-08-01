@@ -9,6 +9,7 @@ import helper.dto.UserDTO;
 import helper.dto.UserStatusMessage;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import controllers.oauth.ApiSecurer;
 
@@ -19,11 +20,12 @@ import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;
+import siena.Json;
 import siena.PersistenceManager;
 
 public class Users extends Controller {
 	
-	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword"})
+	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login"})
 	public static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -32,6 +34,23 @@ public class Users extends Controller {
 					new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "Invalid api signature. Contact hola@reallylatebooking.com"));
 			renderJSON(json);
 		}
+	}
+	
+	public static void login(String json) { 
+		String body = json != null ? json : params.get("body");
+		Logger.debug("JSON received: " + body);
+		
+		if (body != null){
+			User user = new Gson().fromJson(body, User.class);
+			if (Security.authenticateJson(user.email, user.password) || 
+					(user.isFacebook != null && user.isFacebook)){
+				User dbUser = User.findByEmail(user.email);
+				Logger.debug("User found: " + user.email);
+				renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.login.correct"), dbUser));
+			}
+		}
+		
+		renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("user.login.incorrect")));
 	}
 	
 	public static void rememberPassword(String json){
@@ -62,19 +81,25 @@ public class Users extends Controller {
 	}
 	
 	private static void validateAndSave(@Valid User user){
-		user.validate();
-		if (!validation.hasErrors()){
-			user.insert();
-			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "CREATED", Messages.get("user.create.correct"), user);
-			Logger.debug("User correctly created " + new Gson().toJson(message));	
-			Mails.welcome(user);
-			//Mails.validate(user);
-			renderJSON(message);
+		if (user.checkFacebookUserExists()){
+		    String json = new Gson().toJson(user,User.class);	
+			login(json);
 		}
 		else{
-			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), user);
-			Logger.debug("User couldnt be created " + new Gson().toJson(message));	
-			renderJSON(message);
+			user.validate();
+			if (!validation.hasErrors()){
+				user.insert();
+				UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "CREATED", Messages.get("user.create.correct"), user);
+				Logger.debug("User correctly created " + new Gson().toJson(message));	
+				Mails.welcome(user);
+				//Mails.validate(user);
+				renderJSON(message);
+			}
+			else{
+				UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), user);
+				Logger.debug("User couldnt be created " + new Gson().toJson(message));	
+				renderJSON(message);
+			}
 		}
 	}
 

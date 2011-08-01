@@ -71,7 +71,6 @@ function loadItemDetail(item_id){
 function findDealById(item_id){
 	for (i=0;i<root_deals.length;i++){
 		if(root_deals[i].id == item_id){
-			alert("founded");
 			return root_deals[i];
 		}
 	}
@@ -170,4 +169,51 @@ function insertFooter(section){
 	itemHTML 	+=	"</div>";
 	
 	$('section#'+section).append(itemHTML);
+}
+
+function showWelcomeScreen(window_height){
+	
+	var next_screen = '#login';
+	$('img.welcome_bg_img').css('height', window_height+'px');
+	
+	// show welcome screen 3 seconds
+	$('#welcome').show().removeClass('hidden');
+	setTimeout(function(){
+		  $(next_screen).addClass("current");
+		  $('#welcome').remove();
+	},500); 
+	
+	// remove this line when welcome screen is show
+	//$(next_screen).addClass("current");
+}
+
+function doLogin(login_url, email,password, curTaget, link){
+	var user = "{'email':'"+ email + "','password':'" + password + "'}";
+	$.ajax({
+		type: 'POST',
+		url: login_url, 
+		dataType: 'json', 
+		data: user,
+		success: function(data) { 
+			if (data.status == 200){
+				var section = curTaget.closest('section');
+				var prev_element = "#"+(section.removeClass("current").addClass("reverse").attr("id"));
+				var t = $(link.attr("href"));
+				var t_id = link.attr("rel");
+				$(t_id).addClass("current");
+				setBackButton(prev_element, t);
+			}
+			else{
+				$('.loginError').show();
+			}
+		}, 
+		error: function(xhr, type) {
+			alert("error en login: " + type + " | " + xhr);
+		} 
+	});
+};
+
+function validateLogin(data){
+	
+	  
 }

@@ -134,6 +134,7 @@ public class Booking extends Model {
 		} 
 		else if (this.getRooms() > deal.quantity){
 			Validation.addError("rooms", Messages.get("booking.validation.over"));
+			Logger.error("##AGOTADA: someone tried to make a reservation but there were no left rooms");
 		} 
 		else {
 			creditCardValid();

@@ -33,6 +33,29 @@
 		</ul>
 	</section>
 	
+	<section id="confirmForm" class="">
+	<div class="toolbar">
+		<h1>Confirmar</h1>
+	</div>
+	<article>
+		<form>
+			<input type="text" placeholder="Tipo de tarjeta" class="w100"/>
+			<input type="text" placeholder="N&uacute;mero tarjeta" class="w100"/>
+			<input type="text" placeholder="Titular" class="w100"/>
+			<input type="text" placeholder="Caduca en" class="w100"/>
+			<input type="text" placeholder="cvc Code" class="w100"/>
+		</form>
+		<a class="bt" href="#cities" id="confirmBuy"><span>Comprar</span></a>
+		<div class="descr cb">	  
+			<span class="icon"></span>	  
+			<strong>Notas sobre la reserva</strong>	  
+			<div class="content">
+				RellyLateBookig no har‡ ningœn cargo......
+			</div>
+		</div>
+	</article>
+	</section>
+	
 	<div id="endOfPage"></div> <!-- I need it to add items details -->
 	
 <script>
@@ -97,6 +120,23 @@
 					var t_id = link.attr("rel");
 					
 					loadItemDetail(t_id);
+					
+					setBackButton(prev_element, t);
+				});
+				
+				// go to booking form 
+				$("#buy_button").live('tap click', function(e){
+					e.preventDefault();
+					e.stopPropagation();
+					
+					var curTaget = $(e.currentTarget);
+					var section = curTaget.closest('section');
+					var link = $('#buy_button');
+					var prev_element = "#"+(section.removeClass("current").addClass("reverse").attr("id"));
+					var t = $(link.attr("href"));
+					//var t_id = link.attr("rel");
+					
+					$('#confirmForm').addClass("current");
 					
 					setBackButton(prev_element, t);
 				});

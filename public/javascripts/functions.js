@@ -130,7 +130,7 @@ function fillItemDetail(d){
 	itemHTML 	+=	"	      <strong>" + d.priceCents + "<em>&euro;</em></strong>";
 	itemHTML 	+=	"	    </div>";
 	itemHTML 	+=	"	  </div>";
-	itemHTML 	+=	"	  <a href='#'><span>buy</span></a>";
+	itemHTML 	+=	"	  <a href='#deal' id='buy_button' ><span>buy</span></a>";
 	itemHTML 	+=	"	</div>";
 	itemHTML 	+=	"	<div class='address'>";
 	itemHTML 	+=	"	  <span class='icon'></span>";

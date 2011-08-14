@@ -1,23 +1,11 @@
-<!-- Indices written at Sat, 30 Jul 2011 01:55:24 CEST -->
+<!-- Indices written at Sun, 14 Aug 2011 10:33:09 CEST -->
 
 <datastore-indexes>
 
-    <!-- Used 2 times in query history -->
+    <!-- Used 1 time in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="name" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 7 times in query history -->
-    <datastore-index kind="users" ancestor="false" source="auto">
-        <property name="isOwner" direction="asc"/>
-        <property name="email" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="users" ancestor="false" source="auto">
-        <property name="created" direction="asc"/>
-        <property name="email" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

@@ -31,7 +31,8 @@ public class Owners extends Controller{
 		render(deal);
 	}
 	
-	public static void save(Long id, Integer quantity, Integer salePriceCents, Boolean breakfastIncluded) {
+	public static void save(Long id, Integer quantity, Integer salePriceCents, boolean breakfastIncluded) {
+		Logger.debug("breakfast: " + breakfastIncluded);
 	    Deal deal;
 	    // Retrieve post
 	    deal = Deal.findById(id);

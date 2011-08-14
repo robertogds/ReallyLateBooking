@@ -32,6 +32,7 @@ public class Application extends Controller {
 	
 	@Before
 	public static void checkLanguage(){
+		Logger.debug("AAAAAAAAB");
 		Logger.debug("### Accept-language: " + request.acceptLanguage().toString());
 	}
 	
@@ -41,10 +42,16 @@ public class Application extends Controller {
 	} 
 	
 	public static void mobile(){
-		//Workaround needed because jobs dont work on gae
-		Bootstrap job = new Bootstrap();
-		job.doJob();
-		//End of workaround
+		if (Play.mode.isDev()){
+			Logger.debug("POr aqui entra");
+			//Workaround needed because jobs dont work on gae
+			Bootstrap job = new Bootstrap();
+			job.doJob();
+			//End of workaround
+			
+			Bookings.doHotUsaBooking(null);
+		}
+		
 		
 		Collection<City> cities = City.findActiveCities();
 		Logger.debug("Number of cities: " + cities.size());

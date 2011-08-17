@@ -8,6 +8,9 @@
 # Home page
 GET     /                                       Application.index
 
+# Cron tasks
+GET     /cron/refreshHotUsaPrices               Deals.refreshHotUsaPrices
+
 GET     /mobile                                 Mobile.main
 
 GET     /admin/users/freeNightEmails			admin.Users.freeNightEmails

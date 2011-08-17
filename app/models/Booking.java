@@ -59,7 +59,7 @@ public class Booking extends Model {
     public Integer creditCardCVC;
     
     public String code;
-	public Integer salePriceCents;
+	public Float salePriceCents;
 	public Integer priceCents;
 	public String hotelName;
 
@@ -95,7 +95,7 @@ public class Booking extends Model {
     	return Booking.all().filter("user", user).fetch();
     }
    
-    public Integer getTotal() {
+    public Float getTotal() {
         return deal.salePriceCents * nights;
     }
     

@@ -66,10 +66,10 @@ mails.booking.client.thanks = Muchas gracias por confiar en nosotros para tus re
 mails.booking.client.social = Para estar al día de todas nuestras ofertas y las nuevas ciudades abre la aplicación en tu móvil con frecuencia, y visita nuestras paginas en  
 
 mails.welcome.welcome = bienvenido a ReallyLateBooking
-mails.welcome.p1 = Ya puedes reservar los mejores hoteles de cada ciudad desde tu móvil y en el último momento.
+mails.welcome.p1 = Reserva hotel ESTA NOCHE con un descuento de hasta un 70&#37; sobre el precio habitual.
 mails.welcome.p2 = ¿Por qué solo 3 hoteles en cada ciudad? Porque solo te ofrecemos hoteles de calidad y así podemos negociar los mejores precios con cada hotel.
 mails.welcome.p3 = Confía en  ReallyLateBooking para conseguir los mejores precios y sin necesidad de reservar días antes. Siempre tendrás habitaciones disponibles el último día.
-mails.welcome.p4 = Disfruta este nuevo modo de viajar, ¡reserva ahora tu hotel para esta noche!
+mails.welcome.p4 = Disfruta este nuevo modo de viajar, ¡reserva ahora tu HOTEL PARA ESTA NOCHE!
 
 mails.recoverpass.p1 = Recibes este email porque has solicitado recuperar tu password.
 mails.recoverpass.p2 = Haz clic en el siguiente enlace e introduce tu nuevo password:

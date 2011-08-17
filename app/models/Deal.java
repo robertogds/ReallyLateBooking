@@ -32,6 +32,8 @@ public class Deal extends Model {
     public Long id;
 	@Required
 	public String hotelName;	
+	public String hotelCode;
+	public Boolean isHotUsa;
 	public boolean active;
 	@Required
 	@Index("city_index")
@@ -42,7 +44,7 @@ public class Deal extends Model {
 	@Email
 	public String contactEmail;
 	@Required
-	public Integer salePriceCents;
+	public Float salePriceCents;
 	public Integer priceCents;
 	public Integer quantity;
 	public Integer position;
@@ -102,6 +104,7 @@ public class Deal extends Model {
 	public String image8;
 	public String image9;
 	public String image10;
+	public String bookingLine;
 	
 	
 	
@@ -122,6 +125,11 @@ public class Deal extends Model {
 
 	public static List<Deal> findActiveDealsByOwner(User owner){
 		return all().filter("owner", owner).order("position").fetch();
+	}
+	
+
+	public static List<Deal> findDealsFromHotUsa(){
+		return all().filter("isHotUsa", Boolean.TRUE).fetch();
 	}
 	
 	public static List<Deal> findActiveDealsByCity(City city){
@@ -158,7 +166,7 @@ public class Deal extends Model {
 			this.city = City.findById(this.city.id);
 		}	
 	}
-	
+		
 	public void prepareImages(){
 		ImageHelper.prepareImagesRoutes(this);
 	}
@@ -166,6 +174,20 @@ public class Deal extends Model {
 
 	public static Deal findById(Long id) {
 		return all().filter("id", id).get();
+	}
+	
+	public static Deal findByHotelCode(String hotelCode) {
+		return all().filter("hotelCode", hotelCode).get();
+	}
+	
+	public static void updateDealByCode(String hotelCode, int quantity, Float price, String lin){
+	    Deal deal = Deal.findByHotelCode(hotelCode);
+	    // Edit
+	    deal.quantity = quantity;
+	    deal.salePriceCents = price;
+	    deal.updated = Calendar.getInstance().getTime();
+	    deal.bookingLine = lin;
+	    deal.update();
 	}
 }
 

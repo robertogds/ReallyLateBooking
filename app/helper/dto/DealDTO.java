@@ -21,7 +21,7 @@ public class DealDTO {
     public Long id;
 	public String hotelName;	
     public City city;
-	public Integer salePriceCents;
+	public Float salePriceCents;
 	public Integer priceCents;
 	public Integer quantity;
 	public String description;

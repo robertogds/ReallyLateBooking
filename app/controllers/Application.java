@@ -1,39 +1,34 @@
 package controllers;
 
-import play.*;
-import play.exceptions.UnexpectedException;
-import play.i18n.Messages;
-import play.mvc.*;
-import play.mvc.Http.Request;
-import play.mvc.Http.Response;
-import play.mvc.results.Ok;
-import play.mvc.results.Result;
+import helper.HotUsaApiHelper;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import helper.dto.StatusMessage;
-import helper.dto.UserStatusMessage;
-
-import java.lang.reflect.Method;
-import java.util.*;
-
-import notifiers.Mails;
-
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.w3c.dom.Document;
 
 import jobs.Bootstrap;
-
-
-import models.*;
+import models.Booking;
+import models.City;
+import models.Deal;
+import models.User;
+import notifiers.Mails;
+import play.Logger;
+import play.Play;
+import play.libs.WS;
+import play.libs.WS.HttpResponse;
+import play.libs.WS.WSRequest;
+import play.mvc.Before;
+import play.mvc.Controller;
 
 public class Application extends Controller {
 	
 	@Before
 	public static void checkLanguage(){
-		Logger.debug("AAAAAAAAB");
-		Logger.debug("### Accept-language: " + request.acceptLanguage().toString());
+		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
 	}
 	
 	public static void index() { 
@@ -41,15 +36,13 @@ public class Application extends Controller {
 		Owners.index();
 	} 
 	
+	
 	public static void mobile(){
 		if (Play.mode.isDev()){
-			Logger.debug("POr aqui entra");
 			//Workaround needed because jobs dont work on gae
 			Bootstrap job = new Bootstrap();
 			job.doJob();
 			//End of workaround
-			
-			Bookings.doHotUsaBooking(null);
 		}
 		
 		

@@ -40,6 +40,16 @@ public class Bootstrap extends Job {
 		City barcelona = new City("Barcelona", "barcelona");
 		barcelona.active = Boolean.TRUE;
 		barcelona.insert();
+		City moldavia = new City("Moldavia", "moldavia");
+		moldavia.active = Boolean.TRUE;
+		moldavia.insert();
+		Deal prueba = new Deal("Hotel prueba", moldavia, Boolean.TRUE);
+		prueba.address = "moldavia 43";
+		prueba.mainImageBig = "mainImage.jpg";
+		prueba.mainImageSmall = "mainImageSmall.jpg";
+		prueba.hotelCode = "601022";
+		prueba.isHotUsa = Boolean.TRUE;
+		prueba.insert();
 		Deal ritz = new Deal("Hotel Ritz", madrid, Boolean.TRUE);
 		ritz.address = "castellana 43";
 		ritz.mainImageBig = "mainImage.jpg";

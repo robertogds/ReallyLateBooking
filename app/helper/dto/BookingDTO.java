@@ -40,7 +40,7 @@ public class BookingDTO {
     public Integer creditCardCVC;
     public String creditCardType;
     @Expose
-	public Integer salePriceCents;
+	public Float salePriceCents;
     @Expose
 	public Integer priceCents;
     @Expose
@@ -96,7 +96,7 @@ public class BookingDTO {
 		booking.creditCardType = this.creditCardType;
 		booking.code = this.code;
 		booking.priceCents = this.priceCents;
-		booking.salePriceCents = this.priceCents;
+		booking.salePriceCents = this.salePriceCents;
 		booking.hotelName = this.hotelName;
 		return booking;
 	}

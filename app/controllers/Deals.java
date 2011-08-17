@@ -1,5 +1,6 @@
 package controllers;
 
+import helper.HotUsaApiHelper;
 import helper.dto.DealDTO;
 
 import java.util.*;
@@ -32,6 +33,10 @@ public class Deals extends Controller {
 	        renderJSON(dealsDtos);
 	}
 	
+	/*
+	 * Send to hoteliers the current status of their hotels
+	 * Not sure if we'll do it
+	 */
 	public static void sendStatusEmailToOwners(){
 		Collection<City> cities = City.all().fetch();
 		for (City city : cities){
@@ -43,18 +48,38 @@ public class Deals extends Controller {
 		Collection<Deal> deals = Deal.findActiveDealsByCity(city);
 		for (Deal deal: deals){
 			if (deal.active){
-				//send an email if deal is active
+				//TODO send an email if deal is active
 			}
 			else{
-				//send a different email if deal is inactive
+				//TODO send a different email if deal is inactive
 			}
 		}
 	}
 	
+	/*
+	 * Used to avoid the lazy load. do we really need this?
+	 */
 	private static Collection<Deal> fetchDeals(String cityName) {
 			City city = City.findByName(cityName);
 	        Collection<Deal> deals = Deal.findActiveDealsByCity(city);
 	        return deals;
+	}
+	
+	/*
+	 * Refresh prices and availability from hotUsa hotels
+	 * Used by cron GAE
+	 */
+	public static void refreshHotUsaPrices(){
+		Logger.debug("### CRON TASK REFRESHING HOTELS AVAILABILITY START ###");
+		List<Deal> deals = Deal.findDealsFromHotUsa();
+		if (deals.size() > 0){
+			HotUsaApiHelper.getHotelPrices(deals);
+		}
+		else{
+			Logger.debug("We have no any hotusa hotel");
+		}
+		
+		Logger.debug("### CRON TASK REFRESHING HOTELS AVAILABILITY END ###");
 	}
 
 }

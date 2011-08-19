@@ -27,6 +27,7 @@ import siena.Table;
 
 @Table("deals")
 public class Deal extends Model {
+	public static final int MAXDEALS = 3;
 	
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
@@ -138,15 +139,37 @@ public class Deal extends Model {
 		hour = hour + 2; //we are utc+2
 		Logger.info("Hour time right now is: " + hour);
 		//If hour is between 6am and 12pm we return an empty list
+		
 		if (hour >= 6 && hour < 12){
+			Logger.info("We are closed ");
 			return new ArrayList<Deal>();
 		}
 		// between 12 and 23 all deals are open
-		else if (hour >= 12){
-			return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(3);
+		else if (hour >= 12 && hour < 24){
+			Logger.info("We are all opened ");
+			return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(MAXDEALS);
 		}
-		// after 00 we check the limitHour
-		return all().filter("city", city).filter("active", Boolean.TRUE).filter("limitHour>", hour).order("limitHour").order("position").order("-priceCents").fetch(3);
+		
+		List<Deal> activeDeals = all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch();
+		return findActiveDealsByNight(activeDeals, hour);
+	}
+	
+	private static List<Deal> findActiveDealsByNight(List<Deal> deals, Integer hour){
+		
+		List<Deal> active = new ArrayList<Deal>();
+		// 24 = 0
+		hour = hour == 24 ? 0 : hour;
+		Logger.info("Is between 0am and 6am. Hour:  " + hour);
+		// after 24 we check the limitHour
+		for (Deal deal : deals){
+			if (deal.limitHour != null && deal.limitHour > hour){
+				active.add(deal);
+				if (active.size() == MAXDEALS){
+					return active;
+				}
+			}
+		}
+		return active;
 	}
 	
 	public static List<Deal> findByCity(City city) {

@@ -63,6 +63,8 @@ public class Booking extends Model {
 	public Integer priceCents;
 	public String hotelName;
 
+	public Boolean needConfirmation;
+
     public Booking(Deal deal, User user) {
         this.deal = deal;
         this.user = user;
@@ -89,6 +91,10 @@ public class Booking extends Model {
     
     public static List<Booking> findByDeal(Deal deal){
     	return Booking.all().filter("deal", deal).fetch();
+    }
+    
+    public static List<Booking> findConfirmationRequiredDeals(){
+    	return Booking.all().filter("needConfirmation", Boolean.TRUE).fetch();
     }
     
     public static List<Booking> findByUser(User user){

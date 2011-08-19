@@ -64,4 +64,24 @@ public class Application extends Controller {
 		render(user);
 	}
 	
+	public static void confirmReservations(){
+		List<Booking> bookings = Booking.findConfirmationRequiredDeals();
+		
+		for(Booking booking : bookings){
+			String localizador = HotUsaApiHelper.confirmation(booking.code);
+			if (localizador != null){
+				Logger.debug("Confirmation correctly received: " + localizador);
+				booking.code = localizador;
+				booking.needConfirmation = Boolean.FALSE;
+				booking.update();
+				booking.deal = Deal.findById(booking.deal.id);
+				booking.user = User.findById(booking.user.id);
+				Mails.userBookingConfirmation(booking);
+			}
+			else{
+				Logger.error("DANGER: Confirmation not received but User thinks its confirmed");
+			}
+		}
+	}
+	
 }

@@ -7,20 +7,26 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import models.Booking;
 import models.Deal;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.w3c.dom.Document;
 
 import play.Logger;
+import play.data.validation.Validation;
 import play.libs.XML;
 
 import com.google.appengine.api.urlfetch.FetchOptions;
@@ -43,6 +49,14 @@ public final class HotUsaApiHelper {
 	public static final String MADRID = "MADRID";
 	public static final String ENCODING =  "ISO-8859-1";
 	
+	private static final String VISA = "Visa";
+	private static final String MASTERCARD = "Mastercard";
+	private static final String	AMEX = "American Express";
+	
+	private static final String HU_VISA = "VisaCard";
+	private static final String HU_MASTERCARD = "MasterCard";
+	private static final String	HU_AMEX = "AmExCard";
+
 	private static Document prepareRequest(String wsReq){
 		try {
 			wsReq = URLEncoder.encode(wsReq, "UTF-8");
@@ -98,31 +112,6 @@ public final class HotUsaApiHelper {
 		}
 	}
 
-/*	
-	private static Document prepareRequest(String wsReq){
-		WSRequest request = WS.url("http://xml.hotelresb2b.com/xml/listen_xml.jsp");
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("codigousu", "RENG");
-		parameters.put("clausu", "xml269009");
-		parameters.put("afiliacio", "VE");
-		parameters.put("secacc", "54269");
-        parameters.put("xml", wsReq);
-		request.parameters = parameters;
-		request.setHeader("content-type", "text/xml");
-		try {
-			
-            InputSource source = new InputSource(url.openStream());
-            source.setEncoding("ISO-8859-1");
-    		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(source); 
-    		return doc;
-
-        } catch (Exception e) {
-           Logger.error("Error receiving xml from hotusa: " + e);
-        } 
-        
-		return null;
-	}
-*/
 	private static String getAllHotelsByCity(String country, String prov, String city){
 		String request =  "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_disponibilidad_110.dtd\"> <peticion>" +
 		"<tipo>110</tipo> <nombre>Disponibilidad Varias Habitaciones Regímenes</nombre> <agencia>ReallyLateBooking.com</agencia> <parametros>" +
@@ -149,7 +138,7 @@ public final class HotUsaApiHelper {
 		
  		String request = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_disponibilidad_5.dtd\">" +
  		"<peticion> <tipo>105</tipo> <nombre>Petición de Disponibilidad</nombre> <agencia>ReallyLateBooking.com</agencia> <parametros>" +
- 		"<codishotel>"+ hotelCodeList +"</codishotel> <regimen>OB</regimen> <numhab1>2</numhab1> <paxes1>2-0</paxes1> <numhab2>0</numhab2> " +
+ 		"<codishotel>"+ hotelCodeList +"</codishotel> <regimen>OB</regimen> <numhab1>1</numhab1> <paxes1>2-0</paxes1> <numhab2>0</numhab2> " +
  		"<paxes2>0-0</paxes2> <numhab3>0</numhab3> <paxes3>0-0</paxes3> <usuario>939201</usuario> <afiliacion>VE</afiliacion> " +
  		"<fechaentrada>"+sdf.format(today.getTime())+"</fechaentrada> <fechasalida>"+ sdf.format(tomorrow.getTime()) +"</fechasalida> <idioma>1</idioma> <duplicidad>0</duplicidad>" +
  		"<marca/> </parametros></peticion>";
@@ -158,16 +147,57 @@ public final class HotUsaApiHelper {
 	}
 	
 	private static String reservationRequest(Booking booking){
+		Date date = getDateFromString(booking.creditCardExpiry);
+		SimpleDateFormat sdf = new SimpleDateFormat("mm-yy");
+		String dateText = sdf.format(date);
+		String [] splitArr = StringUtils.split(dateText, "-");
+		String year = splitArr[1];
+		String month = splitArr[0];
+		String card = convertCardToHotUsa(booking.creditCardType);
+		
  		String request = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_reserva_3.dtd\">" +
  				"<peticion> <nombre>Peticion de Reserva</nombre> <agencia>ReallyLateBooking.com</agencia> <tipo>202</tipo> <parametros>" +
  				"<codigo_hotel>"+ booking.deal.hotelCode +"</codigo_hotel> <nombre_cliente>"+ booking.creditCardName +"</nombre_cliente> <observaciones></observaciones>" +
- 				" <num_mensaje /> <num_expediente>AB1245</num_expediente> <forma_pago>12</forma_pago> <tipo_targeta>VisaCard</tipo_targeta>" +
- 				" <num_targeta>"+ booking.creditCard +"</num_targeta> <mes_expiracion_targeta>03</mes_expiracion_targeta> <ano_expiracion_targeta>13</ano_expiracion_targeta>" +
+ 				" <num_mensaje /><forma_pago>12</forma_pago> <tipo_targeta>"+card+"</tipo_targeta>" +
+ 				" <num_targeta>"+ booking.creditCard +"</num_targeta> <mes_expiracion_targeta>"+ month +"</mes_expiracion_targeta> <ano_expiracion_targeta>"+ year +"</ano_expiracion_targeta>" +
  				" <titular_targeta>"+ booking.creditCardName +"</titular_targeta> <res>" +
  				"<lin>"+ booking.deal.bookingLine +"</lin> " +
  				"</res> </parametros></peticion>";
  		
  		return request;
+	}
+	
+	private static String confirmationRequest(String localizador){
+ 		String request = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?> <!DOCTYPE peticion SYSTEM \" http://xml.hotelresb2b.com/xml/dtd/pet_reserva.dtd\">" +
+ 				" <peticion><nombre>Anulación/Confirmación de Reserva</nombre> <agencia>ReallyLateBooking.com</agencia> <tipo>3</tipo> <parametros>" +
+ 				"<localizador>"+ localizador +"</localizador><accion>AE</accion> </parametros></peticion>";
+ 		
+ 		return request;
+	}
+	
+	private static String convertCardToHotUsa(String card){
+		if (card.equals(VISA)){
+			return HU_VISA;
+		}
+		if (card.equals(MASTERCARD)){
+			return HU_MASTERCARD;
+		}
+		if (card.equals(AMEX)){
+			return HU_AMEX;
+		}
+		return HU_VISA;
+	}
+	
+	private static Date getDateFromString(String dateString){
+		 String[] parsers = new String[] {"m/yyyy", "m'/'yyyy"};
+		 Date date ;
+		 try {
+			 date = DateUtils.parseDate(dateString, parsers);
+			 return date;
+		} catch (ParseException e) {
+			Logger.error("Error parsing expiration date ", e);
+		} 
+		return null;
 	}
 	
 	public static void getHotelPrices(List<Deal> deals){
@@ -192,10 +222,16 @@ public final class HotUsaApiHelper {
 					if (status.equals("OK") && regime.equals("OK") && pdr.equals("S")){
 						Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString);
 						Float price = Float.parseFloat(priceString);
+						BigDecimal priceRounded = new BigDecimal(price);
+						priceRounded = priceRounded.setScale(0, RoundingMode.UP);
+						price = priceRounded.floatValue();
 						int quantity = 1; //always 1 by now
 						Deal.updateDealByCode(hotelCode, quantity, price, lin);
 					}
 					else{
+						Float price = new Float(0);
+						int quantity = 0; 
+						Deal.updateDealByCode(hotelCode, quantity, price, lin);
 						Logger.debug("Hotel is sold out for tonight");
 					}
 				}
@@ -210,14 +246,17 @@ public final class HotUsaApiHelper {
 	
 	public static String reservation(Booking booking){
 		String wsReq = reservationRequest(booking);
+		Logger.debug("WSRequest: " + wsReq);
 		Document xml = prepareRequest(wsReq);
 		if (xml != null){
 			String status = xml.getElementsByTagName("estado").item(0).getTextContent();
 			Logger.debug("Reservation status: " + status);
 			
 			if (status.equals("00")){
-				String localizador = xml.getElementsByTagName("N_localizador").item(0).getTextContent();
+				String localizador = xml.getElementsByTagName("n_localizador").item(0).getTextContent();
 				Logger.debug("Reservation is Ok, localizador: " + localizador);
+				
+				//PreReservation worked well, so we try confirmation
 				return localizador;
 				
 			}
@@ -229,7 +268,30 @@ public final class HotUsaApiHelper {
 			//TODO
 			Logger.error("Didnt receive a correct answer from HotUsa Api");
 		}
-		return null;
 		
+		return null;
+	}
+	
+	public static String confirmation(String localizador){
+		String wsReq = confirmationRequest(localizador);
+		Document xml = prepareRequest(wsReq);
+		if (xml != null){
+			String status = xml.getElementsByTagName("estado").item(0).getTextContent();
+			Logger.debug("Confirmation status: " + status);
+			
+			if (status.equals("00")){
+				localizador = xml.getElementsByTagName("localizador").item(0).getTextContent();
+				Logger.debug("Confirmation is Ok, localizador: " + localizador);
+				return localizador;
+			}
+			else{
+				Logger.error("Reservation couldnt be completed");
+			}
+		}
+		else{
+			//TODO
+			Logger.error("Didnt receive a correct answer from HotUsa Api");
+		}
+		return null;
 	}
 }

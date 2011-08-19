@@ -10,6 +10,7 @@ GET     /                                       Application.index
 
 # Cron tasks
 GET     /cron/refreshHotUsaPrices               Deals.refreshHotUsaPrices
+GET     /cron/confirmReservations               Application.confirmReservations
 
 GET     /mobile                                 Mobile.main
 

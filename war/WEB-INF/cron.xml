@@ -5,4 +5,10 @@
     <description>Repopulate hotel availability every 2 minutes</description>
     <schedule>every 2 minutes</schedule>
   </cron>
+  <cron>
+    <url>/cron/confirmReservations</url>
+    <description>Confirm partial reservations every 2 minutes</description>
+    <schedule>every 2 minutes</schedule>
+  </cron>
 </cronentries>
+

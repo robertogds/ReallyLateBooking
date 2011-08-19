@@ -1,11 +1,19 @@
-<!-- Indices written at Tue, 16 Aug 2011 15:23:35 CEST -->
+<!-- Indices written at Thu, 18 Aug 2011 18:49:23 CEST -->
 
 <datastore-indexes>
 
-    <!-- Used 2 times in query history -->
+    <!-- Used 7 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="deals" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="city" direction="asc"/>
+        <property name="position" direction="asc"/>
+        <property name="priceCents" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>

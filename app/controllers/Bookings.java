@@ -95,9 +95,9 @@ public class Bookings extends Controller{
 			}
 			else{
 				updateDealRooms(booking.deal.id, booking.rooms);
+				Mails.hotelBookingConfirmation(booking);
+				Mails.userBookingConfirmation(booking);
 			}
-			Mails.hotelBookingConfirmation(booking);
-			Mails.userBookingConfirmation(booking);
 			
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 					new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", 
@@ -114,6 +114,7 @@ public class Bookings extends Controller{
 		if (localizador != null){
 			Logger.debug("Correct booking: " + localizador);
 			booking.code = localizador;
+			booking.needConfirmation = Boolean.TRUE;
 			booking.update();
 		}
 		else{

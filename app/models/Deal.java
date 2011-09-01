@@ -1,5 +1,6 @@
 package models;
 
+import helper.DateHelper;
 import helper.ImageHelper;
 
 import java.sql.Time;
@@ -46,7 +47,20 @@ public class Deal extends Model {
 	public String contactEmail;
 	@Required
 	public Float salePriceCents;
+	@Required
+	@Min(0)
 	public Integer priceCents;
+	@Required
+	@Min(0)
+	public Integer priceDay2;
+	@Required
+	@Min(0)
+	public Integer priceDay3;
+	@Required
+	@Min(0)
+	public Integer priceDay4;
+	@Required
+	@Min(0)
 	public Integer quantity;
 	public Integer position;
 	@Min(0)
@@ -134,9 +148,7 @@ public class Deal extends Model {
 	}
 	
 	public static List<Deal> findActiveDealsByCity(City city){
-		Calendar now = Calendar.getInstance();
-		Integer hour = now.get(Calendar.HOUR_OF_DAY);
-		hour = hour + 2; //we are utc+2
+		Integer hour = DateHelper.getCurrentHour();
 		Logger.info("Hour time right now is: " + hour);
 		//If hour is between 6am and 12pm we return an empty list
 		
@@ -157,8 +169,6 @@ public class Deal extends Model {
 	private static List<Deal> findActiveDealsByNight(List<Deal> deals, Integer hour){
 		
 		List<Deal> active = new ArrayList<Deal>();
-		// 24 = 0
-		hour = hour == 24 ? 0 : hour;
 		Logger.info("Is between 0am and 6am. Hour:  " + hour);
 		// after 24 we check the limitHour
 		for (Deal deal : deals){
@@ -207,7 +217,9 @@ public class Deal extends Model {
 	    Deal deal = Deal.findByHotelCode(hotelCode);
 	    // Edit
 	    deal.quantity = quantity;
-	    deal.salePriceCents = price;
+	    if (price != null && price > 0){
+	    	deal.salePriceCents = price;
+	    }
 	    deal.updated = Calendar.getInstance().getTime();
 	    deal.bookingLine = lin;
 	    deal.update();

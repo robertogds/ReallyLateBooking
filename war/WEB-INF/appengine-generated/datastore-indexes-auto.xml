@@ -1,8 +1,8 @@
-<!-- Indices written at Thu, 18 Aug 2011 18:49:23 CEST -->
+<!-- Indices written at Wed, 31 Aug 2011 13:28:22 CEST -->
 
 <datastore-indexes>
 
-    <!-- Used 7 times in query history -->
+    <!-- Used 6 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="name" direction="asc"/>

@@ -66,9 +66,6 @@ public final class HotUsaApiHelper {
 			urlConnection.setConnectTimeout(10000); 
 			urlConnection.setReadTimeout(10000); 
 			
-			//InputSource source = new InputSource(urlConnection.getInputStream());
-            //source.setEncoding("ISO-8859-1");
-			 
 			String xml = convertStreamToString(urlConnection.getInputStream());
 			xml = StringUtils.trim(xml);
 			Logger.debug("response code: " + xml);
@@ -229,9 +226,8 @@ public final class HotUsaApiHelper {
 						Deal.updateDealByCode(hotelCode, quantity, price, lin);
 					}
 					else{
-						Float price = new Float(0);
 						int quantity = 0; 
-						Deal.updateDealByCode(hotelCode, quantity, price, lin);
+						Deal.updateDealByCode(hotelCode, quantity, null, lin);
 						Logger.debug("Hotel is sold out for tonight");
 					}
 				}

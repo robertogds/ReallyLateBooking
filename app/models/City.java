@@ -42,6 +42,16 @@ public class City extends Model {
 	}
 
 	public static Collection<City> findActiveCities() {
-		return all().filter("active", true).order("name").fetch();
+		Collection<City> cities = all().filter("active", true).order("name").fetch();
+		return cities;
 	}
+
+	public static void addTestCity(Collection<City> cities) {
+		City city = findByName("test");
+		if (city != null){
+			cities.add(city);
+		}
+	}
+	
+	
 }

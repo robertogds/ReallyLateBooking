@@ -10,10 +10,10 @@ public class Cities  extends Controller {
 	
 	public static void cityList() {
 	        Collection<City> cities = City.findActiveCities();
-	        
+	        if (Security.isConnected() && Security.check("admin")){
+	        	City.addTestCity(cities);
+	        }
 	        renderJSON(cities);
 	}
-	
-	
 }
 

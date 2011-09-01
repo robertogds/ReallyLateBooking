@@ -1,6 +1,9 @@
 package helper.dto;
 
+import helper.DateHelper;
+
 import java.security.InvalidParameterException;
+import java.util.Date;
 
 import models.City;
 import models.Deal;
@@ -15,14 +18,15 @@ import siena.Id;
 import siena.Index;
 
 public class DealDTO {
-	
-	
 
     public Long id;
 	public String hotelName;	
     public City city;
 	public Float salePriceCents;
 	public Integer priceCents;
+	public Integer priceDay2;
+	public Integer priceDay3;
+	public Integer priceDay4;
 	public Integer quantity;
 	public String description;
 	public String shortDescription;
@@ -48,6 +52,9 @@ public class DealDTO {
 	public String roomText;
 	public String foodDrinkText;
 	public String aroundText;
+	public Date checkinDate;
+	public Boolean breakfastIncluded;
+
 	
 	
 	public DealDTO(Deal deal) {
@@ -57,6 +64,9 @@ public class DealDTO {
 		this.city = deal.city;
 		this.salePriceCents = deal.salePriceCents;
 		this.priceCents = deal.priceCents;
+		this.priceDay2 = deal.priceDay2;
+		this.priceDay3 = deal.priceDay3;
+		this.priceDay4 = deal.priceDay4;
 		this.quantity = deal.quantity;
 		this.hotelCategory = deal.hotelCategory;
 		this.roomType = deal.roomType;
@@ -80,6 +90,8 @@ public class DealDTO {
 		this.roomText = deal.roomTextEN;
 		this.aroundText = deal.aroundTextEN;
 		this.foodDrinkText = deal.foodDrinkTextEN;
+		this.checkinDate = DateHelper.getTodayDate();
+		this.breakfastIncluded = deal.breakfastIncluded;
 		
 		String lang = Lang.get();
 		Logger.debug("Filling deal info with locale: " + lang);

@@ -44,6 +44,12 @@ public class BookingDTO {
     @Expose
 	public Integer priceCents;
     @Expose
+	public Integer priceDay2;
+    @Expose
+	public Integer priceDay3;
+    @Expose
+	public Integer priceDay4;
+    @Expose
     public String code;
     @Expose
     public String hotelName;
@@ -66,6 +72,9 @@ public class BookingDTO {
 		this.code = booking.code;
 		this.salePriceCents = booking.salePriceCents;
 		this.priceCents = booking.priceCents;
+		this.priceDay2 = booking.priceDay2;
+		this.priceDay3 = booking.priceDay3;
+		this.priceDay4 = booking.priceDay4;
 		this.hotelName = booking.hotelName;
 		Logger.debug("Formating booking date with locale: " + Lang.getLocale());
 		this.checkinDate = booking.checkinDate!= null ? 
@@ -97,6 +106,9 @@ public class BookingDTO {
 		booking.code = this.code;
 		booking.priceCents = this.priceCents;
 		booking.salePriceCents = this.salePriceCents;
+		booking.priceDay2 = this.priceDay2;
+		booking.priceDay3 = this.priceDay3;
+		booking.priceDay4 = this.priceDay4;
 		booking.hotelName = this.hotelName;
 		return booking;
 	}

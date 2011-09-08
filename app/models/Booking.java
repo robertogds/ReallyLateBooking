@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.h2.util.MathUtils;
 
 import play.Logger;
 import play.data.validation.Match;
@@ -65,6 +66,9 @@ public class Booking extends Model {
 	public Integer priceDay4;
 	public String hotelName;
 	public Boolean needConfirmation;
+    public String bookingForFirstName;
+	public String bookingForLastName;
+	public String bookingForEmail;
 
     public Booking(Deal deal, User user) {
         this.deal = deal;
@@ -76,8 +80,8 @@ public class Booking extends Model {
     	this.checkinDate = DateHelper.getTodayDate();
     	this.code = RandomStringUtils.randomAlphanumeric(8);
     	this.deal = Deal.findById(this.deal.id); //fetch deal from datastore
-    	this.priceCents = this.deal.priceCents; //save actual deal price
-    	this.salePriceCents = this.deal.salePriceCents;
+    	this.priceCents = getTotalPrice(); //save actual deal price
+    	this.salePriceCents = getTotal();
     	this.priceDay2 = this.deal.priceDay2;
     	this.priceDay3 = this.deal.priceDay3;
     	this.priceDay4 = this.deal.priceDay4;
@@ -85,7 +89,11 @@ public class Booking extends Model {
     	super.insert();
 	}
     
-    public static Booking findById(Long id) {
+    private Integer getTotalPrice() {
+		return this.deal.priceCents * this.nights;
+	}
+
+	public static Booking findById(Long id) {
         return all().filter("id", id).get();
     }
     
@@ -106,7 +114,17 @@ public class Booking extends Model {
     }
    
     public Float getTotal() {
-        return salePriceCents + priceDay2 + priceDay3 + priceDay4;
+    	Float price = salePriceCents;
+    	if (nights == 2){
+    		price += priceDay2;
+    	}
+    	if (nights == 3){
+    		price += priceDay3;
+    	}
+    	if (nights == 4){
+    		price += priceDay4;
+    	}
+        return price;
     }
     
     public void creditCardValid(){

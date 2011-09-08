@@ -80,15 +80,37 @@ public class Mails extends MailServiceFactory {
 	   	  send(message, template, params);
    }
    
+   
    public static void userBookingConfirmation(Booking booking) {
+	   if (StringUtils.isNotBlank(booking.bookingForEmail)){
+		   userBookingConfirmationForFriend(booking);
+	   }
+	   else{
 	   	  Message message = new Message();
 	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.deal.hotelName);
 	   	  message.setSender("RLB <hola@reallylatebooking.com>");
-	   	  message.setTo(booking.user.email);
 	   	  String template = "Mails/userBookingConfirmation";
+	   	  message.setTo(booking.user.email);
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", booking.user);
 	   	  params.put("booking", booking);
+	   	  send(message, template, params); 
+	   }
+
+   }
+   
+   private static void userBookingConfirmationForFriend(Booking booking) {
+	   	  Message message = new Message();
+	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.deal.hotelName);
+	   	  message.setSender("RLB <hola@reallylatebooking.com>");
+	   	  String template = "Mails/userBookingConfirmationForFriend";
+	   	  User user = booking.user;
+	   	  message.setTo(booking.bookingForEmail);
+	   	  message.setCc(booking.user.email);
+	   	  Map<String, Object> params = new HashMap<String, Object>();
+	   	  params.put("user", user);
+	   	  params.put("booking", booking);
+	   	  
 	   	  send(message, template, params);
    }
    

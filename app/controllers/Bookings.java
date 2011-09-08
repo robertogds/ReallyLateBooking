@@ -96,8 +96,9 @@ public class Bookings extends Controller{
 			else{
 				updateDealRooms(booking.deal.id, booking.rooms);
 				Mails.hotelBookingConfirmation(booking);
-				Mails.userBookingConfirmation(booking);
 			}
+			
+			Mails.userBookingConfirmation(booking);
 			
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 					new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", 

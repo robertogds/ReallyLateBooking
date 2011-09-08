@@ -1,0 +1,114 @@
+<html>
+<body>
+<style>
+	html, body { margin:0; padding:0;}
+</style>
+<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#0D1E28">
+	<tr><td>
+	<table width="600px">
+	<tr>
+		<td style="padding:5px;">
+			<img src="@@{'/public/images/logo_top.gif'}" width="309" height="40"/>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding:5px;">
+			<table width="100%" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;">
+				<tr>
+					<td colspan="2">
+						<p>&{'mails.booking.hotel.hi'},</p>
+						<p><strong>${booking.bookingForFirstName}</strong> &{'mails.booking.hotel.justbooked'}:</p>
+						
+						<table width="200px" bgcolor="#0098CB">
+							<tr><td style="text-align:center;">
+								<span style="font-size:11px;">&{'mails.booking.code'}</span><br/>
+								<strong style="font-size:16px;">${booking.code}</strong>
+							</td></tr>
+						</table>
+						<br/>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top">
+						<strong style="font-size:14px;margin-bottom:5px; float:left; color:#0098CB;">&{'mails.booking.data'}:</strong>
+						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
+							<tr>
+								<td style="color:#858C92;">Hotel:</td>
+								<td><strong>${booking.hotelName}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.room'}:</td>
+								<td><strong>Doble</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.checkin'}:</td>
+								<td><strong>${booking.checkinDate.format('dd MMMM yyyy') }</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.nights'}:</td>
+								<td><strong>${booking.nights}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.price'}:</td>
+								<td><strong>${booking.salePriceCents}&euro;</strong></td>
+							</tr>
+						</table>
+					</td>
+					<td valign="top">
+						<strong style="font-size:14px; margin-bottom:5px; float:left;color:#0098CB;">&{'mails.booking.hotel.client.data'}:</strong>
+						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.name'}:</td>
+								<td><strong>${booking.bookingForLastName}, ${booking.bookingForFirstName} </strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.email'}:</td>
+								<td><strong>${booking.bookingForEmail}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.creditcard'}:</td>
+								<td><strong>${booking.creditCardType},  ${booking.creditCard}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.cvc'}:</td>
+								<td><strong>${booking.creditCardCVC}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.creditcardname'}:</td>
+								<td><strong>${booking.creditCardName}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.creditCardExpiry'}:</td>
+								<td><strong>${booking.creditCardExpiry}</strong></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			
+			<p style="font-family:arial, sans-serif; font-size:14px;color:#0098CB;font-weight:bold;">&{'mails.booking.hotel.remember'}:</p>
+			<ul style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;">
+				<li>&{'mails.booking.hotel.remember.li1'}</li>
+				<li>&{'mails.booking.hotel.remember.li2'}</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding:5px; font-family:arial, sans-serif; color:#F1F1F2; color:#ffffff; font-size:12px;">
+			<img src="@@{'/public/images/logo_small.gif'}" style="margin-top:3px;" width="166" height="22"/><br/>
+			<strong style="padding-left:2px;">&{'mails.rlb.booking.department'}</strong><br/>
+			<span style="padding-left:2px;">616 975 363</span><br/>
+			<a href="http://www.reallylatebooking.com" style="color:#0098CB; padding-left:2px;">reallylatebooking.com</a><br/>
+			
+		</td>
+	</tr>
+	<tr>
+		<td style="font-family:arial, sans-serif; padding:20px 5px;; font-size:11px; color:#ccc;">
+			&{'mails.rlb.footer'}
+		</td>
+	</tr>
+	</table>
+	</td></tr>
+</table>
+</body>
+</html>

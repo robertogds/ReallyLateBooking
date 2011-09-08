@@ -55,6 +55,12 @@ public class BookingDTO {
     public String hotelName;
     @Expose
     public String checkinDate;
+    @Expose
+    public String bookingForFirstName;
+    @Expose
+	public String bookingForLastName;
+    @Expose
+	public String bookingForEmail;
     
     
 	public BookingDTO(Booking booking) {
@@ -76,6 +82,9 @@ public class BookingDTO {
 		this.priceDay3 = booking.priceDay3;
 		this.priceDay4 = booking.priceDay4;
 		this.hotelName = booking.hotelName;
+		this.bookingForEmail = booking.bookingForEmail;
+		this.bookingForFirstName = booking.bookingForFirstName;
+		this.bookingForLastName = booking.bookingForLastName;
 		Logger.debug("Formating booking date with locale: " + Lang.getLocale());
 		this.checkinDate = booking.checkinDate!= null ? 
 					DateFormat.getDateInstance(DateFormat.MEDIUM, Lang.getLocale()).format(booking.checkinDate):
@@ -110,6 +119,9 @@ public class BookingDTO {
 		booking.priceDay3 = this.priceDay3;
 		booking.priceDay4 = this.priceDay4;
 		booking.hotelName = this.hotelName;
+		booking.bookingForEmail = this.bookingForEmail;
+		booking.bookingForFirstName = this.bookingForFirstName;
+		booking.bookingForLastName = this.bookingForLastName;
 		return booking;
 	}
     

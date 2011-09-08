@@ -1,0 +1,32 @@
+&{'mails.booking.hotel.hi'},
+${booking.bookingForFirstName} &{'mails.booking.hotel.justbooked'}:
+
+	&{'mails.booking.code'}    ${booking.code}
+							
+	&{'mails.booking.data'}:
+		Hotel: ${booking.hotelName}
+		&{'mails.booking.room'}: Doble
+		&{'mails.booking.checkin'}: ${booking.checkinDate.format('dd MMMM yyyy') }
+		&{'mails.booking.nights'}: ${booking.nights}
+		&{'mails.booking.price'}: ${booking.salePriceCents}&euro;
+		
+	&{'mails.booking.hotel.client.data'}:
+		&{'mails.booking.client.name'}: ${booking.bookingForLastName}, ${booking.bookingForFirstName}
+		&{'mails.booking.client.email'}: ${booking.bookingForEmail}
+		&{'mails.booking.client.creditcard'}: ${booking.creditCardType},  ${booking.creditCard}
+		&{'mails.booking.client.cvc'}: ${booking.creditCardCVC}
+		&{'mails.booking.client.creditcardname'}: ${booking.creditCardName}
+		&{'mails.booking.client.creditCardExpiry'}: ${booking.creditCardExpiry}
+		
+	&{'mails.booking.hotel.remember'}:
+		&{'mails.booking.hotel.remember.li1'}
+		&{'mails.booking.hotel.remember.li2'}<
+			
+	&{'mails.rlb.booking.department'}
+		616 975 363
+		www.reallylatebooking.com
+		
+		
+		
+&{'mails.rlb.footer'}
+		

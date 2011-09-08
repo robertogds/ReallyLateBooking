@@ -50,13 +50,10 @@ public class Deal extends Model {
 	@Required
 	@Min(0)
 	public Integer priceCents;
-	@Required
 	@Min(0)
 	public Integer priceDay2;
-	@Required
 	@Min(0)
 	public Integer priceDay3;
-	@Required
 	@Min(0)
 	public Integer priceDay4;
 	@Required

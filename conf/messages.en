@@ -77,5 +77,8 @@ mails.recoverpass.p1 = You've just requested to recover your password.
 mails.recoverpass.p2 = Click the next link and set your new password:
 mails.recoverpass.link = Recover my password
 
+extranet.list.title =  Your Hotels
+extranet.title = ReallyLateBooking Extranet 
+
 
 

@@ -36,7 +36,8 @@ public class Deal extends Model {
 	public String hotelName;	
 	public String hotelCode;
 	public Boolean isHotUsa;
-	public boolean active;
+	public Boolean isFake;
+	public Boolean active;
 	@Required
 	@Index("city_index")
     public City city;
@@ -56,6 +57,8 @@ public class Deal extends Model {
 	public Integer priceDay3;
 	@Min(0)
 	public Integer priceDay4;
+	@Min(0)
+	public Integer priceDay5;
 	@Required
 	@Min(0)
 	public Integer quantity;
@@ -65,6 +68,7 @@ public class Deal extends Model {
 	public Integer limitHour;
 	public Boolean breakfastIncluded;
 	public String roomType;
+	public String roomTypeText;
 	public Integer hotelCategory;
 	public String address;
 	public String latitude;
@@ -117,6 +121,8 @@ public class Deal extends Model {
 	public String image9;
 	public String image10;
 	public String bookingLine;
+
+	
 	
 	
 	
@@ -156,7 +162,7 @@ public class Deal extends Model {
 		// between 12 and 23 all deals are open
 		else if (hour >= 12 && hour < 24){
 			Logger.info("We are all opened ");
-			return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(MAXDEALS);
+			return findAllActiveDealsByCity(city, MAXDEALS);
 		}
 		
 		List<Deal> activeDeals = all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch();
@@ -179,9 +185,21 @@ public class Deal extends Model {
 		return active;
 	}
 	
+	/*
+	 * Returns all deals by city independently of the time
+	 * */
+	public static List<Deal> findAllActiveDealsByCity(City city, Integer maxDeals){
+		return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(maxDeals);
+	}
+	
 	public static List<Deal> findByCity(City city) {
         return all().filter("city", city).order("position").order("-priceCents").fetch();
     }
+	
+	public static List<Deal> findAllActiveDealsByCityId(Long cityId){
+		City city = City.findById(cityId);
+		return findAllActiveDealsByCity(city,10);
+	}
 	
 	public static Query<Deal> all() {
     	return Deal.all(Deal.class);
@@ -212,11 +230,22 @@ public class Deal extends Model {
 	
 	public static void updateDealByCode(String hotelCode, int quantity, Float price, String lin){
 	    Deal deal = Deal.findByHotelCode(hotelCode);
-	    // Edit
-	    deal.quantity = quantity;
-	    if (price != null && price > 0){
+	    //Some objects from datastore could come null so we check it
+	    deal.isFake = deal.isFake != null ? deal.isFake : Boolean.FALSE;
+	    deal.quantity = deal.quantity != null ? deal.quantity : 0;
+	    deal.active = deal.active != null ? deal.active : Boolean.FALSE;
+	    
+	    // If isFake but active and dispo 0 we dont want to update dispo
+	    if (!(deal.isFake && deal.quantity == 0 && deal.active)){
+	    	deal.quantity = quantity;
+	    }
+	    
+	    //If isFake we dont want to change the price automatically by the cron task
+	    if (price != null && price > 0 && !deal.isFake){
 	    	deal.salePriceCents = price;
 	    }
+	    Logger.debug("Updatind deal: " + deal.hotelName + " price: " + deal.salePriceCents + " quantity: " + quantity);
+
 	    deal.updated = Calendar.getInstance().getTime();
 	    deal.bookingLine = lin;
 	    deal.update();

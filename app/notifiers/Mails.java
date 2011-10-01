@@ -19,6 +19,7 @@ import com.google.appengine.api.mail.MailServiceFactory;
 import com.google.apphosting.api.ApiProxy.ApiDeadlineExceededException;
 
 import models.Booking;
+import models.City;
 import models.Deal;
 import models.User;
 import play.Logger;
@@ -62,13 +63,6 @@ public class Mails extends MailServiceFactory {
 	   	  Lang.set(lang);
    }
 
-//   public static void validate(User user) {
-//	      setSubject("Welcome %s", user.firstName);
-//	      addRecipient(user.email);
-//	      setFrom("Me <pablo@iipir.com>");
-//	      send(user);
-//   }
-// 
    public static void lostPassword(User user) {
 	      Message message = new Message();
 	   	  message.setSubject(Messages.get("mail.remember.subject") + " "  + user.firstName);
@@ -115,10 +109,13 @@ public class Mails extends MailServiceFactory {
    }
    
    public static void hotelBookingConfirmation(Booking booking) {
-	      String lang = Lang.get(); 
+	   String lang = Lang.get(); 
 	   	  //We want hotels email to be rendered in Spanish
 	   	  Lang.set("es");
-	   	  
+	   if (StringUtils.isNotBlank(booking.bookingForEmail)){
+		   hotelBookingConfirmationForFriend(booking);
+	   }
+	   else{
 	   	  Message message = new Message();
 	   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.deal.hotelName);
 	   	  message.setSender("RLB <hola@reallylatebooking.com>");
@@ -130,22 +127,41 @@ public class Mails extends MailServiceFactory {
 	   	  params.put("booking", booking);
 	   	  
 	   	  send(message, template, params);
-	   	  //set language to client original language
-	   	  Lang.set(lang);
+	   	 
+	   }
+	   //set language to client original language
+	   Lang.set(lang);
    }
    
-   public static void ownerUpdatedDeal(Deal deal) {
+   private static void hotelBookingConfirmationForFriend(Booking booking) {
+	  Message message = new Message();
+   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.deal.hotelName);
+   	  message.setSender("RLB <hola@reallylatebooking.com>");
+   	  message.setTo(booking.deal.contactEmail);
+   	  message.setBcc("hola@reallylatebooking.com"); //easy way to know when a new booking is made
+   	  String template = "Mails/hotelBookingConfirmationForFriend";
+   	  Map<String, Object> params = new HashMap<String, Object>();
+   	  params.put("user", booking.user);
+   	  params.put("booking", booking);
+   	  
+   	  send(message, template, params);
+   }
+
+
+public static void ownerUpdatedDeal(Deal deal) {
 	      String lang = Lang.get(); 
 	   	  //We want hotels email to be rendered in Spanish
 	   	  Lang.set("es");
 	   	  
+	   	  City city = City.findById(deal.city.id);
 	   	  Message message = new Message();
-	   	  message.setSubject("Precios de hoy actualizados para el  "  + deal.hotelName);
+	   	  message.setSubject("Precios de hoy para el  "  + deal.hotelName + " de "+ city.name);
 	   	  message.setSender("RLB <hola@reallylatebooking.com>");
 	   	  message.setTo("precios@reallylatebooking.com");
 	   	  String template = "Mails/ownerUpdatedDeal";
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("deal", deal);
+	      params.put("city", city);
 	   	  
 	   	  send(message, template, params);
 	   	  //set language to client original language

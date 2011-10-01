@@ -1,13 +1,15 @@
 hotelName= Hotel
 active = Activa
 city = Ciudad
-salePriceCents = Precio Oferta (En céntimos)
-priceCents = Precio normal (En céntimos)
-quantity = Cantidad
+salePriceCents = Precio HOY
+priceCents = Precio normal 
+quantity = Disponibilidad
 description = Descripción
 roomType = Tipo de Habitación
 hotelCategory = Categoría del hotel
 address = Dirección del hotel
+breakfastIncluded = Desayuno Incluído
+updated = Actualizado
 
 user.login.correct = El usuario está logado
 user.login.incorrect = Usuario o contraseña incorrecta
@@ -80,3 +82,27 @@ mails.freenight.p1 = ¿Quieres una habitacion para dos en un hotelazo de 4* en e
 mails.freenight.p2 = El primero que nos envie a info@reallylatebooking.com los emails de 5 amigos suyos que se descarguen nuestra aplicacion iphone y se registren se la lleva!
 mails.freenight.p3 = Seguro que tienes 5 amigos con IPhone, ¡no pierdas esta oportunidad y date un capricho!
 mail.freenight.subject = Hotel 4* Gratis esta noche en Madrid
+
+extranet.list.title =  Tus Hoteles
+extranet.title = ReallyLateBooking Extranet 
+
+owners.save = Guardar cambios
+owners.oneday.title = Oferta para esta noche:
+owners.remember= Recuerda pulsar "Guardar cambios" aunque los datos sean iguales para activar la oferta hoy.
+owners.moredays.priceDay5=Precio 5ª noche
+owners.moredays.priceDay4=Precio 4ª noche
+owners.moredays.priceDay3=Precio 3ª noche
+owners.moredays.priceDay2=Precio 2ª noche
+owners.moredays.title= Ofertas de más de un día de duración en ReallyLateBooking (OPCIONAL)
+owners.moredays.description=  Ahora puedes introducir ofertas de 1 a 5 días de duración. La oferta puede ser de la duración de estancia que desees entre 1 y 5 días. Por ejemplo, si quieres introducir una oferta de un máximo de 3 días debes introducir precios para la segunda y tercera noche y dejar la cuarta y quinta en blanco.
+owners.moredays.important= Importante:
+owners.moredays.point1= La disponibilidad debe ser la mínima que cumplan todas las noches introducidas. 
+owners.moredays.point2= El cliente puede reservar una o más noches hasta el máximo introducido.
+owners.moredays.point3= Los precios son siempre para estancias que empiezan esta noche. 
+owners.moredays.point4= Si necesitas enviarnos ofertas para más días venideros, puedes hacerlo por email a precios@reallylatebooking.com
+owners.moredays.point5= Si tienes cualquier duda sobre el funcionamiento de las ofertas de más de un día llamanos al 648093154 y te ayudamos.
+owners.breakfastIncluded= Desayuno Incluido:
+owners.salePriceCents= Precio de Oferta para HOY (IVA incluido):
+owners.quantity = Habitaciones disponibles:
+error.correct = Por favor, corrige los errores.
+

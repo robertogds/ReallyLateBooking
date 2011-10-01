@@ -4,19 +4,21 @@
 
         <h2 id="crudShowTitle">&{'crud.show.title', deal.hotelName}</h2>
 
-        <div class="objectForm">
+        <div class="objectForm" style="padding:10px;">
         
         #{form @save(deal.id)}
- 
+ 			
+ 			<h3>  &{'owners.oneday.title'} </h3>
+ 			
 		    #{ifErrors}
 		        <p class="error">
-		            Please correct these errors.
+		        	&{'error.correct'}
 		        </p>
 		    #{/ifErrors}
 		     
 		    <p>
 		        #{field 'quantity'}
-		        <label>Habitaciones disponibles:</label>
+		        <label>&{'owners.quantity'}</label>
 		        <input type="text" name="${field.name}" 
 		            value="${deal.quantity}" class="${field.errorClass}" />
 		        #{/field}
@@ -24,24 +26,73 @@
 		    
 		    <p>
 		        #{field 'salePriceCents'}
-		        <label>Precio de Oferta:</label>
+		        <label>&{'owners.salePriceCents'}</label>
 		        <input type="text" name="${field.name}" 
 		            value="${deal.salePriceCents}" class="${field.errorClass}" />
 		        #{/field}
 		    </p>
-		 
+		    
 		    <p>
 		        #{field 'breakfastIncluded'}
-		        <label>Desayuno Incluido:</label>
+		        <label> &{'owners.breakfastIncluded'} </label>
 		        <input type="checkbox" name="${field.name}"
-		            class="${field.errorClass}" />
+		            class="${field.errorClass}" #{if deal.breakfastIncluded} checked="true" #{/if} />
 		        #{/field}
-		    </p>		    
+		    </p>
 		    
-		    <p>Recuerda pulsar "Guardar cambios" aunque los datos sean iguales para activar la oferta hoy.</p>
+		    <br/>
+		    <h3>  &{'owners.moredays.title'} </h3>
+		    <div style="float: right; width: 800px;">
+		 	<p> &{'owners.moredays.description'}
+		 	</p>
+		 	<h4>&{'owners.moredays.important'}</h4>
+		 	<ul>
+		 		<li> &{'owners.moredays.point1'}  </li>
+				<li> &{'owners.moredays.point2'} </li>
+				<li> &{'owners.moredays.point3'}  </li>
+				<li> &{'owners.moredays.point4'} </li>
+		 	</ul>
+		 	</div>
+		 	<br/>
+		 	<div>
+		 	<p>
+		        #{field 'priceDay2'}
+		        <label>&{'owners.moredays.priceDay2'}</label>
+		        <input type="text" name="${field.name}" 
+		            value="${deal.priceDay2}" class="${field.errorClass}" />
+		        #{/field}
+		    </p>
 		    
 		    <p>
-		        <input type="submit" value="Guardar cambios" />
+		        #{field 'priceDay3'}
+		        <label>&{'owners.moredays.priceDay3'}</label>
+		        <input type="text" name="${field.name}" 
+		            value="${deal.priceDay3}" class="${field.errorClass}" />
+		        #{/field}
+		    </p>
+		    
+		      <p>
+		        #{field 'priceDay4'}
+		        <label>&{'owners.moredays.priceDay4'}</label>
+		        <input type="text" name="${field.name}" 
+		            value="${deal.priceDay4}" class="${field.errorClass}" />
+		        #{/field}
+		    </p>
+		    
+		      <p>
+		        #{field 'priceDay5'}
+		        <label>&{'owners.moredays.priceDay5'}</label>
+		        <input type="text" name="${field.name}" 
+		            value="${deal.priceDay5}" class="${field.errorClass}" />
+		        #{/field}
+		    </p>
+		    </div>
+		   <br/>
+		    <p>&{'owners.moredays.point5'}</p>
+		    <p>&{'owners.remember'}</p>
+		    
+		    <p>
+		        <input type="submit" value="&{'owners.save'}" />
 		    </p>
 		    
 		#{/form}

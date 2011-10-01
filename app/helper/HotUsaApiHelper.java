@@ -228,7 +228,7 @@ public final class HotUsaApiHelper {
 					else{
 						int quantity = 0; 
 						Deal.updateDealByCode(hotelCode, quantity, null, lin);
-						Logger.debug("Hotel is sold out for tonight");
+						Logger.debug("Hotel is sold out for tonight: " + hotelCode);
 					}
 				}
 			}

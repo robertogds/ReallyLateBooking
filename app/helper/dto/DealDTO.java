@@ -27,10 +27,12 @@ public class DealDTO {
 	public Integer priceDay2;
 	public Integer priceDay3;
 	public Integer priceDay4;
+	public Integer priceDay5;
 	public Integer quantity;
 	public String description;
 	public String shortDescription;
 	public String roomType;
+	public String roomTypeText;
 	public Integer hotelCategory;
 	public String address;
 	public String latitude;
@@ -67,9 +69,11 @@ public class DealDTO {
 		this.priceDay2 = deal.priceDay2;
 		this.priceDay3 = deal.priceDay3;
 		this.priceDay4 = deal.priceDay4;
+		this.priceDay5 = deal.priceDay5;
 		this.quantity = deal.quantity;
 		this.hotelCategory = deal.hotelCategory;
 		this.roomType = deal.roomType;
+		this.roomTypeText = deal.roomTypeText;
 		this.address = deal.address;
 		this.latitude = deal.latitude;
 		this.longitude = deal.longitude;

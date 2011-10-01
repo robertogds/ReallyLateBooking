@@ -5,7 +5,7 @@
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
 
 	<div id="crudListTable">
-		#{crud.table fields:['hotelName', 'city', 'priceCents', 'salePriceCents', 'quantity','position','active', 'updated'] }
+		#{crud.table fields:['hotelName', 'city'] }
 		  #{crud.custom 'city'}
 		  	 ${models.City.findById(object.city.id) }
 		   #{/crud.custom}

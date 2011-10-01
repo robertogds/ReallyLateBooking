@@ -1,13 +1,23 @@
-Que suerte tenemos,
 
 
-El responsable del ${deal.hotelName} acaba de actualizar los precios para hoy:
+El ${deal.hotelName} de ${city.name} acaba de actualizar los precios para hoy:
 	Precio oferta: ${deal.salePriceCents}
+	Precio orginal: ${deal.priceCents}
 	Disponibilidad: ${deal.quantity}
+	Posicion:  ${deal.position}
+	Precio dia 2: ${deal.priceDay2}
+	Precio dia 3: ${deal.priceDay3}
+	Precio dia 4: ${deal.priceDay4}
+	Precio dia 5: ${deal.priceDay5}
 	
-Más datos del hotel:
-	Activo: ${deal.active}
-	Position: ${deal.position}
+
+MAS DATOS DEL HOTEL:
+	ACTIVO: ${deal.active}
+	POSICION: ${deal.position}
+	HORA LIMITE:  ${deal.limitHour}
+	DIRECCION: ${deal.address}
+	DESCRIPCION: ${deal.hotelText}
+	DETALLE: ${deal.detailText}
 									
 		
 &{'mails.rlb.footer'}

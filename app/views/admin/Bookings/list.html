@@ -13,8 +13,11 @@
 	</div>
 
 	<div id="crudListTable">
-		#{crud.table fields:['checkinDate','hotelName', 'creditCardName', 'priceCents', 'salePriceCents','code'] }
-
+		#{crud.table fields:['creditCardName','checkinDate','hotelName', 'priceCents', 'salePriceCents','code'] }
+			#{crud.custom 'checkinDate'}
+		  	 ${object.checkinDate?.format('dd MMMM yyyy - hh:mm')}
+		   #{/crud.custom}
+	
    		#{/crud.table}
 	</div>
 	

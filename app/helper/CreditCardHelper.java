@@ -24,7 +24,8 @@ public class CreditCardHelper {
   /**
    * Valid a Credit Card number
    */
-  public static boolean validCC(String number){   
+  public static boolean validCC(String number){  
+	Logger.debug("Validatind credit card number: "+number);
     int CardID;
     if ( (CardID = getCardID(number)) != -1)
         return validCCNumber(number);

@@ -6,7 +6,12 @@
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
 
 	<div id="crudListTable">
-		#{crud.table fields:['email', 'firstName' , 'lastName','isAdmin','isOwner','isFacebook','created'] /}
+		#{crud.table fields:['email', 'firstName' , 'lastName','isAdmin','isOwner','isFacebook','created'] }
+		
+		#{crud.custom 'created'}
+		  	 ${object.created?.format('dd MMMM yyyy - hh:mm')}
+		   #{/crud.custom}
+		  #{/crud.table}
 	</div>
 	
 	<div id="crudListPagination">

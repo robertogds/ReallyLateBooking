@@ -1,8 +1,10 @@
 package models;
 
 import java.util.Collection;
+import java.util.Date;
 
 import play.data.validation.Required;
+import siena.DateTime;
 import siena.Generator;
 import siena.Id;
 import siena.Model;
@@ -19,6 +21,8 @@ public class City extends Model {
 	@Required
 	public String url;
 	public boolean active;
+	@DateTime
+	public Date updated;
 	
 	public City(String name, String url){
 		this.name = name;

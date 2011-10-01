@@ -164,7 +164,7 @@ public class ApplicationTest extends FunctionalTest {
 	    Booking booking = new Booking(deal, user);
 	    booking.creditCard = "4214730854508021";
 	    booking.creditCardName = "Pablo Pazos";
-	    booking.creditCardCVC= 565;
+	    booking.creditCardCVC= "564";
 	    booking.creditCardExpiry ="01/01/2012";
 	    booking.creditCardType = "visa";
 	    booking.nights = 1 ; 
@@ -203,7 +203,7 @@ public class ApplicationTest extends FunctionalTest {
 	    Booking booking = new Booking(deal, user);
 	    booking.creditCardName = "Pablo Pazos";
 	    booking.creditCard = "12345678912345679";
-	    booking.creditCardCVC= 565;
+	    booking.creditCardCVC= "546";
 	    booking.creditCardExpiry ="10/12";
 	    booking.creditCardType = "visa";
 	    booking.nights = 1 ; 
@@ -234,7 +234,7 @@ public class ApplicationTest extends FunctionalTest {
 	    Booking booking = new Booking(deal, user);
 	    booking.creditCard = "4214730854508021";
 	    booking.creditCardName = "Pablo Pazos";
-	    booking.creditCardCVC= 565;
+	    booking.creditCardCVC= "546";
 	    booking.creditCardExpiry ="01/01/2012";
 	    booking.creditCardType = "visa";
 	    booking.nights = 1 ; 

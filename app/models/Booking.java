@@ -23,6 +23,7 @@ import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.data.validation.Validation.Validator;
 import play.i18n.Messages;
+import siena.DateTime;
 import siena.Generator;
 import siena.Id;
 import siena.Index;
@@ -41,6 +42,7 @@ public class Booking extends Model {
     @Required
     @Index("deal_index")
     public Deal deal;
+    @DateTime
     public Date checkinDate;
     public Integer nights;
     public Integer rooms;
@@ -57,13 +59,14 @@ public class Booking extends Model {
     @Required
     @MinSize(value=3)
     @MaxSize(value=4)
-    public Integer creditCardCVC;
+    public String creditCardCVC;
     public String code;
 	public Float salePriceCents;
 	public Integer priceCents;
 	public Integer priceDay2;
 	public Integer priceDay3;
 	public Integer priceDay4;
+	public Integer priceDay5;
 	public String hotelName;
 	public Boolean needConfirmation;
     public String bookingForFirstName;
@@ -77,16 +80,29 @@ public class Booking extends Model {
     
 	@Override
 	public void insert() {
+		Logger.debug("get nights: " + this.nights);
+		this.nights = this.getTotalNights();
     	this.checkinDate = DateHelper.getTodayDate();
     	this.code = RandomStringUtils.randomAlphanumeric(8);
     	this.deal = Deal.findById(this.deal.id); //fetch deal from datastore
-    	this.priceCents = getTotalPrice(); //save actual deal price
-    	this.salePriceCents = getTotal();
     	this.priceDay2 = this.deal.priceDay2;
     	this.priceDay3 = this.deal.priceDay3;
     	this.priceDay4 = this.deal.priceDay4;
+    	this.priceDay5 = this.deal.priceDay5;
     	this.hotelName = this.deal.hotelName;
+    	this.priceCents = this.getTotalPrice(); //save actual deal price
+    	this.salePriceCents = this.getTotal();
+    	
     	super.insert();
+	}
+	
+	private Integer getTotalNights(){
+		if (this.nights == null || this.nights < 1){
+			return 1;
+		}
+		else{
+			return this.nights;
+		}
 	}
     
     private Integer getTotalPrice() {
@@ -114,16 +130,22 @@ public class Booking extends Model {
     }
    
     public Float getTotal() {
-    	Float price = salePriceCents;
-    	if (nights == 2){
-    		price += priceDay2;
+    	Float price = this.deal.salePriceCents;
+    	Logger.debug("Total price: " + price);
+    	if (nights >= 2){
+    		Logger.debug("Price day 2: " + priceDay2);
+    		price += priceDay2.floatValue();
     	}
-    	if (nights == 3){
-    		price += priceDay3;
+    	if (nights >= 3){
+    		price += priceDay3.floatValue();
     	}
-    	if (nights == 4){
-    		price += priceDay4;
+    	if (nights >= 4){
+    		price += priceDay4.floatValue();
     	}
+    	if (nights == 5){
+    		price += priceDay5.floatValue();
+    	}
+    	
         return price;
     }
     
@@ -133,6 +155,7 @@ public class Booking extends Model {
     			Validation.valid("creditCardType", this).message("booking.validation.creditcardtype").ok&&
     			Validation.valid("creditCardCVC", this).message("booking.validation.cvc").ok){
     		if (!CreditCardHelper.validCC(this.creditCard)){
+    			Logger.debug("Credit card number algotrithm failed");
     			Validation.addError("creditCard", Messages.get("booking.validation.creditcard"), creditCard);
     		}
     		else{

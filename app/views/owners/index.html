@@ -9,29 +9,38 @@
 		<table>
         <thead>
                 <tr>
-                        <th width="300">
-                        	Hotel Name
-                        </th>
-                         <th width="200">
-                        	City
-                        </th>
-                         <th width="100">
-                        	Price
+                        <th width="100">
+                        	&{'hotelName'}
                         </th>
                          <th width="75">
-                        	Sale Price
+                        	&{'city'}
                         </th>
                          <th width="75">
-                        	Disponibilidad
+                        	&{'priceCents'}
                         </th>
                          <th width="75">
-                        	Desayuno
+                        	&{'salePriceCents'}
+                        </th>
+                        <th width="75">
+                        	&{'owners.moredays.priceDay2'}
+                        </th>
+                        <th width="75">
+                        	&{'owners.moredays.priceDay3'}
+                        </th>
+                        <th width="75">
+                        	&{'owners.moredays.priceDay4'}
+                        </th>
+                        <th width="75">
+                        	&{'owners.moredays.priceDay5'}
+                        </th>
+                         <th width="50">
+                        	&{'quantity'}
                         </th>
                          <th width="75">
-                        	Activo
+                        	&{'breakfastIncluded'}
                         </th>
                         <th width="100">
-                        	Actualizado
+                        	&{'updated'}
                         </th>
                 </tr>
         </thead>
@@ -51,16 +60,25 @@
 	                  ${deal.salePriceCents}      
 	             </td>
 	             <td>
+	                  ${deal.priceDay2}      
+	             </td>
+	            <td>
+	                  ${deal.priceDay3}      
+	             </td>
+	             <td>
+	                  ${deal.priceDay4}      
+	             </td>
+	             <td>
+	                  ${deal.priceDay5}      
+	             </td>
+	             <td>
 	                  ${deal.quantity}      
 	             </td>
 	             <td>
 	                  ${deal.breakfastIncluded}      
 	             </td>
-	              <td>
-	                  ${deal.active}      
-	             </td>
 	               <td>
-	                  ${deal.updated}      
+	                  ${deal.updated?.format('dd MMMM yyyy - hh:mm')}    
 	             </td>
 	              
 	        </tr>

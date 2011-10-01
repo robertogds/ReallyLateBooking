@@ -20,5 +20,7 @@ public class Deals extends controllers.CRUD {
 		HotUsaApiHelper.getHotelPrices(deals);
 		redirect("/admin/deals");
 	}
+	
 }
+
 

@@ -37,7 +37,7 @@ public class BookingDTO {
     public String creditCard;
     public String creditCardName;
     public String creditCardExpiry;
-    public Integer creditCardCVC;
+    public String creditCardCVC;
     public String creditCardType;
     @Expose
 	public Float salePriceCents;
@@ -49,6 +49,8 @@ public class BookingDTO {
 	public Integer priceDay3;
     @Expose
 	public Integer priceDay4;
+    @Expose
+	public Integer priceDay5;
     @Expose
     public String code;
     @Expose
@@ -81,6 +83,7 @@ public class BookingDTO {
 		this.priceDay2 = booking.priceDay2;
 		this.priceDay3 = booking.priceDay3;
 		this.priceDay4 = booking.priceDay4;
+		this.priceDay5 = booking.priceDay5;
 		this.hotelName = booking.hotelName;
 		this.bookingForEmail = booking.bookingForEmail;
 		this.bookingForFirstName = booking.bookingForFirstName;
@@ -118,6 +121,7 @@ public class BookingDTO {
 		booking.priceDay2 = this.priceDay2;
 		booking.priceDay3 = this.priceDay3;
 		booking.priceDay4 = this.priceDay4;
+		booking.priceDay5 = this.priceDay5;
 		booking.hotelName = this.hotelName;
 		booking.bookingForEmail = this.bookingForEmail;
 		booking.bookingForFirstName = this.bookingForFirstName;

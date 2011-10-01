@@ -1,0 +1,177 @@
+#{extends 'CRUD/layout.html' /}
+
+<div id="crudShow">
+
+        <h2 id="crudShowTitle">&{'crud.show.title', city.name}</h2>
+
+        <div class="objectForm">
+        
+        <div id="crudListTable">
+			<table>
+				<thead>
+					<tr>
+						<th width="15%">
+							Hotel
+						</th>
+						<th width="5%">
+							Quantity
+						</th>
+						<th width="5%">
+							Original Price
+						</th>
+						<th width="5%">
+							Sale Price
+						</th>
+						<th width="5%">
+							Price Day 2
+						</th>
+						<th width="5%">
+							Price Day 3
+						</th>
+						<th width="5%">
+							Price Day 4
+						</th>
+						<th width="5%">
+							Price Day 5
+						</th>
+						<th width="5%">
+							Position
+						</th>
+						<th width="5%">
+							Active
+						</th>
+						<th width="5%">
+							Is HotUsa
+						</th>
+						<th width="5%">
+							Is Fake
+						</th>
+						<th width="5%">
+							Limit Hour
+						</th>
+						<th width="10%">
+							Updated
+						</th>
+						<th width="5%">
+						</th>
+						<th width="5%">
+						</th>
+						<th width="5%">
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				 #{list deals, as:'deal'}
+				 	#{form @updateDeal(deal.id)}
+					    <tr class="${deal_index % 2 ? 'even' : 'odd'}"  #{if !deal.image3?.trim()} style="border-color: red;border-style: solid;" #{/if} >
+					    	 #{ifErrors}
+					        <p class="error">
+					            Please correct these errors.
+					        </p>
+					    	#{/ifErrors}
+							<td>
+								${deal.hotelName}
+							</td>
+							<td>
+								#{field 'quantity'}
+							        <input type="text" name="${field.name}" size="2"
+							            value="${deal.quantity}" class="${field.errorClass}" />
+						        #{/field}
+							</td>
+							<td>
+								#{field 'priceCents'}
+							        <input type="text" name="${field.name}" size="3"
+			           					 value="${deal.priceCents}" class="${field.errorClass}" />
+						        #{/field}
+							</td>
+							<td>
+								#{field 'salePriceCents'}
+							        <input type="text" name="${field.name}"  size="5"
+			           					 value="${deal.salePriceCents}" class="${field.errorClass}" />
+						        #{/field}
+							</td>
+							<td>
+								#{field 'priceDay2'}
+							        <input type="text" name="${field.name}"  size="5"
+			           					 value="${deal.priceDay2}" class="${field.errorClass}" />
+						        #{/field}
+							</td>
+							<td>
+								#{field 'priceDay3'}
+							        <input type="text" name="${field.name}"  size="5"
+			           					 value="${deal.priceDay3}" class="${field.errorClass}" />
+						        #{/field}
+							</td>
+							<td>
+								#{field 'priceDay4'}
+							        <input type="text" name="${field.name}"  size="5"
+			           					 value="${deal.priceDay4}" class="${field.errorClass}" />
+						        #{/field}
+							</td>
+							<td>
+								#{field 'priceDay5'}
+							        <input type="text" name="${field.name}"  size="5"
+			           					 value="${deal.priceDay5}" class="${field.errorClass}" />
+						        #{/field}
+							</td>
+							
+							<td>
+								#{field 'position'}
+							        <input type="text" name="${field.name}"  size="2"
+			           					 value="${deal.position}" class="${field.errorClass}" />
+						        #{/field}
+							</td>
+							<td>
+								#{field 'active'}
+			           				<input type="checkbox" name="${field.name}"
+		            					class="${field.errorClass}" #{if deal.active} checked="true" #{/if}/>
+						        #{/field}
+							</td>
+							<td>
+								#{field 'isHotUsa'}
+			           				<input type="checkbox" name="${field.name}"
+		            					class="${field.errorClass}" #{if deal.isHotUsa} checked="true" #{/if}/>
+						        #{/field}
+							</td>
+							<td>
+								#{field 'isFake'}
+			           				<input type="checkbox" name="${field.name}"
+		            					class="${field.errorClass}" #{if deal.isFake} checked="true" #{/if}/>
+						        #{/field}
+							</td>
+							<td>
+								#{field 'limitHour'}
+							        <input type="text" name="${field.name}"  size="2"
+			           					 value="${deal.limitHour}" class="${field.errorClass}" />
+						        #{/field}
+							</td>
+							<td>
+								${deal.updated?.format('dd MMMM yyyy - hh:mm')}
+							</td>
+							
+							<td>
+								<a target="_blank" href="http://es.hotusa.com/interfaz/getGeneralComs.jsp?opc=4&tipus_desti=H&codhot=${deal.hotelCode}&secacc=49046&atrasbut=1&verdispo=1" >HotUsa</a>
+							</td>
+							<td>
+								<a href="http://www.trivago.es/search.php?q=${deal.hotelName}" target="_blank">Trivago</a>
+							</td>
+							<td>
+								<input type="hidden" value="${city.id}" name="cityId" />
+								<input type="submit" value="Save" />
+							</td>
+					  	</tr>
+				  	#{/form}
+				#{/list}
+	</tbody>
+	</table>
+	</div>
+</div>
+	<div>
+	<br/><br/>
+	 <h2 id="crudShowTitle">Hotels Preview</h2>
+	  #{list models.Deal.findAllActiveDealsByCityId(city.id), as:'deal'}
+	  	<h3  #{if deal.quantity == 0} style="color:red"#{/if} >${deal.position}. ${deal.hotelName} - ${deal.salePriceCents} &euro; - ${deal.roomType} - Active until ${deal.limitHour} a.m.</h3>
+	  #{/list}
+	  
+	</div>
+</div>

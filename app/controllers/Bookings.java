@@ -90,14 +90,15 @@ public class Bookings extends Controller{
 			booking.user = User.findById(booking.user.id);
 			//if is an old object from datastore without the boolean set
 			booking.deal.isHotUsa = booking.deal.isHotUsa != null ? booking.deal.isHotUsa : Boolean.FALSE;
-			if (booking.deal.isHotUsa){
+			booking.deal.isFake = booking.deal.isFake != null ? booking.deal.isFake : Boolean.FALSE;
+			if (booking.deal.isHotUsa && !booking.deal.isFake ){
 				doHotUsaReservation(booking);
 			}
 			else{
 				updateDealRooms(booking.deal.id, booking.rooms);
 				Mails.hotelBookingConfirmation(booking);
 			}
-			
+
 			Mails.userBookingConfirmation(booking);
 			
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(

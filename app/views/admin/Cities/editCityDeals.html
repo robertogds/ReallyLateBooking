@@ -10,7 +10,7 @@
 			<table>
 				<thead>
 					<tr>
-						<th width="15%">
+						<th width="10%">
 							Hotel
 						</th>
 						<th width="5%">
@@ -45,6 +45,9 @@
 						</th>
 						<th width="5%">
 							Is Fake
+						</th>
+						<th width="5%">
+							Breakfast Included
 						</th>
 						<th width="5%">
 							Limit Hour
@@ -138,6 +141,9 @@
 			           				<input type="checkbox" name="${field.name}"
 		            					class="${field.errorClass}" #{if deal.isFake} checked="true" #{/if}/>
 						        #{/field}
+							</td>
+							<td>
+			           				<label>${deal.breakfastIncluded}</label>
 							</td>
 							<td>
 								#{field 'limitHour'}

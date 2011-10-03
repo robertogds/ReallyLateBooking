@@ -25,6 +25,13 @@ public final class DateHelper {
 		 
 	}
 	
+	public static Date getFutureDay(Integer days){
+		Calendar date = Calendar.getInstance(); 
+		date.setTime(getTodayDate());
+		date.add(Calendar.DAY_OF_MONTH, days ); 
+		return date.getTime();
+	}
+	
 	public static Boolean isActiveTime(){
 	    int hour = DateHelper.getCurrentHour() ;
 	    Logger.info("Its time: " + hour);

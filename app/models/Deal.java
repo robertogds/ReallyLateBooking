@@ -47,7 +47,7 @@ public class Deal extends Model {
 	@Email
 	public String contactEmail;
 	@Required
-	public Float salePriceCents;
+	public Integer salePriceCents;
 	@Required
 	@Min(0)
 	public Integer priceCents;
@@ -121,10 +121,11 @@ public class Deal extends Model {
 	public String image9;
 	public String image10;
 	public String bookingLine;
+	public String bookingLine2;
+	public String bookingLine3;
+	public String bookingLine4;
+	public String bookingLine5;
 
-	
-	
-	
 	
 	public Deal(String hotelName, City city) {
 		this.hotelName = hotelName;
@@ -228,26 +229,49 @@ public class Deal extends Model {
 		return all().filter("hotelCode", hotelCode).get();
 	}
 	
-	public static void updateDealByCode(String hotelCode, int quantity, Float price, String lin){
+	public static void updateDealByCode(String hotelCode, int quantity, Integer price, Boolean breakfastIncluded, String lin, int day){
 	    Deal deal = Deal.findByHotelCode(hotelCode);
 	    //Some objects from datastore could come null so we check it
 	    deal.isFake = deal.isFake != null ? deal.isFake : Boolean.FALSE;
 	    deal.quantity = deal.quantity != null ? deal.quantity : 0;
 	    deal.active = deal.active != null ? deal.active : Boolean.FALSE;
 	    
+	    
 	    // If isFake but active and dispo 0 we dont want to update dispo
 	    if (!(deal.isFake && deal.quantity == 0 && deal.active)){
 	    	deal.quantity = quantity;
 	    }
-	    
-	    //If isFake we dont want to change the price automatically by the cron task
-	    if (price != null && price > 0 && !deal.isFake){
-	    	deal.salePriceCents = price;
-	    }
+	    switch (day) {
+			case 0:
+				 //If isFake we dont want to change the price automatically by the cron task
+			    if (price != null && price > 0 && !deal.isFake){
+			    	deal.salePriceCents = price;
+			    }
+			    //Set breakfast included
+			    deal.breakfastIncluded = breakfastIncluded;
+			    deal.bookingLine = lin;
+			    break;
+			case 1:
+				deal.priceDay2 = price;
+			    deal.bookingLine2 = lin;
+			    break;
+			case 2:
+				deal.priceDay3 = price;
+			    deal.bookingLine3 = lin;
+			    break;
+			case 3:
+				deal.priceDay4 = price;
+			    deal.bookingLine4 = lin;
+			    break;
+			case 4:
+				deal.priceDay5 = price;
+			    deal.bookingLine5 = lin;
+			    break;    
+			default:
+				break;
+		}
 	    Logger.debug("Updatind deal: " + deal.hotelName + " price: " + deal.salePriceCents + " quantity: " + quantity);
-
 	    deal.updated = Calendar.getInstance().getTime();
-	    deal.bookingLine = lin;
 	    deal.update();
 	}
 }

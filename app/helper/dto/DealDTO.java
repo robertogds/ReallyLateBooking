@@ -22,7 +22,7 @@ public class DealDTO {
     public Long id;
 	public String hotelName;	
     public City city;
-	public Float salePriceCents;
+	public Integer salePriceCents;
 	public Integer priceCents;
 	public Integer priceDay2;
 	public Integer priceDay3;

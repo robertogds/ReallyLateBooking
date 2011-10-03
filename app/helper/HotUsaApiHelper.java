@@ -14,6 +14,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -63,8 +64,8 @@ public final class HotUsaApiHelper {
 			String url = APIURL + "?codigousu="+ sCodigousu +"&clausu="+ sClausu +"&afiliacio="+ sAfiliacio +"&secacc="+ sSecacc+"&xml="+wsReq;
 			URL parsedUrl = new URL(url);
 			URLConnection urlConnection = parsedUrl.openConnection(); 
-			urlConnection.setConnectTimeout(10000); 
-			urlConnection.setReadTimeout(10000); 
+			urlConnection.setConnectTimeout(15000); 
+			urlConnection.setReadTimeout(15000); 
 			
 			String xml = convertStreamToString(urlConnection.getInputStream());
 			xml = StringUtils.trim(xml);
@@ -122,7 +123,7 @@ public final class HotUsaApiHelper {
 	}
 	
 	
-	private static String getPriceByHotelRequest(List<Deal> deals){
+	private static String getPriceByHotelRequest(List<Deal> deals, Integer days){
 		String hotelCodeList = "";
 		for (Deal deal: deals){
 			hotelCodeList += deal.hotelCode + "#";
@@ -130,14 +131,14 @@ public final class HotUsaApiHelper {
 		
 		Calendar today = Calendar.getInstance();
 		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
-		Calendar tomorrow = Calendar.getInstance(); 
-		tomorrow.add(Calendar.DAY_OF_MONTH, 1 ); 
+		Calendar checkoutDate = Calendar.getInstance(); 
+		checkoutDate.setTime(DateHelper.getFutureDay(days));
 		
  		String request = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_disponibilidad_5.dtd\">" +
  		"<peticion> <tipo>105</tipo> <nombre>Petición de Disponibilidad</nombre> <agencia>ReallyLateBooking.com</agencia> <parametros>" +
  		"<codishotel>"+ hotelCodeList +"</codishotel> <regimen>OB</regimen> <numhab1>1</numhab1> <paxes1>2-0</paxes1> <numhab2>0</numhab2> " +
  		"<paxes2>0-0</paxes2> <numhab3>0</numhab3> <paxes3>0-0</paxes3> <usuario>939201</usuario> <afiliacion>VE</afiliacion> " +
- 		"<fechaentrada>"+sdf.format(today.getTime())+"</fechaentrada> <fechasalida>"+ sdf.format(tomorrow.getTime()) +"</fechasalida> <idioma>1</idioma> <duplicidad>0</duplicidad>" +
+ 		"<fechaentrada>"+sdf.format(today.getTime())+"</fechaentrada> <fechasalida>"+ sdf.format(checkoutDate.getTime()) +"</fechasalida> <idioma>1</idioma> <duplicidad>0</duplicidad>" +
  		"<marca/> </parametros></peticion>";
  		
 		return request;
@@ -157,9 +158,22 @@ public final class HotUsaApiHelper {
  				"<codigo_hotel>"+ booking.deal.hotelCode +"</codigo_hotel> <nombre_cliente>"+ booking.creditCardName +"</nombre_cliente> <observaciones></observaciones>" +
  				" <num_mensaje /><forma_pago>12</forma_pago> <tipo_targeta>"+card+"</tipo_targeta>" +
  				" <num_targeta>"+ booking.creditCard +"</num_targeta> <mes_expiracion_targeta>"+ month +"</mes_expiracion_targeta> <ano_expiracion_targeta>"+ year +"</ano_expiracion_targeta>" +
- 				" <titular_targeta>"+ booking.creditCardName +"</titular_targeta> <res>" +
- 				"<lin>"+ booking.deal.bookingLine +"</lin> " +
- 				"</res> </parametros></peticion>";
+ 				" <titular_targeta>"+ booking.creditCardName +"</titular_targeta> <res>";
+		request = request + "<lin>"+ booking.deal.bookingLine +"</lin> ";
+
+ 		if (booking.nights >= 2){
+ 			request = request + "<lin>"+ booking.deal.bookingLine2 +"</lin> ";
+    	}
+    	if (booking.nights >= 3){
+    		request = request + "<lin>"+ booking.deal.bookingLine3 +"</lin> ";    	
+    	}
+    	if (booking.nights >= 4){
+    		request = request + "<lin>"+ booking.deal.bookingLine4 +"</lin> ";    	
+    	}
+    	if (booking.nights == 5){
+    		request = request + "<lin>"+ booking.deal.bookingLine5 +"</lin> ";    	
+    	}
+    	request = request + "</res> </parametros></peticion>";
  		
  		return request;
 	}
@@ -198,37 +212,53 @@ public final class HotUsaApiHelper {
 	}
 	
 	public static void getHotelPrices(List<Deal> deals){
-		String wsReq = getPriceByHotelRequest(deals);
+		int bookingDays = 5;
+		String wsReq = getPriceByHotelRequest(deals, bookingDays);
 		Logger.debug("WSRequest: " + wsReq);
 		Document xml = prepareRequest(wsReq);
 		if (xml != null){
 			if (xml.getElementsByTagName("hot") != null){
 				int hotels = xml.getElementsByTagName("hot").getLength();
 				Logger.debug("Hotels number: " + hotels);
-				for (int i=0; i < hotels; i++){
-					String hotelCode = xml.getElementsByTagName("cod").item(i).getTextContent();
-					String priceString = xml.getElementsByTagName("prr").item(i).getTextContent();
-					String status = xml.getElementsByTagName("esr").item(i).getTextContent();
-					String regime = xml.getElementsByTagName("reg").item(i).getTextContent();
-					/* lin son Valores compactados de la disponibilidad, 
-					 * que servirán para realizar la reserva. Una lin por noche, por ahora una siempre */
-					String lin = xml.getElementsByTagName("lin").item(i).getTextContent();
+				for (int hotel=0; hotel < hotels; hotel++){
+					String hotelCode = xml.getElementsByTagName("cod").item(hotel).getTextContent();
 					//Si se acepta el pago directo
-					String pdr = xml.getElementsByTagName("pdr").item(i).getTextContent();
-					
-					if (status.equals("OK") && regime.equals("OK") && pdr.equals("S")){
-						Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString);
-						Float price = Float.parseFloat(priceString);
-						BigDecimal priceRounded = new BigDecimal(price);
-						priceRounded = priceRounded.setScale(0, RoundingMode.UP);
-						price = priceRounded.floatValue();
-						int quantity = 1; //always 1 by now
-						Deal.updateDealByCode(hotelCode, quantity, price, lin);
-					}
-					else{
-						int quantity = 0; 
-						Deal.updateDealByCode(hotelCode, quantity, null, lin);
-						Logger.debug("Hotel is sold out for tonight: " + hotelCode);
+					String pdr = xml.getElementsByTagName("pdr").item(hotel).getTextContent();
+					int i = 0;
+					for (int day=0; day < hotels * bookingDays ; day++){
+						i = hotel+ day;
+						Logger.debug("### Hotel index : " + i + " day: " + day);
+						
+						if (xml.getElementsByTagName("lin").item(i) != null){
+							/* lin son Valores compactados de la disponibilidad, 
+							 * que servirán para realizar la reserva. Una lin por noche*/
+							String lin = xml.getElementsByTagName("lin").item(i).getTextContent();
+							
+							String[] linArray = StringUtils.split(lin, "#");
+							String status = linArray[6];
+							String regime = linArray[5];
+							String priceString = linArray[3];
+
+							if (status.equals("OK") && (regime.equals("OB") || regime.equals("BB") ) && pdr.equals("S")){
+								Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString + " breakfast included: " +  regime.equals("BB"));
+								Float price = Float.parseFloat(priceString);
+								BigDecimal priceRounded = new BigDecimal(price);
+								priceRounded = priceRounded.setScale(0, RoundingMode.DOWN);
+								int quantity = 1; //always 1 by now
+								Boolean breakfastIncluded = regime.equals("BB") ;
+								Deal.updateDealByCode(hotelCode, quantity, price.intValue(), breakfastIncluded, lin, day);
+							}
+							else if (day == 0) {
+								int quantity = 0; 
+								Deal.updateDealByCode(hotelCode, quantity, null, null, lin, day);
+								Logger.debug("Hotel is sold out for tonight: " + hotelCode);
+								break;
+							}
+						}
+						else{
+							Logger.debug("### No hotel here: " + i + " day: " + day);
+						}
+						
 					}
 				}
 			}

@@ -25,7 +25,7 @@ public class Cities extends controllers.CRUD {
         render(city, deals);
 	}
 	
-	public static void updateDeal(Long id, Integer quantity, Integer priceCents, Float salePriceCents, 
+	public static void updateDeal(Long id, Integer quantity, Integer priceCents, Integer salePriceCents, 
 			Integer priceDay2, Integer priceDay3, Integer priceDay4, Integer priceDay5, 
 			Integer position, Boolean active, Boolean isHotUsa, Boolean isFake, Integer limitHour,
 			Long cityId) {

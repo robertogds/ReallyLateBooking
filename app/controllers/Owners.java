@@ -33,7 +33,7 @@ public class Owners extends Controller{
 		render(deal);
 	}
 	
-	public static void save(Long id, Integer quantity, Float salePriceCents, boolean breakfastIncluded,
+	public static void save(Long id, Integer quantity, Integer salePriceCents, boolean breakfastIncluded,
 			Integer priceDay2, Integer priceDay3, Integer priceDay4, Integer priceDay5) {
 		Logger.debug("breakfast: " + breakfastIncluded);
 	    Deal deal;

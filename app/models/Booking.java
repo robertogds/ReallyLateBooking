@@ -61,7 +61,7 @@ public class Booking extends Model {
     @MaxSize(value=4)
     public String creditCardCVC;
     public String code;
-	public Float salePriceCents;
+	public Integer salePriceCents;
 	public Integer priceCents;
 	public Integer priceDay2;
 	public Integer priceDay3;
@@ -129,23 +129,22 @@ public class Booking extends Model {
     	return Booking.all().filter("user", user).fetch();
     }
    
-    public Float getTotal() {
-    	Float price = this.deal.salePriceCents;
-    	Logger.debug("Total price: " + price);
+    public Integer getTotal() {
+    	Integer price = this.deal.salePriceCents;
     	if (nights >= 2){
-    		Logger.debug("Price day 2: " + priceDay2);
-    		price += priceDay2.floatValue();
+    		price += priceDay2;
     	}
     	if (nights >= 3){
-    		price += priceDay3.floatValue();
+    		price += priceDay3;
     	}
     	if (nights >= 4){
-    		price += priceDay4.floatValue();
+    		price += priceDay4;
     	}
     	if (nights == 5){
-    		price += priceDay5.floatValue();
+    		price += priceDay5;
     	}
-    	
+    	Logger.debug("Total price: " + price);
+
         return price;
     }
     

@@ -220,13 +220,13 @@ public final class HotUsaApiHelper {
 			if (xml.getElementsByTagName("hot") != null){
 				int hotels = xml.getElementsByTagName("hot").getLength();
 				Logger.debug("Hotels number: " + hotels);
+				int i = 0;
 				for (int hotel=0; hotel < hotels; hotel++){
 					String hotelCode = xml.getElementsByTagName("cod").item(hotel).getTextContent();
 					//Si se acepta el pago directo
 					String pdr = xml.getElementsByTagName("pdr").item(hotel).getTextContent();
-					int i = 0;
-					for (int day=0; day < hotels * bookingDays ; day++){
-						i = hotel+ day;
+					for (int day=0; day < bookingDays ; day++){
+						
 						Logger.debug("### Hotel index : " + i + " day: " + day);
 						
 						if (xml.getElementsByTagName("lin").item(i) != null){
@@ -238,8 +238,9 @@ public final class HotUsaApiHelper {
 							String status = linArray[6];
 							String regime = linArray[5];
 							String priceString = linArray[3];
-
-							if (status.equals("OK") && (regime.equals("OB") || regime.equals("BB") ) && pdr.equals("S")){
+							Logger.debug("PDR: " + pdr + " status: " + status + " priceString: " +  priceString + " regime:" + regime);	
+							//We have dispo so we set price and dispo and continue with next day
+							if (status.equals("OK") && (regime.equals("OB") || regime.equals("RO") || regime.equals("BB")) && pdr.equals("S")){
 								Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString + " breakfast included: " +  regime.equals("BB"));
 								Float price = Float.parseFloat(priceString);
 								BigDecimal priceRounded = new BigDecimal(price);
@@ -248,17 +249,30 @@ public final class HotUsaApiHelper {
 								Boolean breakfastIncluded = regime.equals("BB") ;
 								Deal.updateDealByCode(hotelCode, quantity, price.intValue(), breakfastIncluded, lin, day);
 							}
-							else if (day == 0) {
-								int quantity = 0; 
-								Deal.updateDealByCode(hotelCode, quantity, null, null, lin, day);
-								Logger.debug("Hotel is sold out for tonight: " + hotelCode);
+							// we dont have dispo for current day
+							else {
+								//if current day is the first one, the hotel is marked as sold out 
+								if (day == 0) {
+									int quantity = 0; 
+									Deal.updateDealByCode(hotelCode, quantity, null, null, lin, day);
+									Logger.debug("Hotel is sold out for tonight: " + hotelCode);
+								}
+								//if is not the first day, we just update price
+								else{
+									Deal.updatePriceByCode(hotelCode, null, lin, day);
+									Logger.debug("Hotel is sold out for tonight: " + hotelCode);
+									
+								}
+								//we dont continue retrieving prices for next day
+								Deal.cleanNextDays(hotelCode, day);
+								i = i + (bookingDays - day);
 								break;
 							}
 						}
 						else{
-							Logger.debug("### No hotel here: " + i + " day: " + day);
+							Logger.error("### No hotel here: " + i + " day: " + day);
 						}
-						
+						i++;
 					}
 				}
 			}
@@ -321,3 +335,5 @@ public final class HotUsaApiHelper {
 		return null;
 	}
 }
+
+

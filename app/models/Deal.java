@@ -274,6 +274,86 @@ public class Deal extends Model {
 	    deal.updated = Calendar.getInstance().getTime();
 	    deal.update();
 	}
+	
+	public static void updatePriceByCode(String hotelCode, Integer price, String lin, int day){
+	    Deal deal = Deal.findByHotelCode(hotelCode);
+	    
+	    switch (day) {
+			case 0:
+				 //If isFake we dont want to change the price automatically by the cron task
+			    if (price != null && price > 0 && !deal.isFake){
+			    	deal.salePriceCents = price;
+			    }
+			    //Set breakfast included
+			    deal.bookingLine = lin;
+			    break;
+			case 1:
+				deal.priceDay2 = price;
+			    deal.bookingLine2 = lin;
+			    break;
+			case 2:
+				deal.priceDay3 = price;
+			    deal.bookingLine3 = lin;
+			    break;
+			case 3:
+				deal.priceDay4 = price;
+			    deal.bookingLine4 = lin;
+			    break;
+			case 4:
+				deal.priceDay5 = price;
+			    deal.bookingLine5 = lin;
+			    break;    
+			default:
+				break;
+		}
+	    Logger.debug("Updatind price for: " + deal.hotelName + " day: " + day );
+	    deal.updated = Calendar.getInstance().getTime();
+	    deal.update();
+	}
+
+	public static void cleanNextDays(String hotelCode, int day) {
+		Deal deal = Deal.findByHotelCode(hotelCode);		
+		switch (day) {
+			case 0:
+				deal.priceDay2 = null;
+				deal.priceDay3 = null;
+				deal.priceDay4 = null;
+				deal.priceDay5 = null;
+				deal.bookingLine = null;
+				deal.bookingLine2 = null;
+				deal.bookingLine3 = null;
+				deal.bookingLine4 = null;
+				deal.bookingLine5 = null;
+			    break;
+			case 1:
+				deal.priceDay3 = null;
+				deal.priceDay4 = null;
+				deal.priceDay5 = null;
+				deal.bookingLine2 = null;
+				deal.bookingLine3 = null;
+				deal.bookingLine4 = null;
+				deal.bookingLine5 = null;
+			    break;
+			case 2:
+				deal.priceDay4 = null;
+				deal.priceDay5 = null;
+				deal.bookingLine3 = null;
+				deal.bookingLine4 = null;
+				deal.bookingLine5 = null;
+			    break;
+			case 3:
+				deal.priceDay5 = null;
+				deal.bookingLine4 = null;
+				deal.bookingLine5 = null;
+			    break;   
+			case 4:
+				deal.bookingLine5 = null;
+			    break;  
+			default:
+				break;
+		}
+	    deal.update();
+	}
 }
 
 

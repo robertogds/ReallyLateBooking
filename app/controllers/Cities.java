@@ -9,11 +9,16 @@ import play.mvc.Controller;
 public class Cities  extends Controller {
 	
 	public static void cityList() {
-	        Collection<City> cities = City.findActiveCities();
-	        if (Security.isConnected() && Security.check("admin")){
-	        	City.addTestCity(cities);
-	        }
-	        renderJSON(cities);
+		Cities.cityListByCountry("spain");
+	}
+	
+	public static void cityListByCountry(String countryUrl) {
+		Country country = Country.findByName(countryUrl);
+        Collection<City> cities = City.findActiveCitiesByCountry(country);
+        if (Security.isConnected() && Security.check("admin")){
+        	City.addTestCity(cities);
+        }
+        renderJSON(cities);
 	}
 }
 

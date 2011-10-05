@@ -22,7 +22,11 @@ GET 	/admin									module:crudsiena
 GET 	/deals/{city}							Deals.iPhoneList(format:'json')
 
 # Cities
+GET 	/cities/{countryUrl}					Cities.cityListByCountry(format:'json')
 GET 	/cities							    	Cities.cityList(format:'json')
+
+#Countries
+GET 	/countries							    Countries.countryList(format:'json')
 
 
 # Bookings Rest

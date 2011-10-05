@@ -2,11 +2,13 @@ package models;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import play.data.validation.Required;
 import siena.DateTime;
 import siena.Generator;
 import siena.Id;
+import siena.Index;
 import siena.Model;
 import siena.Query;
 import siena.Table;
@@ -24,10 +26,15 @@ public class City extends Model {
 	@DateTime
 	public Date updated;
 	
+	@Required
+	@Index("country_index")
+    public Country country;
+	
 	public City(String name, String url){
 		this.name = name;
 		this.url = url;
 	}
+	
 	
 	public static Query<City> all() {
     	return Model.all(City.class);
@@ -50,6 +57,10 @@ public class City extends Model {
 		return cities;
 	}
 
+	public static List<City> findActiveCitiesByCountry(Country country){
+		return all().filter("country", country).filter("active", Boolean.TRUE).order("name").fetch();
+	}
+	
 	public static void addTestCity(Collection<City> cities) {
 		City city = findByName("test");
 		if (city != null){

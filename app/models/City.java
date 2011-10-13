@@ -21,6 +21,10 @@ public class City extends Model {
 	@Required
 	public String name;
 	@Required
+	public String nameEN;
+	@Required
+	public String nameFR;
+	@Required
 	public String url;
 	public boolean active;
 	@DateTime

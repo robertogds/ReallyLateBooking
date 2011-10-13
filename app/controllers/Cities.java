@@ -1,6 +1,10 @@
 package controllers;
 
+import helper.dto.CityDTO;
+import helper.dto.CountryDTO;
+
 import java.util.*;
+
 import models.*;
 import play.*;
 import play.mvc.Controller;
@@ -18,7 +22,11 @@ public class Cities  extends Controller {
         if (Security.isConnected() && Security.check("admin")){
         	City.addTestCity(cities);
         }
-        renderJSON(cities);
+        Collection<CityDTO> citiesDto = new ArrayList<CityDTO>();
+		for (City city: cities){
+			citiesDto.add(new CityDTO(city));
+		}
+        renderJSON(citiesDto);
 	}
 }
 

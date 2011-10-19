@@ -5,9 +5,16 @@
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
 
 	<div id="crudListTable">
-		#{crud.table fields:['creditCardName','checkinDate','hotelName', 'priceCents', 'salePriceCents','code','invoiced','canceled'] }
-			#{crud.custom 'checkinDate'}
-		  	 ${object.checkinDate?.format('dd MMMM yyyy - hh:mm')}
+		#{crud.table fields:['id','company','subTotal','totalAmount', 'totalTax', 'payed','created'] }
+			
+			#{crud.custom 'company'}
+		  	  ${models.Company.findById(object.company.id) }
+		   #{/crud.custom}
+		   
+			#{crud.custom 'created'}
+				<a href="@{admin.Invoices.showInvoice(object.id)}">
+		  	 		${object.created?.format('dd MMMM yyyy - hh:mm')}
+		  	 	</a>
 		   #{/crud.custom}
 	
    		#{/crud.table}
@@ -21,8 +28,4 @@
 		<a href="@{blank()}">&{'crud.add', type.modelName}</a>
 	</p>
 	
-	<p class="crudListExport"  id="exportAll">
-		<a href="@{admin.Bookings.exportAllCSV}">Export all Bookings as CSV </a>
-	</p>
-
 </div>

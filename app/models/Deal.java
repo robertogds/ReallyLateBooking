@@ -44,6 +44,8 @@ public class Deal extends Model {
 	@Required
 	@Index("owner_index")
     public User owner;
+	@Index("company_index")
+	public Company company;
 	@Email
 	public String contactEmail;
 	@Required

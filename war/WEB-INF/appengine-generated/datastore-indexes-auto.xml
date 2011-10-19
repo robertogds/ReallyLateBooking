@@ -1,4 +1,4 @@
-<!-- Indices written at Wed, 5 Oct 2011 17:42:09 CEST -->
+<!-- Indices written at Sat, 15 Oct 2011 18:24:07 CEST -->
 
 <datastore-indexes>
 
@@ -8,23 +8,11 @@
         <property name="name" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 5 times in query history -->
+    <!-- Used 1 time in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="country" direction="asc"/>
         <property name="name" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="countries" ancestor="false" source="auto">
-        <property name="active" direction="asc"/>
-        <property name="name" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="deals" ancestor="false" source="auto">
-        <property name="owner" direction="asc"/>
-        <property name="position" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

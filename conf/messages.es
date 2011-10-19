@@ -106,3 +106,21 @@ owners.salePriceCents= Precio de Oferta para HOY (IVA incluido):
 owners.quantity = Habitaciones disponibles:
 error.correct = Por favor, corrige los errores.
 
+invoice = Factura
+
+invoice.amount_due = Adeudo Total
+invoice.date = Fecha
+invoice.description = Reserva
+invoice.cost = Coste
+invoice.commission = Comisión
+invoice.price = Precio
+invoice.booking = Reserva en %s | noches: %s | codigo: %s
+invoice.subtotal = Subtotal
+invoice.total= Total
+invoice.amount_paid = Pagado
+invoice.balance_due = A pagar
+invoice.tax= IVA
+invoice.terms = Términos
+invoice.add_row = Añadir linea de factura 
+invoice.banktransfer=Por transferencia bancaria al número de cuenta IBAN: 0049 6109 62 2116345761. 
+

@@ -105,9 +105,10 @@ public class BookingDTO {
 
 	
 	public Booking toBooking(){
-		Deal deal = new Deal(dealId);
+		Deal deal = Deal.findById(dealId);
 		User user = new User(userId);
 		Booking booking = new Booking(deal, user);
+		booking.company = deal.company;
 		booking.nights = this.nights;
 		booking.rooms =  this.rooms;
 		booking.creditCard = this.creditCard;

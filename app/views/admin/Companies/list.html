@@ -1,0 +1,26 @@
+#{extends 'CRUD/layout.html' /}
+
+<div id="crudList" class="${type.name}">
+	
+	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
+
+	<div id="crudListTable">
+		#{crud.table fields:['name', 'phone', 'fee', 'updated'] }
+		 #{crud.custom 'updated'}
+		 		 <a href="@{admin.Companies.showCompanyBookings(object.id)}">
+   					${object.updated?.format('dd MMMM yyyy - hh:mm')}
+   				 </a>
+		   #{/crud.custom}
+		#{/crud.table}
+	</div>
+	
+	<div id="crudListPagination">
+		#{crud.pagination /}
+	</div>
+	
+	<p id="crudListAdd">
+		<a href="@{blank()}">&{'crud.add', type.modelName}</a>
+	</p>
+	
+
+</div>

@@ -212,7 +212,7 @@ public final class HotUsaApiHelper {
 	}
 	
 	public static void getHotelPrices(List<Deal> deals){
-		int bookingDays = 5;
+		int bookingDays = 2;
 		String wsReq = getPriceByHotelRequest(deals, bookingDays);
 		Logger.debug("WSRequest: " + wsReq);
 		Document xml = prepareRequest(wsReq);
@@ -270,7 +270,7 @@ public final class HotUsaApiHelper {
 							}
 						}
 						else{
-							Logger.error("### No hotel here: " + i + " day: " + day);
+							Logger.debug("### No hotel here: " + i + " day: " + day);
 						}
 						i++;
 					}

@@ -23,21 +23,21 @@ public class CityDTO {
 	public String name;
 	public String url;
 	
-	public CityDTO(City city){
+	public CityDTO(City city, String lang){
 		this.id = city.id;
 		this.name = city.nameEN;
 		this.url = city.url;
 		
-		String lang = Lang.get();
-		Logger.debug("Filling city info with locale: " + lang);
-		if (lang.equals("es")){
-			Logger.debug("Filling city info with Spanish ");
-			this.name = city.name;
-		}
-		else if (lang.equals(Lang.getLocale().FRENCH.getLanguage())){
-			Logger.debug("Filling city info with French ");
-			this.name = city.nameFR;
+		if (lang != null){
+			Logger.debug("Filling city info with locale: " + lang);
+			if (lang.equals("es") || lang.equals("es_ES")){
+				Logger.debug("Filling city info with Spanish ");
+				this.name = city.name;
+			}
+			else if (lang.equals("fr")){
+				Logger.debug("Filling city info with French ");
+				this.name = city.nameFR;
+			}
 		}
 	}
-	
 }

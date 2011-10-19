@@ -6,8 +6,11 @@ import helper.DateHelper;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.PreUpdate;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -39,6 +42,12 @@ public class Booking extends Model {
     @Index("user_index")
     public User user;
     
+    @Index("company_index")
+    public Company company;
+    
+    @Index("invoice_index")
+    public Invoice invoice;
+    
     @Required
     @Index("deal_index")
     public Deal deal;
@@ -69,9 +78,12 @@ public class Booking extends Model {
 	public Integer priceDay5;
 	public String hotelName;
 	public Boolean needConfirmation;
+	public Boolean canceled;
+	public Boolean invoiced;
     public String bookingForFirstName;
 	public String bookingForLastName;
 	public String bookingForEmail;
+	public Float fee;
 
     public Booking(Deal deal, User user) {
         this.deal = deal;
@@ -149,6 +161,7 @@ public class Booking extends Model {
     }
     
     public void creditCardValid(){
+    	Logger.debug("Credit card number: " + creditCard + " creditCardName: "+ creditCardName + " creditCardType: "+creditCardType + " creditCardCVC: " + creditCardCVC);
     	if (Validation.valid("creditCard", this).message("booking.validation.creditcard").ok &&
     			Validation.valid("creditCardName", this).message("booking.validation.creditcardname").ok &&
     			Validation.valid("creditCardType", this).message("booking.validation.creditcardtype").ok&&
@@ -201,5 +214,19 @@ public class Booking extends Model {
     	//if we are not using number of rooms means is always just 1 per booking
     	return  this.rooms != null ? this.rooms : 1;
     }
+
+	public static Collection<Booking> findByCompany(Company company) {
+		return Booking.all().filter("company", company).fetch();
+	}
+
+	public static Collection<Booking> findUninvoicedByCompany(Company company) {
+		return Booking.all().filter("company", company).filter("invoiced", Boolean.FALSE)
+			.filter("canceled", Boolean.FALSE).fetch();
+	}
+
+	public static Collection<Booking> findByInvoice(Invoice invoice) {
+		return Booking.all().filter("invoice", invoice).fetch();
+	}
+	
 
 }

@@ -1,0 +1,89 @@
+#{extends 'CRUD/layout.html' /}
+
+<div id="crudShow">
+
+        <h2 id="crudShowTitle">Bookings of ${company.name}</h2>
+
+        <div class="objectForm">
+        <div id="crudListTable">
+			<table>
+				<thead>
+					<tr>
+						<th width="15%">
+							Check-in Date
+						</th>
+						<th width="20%">
+							CreditCard Name
+						</th>
+						<th width="10%">
+							Hotel Name 
+						</th>
+						<th width="10%">
+							Price
+						</th>
+						<th width="10%">
+							Sale Price
+						</th>
+						<th width="15%">
+							Reservation Code
+						</th>
+						<th width="5%">
+							Invoiced
+						</th>
+						<th width="5%">
+							Canceled
+						</th>
+					
+						<th width="10%">
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				 #{list bookings, as:'booking'}
+				 	#{form @updateBooking(booking.id, company.id)}
+					    <tr class="${booking_index % 2 ? 'even' : 'odd'}" >
+							<td>
+								${booking.checkinDate?.format('dd MMMM yyyy - hh:mm')}
+							</td>
+							<td>
+								${booking.creditCardName}
+							</td>
+							<td>
+								${booking.hotelName}
+							</td>
+							<td>
+								${booking.priceCents}
+							</td>
+							<td>
+								${booking.salePriceCents}
+							</td>
+							<td>
+								${booking.code}
+							</td>
+							<td>
+								#{field 'invoiced'}
+			           				<input type="checkbox" name="${field.name}"
+		            					class="${field.errorClass}" #{if booking.invoiced} checked="true" #{/if}/>
+						        #{/field}
+							</td>
+							<td>
+								#{field 'canceled'}
+			           				<input type="checkbox" name="${field.name}"
+		            					class="${field.errorClass}" #{if booking.canceled} checked="true" #{/if}/>
+						        #{/field}
+							</td>
+							<td>
+								<input type="submit" value="Update" />
+							</td>
+					  	</tr>
+				  	#{/form}
+				#{/list}
+	</tbody>
+	</table>
+	</div>
+</div>
+<p class="crudListExport"  id="exportAll">
+		<a href="@{admin.Companies.createInvoice(company.id)}">Create invoices</a>
+	</p>
+
+</div>

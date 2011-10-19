@@ -1,0 +1,4 @@
+id, creditCardName, checkinDate, hotelName, priceCents, salePriceCents, code, nights, rooms
+#{list items:bookings, as:'booking' }
+${booking.id}, ${booking.creditCardName}, ${booking.checkinDate}, ${booking.hotelName},${booking.priceCents},${booking.salePriceCents},${booking.code},${booking.nights},${booking.rooms}
+#{/list}	

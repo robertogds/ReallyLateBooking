@@ -1,6 +1,9 @@
 package controllers.admin;
 
+import java.util.List;
+
 import models.Booking;
+import models.User;
 import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
@@ -11,5 +14,10 @@ import controllers.Secure;
 @CRUD.For(Booking.class)
 public class Bookings extends controllers.CRUD{
 
+	public static void exportAllCSV(){
+		List<Booking> bookings = Booking.all().fetch();
+		renderTemplate("admin/Bookings/bookings.csv",bookings);
+	}
+	
 }
 

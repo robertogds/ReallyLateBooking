@@ -23,20 +23,24 @@ public class CityDTO {
 	public String name;
 	public String url;
 	
-	public CityDTO(City city, String lang){
+	public CityDTO(City city){
 		this.id = city.id;
 		this.name = city.nameEN;
 		this.url = city.url;
 		
+		String lang = Lang.get();
 		if (lang != null){
 			Logger.debug("Filling city info with locale: " + lang);
 			if (lang.equals("es") || lang.equals("es_ES")){
-				Logger.debug("Filling city info with Spanish ");
 				this.name = city.name;
+				Logger.debug("Filling city info with Spanish : " + this.name);
 			}
 			else if (lang.equals("fr")){
 				Logger.debug("Filling city info with French ");
 				this.name = city.nameFR;
+			}
+			else{
+				Logger.debug("Lang is not spanish nor french: " + lang);
 			}
 		}
 	}

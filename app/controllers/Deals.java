@@ -7,6 +7,7 @@ import java.util.*;
 
 import models.*;
 import play.*;
+import play.i18n.Lang;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -14,8 +15,8 @@ import play.mvc.With;
 public class Deals extends Controller {
 	
 	@Before
-	public static void checkLanguage(){
-		Logger.debug("### HEADERS : " + request.headers.toString());
+	static void analytics(){
+		Statistic.saveVisit(request.path);
 	}
 	
 	public static void list(String city) {

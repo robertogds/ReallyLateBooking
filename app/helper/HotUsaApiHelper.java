@@ -129,7 +129,7 @@ public final class HotUsaApiHelper {
 			hotelCodeList += deal.hotelCode + "#";
 		}
 		
-		Calendar today = Calendar.getInstance();
+		Date today = DateHelper.getTodayDate();
 		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
 		Calendar checkoutDate = Calendar.getInstance(); 
 		checkoutDate.setTime(DateHelper.getFutureDay(days));
@@ -138,7 +138,7 @@ public final class HotUsaApiHelper {
  		"<peticion> <tipo>105</tipo> <nombre>Petición de Disponibilidad</nombre> <agencia>ReallyLateBooking.com</agencia> <parametros>" +
  		"<codishotel>"+ hotelCodeList +"</codishotel> <regimen>OB</regimen> <numhab1>1</numhab1> <paxes1>2-0</paxes1> <numhab2>0</numhab2> " +
  		"<paxes2>0-0</paxes2> <numhab3>0</numhab3> <paxes3>0-0</paxes3> <usuario>939201</usuario> <afiliacion>VE</afiliacion> " +
- 		"<fechaentrada>"+sdf.format(today.getTime())+"</fechaentrada> <fechasalida>"+ sdf.format(checkoutDate.getTime()) +"</fechasalida> <idioma>1</idioma> <duplicidad>0</duplicidad>" +
+ 		"<fechaentrada>"+sdf.format(today)+"</fechaentrada> <fechasalida>"+ sdf.format(checkoutDate.getTime()) +"</fechasalida> <idioma>1</idioma> <duplicidad>0</duplicidad>" +
  		"<marca/> </parametros></peticion>";
  		
 		return request;

@@ -17,8 +17,8 @@ public final class DateHelper {
 		Integer hour = today.get(Calendar.HOUR_OF_DAY);
 		//Between 0am and 6am we need to book for the past day
 		if (hour >= 0 && hour < 6){
-			Logger.info("Its between 0am and 6am, day of month: " + Calendar.DAY_OF_MONTH);
 			today.add(Calendar.DAY_OF_MONTH, -1 );
+			Logger.info("Its between 0am and 6am, day of month: " + today.get(Calendar.DAY_OF_MONTH));
 		}
 		
 		return today.getTime();
@@ -52,7 +52,7 @@ public final class DateHelper {
 		else{
 			Calendar now = Calendar.getInstance();
 			Integer hour = now.get(Calendar.HOUR_OF_DAY);
-			hour = hour + 2; //we are utc+2 and gae is UTC
+			hour = hour + 1; //we are utc+1 and gae is UTC
 			// 24 = 0
 			hour = hour == 24 ? 0 : hour;
 			// 25 = 1

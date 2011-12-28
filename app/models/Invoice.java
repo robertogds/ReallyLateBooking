@@ -53,6 +53,8 @@ public class Invoice extends Model {
     public Boolean payed;
     public Float totalTax;
     
+    @MaxSize(10000)
+	public String comment;
 
     public Invoice(Company company) {
         this.company = company;

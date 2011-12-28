@@ -48,6 +48,9 @@ public class Booking extends Model {
     @Index("invoice_index")
     public Invoice invoice;
     
+    @Index("city_index")
+    public City city;
+    
     @Required
     @Index("deal_index")
     public Deal deal;
@@ -84,6 +87,8 @@ public class Booking extends Model {
 	public String bookingForLastName;
 	public String bookingForEmail;
 	public Float fee;
+	@MaxSize(10000)
+	public String comment;
 
     public Booking(Deal deal, User user) {
         this.deal = deal;
@@ -104,6 +109,8 @@ public class Booking extends Model {
     	this.hotelName = this.deal.hotelName;
     	this.priceCents = this.getTotalPrice(); //save actual deal price
     	this.salePriceCents = this.getTotal();
+    	this.invoiced = Boolean.FALSE;
+    	this.canceled = Boolean.FALSE;
     	
     	super.insert();
 	}
@@ -226,6 +233,12 @@ public class Booking extends Model {
 
 	public static Collection<Booking> findByInvoice(Invoice invoice) {
 		return Booking.all().filter("invoice", invoice).fetch();
+	}
+
+	public static int countBookingsByCity(City city, Date start, Date end) {
+		int bookings = Booking.all().filter("city", city)
+    		.filter("checkinDate>", start).filter("checkinDate<", end).count();
+		return bookings;
 	}
 	
 

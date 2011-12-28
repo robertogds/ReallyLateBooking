@@ -2,13 +2,13 @@
 <cronentries>
   <cron>
     <url>/cron/refreshHotUsaPrices</url>
-    <description>Repopulate hotel availability every 10 minutes</description>
-    <schedule>every 10 minutes</schedule>
+    <description>Repopulate hotel availability every 20 minutes</description>
+    <schedule>every 20 minutes</schedule>
   </cron>
   <cron>
     <url>/cron/confirmReservations</url>
-    <description>Confirm partial reservations every 2 minutes</description>
-    <schedule>every 2 minutes</schedule>
+    <description>Confirm partial reservations every 5 minutes</description>
+    <schedule>every 5 minutes</schedule>
   </cron>
 </cronentries>
 

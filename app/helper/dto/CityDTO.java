@@ -22,11 +22,15 @@ public class CityDTO {
     public Long id;
 	public String name;
 	public String url;
+	public String latitude;
+	public String longitude;
 	
 	public CityDTO(City city){
 		this.id = city.id;
 		this.name = city.nameEN;
 		this.url = city.url;
+		this.latitude = city.latitude;
+		this.longitude = city.longitude;
 		
 		String lang = Lang.get();
 		if (lang != null){

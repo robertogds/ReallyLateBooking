@@ -16,6 +16,9 @@ public class Bookings extends controllers.CRUD{
 
 	public static void exportAllCSV(){
 		List<Booking> bookings = Booking.all().fetch();
+		for (Booking booking: bookings){
+			booking.user = User.findById(booking.user.id);
+		}
 		renderTemplate("admin/Bookings/bookings.csv",bookings);
 	}
 	

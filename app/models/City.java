@@ -30,9 +30,17 @@ public class City extends Model {
 	@DateTime
 	public Date updated;
 	
+	public String latitude;
+	public String longitude;
+	
 	@Required
 	@Index("country_index")
     public Country country;
+	
+	//url string of the City root
+	public String root;
+	public String hotusaProvCode;
+	public String hotusaCode;
 	
 	public City(String name, String url){
 		this.name = name;
@@ -56,13 +64,17 @@ public class City extends Model {
 		return name;
 	}
 
-	public static Collection<City> findActiveCities() {
-		Collection<City> cities = all().filter("active", true).order("name").fetch();
+	public static List<City> findActiveCities() {
+		List<City> cities = all().filter("active", Boolean.TRUE).order("name").fetch();
 		return cities;
 	}
 
 	public static List<City> findActiveCitiesByCountry(Country country){
 		return all().filter("country", country).filter("active", Boolean.TRUE).order("name").fetch();
+	}
+	
+	public static List<City> findActiveCitiesByRoot(String root){
+		return all().filter("root", root).filter("active", Boolean.TRUE).order("name").fetch();
 	}
 	
 	public static void addTestCity(Collection<City> cities) {

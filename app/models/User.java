@@ -158,5 +158,11 @@ public class User extends Model{
 		}
 		return Boolean.FALSE;
 	}
+
+	public static int countNewUsersByDate(Calendar calStart, Calendar calEnd) {
+		int users  = User.all().filter("created>", calStart.getTime()).
+							filter("created<", calEnd.getTime()).count();
+		return users;
+	}
     
 }

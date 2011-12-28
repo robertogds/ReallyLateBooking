@@ -28,9 +28,12 @@ public class Country extends Model {
 	public String url;
 	
 	public boolean active;
+	public String latitude;
+	public String longitude;
 	
 	@DateTime
 	public Date updated;
+	public String hotusaCode;
 	
 	public Country(String name, String url){
 		this.name = name;

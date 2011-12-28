@@ -1,6 +1,7 @@
 package jobs;
 
 import models.City;
+import models.Country;
 import models.Deal;
 import models.User;
 import play.Logger;
@@ -12,13 +13,13 @@ import play.jobs.OnApplicationStart;
 public class Bootstrap extends Job {
     
     public void doJob() {
+    	if(User.all().count() == 0) {
+            this.initializeUsers();
+            Logger.info("The are no user. A root user has been created.");
+        }
         if(Deal.all().count() == 0) {
         	this.initializeDeals();
         	Logger.info("The are no deals. Some examples have been created.");
-        }
-        if(User.all().count() == 0) {
-            this.initializeUsers();
-            Logger.info("The are no user. A root user has been created.");
         }
     }
 
@@ -34,11 +35,15 @@ public class Bootstrap extends Job {
 	}
 
 	private void initializeDeals() {
+		Country spain = new Country("España", "spain");
+		spain.insert();
 		City madrid = new City("Madrid", "madrid");
 		madrid.active = Boolean.TRUE;
+		madrid.country = spain;
 		madrid.insert();
 		City barcelona = new City("Barcelona", "barcelona");
 		barcelona.active = Boolean.TRUE;
+		barcelona.country = spain;
 		barcelona.insert();
 		City moldavia = new City("Moldavia", "moldavia");
 		moldavia.active = Boolean.TRUE;
@@ -49,8 +54,12 @@ public class Bootstrap extends Job {
 		prueba.mainImageSmall = "mainImageSmall.jpg";
 		prueba.hotelCode = "601022";
 		prueba.isHotUsa = Boolean.TRUE;
+		prueba.contactEmail = "pablo@iipir.com";
+		prueba.priceCents = 100;
+		prueba.owner = User.findByEmail("pablo@iipir.com");
+		prueba.quantity = 10;
 		prueba.insert();
-		Deal ritz = new Deal("Hotel Ritz", madrid, Boolean.TRUE);
+		Deal ritz = new Deal("Hotel DORMIRDCINE", madrid, Boolean.TRUE);
 		ritz.address = "castellana 43";
 		ritz.mainImageBig = "mainImage.jpg";
 		ritz.mainImageSmall = "mainImageSmall.jpg";
@@ -58,8 +67,14 @@ public class Bootstrap extends Job {
 		ritz.image2 = "image2.jpg";
 		ritz.image3 = "image3.jpg";
 		ritz.image4 = "image4.jpg";
+		ritz.hotelCode = "691990";
+		ritz.isHotUsa = Boolean.TRUE;
+		ritz.contactEmail = "pablo@iipir.com";
+		ritz.priceCents = 100;
+		ritz.owner = User.findByEmail("pablo@iipir.com");
+		ritz.quantity = 10;
 		ritz.insert();
-	    Deal cibeles = new Deal("Hotel Cibeles", madrid, Boolean.TRUE);
+	    Deal cibeles = new Deal("Vincci Soho", madrid, Boolean.TRUE);
 	    cibeles.address = "castellana 43";
 		cibeles.mainImageBig = "mainImage.jpg";
 		cibeles.mainImageSmall = "mainImageSmall.jpg";
@@ -67,8 +82,14 @@ public class Bootstrap extends Job {
 		cibeles.image2 = "image2.jpg";
 		cibeles.image3 = "image3.jpg";
 		cibeles.image4 = "image4.jpg";
+		cibeles.hotelCode = "614546";
+		cibeles.isHotUsa = Boolean.TRUE;
+		cibeles.contactEmail = "pablo@iipir.com";
+		cibeles.priceCents = 100;
+		cibeles.owner = User.findByEmail("pablo@iipir.com");
+		cibeles.quantity = 10;
 	    cibeles.insert();
-	    Deal sol = new Deal("Hotel Sol", madrid, Boolean.TRUE);
+	    Deal sol = new Deal("Hotel Conde Duque", madrid, Boolean.TRUE);
 	    sol.address = "castellana 43";
 	    sol.mainImageBig = "mainImage.jpg";
 		sol.mainImageSmall = "mainImageSmall.jpg";
@@ -76,6 +97,12 @@ public class Bootstrap extends Job {
 		sol.image2 = "image2.jpg";
 		sol.image3 = "image3.jpg";
 		sol.image4 = "image4.jpg";
+		sol.hotelCode = "000850";
+		sol.isHotUsa = Boolean.TRUE;
+		sol.contactEmail = "pablo@iipir.com";
+		sol.priceCents = 100;
+		sol.owner = User.findByEmail("pablo@iipir.com");
+		sol.quantity = 10;
 	    sol.insert();
 	    Deal catalunya = new Deal("Hotel Catalunya", barcelona, Boolean.TRUE);
 	    catalunya.address = "castellana 43";
@@ -85,6 +112,12 @@ public class Bootstrap extends Job {
 		catalunya.image2 = "image2.jpg";
 		catalunya.image3 = "image3.jpg";
 		catalunya.image4 = "image4.jpg";
+		catalunya.isHotUsa = Boolean.FALSE;
+		catalunya.contactEmail = "pablo@iipir.com";
+		catalunya.priceCents = 200;
+		catalunya.salePriceCents = 60;
+		catalunya.owner = User.findByEmail("pablo@iipir.com");
+		catalunya.quantity = 10;
 	    catalunya.insert();		
 	}
     

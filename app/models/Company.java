@@ -11,6 +11,7 @@ import controllers.CRUD.Hidden;
 
 import play.Logger;
 import play.data.validation.Email;
+import play.data.validation.MaxSize;
 import play.data.validation.Password;
 import play.data.validation.Required;
 import play.data.validation.Validation;
@@ -42,6 +43,8 @@ public class Company extends Model{
 	public String nif;
 	public String phone;
 	public String address;
+	@MaxSize(10000)
+	public String comment;
 	@DateTime
     public Date updated;
 	public Integer fee;

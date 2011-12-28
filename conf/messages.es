@@ -124,3 +124,4 @@ invoice.terms = Términos
 invoice.add_row = Añadir linea de factura 
 invoice.banktransfer=Por transferencia bancaria al número de cuenta IBAN: 0049 6109 62 2116345761. 
 
+city.notfound =Ciudad no encontrada

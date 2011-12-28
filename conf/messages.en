@@ -80,5 +80,46 @@ mails.recoverpass.link = Recover my password
 extranet.list.title =  Your Hotels
 extranet.title = ReallyLateBooking Extranet 
 
+owners.save = Save changes
+owners.oneday.title = Deal price for tonight:
+owners.remember= Remember clicking on Save Changes to active your deal for tonight.
+owners.moredays.priceDay5=Price 5th night
+owners.moredays.priceDay4=Price 4th night
+owners.moredays.priceDay3=Price 3th night
+owners.moredays.priceDay2=Price 2th night
+owners.moredays.title= Ofertas de más de un día de duración en ReallyLateBooking (OPCIONAL)
+owners.moredays.description=  Ahora puedes introducir ofertas de 1 a 5 días de duración. La oferta puede ser de la duración de estancia que desees entre 1 y 5 días. Por ejemplo, si quieres introducir una oferta de un máximo de 3 días debes introducir precios para la segunda y tercera noche y dejar la cuarta y quinta en blanco.
+owners.moredays.important= Importante:
+owners.moredays.point1= La disponibilidad debe ser la mínima que cumplan todas las noches introducidas. 
+owners.moredays.point2= El cliente puede reservar una o más noches hasta el máximo introducido.
+owners.moredays.point3= Los precios son siempre para estancias que empiezan esta noche. 
+owners.moredays.point4= Si necesitas enviarnos ofertas para más días venideros, puedes hacerlo por email a precios@reallylatebooking.com
+owners.moredays.point5= Si tienes cualquier duda sobre el funcionamiento de las ofertas de más de un día llamanos al 648093154 y te ayudamos.
+owners.breakfastIncluded= Desayuno Incluido:
+owners.salePriceCents= Precio de Oferta para HOY (IVA incluido):
+owners.quantity = Habitaciones disponibles:
+error.correct = Por favor, corrige los errores.
+
+invoice = Factura
+
+invoice.amount_due = Adeudo Total
+invoice.date = Fecha
+invoice.description = Reserva
+invoice.cost = Coste
+invoice.commission = Comisión
+invoice.price = Precio
+invoice.booking = Reserva en %s | noches: %s | codigo: %s
+invoice.subtotal = Subtotal
+invoice.total= Total
+invoice.amount_paid = Pagado
+invoice.balance_due = A pagar
+invoice.tax= IVA
+invoice.terms = Términos
+invoice.add_row = Añadir linea de factura 
+invoice.banktransfer=Por transferencia bancaria al número de cuenta IBAN: 0049 6109 62 2116345761. 
+
+
+city.notfound = City not found
+
 
 

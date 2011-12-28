@@ -1,11 +1,17 @@
-<!-- Indices written at Wed, 2 Nov 2011 17:17:30 CET -->
+<!-- Indices written at Tue, 27 Dec 2011 17:19:06 CET -->
 
 <datastore-indexes>
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 10 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="statistics" ancestor="false" source="auto">
+        <property name="path" direction="asc"/>
+        <property name="date" direction="desc"/>
     </datastore-index>
 
     <!-- Used 1 time in query history -->

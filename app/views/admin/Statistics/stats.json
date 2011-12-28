@@ -1,0 +1,23 @@
+{ 
+  "cols": [ 
+        {"id":"date","label":"Date","type":"string"}, 
+        {"id":"stat","label":"Stat","type":"number"} 
+      ], 
+  "rows": [ 
+  
+  
+#{list data?.visits.grep( path == "/deals/madrid"), as:'visit'} 
+        {"c":[ 
+            {"v":"${visit.date?.format('dd MMMM yyyy')}"}, 
+            {"v":${visit.count}} 
+        ]}, 
+#{/list} 
+
+#{list data?.visits.grep( path == "/deals/barcelona"), as:'visit'} 
+        {"c":[ 
+            {"v":"${visit.date?.format('dd MMMM yyyy')}"}, 
+            {"v":${visit.count}} 
+        ]}, 
+#{/list} 
+      ] 
+} 

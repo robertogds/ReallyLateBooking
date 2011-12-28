@@ -21,11 +21,15 @@ public class CountryDTO {
     public Long id;
 	public String name;
 	public String url;
+	public String latitude;
+	public String longitude;
 	
 	public CountryDTO(Country country){
 		this.id = country.id;
 		this.name = country.nameEN;
 		this.url = country.url;
+		this.latitude = country.latitude;
+		this.longitude = country.longitude;
 		
 		String lang = Lang.get();
 		Logger.debug("Filling country info with locale: " + lang);

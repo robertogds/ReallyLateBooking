@@ -14,16 +14,23 @@ GET     /cron/confirmReservations               Application.confirmReservations
 
 GET     /mobile                                 Mobile.main
 
-GET     /admin/users/freeNightEmails			admin.Users.freeNightEmails
+
 GET 	/admin									module:crudsiena
+GET     /admin/statistics						admin.Statistics.index
+GET     /admin/statistics/stats					admin.Statistics.stats(format:'json')
+GET     /admin/statistics/repare				admin.Statistics.repare
+
+
 
 # Deals
-# GET 	/deals/list/{city}						Deals.list
-GET 	/deals/{city}							Deals.iPhoneList(format:'json')
+GET 	/deals/{cityUrl}						Deals.iPhoneList(format:'json')
+GET 	/v2/deals/{cityUrl}						Deals.listV2(format:'json')
+
 
 # Cities
 GET 	/cities/{countryUrl}					Cities.cityListByCountry(format:'json')
 GET 	/cities							    	Cities.cityList(format:'json')
+GET 	/v2/cities							    Cities.cityListAll(format:'json')
 
 #Countries
 GET 	/countries							    Countries.countryList(format:'json')

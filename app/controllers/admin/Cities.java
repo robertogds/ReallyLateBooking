@@ -25,7 +25,7 @@ public class Cities extends controllers.CRUD {
         render(city, deals);
 	}
 	
-	public static void updateDeal(Long id, Integer quantity, Integer priceCents, Integer salePriceCents, 
+	public static void updateDeal(Long id, Integer quantity, Integer priceCents, Integer bestPrice, Integer salePriceCents, 
 			Integer priceDay2, Integer priceDay3, Integer priceDay4, Integer priceDay5, 
 			Integer position, Boolean active, Boolean isHotUsa, Boolean isFake, Integer limitHour,
 			Long cityId) {
@@ -34,16 +34,24 @@ public class Cities extends controllers.CRUD {
 	    deal = Deal.findById(id);
 	    // Edit
 	    deal.quantity = quantity;
+	    deal.bestPrice = bestPrice;
 	    deal.priceCents = priceCents;
+	    if (deal.bestPrice != null ){
+	    	int dif = (deal.bestPrice - deal.salePriceCents) * 100;
+	    	deal.discount = dif != 0 ? dif / deal.bestPrice : 0;
+	    }
+	    else{
+	    	deal.discount = 0;
+	    }
 	    deal.salePriceCents = salePriceCents;
 	    deal.priceDay2 = priceDay2;
 	    deal.priceDay3 = priceDay3;
 	    deal.priceDay4 = priceDay4;
 	    deal.priceDay5 = priceDay5;
 	    deal.position = position;
-	    deal.active = active;
-	    deal.isHotUsa = isHotUsa;
-	    deal.isFake = isFake;
+	    deal.active = active != null ? active : Boolean.FALSE;
+	    deal.isHotUsa = isHotUsa != null ? isHotUsa : Boolean.FALSE;
+	    deal.isFake = isFake != null ? isFake : Boolean.FALSE;
 	    deal.limitHour = limitHour;
 	    
 	    //Actualize city updated date

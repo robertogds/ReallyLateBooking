@@ -6,6 +6,7 @@ import helper.ImageHelper;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -48,6 +49,8 @@ public class Deal extends Model {
 	public Company company;
 	@Email
 	public String contactEmail;
+	public double discount;
+	public Integer bestPrice;
 	@Required
 	public Integer salePriceCents;
 	@Required
@@ -112,6 +115,7 @@ public class Deal extends Model {
     public String mainImageBig;
 	@Required
     public String mainImageSmall;
+	public String listImage;
 	public String image1;
 	public String image2;
 	public String image3;
@@ -153,9 +157,32 @@ public class Deal extends Model {
 		return all().filter("isHotUsa", Boolean.TRUE).fetch();
 	}
 	
+	public static List<Deal> findDealsFromHotUsaByCity(City city){
+		return all().filter("isHotUsa", Boolean.TRUE).filter("city", city).fetch();
+	}
+	
+	public static Collection<Deal> findActiveDealsByCityV2(City city) {
+		Integer hour = DateHelper.getCurrentHour();
+		Logger.debug("Hour time right now is: " + hour);
+		//If hour is between 6am and 12pm we return an empty list
+		if (hour >= 6 && hour < 12){
+			Logger.info("We are closed ");
+			return new ArrayList<Deal>();
+		}
+		// between 12 and 23 all deals are open
+		else{
+			List<Deal> activeDeals = findAllActiveDealsByCityV2(city, MAXDEALS);
+			if (hour >= 12 && hour < 24){
+				Logger.info("We are all opened");
+				return activeDeals;
+			}
+			return findActiveDealsByNight(activeDeals, hour);
+		}
+	}
+	
 	public static List<Deal> findActiveDealsByCity(City city){
 		Integer hour = DateHelper.getCurrentHour();
-		Logger.info("Hour time right now is: " + hour);
+		Logger.debug("Hour time right now is: " + hour);
 		//If hour is between 6am and 12pm we return an empty list
 		
 		if (hour >= 6 && hour < 12){
@@ -175,7 +202,7 @@ public class Deal extends Model {
 	private static List<Deal> findActiveDealsByNight(List<Deal> deals, Integer hour){
 		
 		List<Deal> active = new ArrayList<Deal>();
-		Logger.info("Is between 0am and 6am. Hour:  " + hour);
+		Logger.debug("Is between 0am and 6am. Hour:  " + hour);
 		// after 24 we check the limitHour
 		for (Deal deal : deals){
 			if (deal.limitHour != null && deal.limitHour > hour){
@@ -194,15 +221,28 @@ public class Deal extends Model {
 	public static List<Deal> findAllActiveDealsByCity(City city, Integer maxDeals){
 		return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(maxDeals);
 	}
+	/*
+	 * Returns all deals by city independently of the time
+	 * V2 returns all the deals from all the locations in a city
+	 * */
+	public static List<Deal> findAllActiveDealsByCityV2(City city, Integer maxDeals){
+		List<Deal> active = new ArrayList<Deal>();
+		List<City> cities = City.findActiveCitiesByRoot(city.url);
+		for (City location: cities) {
+			active.addAll(all().filter("city", location).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(maxDeals));
+		}
+		return active;
+	}
 	
 	public static List<Deal> findByCity(City city) {
-        return all().filter("city", city).order("position").order("-priceCents").fetch();
+        return all().filter("city", city).order("-updated").order("position").fetch();
     }
 	
 	public static List<Deal> findAllActiveDealsByCityId(Long cityId){
 		City city = City.findById(cityId);
 		return findAllActiveDealsByCity(city,10);
 	}
+	
 	
 	public static Query<Deal> all() {
     	return Deal.all(Deal.class);
@@ -356,6 +396,27 @@ public class Deal extends Model {
 		}
 	    deal.update();
 	}
+
+	public static int countHotelsByCity(City city, Date start, Date end) {
+		int hotels = Deal.all().filter("city", city).filter("active", Boolean.TRUE).count();
+		return hotels;
+	}
+
+	public static int countActiveDirectHotelsByCity(City city, Date start, Date end) {
+		int hotels = Deal.all().filter("city", city).filter("active", Boolean.TRUE).filter("isHotUsa", Boolean.FALSE).count();
+		return hotels;
+	}
+
+	public static double findMaxDiscountByCity(City city, Date start, Date end) {
+		Deal deal = Deal.all().filter("city", city).filter("active", Boolean.TRUE).order("-discount").get();
+		return deal != null ? deal.discount : 0;
+	}
+
+	public static double findMinDiscountByCity(City city, Date start, Date end) {
+		Deal deal = Deal.all().filter("city", city).filter("active", Boolean.TRUE).order("discount").get();
+		return deal != null ? deal.discount : 0;
+	}
+
 }
 
 

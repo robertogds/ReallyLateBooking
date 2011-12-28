@@ -1,5 +1,5 @@
 /** Administration area **/
-.crudListExport a {
+.crudListExport a{
     background: none repeat scroll 0 0 #0A65AF;
     border-radius: 8px 8px 8px 8px;
     color: #FFFFFF !important;
@@ -14,4 +14,33 @@
 
 #exportAll a{
 	right: 400px;
+}
+
+.logout{
+    background: none repeat scroll 0 0 red;
+    border-radius: 8px 8px 8px 8px;
+    color: #FFFFFF !important;
+    font-size: 100%;
+    margin: 0;
+    padding: 3px 10px;
+    text-decoration: none;
+    top: 0;
+}
+.panel{
+    background: none repeat scroll 0 0 #0A65AF;
+    border-radius: 8px 8px 8px 8px;
+    color: #FFFFFF !important;
+    font-size: 100%;
+    margin: 0;
+    padding: 3px 10px;
+    text-decoration: none;
+    top: 0;
+}
+
+.control_panel label{
+	color: black;
+}
+
+label.second {
+	color: green;
 }

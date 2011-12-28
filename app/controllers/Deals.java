@@ -1,15 +1,21 @@
 package controllers;
 
+import helper.DateHelper;
 import helper.HotUsaApiHelper;
 import helper.dto.DealDTO;
+import helper.dto.StatusMessage;
 
 import java.util.*;
+
+import com.google.appengine.api.urlfetch.HTTPHeader;
 
 import models.*;
 import play.*;
 import play.i18n.Lang;
+import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.With;
 
 public class Deals extends Controller {
@@ -23,8 +29,15 @@ public class Deals extends Controller {
         render(city);
 	}
 	
-	public static void iPhoneList(String city) {
-	        Collection<Deal> deals = fetchDeals(city);	
+	/*
+	 * Retrieves all the active deals from all the active locations
+	 * in the required city.
+	 * */
+	public static void listV2(String cityUrl) {
+		City city = City.findByName(cityUrl);
+		
+		if (city != null){
+			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
 				deal.prepareImages();//just for iphone now, make configurable in the future
@@ -32,6 +45,27 @@ public class Deals extends Controller {
 				dealsDtos.add(new DealDTO(deal));
 			}
 	        renderJSON(dealsDtos);
+		}
+		else{
+			renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("city.notfound")));
+		}
+	}
+	
+	public static void iPhoneList(String cityUrl) {
+		City city = City.findByName(cityUrl);
+		if (city != null){
+			Collection<Deal> deals = Deal.findActiveDealsByCity(city);
+	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
+			for (Deal deal: deals){
+				deal.prepareImages();//just for iphone now, make configurable in the future
+				deal.fecthCity(); //retrieves city object to not to send just the city id
+				dealsDtos.add(new DealDTO(deal));
+			}
+	        renderJSON(dealsDtos);
+		}
+		else{
+			renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("city.notfound")));
+		}
 	}
 	
 	/*
@@ -57,30 +91,25 @@ public class Deals extends Controller {
 		}
 	}
 	
-	/*
-	 * Used to avoid the lazy load. do we really need this?
-	 */
-	private static Collection<Deal> fetchDeals(String cityName) {
-			City city = City.findByName(cityName);
-	        Collection<Deal> deals = Deal.findActiveDealsByCity(city);
-	        return deals;
-	}
 	
 	/*
 	 * Refresh prices and availability from hotUsa hotels
 	 * Used by cron GAE
 	 */
 	public static void refreshHotUsaPrices(){
-		Logger.debug("### CRON TASK REFRESHING HOTELS AVAILABILITY START ###");
-		List<Deal> deals = Deal.findDealsFromHotUsa();
-		if (deals.size() > 0){
-			HotUsaApiHelper.getHotelPrices(deals);
-		}
-		else{
-			Logger.debug("We have no any hotusa hotel");
+		if (DateHelper.isWorkingTime()){
+			Logger.debug("### CRON TASK REFRESHING HOTELS AVAILABILITY START ###");
+			List<Deal> deals = Deal.findDealsFromHotUsa();
+			if (deals.size() > 0){
+				HotUsaApiHelper.getHotelPrices(deals);
+			}
+			else{
+				Logger.debug("We have no any hotusa hotel");
+			}
+			
+			Logger.debug("### CRON TASK REFRESHING HOTELS AVAILABILITY END ###");
 		}
 		
-		Logger.debug("### CRON TASK REFRESHING HOTELS AVAILABILITY END ###");
 	}
 
 }

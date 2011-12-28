@@ -1,0 +1,160 @@
+#{extends 'admin/layout.html' /}
+
+<div id="crudShow" class="control_panel">
+
+        <h2 id="crudShowTitle">Control Panel</h2>
+        
+
+        #{form @updateStatistics()}
+        	<div>
+		     <label>Start Date</label>   
+			#{select 'dayStart', items:1..31, value:data.dayStart,  id:'daySelect' /}
+			#{select 'monthStart', items:1..12, value:data.monthStart,  id:'monthSelect' /}
+			#{select 'yearStart', items:2011..2012, value:data.yearStart,  id:'yearSelect' /}
+			</div>
+			<div>
+			 <label>End Date</label>   
+			#{select 'dayEnd', items:1..31, value:data.dayEnd,  id:'daySelect' /}
+			#{select 'monthEnd', items:1..12, value:data.monthEnd,  id:'monthSelect' /}
+			#{select 'yearEnd', items:2011..2012, value:data.yearEnd,  id:'yearSelect' /}
+			</div>
+			<div>
+		 <label class="second">Start Date 2</label>   
+			#{select 'dayStartB', items:1..31, value:data.dayStartB,  id:'daySelect' /}
+			#{select 'monthStartB', items:1..12, value:data.monthStartB,  id:'monthSelect' /}
+			#{select 'yearStartB', items:2011..2012, value:data.yearStartB,  id:'yearSelect' /}
+			</div>
+			<div>
+			 <label class="second">End Date 2</label>   
+			#{select 'dayEndB', items:1..31, value:data.dayEndB,  id:'daySelect' /}
+			#{select 'monthEndB', items:1..12, value:data.monthEndB,  id:'monthSelect' /}
+			#{select 'yearEndB', items:2011..2012, value:data.yearEndB,  id:'yearSelect' /}
+			<input type="submit" value="Refresh" />
+			</div>
+
+        <div class="objectForm">
+        <div id="crudListTable">
+			<table>
+				<thead>
+					<tr>
+						<th width="20%">
+							City
+						</th>
+						<th width="10%">
+							Visits
+						</th>
+						<th width="10%">
+							Bookings
+						</th>
+						<th width="10%">
+							Max Discount
+						</th>
+						<th width="10%">
+							Min Discount
+						</th>
+						<th width="10%">
+							Direct Active Hotels
+						</th>
+						<th width="10%">
+							Hotels
+						</th>
+						<th width="10%">
+							Registered
+						</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+				%{ data.cities.eachWithIndex() { 
+					key, value , index -> }%
+						 <tr class="${index % 2 ? 'even' : 'odd'}" >
+							<td>
+								${key.name}
+							</td>
+							<td>
+								<label> ${value.visits}</label> 
+								<label class="second"> ${data.citiesB[key].visits}</label> 
+							</td>
+							<td>
+								<label> ${value.bookings}</label> 
+								<label class="second"> ${data.citiesB[key].bookings}</label> 
+							</td>
+							<td>
+								${value.maxDiscount}%
+							</td>
+							<td>
+								${value.minDiscount}%
+							</td>
+							<td>
+								${value.activeDirectHotels}
+							</td>
+							<td>
+								${value.hotels}
+							</td>
+							<td>
+								<label> ${data.registered}</label> 
+								<label class="second"> ${data.registeredB}</label> 
+							</td>
+						</tr>
+				%{ } }%
+				<tr style="background-color: grey;">
+							<td>
+								Total
+							</td>
+							<td>
+								<label>%{ out.print(data.cities.collect{ key, value -> value.visits }.sum()) %}</label> 
+								<label class="second">%{ out.print(data.citiesB.collect{ key, value -> value.visits }.sum()) %}</label>
+							</td>
+							<td>
+								<label>%{ out.print(data.cities.collect{ key, value -> value.bookings }.sum()) %}</label> 
+								<label class="second">%{ out.print(data.citiesB.collect{ key, value -> value.bookings }.sum()) %}</label>
+							</td>
+							<td>
+								<label>%{ out.print(data.cities.collect{ key, value -> value.maxDiscount}.max()) %}%</label>
+							</td>
+							<td>
+								<label>%{ out.print(data.cities.collect{ key, value -> value.minDiscount}.min()) %}%</label>
+							</td>
+							<td>
+								<label>%{ out.print(data.cities.collect { key, value -> value.activeDirectHotels }.sum()) %}</label>
+							</td>
+							<td>
+								<label>%{ out.print(data.cities.collect { key, value -> value.hotels }.sum()) %}</label>
+							</td>
+							<td>
+								<label>${data.registered}</label> 
+								<label class="second">${data.registeredB}</label>
+							</td>
+						</tr>
+	</tbody>
+	
+	</table>
+	</div>
+</div>
+		#{/form}
+		
+		<div id="chart_div"></div>
+</div>
+
+
+<script type="text/javascript"> 
+    google.load("visualization", "1", { 
+        packages : [ "corechart" ] 
+    }); 
+    google.setOnLoadCallback(drawChart); 
+    function drawChart() { 
+        var jsonData = $.ajax({ 
+            url : "@{admin.Statistics.stats()}", 
+            dataType : "json", 
+            async : false 
+        }).responseText; 
+        var data = new google.visualization.DataTable(jsonData); 
+        var chart = new 
+	google.visualization.LineChart(document.getElementById('chart_div')); 
+        chart.draw(data, { 
+            width : 960, 
+            height : 400, 
+            title : 'My chart' 
+        }); 
+    } 
+</script> 

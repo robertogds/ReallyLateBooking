@@ -16,8 +16,8 @@ import siena.*;
 public class Deals extends controllers.CRUD {
 	
 	public static void refreshHotUsaPrices(){
-		List<Deal> deals = Deal.findDealsFromHotUsa();
-		HotUsaApiHelper.getHotelPrices(deals);
+		List<City> cities = City.findActiveCities();
+		HotUsaApiHelper.getHotelPricesByCityList(cities);
 		redirect("/admin/deals");
 	}
 	

@@ -23,6 +23,7 @@ import com.google.gson.JsonSyntaxException;
 import controllers.oauth.ApiSecurer;
 
 import models.Booking;
+import models.City;
 import models.Deal;
 import models.User;
 import play.Logger;
@@ -84,13 +85,14 @@ public class Bookings extends Controller{
 		booking.validate(); //validate object and fill errors map if exist
 		if (!validation.hasErrors()){ 
 			Logger.debug("Valid booking");
-			booking.insert();
 			//we need to fetch all the info form user and deal 
 			booking.deal = Deal.findById(booking.deal.id);
 			booking.user = User.findById(booking.user.id);
+			booking.city = City.findById(booking.deal.city.id);
 			//if is an old object from datastore without the boolean set
 			booking.deal.isHotUsa = booking.deal.isHotUsa != null ? booking.deal.isHotUsa : Boolean.FALSE;
 			booking.deal.isFake = booking.deal.isFake != null ? booking.deal.isFake : Boolean.FALSE;
+			booking.insert();
 			if (booking.deal.isHotUsa && !booking.deal.isFake ){
 				doHotUsaReservation(booking);
 			}

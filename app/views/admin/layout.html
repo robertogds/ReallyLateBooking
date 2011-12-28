@@ -10,28 +10,7 @@
         <script src="@{'/public/javascripts/jquery-1.4.2.min.js'}" type="text/javascript" charset="utf-8"></script>
         <script src="@{'/public/javascripts/jquery-ui-1.8.4.custom.min.js'}" type="text/javascript" charset="utf-8"></script>
         <script src="@{'/public/javascripts/jquery-ui-timepicker-addon-0.5-custom.min.js'}" type="text/javascript" charset="utf-8"></script>
-
-		<script type="text/javascript">
-			var addListAction = #{jsAction @addListElement(':id', ':field') /}	
-		    var addListElement = function(id, field, elt) {
-		        $(elt).load( addListAction({id: id, field: field}) )
-		    }
-
-		    var delListAction = #{jsAction @deleteListElement(':id', ':field', ':idx') /}	
-		    var delListElement = function(id, field, idx, elt) {
-		        $(elt).load( delListAction({id: id, field: field, idx: idx}) )
-		    }
-
-		    var addMapAction = #{jsAction @addMapElement(':id', ':field', ':mkey') /}	
-		    var addMapElement = function(id, field, mkey, elt) {
-		        $(elt).load( addMapAction({id: id, field: field, mkey: mkey}) )
-		    }
-
-		    var delMapAction = #{jsAction @deleteMapElement(':id', ':field', ':mkey') /}	
-		    var delMapElement = function(id, field, mkey, elt) {
-		        $(elt).load( delMapAction({id: id, field: field, mkey: mkey}) )
-		    }
-		</script> 
+	 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	</head>
 	<body id="crud">
 		
@@ -46,15 +25,13 @@
    					</a>
         	</div>
 		</div>
-		
+
 		
 		#{if request.actionMethod != 'index'}
 			<div id="crudBreadcrumb">
 				#{crud.navigation /}
 			</div>
 		#{/if}
-		
-		
 
 		#{if flash.success}
 			<div class="crudFlash flashSuccess">

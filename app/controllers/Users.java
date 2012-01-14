@@ -4,9 +4,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import notifiers.Mails;
 import helper.JsonHelper;
-import helper.dto.StatusMessage;
-import helper.dto.UserDTO;
-import helper.dto.UserStatusMessage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,6 +11,9 @@ import com.google.gson.GsonBuilder;
 import controllers.oauth.ApiSecurer;
 
 import models.User;
+import models.dto.StatusMessage;
+import models.dto.UserDTO;
+import models.dto.UserStatusMessage;
 import play.Logger;
 import play.data.validation.Valid;
 import play.i18n.Messages;
@@ -49,7 +49,6 @@ public class Users extends Controller {
 				renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.login.correct"), dbUser));
 			}
 		}
-		
 		renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("user.login.incorrect")));
 	}
 	
@@ -68,7 +67,6 @@ public class Users extends Controller {
 				renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("user.remember.incorrect")));
 			}
 		}
-		
 	}
 	
 	public static void create(String json) {
@@ -106,7 +104,6 @@ public class Users extends Controller {
 	public static void update(Long id) {
 		String body = params.get("body");
 		Logger.debug("Update user " + body);
-		
 		if (body != null){
 			User user = new Gson().fromJson(body, User.class);
 		    User dbUser = User.findById(id);
@@ -152,5 +149,4 @@ public class Users extends Controller {
 		}
 		render();
 	}
-	
 }

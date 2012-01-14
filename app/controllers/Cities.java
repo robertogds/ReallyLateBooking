@@ -1,11 +1,11 @@
 package controllers;
 
-import helper.dto.CityDTO;
-import helper.dto.CountryDTO;
 
 import java.util.*;
 
 import models.*;
+import models.dto.CityDTO;
+import models.dto.CountryDTO;
 import play.*;
 import play.i18n.Lang;
 import play.mvc.Before;

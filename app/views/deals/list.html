@@ -1,64 +1,61 @@
-#{extends 'main.html' /}
-#{set title: 'Ofertas' /}
+#{extends 'layout.html' /}
+#{set title: city.name /}
 
-<section id="list">
-		<div class="toolbar">
-			<!-- <a href="/" class="button">Cities</a> -->
-			<h1>${city}</h1>
-		</div>
-				
-		<ul id="items_list" class="list">
-		</ul>
-		<div class="footer">
-			<ul>
-				<li class="cities">
-					<a href="#">
-						<span></span>Ciudades
-					</a>
-				</li>
-				<li class="myItems">
-					<a href="#">
-						<span></span>Reservas
-					</a>
-				</li>
-				<li class="myData">
-					<a href="#">
-						<span></span>Mis Datos
-					</a>
-				</li>
-			</ul>
-		</div>
-</section>
-	<div id="endOfPage"></div> <!-- I need it to add items details -->
+
+<div class="container">
+    
+    <div class="content">
+        #{list items:dealsDtos, as:'deal' }
+        	#{if deal_isFirst }
+		            <div class="row">
+			        	<div class="span12 today">
+				           <h1>Estas son las ofertas para hoy</h1>
+				        </div>
+			        </div>
+			#{/if}
+	        <div class="row deal-list">
+	        	<div class="span12 deal" >
+		            <div class="row" >
+		            	<div class="span6 hotelImage">
+		            		<img alt="${deal.hotelName}" src="${deal.image10}">
+		            	</div>
+			        	<div class="span6 deal-info">	
+			        		<div class="title">
+			        			<h2>${deal.hotelName} <small>${deal.address}</small></h2>
+			        			<p> %{ out.print(deal.hotelText) }%</p>
+			        		</div>
+				           
+				           <div class="main-info">
+				           		<div class="row price-more">
+				           			<div class="span3 price">
+				           				${deal.salePriceCents}<span>&euro;</span>
+				           			</div>
+				           			<div class="span3 more-info">
+				           				<a class="btn large primary" href="@{Deals.show(city.url,deal.id)}">Ver Oferta</a>
+				           			</div>
+				           		</div>
+				           		<div class="row deal-info">
+				           			<div class="span2 before">
+				           				 ${deal.priceCents}<span>&euro;</span> <span>antes</span>
+				           			</div>
+				           			<div class="span2 nights">
+				           				1-5 <span>noches</span>
+				           			</div>
+				           			<div class="span2 rooms">
+				           				${deal.quantity} <span>quedan</span>
+				           			</div>
+				           		</div>
+				           		
+				           		<div class="row social">
+				           			<div class="span3">
+				           			</div>
+				           		</div>
+				           </div>
+				        </div>
+			        </div>
+				</div>
+	        </div>
+        #{/list}
+    </div>
 	
-		<script>
-			$(document).ready(function(){	
-				loadItemsList('@{Deals.iPhoneList()}','${city}');
-				
-				$("body > section").first().addClass("current");
-	
-				$("a.back").live('tap click', function(e) {
-					var current = $(e.currentTarget).attr("href");
-					$(".current").removeClass("current").addClass("reverse");
-					$(current).addClass("current");
-				});
-	
-				// go to item detail when clicking on a item list element
-				$("#items_list li").live('tap click', function(e){
-					e.preventDefault();
-					e.stopPropagation();
-					
-					var curTaget = $(e.currentTarget);
-					var section = curTaget.closest('section');
-					var link = curTaget.find("a.moreInfo");
-					var prev_element = "#"+(section.removeClass("current").addClass("reverse").attr("id"));
-					var t = $(link.attr("href"));
-					var t_id = link.attr("rel");
-					
-					
-					loadItemDetail(t_id);
-					
-					setBackButton(prev_element, t);
-				});
-			});
-		</script>
+</div>

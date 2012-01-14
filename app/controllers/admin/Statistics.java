@@ -1,8 +1,6 @@
 package controllers.admin;
 
 import helper.DateHelper;
-import helper.dto.StatisticDTO;
-import helper.dto.StatsGraphDTO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,6 +13,8 @@ import models.Booking;
 import models.City;
 import models.Deal;
 import models.Statistic;
+import models.dto.StatisticDTO;
+import models.dto.StatsGraphDTO;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.With;

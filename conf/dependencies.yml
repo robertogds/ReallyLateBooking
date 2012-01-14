@@ -2,7 +2,9 @@
 
 require:
    - play
+   - play -> securesocial 0.2.2
    - play -> gae 1.4
    - play -> siena 2.0.0
    - play -> crudsiena 2.0.0
    - play -> secure
+   

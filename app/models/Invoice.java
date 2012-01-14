@@ -60,16 +60,16 @@ public class Invoice extends Model {
         this.company = company;
         this.created = Calendar.getInstance().getTime();
         this.payed = Boolean.FALSE;
-        this.totalAmount = new Float(0);
+        this.subTotal = new Float(0);
         this.totalTax = new Float(0);
     }
 	
     public void assignBookings(Collection<Booking> bookings){
     	for(Booking booking: bookings){
 			booking.fee = this.calculateCommission(booking.salePriceCents);
-			this.totalAmount += booking.fee;
 			this.totalTax += this.calculateTax(booking.fee);
-			this.subTotal = this.totalAmount - this.totalTax;
+			this.subTotal += booking.fee;
+			this.totalAmount = this.subTotal + this.totalTax;
 			booking.invoice = this;
 			booking.invoiced = Boolean.TRUE;
 			booking.update();

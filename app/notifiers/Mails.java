@@ -88,6 +88,8 @@ public class Mails extends MailServiceFactory {
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", booking.user);
 	   	  params.put("booking", booking);
+	   	  Deal deal = Deal.findById(booking.deal.id);
+	   	  params.put("deal", deal);
 	   	  send(message, template, params); 
 	   }
 
@@ -104,7 +106,8 @@ public class Mails extends MailServiceFactory {
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", user);
 	   	  params.put("booking", booking);
-	   	  
+	   	  Deal deal = Deal.findById(booking.deal.id);
+	   	  params.put("deal", deal);
 	   	  send(message, template, params);
    }
    

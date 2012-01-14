@@ -55,6 +55,7 @@ mails.booking.client.creditcard = Credit card
 mails.booking.client.cvc = cvc
 mails.booking.client.creditcardname = Credit Card Owner
 mails.booking.client.creditCardExpiry = Expiration date
+mails.booking.hotel.client.map = Hotel Location
 mails.booking.hotel.remember = Remember
 mails.booking.hotel.remember.li1 = This reservation is already confirmed
 mails.booking.hotel.remember.li2 = For any doubt contact ReallyLateBooking

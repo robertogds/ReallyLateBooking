@@ -1,31 +1,23 @@
 package models;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
 
-import controllers.CRUD.Hidden;
-
-
-import play.Logger;
 import play.data.validation.Email;
 import play.data.validation.Password;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.i18n.Messages;
-import play.libs.Crypto;
-import play.libs.OAuth.TokenPair;
 import play.modules.crudsiena.CrudUnique;
-import siena.Column;
 import siena.DateTime;
 import siena.Generator;
 import siena.Id;
 import siena.Model;
 import siena.Query;
 import siena.Table;
-import siena.Unique;
 
 
 @Table("users")
@@ -111,7 +103,7 @@ public class User extends Model{
     }
     
     public static User findByEmailAndPassword(String email, String password){
-    	return User.all().filter("email", email.trim().toLowerCase()).filter("validated", true).filter("password", password.trim()).get();
+    	return User.all().filter("email", email.trim().toLowerCase()).filter("password", password.trim()).get();
     }
  
     public String toString() {

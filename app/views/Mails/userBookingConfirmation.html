@@ -85,6 +85,18 @@
 						<br/><br/>
 					</td>
 				</tr>
+				<tr>
+					<td colspan="2" valign="top">
+						<strong style="font-size:14px; margin-bottom:5px; float:left;color:#0098CB;">&{'mails.booking.hotel.client.map'}:</strong>
+						<br/>
+						<strong>${deal.address}</strong>
+						<br/>
+							<a href="http://maps.google.com/maps?q=${deal.latitude},${deal.longitude}+(${deal.hotelName})&iwloc=A">
+								<img src="http://maps.google.com/maps/api/staticmap?center=${deal.latitude},${deal.longitude}&amp;zoom=13&amp;size=500x300&amp;markers=color:blue|${deal.latitude},${deal.longitude}&amp;sensor=true">
+							</a>
+						<br/><br/>
+					</td>
+				</tr>
 			</table>
 		</td>
 	</tr>
@@ -97,7 +109,7 @@
 			<img src="@@{'/public/images/logo_small.gif'}" style="margin-top:3px;" width="166" height="22"/><br/>
 			<strong style="padding-left:2px;">&{'mails.rlb.booking.department'}</strong><br/>
 			<span style="padding-left:2px;">616 975 363</span><br/>
-			<a href="http://www.reallylatebooking.com style="color:#0098CB; padding-left:2px;">reallylatebooking.com</a><br/>
+			<a href="http://www.reallylatebooking.com" style="color:#0098CB; padding-left:2px;" >reallylatebooking.com</a><br/>
 			
 		</td>
 	</tr>

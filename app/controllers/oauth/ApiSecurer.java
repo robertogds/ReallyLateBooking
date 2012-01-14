@@ -1,7 +1,6 @@
 package controllers.oauth;
 
 import helper.JsonHelper;
-import helper.dto.StatusMessage;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -13,6 +12,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import models.User;
+import models.dto.StatusMessage;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;

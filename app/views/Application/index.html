@@ -1,0 +1,29 @@
+#{extends 'layout.html' /}
+#{set title:'Ciudades' /}
+
+<div class="container-fluid">
+    	
+      <div class="content" id="cities">
+        <!-- Main hero unit for a primary marketing message or call to action 
+        <div class="hero-unit">
+          <h1>Ciudades</h1>
+          <p>Vestibulum id ligula porta felis euismod semper. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+          <p><a class="btn primary large">Learn more &raquo;</a></p>
+        </div>
+        -->
+        <!-- Example row of columns -->
+        
+        <div >
+	        <ul class="media-grid">
+			 	#{list items:cities, as:'city' }
+			 		<li id="${city.url}">
+					    <a href="@{Deals.list(city.url)}">
+					      <img class="thumbnail span5" alt="${city.name}" src="@{'/public/images/cities/'+city.url+'.jpg'}">
+					    </a>
+					</li>
+			    #{/list}
+			</ul>
+        	
+        </div>
+      </div>
+    </div>

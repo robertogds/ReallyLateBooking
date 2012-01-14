@@ -55,6 +55,7 @@ mails.booking.client.creditcard = Tarjeta
 mails.booking.client.cvc = ccv
 mails.booking.client.creditcardname = Titular Tarjeta
 mails.booking.client.creditCardExpiry = Fecha de caducidad
+mails.booking.hotel.client.map = Situación del hotel
 mails.booking.hotel.remember = Recuerde
 mails.booking.hotel.remember.li1 = Esta reserva es efectiva sin necesidad de confirmación.
 mails.booking.hotel.remember.li2 = Para cualquier duda pongase en contacto con su gestor de ReallyLateBooking

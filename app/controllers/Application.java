@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.w3c.dom.Document;
 
+import controllers.securesocial.SecureSocial;
+
 import jobs.Bootstrap;
 import models.Booking;
 import models.City;
@@ -23,7 +25,9 @@ import play.libs.WS.HttpResponse;
 import play.libs.WS.WSRequest;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(SecureSocial.class)
 public class Application extends Controller {
 	
 	@Before
@@ -32,8 +36,8 @@ public class Application extends Controller {
 	}
 	
 	public static void index() { 
-		//redirect to the extranet
-		Owners.index();
+		Collection<City> cities = City.findActiveCities();
+		render(cities); 
 	} 
 	
 	

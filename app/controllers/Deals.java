@@ -2,14 +2,14 @@ package controllers;
 
 import helper.DateHelper;
 import helper.HotUsaApiHelper;
-import helper.dto.DealDTO;
-import helper.dto.StatusMessage;
 
 import java.util.*;
 
 import com.google.appengine.api.urlfetch.HTTPHeader;
 
 import models.*;
+import models.dto.DealDTO;
+import models.dto.StatusMessage;
 import play.*;
 import play.i18n.Lang;
 import play.i18n.Messages;
@@ -25,8 +25,32 @@ public class Deals extends Controller {
 		Statistic.saveVisit(request.path);
 	}
 	
-	public static void list(String city) {
-        render(city);
+	public static void show(String cityUrl, Long id) {
+		Deal deal = Deal.findById(id);
+		if (deal != null){
+			deal.prepareImages();//just for iphone now, make configurable in the future
+			render(deal);
+		}
+		else{
+			notFound();
+		}
+	}
+	
+	public static void list(String cityUrl) {
+		City city = City.findByName(cityUrl);
+		
+		if (city != null){
+			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
+	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
+			for (Deal deal: deals){
+				deal.prepareImages();//just for iphone now, make configurable in the future
+				dealsDtos.add(new DealDTO(deal));
+			}
+	        render(city, dealsDtos);
+		}
+		else{
+			notFound();
+		}
 	}
 	
 	/*

@@ -1,0 +1,136 @@
+#{extends 'layout.html' /}
+#{set title: deal.hotelName /}
+
+
+<div class="container">
+    
+    <div class="content">
+
+       		<div class="row">
+	        	<div class="span12 today">
+		           <h1>Reserva este hotel para esta noche</h1>
+		        </div>
+	        </div>
+	        <div class="row">
+	        	<div class="span12 deal" id="deal_detail">
+		            <div class="row" >
+		            	<div class="span12 hotelImage">
+		            		<div class="imageContainer">
+		            			<img alt="${deal.hotelName}" src="${deal.mainImageBig}">
+		            		</div>
+		            		<div class="span12 captions black60">
+		            		</div>
+		            	</div>
+		            </div>
+		            <div class="row" >
+				        		<div class="title span12">
+				        			<h1>${deal.hotelName} <small>${deal.address}</small></h1>
+				        		</div>
+				    </div>
+		            <div class="row" >
+			        	<div class="span12 deal-info">	
+				           <div class="row main-content" >
+					           <div class="span8">
+					           		<div class="row">
+					           			<div class="span8">
+						           			<p>${deal.hotelText}</p>
+					           			</div>
+					           		</div>
+					           		<div class="row">
+					           			<div class="span8">
+						           			<h2>Las habitaciones</h2>
+						           			<p>${deal.roomText}</p>
+					           			</div>
+					           		</div>
+					           		<div class="row">
+					           			<div class="span8">
+						           			<h2>Comer y beber</h2>
+						           			<p>${deal.foodDrinkText}</p>
+					           			</div>
+					           		</div>
+					           		<div class="row">
+					           			<div class="span8">
+						           			<h2>Los alrededores</h2>
+						           			<p>${deal.aroundText}</p>
+					           			</div>
+					           		</div>
+					           </div>
+					            <div class="span3">
+					            	<div class="buy-column">
+						           		<div class="row price-more">
+						           			<div class="span4 price">
+						           				${deal.salePriceCents}<span>&euro;</span>
+						           			</div>
+						           		</div>
+						           		<div class="row">
+						           			<div class="span4 before">
+						           				  <span>antes</span> ${deal.priceCents}<span>&euro;</span>
+						           			</div>
+						           		</div>
+						           		<div class="row">
+						           			<div class="span4 buy-now">
+						           				<a class="btn large primary" href="#">Comprar</a>
+						           			</div>
+						           		</div>
+						           		<div class="row">
+						           			<div class="span4 info-list">
+						           				<ul class="unstyled">
+												  <li class="rooms">
+												  	<span>quedan</span>
+												    <span class="value">${deal.quantity}</span>
+												  </li>
+												  <li class="nights">
+												    <span class="value">1-5 </span>
+												    <span>noches</span>
+												  </li>
+												</ul>
+						           			</div>
+						           		</div>
+						           		<div class="row social">
+						           			<div class="span3">
+						           			</div>
+						           		</div>
+					           		</div><!-- buy-column end -->
+					           	</div>
+					           	
+				           </div> <!-- main-content end -->
+				           
+				           <div class="row">
+								<div class="span12 image-gallery">
+									<h2>Fotos</h2>
+									<ul class="media-grid">
+								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image1}' alt='Hotel Image' />"><img src="${deal.image1}" alt="Hotel Image" /></a></li>
+								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image2}' alt='Hotel Image' />"><img src="${deal.image2}" alt="Hotel Image" /></a></li>
+								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image3}' alt='Hotel Image' />"><img src="${deal.image3}" alt="Hotel Image" /></a></li>
+								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image4}' alt='Hotel Image' />"><img src="${deal.image4}" alt="Hotel Image" /></a></li>
+								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image5}' alt='Hotel Image' />"><img src="${deal.image5}" alt="Hotel Image" /></a></li>
+								    </ul>
+								</div>
+							</div>
+			           		<div class="row">
+				           		<div class="span12 location location-wide">
+								  <h2>Location</h2>
+								  <div id="map_canvas" style="width: 670px; height: 300px"></div>
+								  <div class="meta">
+								      <span class="street_1">${deal.address}</span>
+								      <span class="phone">${deal.city.name}</span>
+								      <span class="directions">
+								      	<a href="http://maps.google.com/maps?q=${deal.latitude}, ${deal.longitude}" target="_blank">como llegar</a>
+								      </span>
+								  </div>
+								</div>
+							</div>
+				        </div> <!--  deal-info end -->
+			        </div>
+				</div> <!-- deal-detail end -->
+	        </div>
+    </div> <!-- content end -->
+	
+</div> <!-- container end -->
+
+<script type="text/javascript">
+$(function() {
+	var options = {position: 10, placement: 'above', html: true};
+	$('.image-popover').popover(options);
+});
+</script>

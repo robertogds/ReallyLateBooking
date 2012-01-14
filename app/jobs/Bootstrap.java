@@ -33,10 +33,55 @@ public class Bootstrap extends Job {
 		 roberto.validated = true;
 		 roberto.update();
 	}
+	
 
 	private void initializeDeals() {
 		Country spain = new Country("España", "spain");
 		spain.insert();
+		City coruña = new City("coruña", "coruña");
+		coruña.active = Boolean.TRUE;
+		coruña.country = spain;
+		coruña.insert();
+		City berlin = new City("berlin", "berlin");
+		berlin.active = Boolean.TRUE;
+		berlin.country = spain;
+		berlin.insert();
+		City bilbao = new City("bilbao", "bilbao");
+		bilbao.active = Boolean.TRUE;
+		bilbao.country = spain;
+		bilbao.insert();
+		City londres = new City("londres", "londres");
+		londres.active = Boolean.TRUE;
+		londres.country = spain;
+		londres.insert();
+		City milan = new City("milan", "milan");
+		milan.active = Boolean.TRUE;
+		milan.country = spain;
+		milan.insert();
+		City malaga = new City("malaga", "malaga");
+		malaga.active = Boolean.TRUE;
+		malaga.country = spain;
+		malaga.insert();
+		City paris = new City("paris", "paris");
+		paris.active = Boolean.TRUE;
+		paris.country = spain;
+		paris.insert();
+		City santiago = new City("santiago", "santiago");
+		santiago.active = Boolean.TRUE;
+		santiago.country = spain;
+		santiago.insert();
+		City sevilla = new City("sevilla", "sevilla");
+		sevilla.active = Boolean.TRUE;
+		sevilla.country = spain;
+		sevilla.insert();
+		City valencia = new City("valencia", "valencia");
+		valencia.active = Boolean.TRUE;
+		valencia.country = spain;
+		valencia.insert();
+		City valladolid = new City("valladolid", "valladolid");
+		valladolid.active = Boolean.TRUE;
+		valladolid.country = spain;
+		valladolid.insert();
 		City madrid = new City("Madrid", "madrid");
 		madrid.active = Boolean.TRUE;
 		madrid.country = spain;

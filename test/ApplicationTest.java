@@ -1,8 +1,3 @@
-import helper.dto.BookingDTO;
-import helper.dto.BookingStatusMessage;
-import helper.dto.StatusMessage;
-import helper.dto.UserDTO;
-import helper.dto.UserStatusMessage;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -27,6 +22,11 @@ import play.mvc.*;
 import play.mvc.Http.*;
 import sun.util.calendar.CalendarUtils;
 import models.*;
+import models.dto.BookingDTO;
+import models.dto.BookingStatusMessage;
+import models.dto.StatusMessage;
+import models.dto.UserDTO;
+import models.dto.UserStatusMessage;
 
 public class ApplicationTest extends FunctionalTest {
 

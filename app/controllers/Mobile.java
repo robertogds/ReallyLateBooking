@@ -10,8 +10,6 @@ import play.mvc.results.Ok;
 import play.mvc.results.Result;
 
 
-import helper.dto.StatusMessage;
-import helper.dto.UserStatusMessage;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -27,6 +25,8 @@ import jobs.Bootstrap;
 
 
 import models.*;
+import models.dto.StatusMessage;
+import models.dto.UserStatusMessage;
 
 public class Mobile extends Controller {
 	

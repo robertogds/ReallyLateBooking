@@ -4,9 +4,7 @@ import java.util.Collection;
 
 import models.Booking;
 import models.Company;
-import models.InfoText;
 import models.Invoice;
-import play.Logger;
 import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;

@@ -3,15 +3,23 @@ package models;
 import java.util.Calendar;
 import java.util.Date;
 
+import notifiers.Mails;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
 
+import com.google.gson.JsonObject;
+
+import controllers.Users;
+
+import play.Logger;
 import play.data.validation.Email;
 import play.data.validation.Password;
 import play.data.validation.Required;
 import play.data.validation.Validation;
 import play.i18n.Messages;
 import play.modules.crudsiena.CrudUnique;
+import play.mvc.Scope.Session;
 import siena.DateTime;
 import siena.Generator;
 import siena.Id;
@@ -25,6 +33,8 @@ public class User extends Model{
  
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
+	//Facebook id
+	public Long uuid;
    
 	@CrudUnique
 	@Required
@@ -49,6 +59,17 @@ public class User extends Model{
     public Integer credit;
     public String inviteByCode;
     public String inviteCode;
+    public String fbLink;
+    public String fbUsername;
+    public String gender;
+    public int timezone;
+    public String locale;
+    public String fbAccessToken;
+    public String fbExpires;
+    
+    public User() {
+    	super();
+    }
     
     public User(String email, String password, String firstName, String lastName) {
         this.email = email;
@@ -66,7 +87,6 @@ public class User extends Model{
         this.isOwner = isAdmin;
         this.validated = validated;
     }
-       
     
     public User(Long id) {
     	this.id = id;
@@ -86,7 +106,60 @@ public class User extends Model{
     	super.insert();
 	}
     
-    public static User findByEmail(String email){
+	public static void facebookOAuthCallback(JsonObject data){
+		Logger.debug("User Json from FB: " + data);
+		registerOrLogin(data);
+    }
+	
+	/**
+	 * Login the user if already exists or register a new user
+	 * if can't found user by email.
+	 * @param data
+	 */
+    private static void registerOrLogin(JsonObject data) {
+    	String email = data.get("email").getAsString();
+    	User user = User.findByEmail(email);
+    	if (user != null){
+    		Logger.debug("User exists: " + user.email);
+    		user.getUserDataFromFB(data);
+    		user.update();
+    		user.createUserSession();
+    	}
+    	else{
+    		Logger.debug("User new: " + email);
+    		user = new User();
+    		user.getUserDataFromFB(data);
+    		user.insert();
+    		Mails.welcome(user);
+    		user.createUserSession();
+    	}
+	}
+    
+    public void createUserSession(){
+    	Session.current().put("user", this.email);
+    	Session.current().put("firstName", this.firstName);
+    	Session.current().put("lastName", this.lastName);
+    	Session.current().put("userId", this.id);
+    	Session.current().put("uuid", this.uuid);
+    }
+
+	private void getUserDataFromFB(JsonObject data) {
+		this.firstName = data.get("first_name").getAsString();
+		this.lastName = data.get("last_name").getAsString();
+		this.email = data.get("email").getAsString();
+		this.isFacebook = Boolean.TRUE;
+		this.uuid = data.get("id").getAsLong();
+		this.fbLink = data.get("link").getAsString();
+		this.fbUsername = data.get("username").getAsString();
+		this.gender = data.get("gender").getAsString();
+		this.timezone = data.get("timezone").getAsInt();
+		this.locale = data.get("locale").getAsString();
+		this.fbAccessToken = data.get("accessToken").getAsString();
+		this.fbExpires = data.get("expires").getAsString();
+	}
+	
+
+	public static User findByEmail(String email){
     	return User.all().filter("email", email.trim().toLowerCase()).get();
     }
     

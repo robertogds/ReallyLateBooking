@@ -10,14 +10,10 @@ import play.*;
 import play.i18n.Lang;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 
-
+@With(Analytics.class)
 public class Countries  extends Controller {
-	
-	@Before
-	static void analytics(){
-		Statistic.saveVisit(request.path);
-	}
 	
 	public static void countryList() {
         Collection<Country> countries = Country.findActiveCountries();

@@ -1,13 +1,48 @@
 #{extends 'layout.html' /}
 #{set title: deal.hotelName /}
 
+#{set 'moreScripts'}
+    <script type="text/javascript">
+      var map;
+      function initialize() {
+        var myOptions = {
+          zoom: 12,
+          center: new google.maps.LatLng(${deal.latitude}, ${deal.longitude}),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+       
+        map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
+        var marker = new google.maps.Marker({
+          position: map.getCenter(),
+          map: map,
+          title: 'Click to zoom'
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          if (map.getZoom() == 16) {
+            map.setZoom(12);
+          } else {
+            map.setZoom(16);
+          }
+        });
+       
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+	</script>
+	<script type="text/javascript">
+		$(function() {
+			var options = {position: 10, placement: 'above', html: true};
+			$('.image-popover').popover(options);
+		});
+	</script>
+#{/set}
 
 <div class="container">
     
     <div class="content">
 
        		<div class="row">
-	        	<div class="span12 today">
+	        	<div class="span12 title-black">
 		           <h1>Reserva este hotel para esta noche</h1>
 		        </div>
 	        </div>
@@ -69,7 +104,7 @@
 						           		</div>
 						           		<div class="row">
 						           			<div class="span4 buy-now">
-						           				<a class="btn large primary" href="#">Comprar</a>
+						           				<a class="btn large primary" href="@{Deals.bookingForm(deal.id)}">Comprar</a>
 						           			</div>
 						           		</div>
 						           		<div class="row">
@@ -127,10 +162,3 @@
     </div> <!-- content end -->
 	
 </div> <!-- container end -->
-
-<script type="text/javascript">
-$(function() {
-	var options = {position: 10, placement: 'above', html: true};
-	$('.image-popover').popover(options);
-});
-</script>

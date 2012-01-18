@@ -4,7 +4,6 @@
 
 # Import Secure routes
 *       /                                       module:secure
-*       /auth                                   module:securesocial
 
 # Home page
 GET     /                                       Application.index
@@ -26,6 +25,7 @@ GET     /admin/statistics/repare				admin.Statistics.repare
 # Deals
 GET 	/deals/{cityUrl}						Deals.iPhoneList(format:'json')
 GET 	/v2/deals/{cityUrl}						Deals.listV2(format:'json')
+GET  	/web/deals/bookingForm/{id}				Deals.bookingForm
 GET 	/web/deals/{cityUrl}					Deals.list
 GET 	/web/deals/{cityUrl}/{id}				Deals.show
 
@@ -34,6 +34,7 @@ GET 	/web/deals/{cityUrl}/{id}				Deals.show
 GET 	/cities/{countryUrl}					Cities.cityListByCountry(format:'json')
 GET 	/cities							    	Cities.cityList(format:'json')
 GET 	/v2/cities							    Cities.cityListAll(format:'json')
+GET 	/web/cities							   	Cities.index
 
 #Countries
 GET 	/countries							    Countries.countryList(format:'json')
@@ -44,6 +45,7 @@ GET     /user/{userId}/bookings/{token}/{timestamp}/{signature}     Bookings.lis
 POST    /booking/{token}/{timestamp}/{signature}         			Bookings.create(format:'json')
 
 # Users Rest
+GET		/dashboard													Users.dashboard
 POST    /users/login                            				    Users.login(format:'json')
 POST	/users/remember 											Users.rememberPassword(format:'json')
 GET     /users/activate/{code}                  					Application.activate

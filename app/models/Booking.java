@@ -38,7 +38,6 @@ public class Booking extends Model {
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
 	
-    @Required
     @Index("user_index")
     public User user;
     
@@ -51,11 +50,11 @@ public class Booking extends Model {
     @Index("city_index")
     public City city;
     
-    @Required
     @Index("deal_index")
     public Deal deal;
     @DateTime
     public Date checkinDate;
+    @Required
     public Integer nights;
     public Integer rooms;
     @Required
@@ -178,6 +177,7 @@ public class Booking extends Model {
     			Validation.addError("creditCard", Messages.get("booking.validation.creditcard"), creditCard);
     		}
     		else{
+    			Logger.debug("hola");
     			creditCardExpiryValid();
     		}
     	}

@@ -2,15 +2,8 @@ package controllers;
 
 import helper.HotUsaApiHelper;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.w3c.dom.Document;
-
-import controllers.securesocial.SecureSocial;
 
 import jobs.Bootstrap;
 import models.Booking;
@@ -20,26 +13,47 @@ import models.User;
 import notifiers.Mails;
 import play.Logger;
 import play.Play;
-import play.libs.WS;
-import play.libs.WS.HttpResponse;
-import play.libs.WS.WSRequest;
+import play.data.validation.Required;
+import play.libs.Crypto;
 import play.mvc.Before;
 import play.mvc.Controller;
-import play.mvc.With;
+import play.mvc.Http;
 
-@With(SecureSocial.class)
 public class Application extends Controller {
 	
-	@Before
-	public static void checkLanguage(){
-		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
-	}
-	
-	public static void index() { 
-		Collection<City> cities = City.findActiveCities();
-		render(cities); 
-	} 
-	
+	public static void index() {
+        if(session.contains("user")) {
+            Cities.index();
+        }
+        render();
+    }
+    
+    public static void logout() {
+        session.remove("user");
+        redirect("Application.index");
+    }
+    
+    
+    public static void authenticate(@Required String username, String password) throws Throwable {
+        // Check tokens
+        Boolean allowed = (Boolean)Security.authenticate(username, password);
+         
+        if(validation.hasErrors() || !allowed) {
+            flash.keep("url");
+            flash.error("Nombre de usuario o contraseña incorrecta");
+            params.flash();
+        }
+        else{
+        	// Mark user as connected
+            User user = User.findByEmail(username);
+        	if (user!= null){
+        		user.createUserSession();
+        	}
+        }
+        
+        // Redirect to the original URL (or /)
+        Secure.redirectToOriginalURL();
+    }
 	
 	public static void mobile(){
 		if (Play.mode.isDev()){

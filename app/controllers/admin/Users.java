@@ -3,9 +3,10 @@ package controllers.admin;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
+import models.User;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
-import notifiers.Mails;
 import play.Logger;
 import play.data.binding.Binder;
 import play.data.validation.Validation;
@@ -14,9 +15,9 @@ import play.i18n.Messages;
 import play.modules.siena.SienaModelUtils;
 import play.modules.siena.SienaPlugin;
 import play.mvc.With;
-import models.User;
-import controllers.*;
-import controllers.CRUD.ObjectType;
+import controllers.CRUD;
+import controllers.Check;
+import controllers.Secure;
 
 @Check("admin")
 @With(Secure.class)

@@ -7,6 +7,7 @@ import helper.JsonHelper;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import controllers.oauth.ApiSecurer;
 
@@ -25,7 +26,13 @@ import siena.PersistenceManager;
 
 public class Users extends Controller {
 	
-	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login"})
+	@Before(only = {"dashboard"})
+    static void checkConnected() {
+		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
+		Security.checkConnected();
+    }
+	
+	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","dashboard"})
 	public static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -36,6 +43,13 @@ public class Users extends Controller {
 		}
 	}
 	
+	/** RLB Web Methods **/
+	public static void dashboard(){
+		User user= User.findById(Long.valueOf(session.get("userId")));
+		render(user);
+	}
+	
+	/** RLB API Methods **/
 	public static void login(String json) { 
 		String body = json != null ? json : params.get("body");
 		Logger.debug("JSON received: " + body);
@@ -67,6 +81,12 @@ public class Users extends Controller {
 				renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("user.remember.incorrect")));
 			}
 		}
+	}
+	
+	public static void create(JsonObject json) {
+		Logger.debug("Create user " + json);	
+		User user = new Gson().fromJson(json, User.class);
+		validateAndSave(user);
 	}
 	
 	public static void create(String json) {

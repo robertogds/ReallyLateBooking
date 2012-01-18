@@ -3,12 +3,14 @@ html, body {
 }
 
 body {
-  padding-top: 60px; 
+  padding-top: 90px; 
 }
 footer p {
   text-align: center; /* center align it with the container */
 }
-
+.help-block {
+    display: inline-block;
+}
 .container-fluid > #cities{
 	margin-left: 0px !important;
 }
@@ -19,11 +21,80 @@ footer p {
 .topbar{
 	margin-left: auto;
 	margin-right: auto;
-	-webkit-border-radius:  0 6px;
-	-moz-border-radius: 0 6px;
-	border-radius: 0 6px;
+	height: 70px;
+	font-size: 15px;
 }
 
+.topbar .topbar-inner{
+	-webkit-border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
+}
+
+.topbar .nav li{
+	padding: 14px 5px 14px;
+	}
+.topbar .nav li ul li {
+    padding: 0;
+}
+
+.hero-unit h1 {
+	font-size: 54px;
+}
+
+.fb-button-container-centered {
+	padding-top: 20px;
+	text-align: center;
+}
+
+.play-fbconnect-button {
+	left: auto;
+	margin-bottom: 13px;
+	float: none;
+	display: inline-block;
+	position: relative;
+	text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.6);
+	border-radius: 4px;
+	moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	text-align: center;
+}
+.play-fbconnect-button:hover{
+	box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+	-o-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+	-moz-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+	-webkit-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+	text-decoration:none!important
+}
+.fb-button-left {
+	width: 40px;
+}
+.fb-button-right, .fb-button-center, .fb-button-left {
+	float: left;
+	height: 40px;
+	background: url(https://a2.muscache.com/s/1326620451/images/uiwidgets/fb-button-sprite.png?1307134456) left top no-repeat;
+}
+
+.fb-button, .fb-button-right, .fb-button-center, .fb-button-left {
+	display: block;
+}
+.fb-button-center {
+	padding: 0 5px 0 8px;
+	line-height: 40px;
+	font-size: 16px;
+	color: white;
+	background-color: #6385BA;
+	background-position: left -40px;
+	background-repeat: repeat-x;
+}
+
+.fb-button-right {
+	width: 6px;
+	background-position: 100% -80px;
+}
+
+
+	
 #background {
 	background: transparent url("http://a1.ak.lscdn.net/deals/images/refresh/background-fade.png") repeat-x scroll left bottom;
 	position:fixed;
@@ -63,7 +134,7 @@ footer p {
 .topbar .btn {
   border: 0;
 }
-.today {
+.title-black {
 	height: 44px;
 	background-color: #222;
 	-webkit-border-radius: 6px 6px 0 0;
@@ -74,7 +145,7 @@ footer p {
 	border-bottom-style: solid;
 	border-bottom-color: #5093B0;
 }
-div.today h1 {
+div.title-black h1 {
 	color: white;
 	text-transform: lowercase;
 	padding: 10px 20px 10px;
@@ -226,4 +297,79 @@ div.today h1 {
 }
 .popover .inner{
 	width: 350px !important;
+}
+
+.dashboard {
+    background-color: white;
+    background-repeat: no-repeat;
+    border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
+	-webkit-border-radius: 0 0 6px 6px;
+    height: 100%;
+}
+.dashboard ul.tabs{
+	padding-top: 10px;
+	padding-left: 10px;
+}
+	
+.bordered{
+	background-color: white;
+    background-repeat: no-repeat;
+    border: 1px solid #C3C3C3;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	margin: -1px;
+	overflow: hidden;
+}
+
+#step1{
+	height: 227px;
+	}
+	
+#step1 img{
+	border-radius: 6px 0 0 6px;
+	-moz-border-radius: 6px 0 0 6px;
+	-webkit-border-radius: 6px 0 0 6px;
+	}
+	
+.steps{
+	margin-top: 20px;
+	margin-left: 50px !important;
+	margin-right:20px;
+	}
+	
+#step1 .price {
+    font-size: 40px;
+    line-height: 30px;
+    text-indent: 0px;
+}
+#step1 .price small{
+	font-size: 14px;
+	color: #404040;
+	}
+option span.total-price{
+	float: right;
+	}
+#step2 .total{
+	background: #FFFDBC;
+	border: 1px solid #D1D1C9;
+	border-width: 1px 0 0 0;
+	height: 20px;
+	line-height: 15px;
+	color: #5F5F57;
+	padding: 18px;
+	font-size: 18px;
+	}
+#step2 #total-booking{
+	font-size:40px;
+	}
+	
+#step2 fieldset {
+    margin-bottom: 0;
+}
+
+#step4 #cc_details {
+	background: url(/public/images/cc_logos.png?1300304855) no-repeat 140px 0;
+	padding: 40px 0 0 0px;
 }

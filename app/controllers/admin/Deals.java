@@ -2,13 +2,14 @@ package controllers.admin;
 
 import helper.HotUsaApiHelper;
 
-import java.util.*;
+import java.util.List;
 
-import models.*;
-import controllers.*;
-import play.*;
-import play.mvc.*;
-import siena.*;
+import models.City;
+import models.Deal;
+import play.mvc.With;
+import controllers.CRUD;
+import controllers.Check;
+import controllers.Secure;
 
 @Check("admin")
 @With(Secure.class)

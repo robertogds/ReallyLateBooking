@@ -27,6 +27,7 @@ import models.dto.BookingStatusMessage;
 import models.dto.StatusMessage;
 import models.dto.UserStatusMessage;
 import play.Logger;
+import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.data.validation.Validation;
 import play.i18n.Messages;
@@ -39,7 +40,13 @@ import play.mvc.Http;
 
 public class Bookings extends Controller{
 	
-	@Before
+	@Before(only = {"doBooking"})
+    static void checkConnected() {
+		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
+		Security.checkConnected();
+    }
+	
+	@Before(unless = {"doBooking"})
 	static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -49,6 +56,45 @@ public class Bookings extends Controller{
 			renderJSON(json);
 		}
 	}
+	
+	public static void doBooking(@Valid Booking booking, @Required Long dealId){
+		//Assign booking user to the current session user
+		User user = new User(Long.valueOf(session.get("userId")));
+		booking.user = user;
+		Deal deal = Deal.findById(dealId);
+		booking.deal = deal;
+		booking.rooms = 1; //we dont allow more rooms by now
+		if (!validation.hasErrors()){ 
+			Logger.debug("Valid booking");
+			//we need to fetch all the info form user and deal 
+			booking.city = City.findById(booking.deal.city.id);
+			//if is an old object from datastore without the boolean set
+			booking.deal.isHotUsa = booking.deal.isHotUsa != null ? booking.deal.isHotUsa : Boolean.FALSE;
+			booking.deal.isFake = booking.deal.isFake != null ? booking.deal.isFake : Boolean.FALSE;
+			booking.insert();
+			if (booking.deal.isHotUsa && !booking.deal.isFake ){
+				doHotUsaReservation(booking);
+			}
+			else{
+				updateDealRooms(booking.deal.id, booking.rooms);
+				Mails.hotelBookingConfirmation(booking);
+			}
+			Mails.userBookingConfirmation(booking);
+			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
+					new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", 
+							Messages.get("booking.create.correct"), booking));
+			renderJSON(json);
+		}
+		else{
+			params.flash(); // add http parameters to the flash scope
+	        validation.keep(); // keep the errors for the next request
+	        Logger.debug("Errors " + validation.errorsMap().toString());
+	        Deals.bookingForm(dealId);
+		}
+	}
+	
+	
+	/*** Json API methods ****/
 	
 	public static void listByUser(Long userId){
 		User user = User.findById(userId);

@@ -1,29 +1,47 @@
 #{extends 'layout.html' /}
-#{set title:'Ciudades' /}
+#{set title:'Home' /}
 
-<div class="container-fluid">
+<div class="container">
     	
       <div class="content" id="cities">
-        <!-- Main hero unit for a primary marketing message or call to action 
         <div class="hero-unit">
-          <h1>Ciudades</h1>
-          <p>Vestibulum id ligula porta felis euismod semper. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
-          <p><a class="btn primary large">Learn more &raquo;</a></p>
-        </div>
-        -->
-        <!-- Example row of columns -->
-        
-        <div >
-	        <ul class="media-grid">
-			 	#{list items:cities, as:'city' }
-			 		<li id="${city.url}">
-					    <a href="@{Deals.list(city.url)}">
-					      <img class="thumbnail span5" alt="${city.name}" src="@{'/public/images/cities/'+city.url+'.jpg'}">
-					    </a>
-					</li>
-			    #{/list}
-			</ul>
-        	
+          <h1>Hotel para esta noche</h1>
+          <p>Reserva rapido y seguro y consigue descuentos de hasta el 70% en los mejores hoteles.</p>
+          <div class="row">
+			  <div class="span7">
+			   <div class="fb-button-container-centered">
+			   		#{fbconnect.button label:'<span class="fb-button-left"></span>
+						<span class="fb-button-center"><strong>Ingresar</strong> con <strong>Facebook</strong></span>
+						<span class="fb-button-right"></span>', scope:'email' /}
+
+			  </div>
+			  </div>
+			  <div class="span7">
+			  	<h2>Entra con tu email</h2>
+			  	<div id="login">
+					#{form @authenticate() , class:'form-stacked '}
+						<div class="input-prepend">
+						  <label for="username">&{'secure.email'}</label>
+			              <div class="input-prepend">
+			                <span class="add-on">@</span>
+			                <input class="medium" name="username" id="username" value="${flash.username}" size="16" type="text">
+			              </div>
+			            </div>
+			            <div class="input-prepend"> 
+			              <label for="username">&{'secure.password'}</label>
+			              <div class="input-prepend">
+			                <span class="add-on">*</span>
+			                <input class="medium" type="password" name="password" id="password" value=""  size="16">
+			              </div>
+			             </div>  
+						<div class="actions">
+							<input class="btn primary large" type="submit" id="signin" value="&{'secure.signin'}" />
+						</div>
+					#{/form}
+				</div>
+			  </div>
+		  </div>
         </div>
       </div>
-    </div>
+</div>
+

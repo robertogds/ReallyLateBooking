@@ -2,23 +2,14 @@ package controllers.admin;
 
 import helper.DateHelper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
-import models.Booking;
 import models.City;
-import models.Deal;
-import models.Statistic;
 import models.dto.StatisticDTO;
 import models.dto.StatsGraphDTO;
-import play.Logger;
 import play.mvc.Controller;
 import play.mvc.With;
-import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
 
@@ -81,10 +72,5 @@ public class Statistics extends Controller{
 		return dto;
 	}
 	
-	private static StatisticDTO prepareStatistic(Calendar start, Calendar end) {
-		Collection<City> cities = City.all().fetch();
-		StatisticDTO dto = new StatisticDTO(cities, start, end);
-		return dto;
-	}
 }
 

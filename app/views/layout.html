@@ -36,33 +36,7 @@
     <link rel="apple-touch-icon" href="@{'/public/images/apple-touch-icon-72x72.png'}">
     <link rel="apple-touch-icon" href="@{'/public/images/apple-touch-icon-114x114.png'}">
     
-    <script type="text/javascript">
-      var map;
-      function initialize() {
-        var myOptions = {
-          zoom: 12,
-          center: new google.maps.LatLng(${deal.latitude}, ${deal.longitude}),
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-       
-        map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
-        var marker = new google.maps.Marker({
-          position: map.getCenter(),
-          map: map,
-          title: 'Click to zoom'
-        });
-
-        google.maps.event.addListener(marker, 'click', function() {
-          if (map.getZoom() == 16) {
-            map.setZoom(12);
-          } else {
-            map.setZoom(16);
-          }
-        });
-       
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
-	</script>
+     #{get 'moreScripts' /}
   </head>
 
   <body>
@@ -74,21 +48,58 @@
     <div class="topbar span16">
       <div class="topbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="/">ReallyLateBooking</a>
+          <a class="brand" href="/"><img src="http://reallylatebooking.com/public/images/logo_black_400.original_4o3nb3f2h20bxatc.png" alt="ReallyLateBooking" title="ReallyLateBooking"></a>
           <ul class="nav">
-            <li class="active"><a href="/">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+          	 #{if user}
+          	 	<li class="dropdown" data-dropdown="dropdown">
+	              <a href="#" class="dropdown-toggle">Hola, ${user.firstName}</a>
+	              <ul class="dropdown-menu">
+	                <li><a href="@{Users.dashboard()}">Panel de control</a></li>
+	                <li><a href="@{Users.dashboard()}#bookings">Mis reservas</a></li>
+	                <li class="divider"></li>
+	                <li><a href="@{Users.dashboard()}#account">Perfil</a></li>
+	                <li><a href="@{Application.logout()}">Salir</a></li>
+	              </ul>
+	            </li>
+	             <li><a href="#">Mis reservas</a></li>
+	       	 #{/if}
+	       	
+            <li><a href="#about" class="active">Cómo funciona</a></li>
+            <li><a href="#contact">Contacto</a></li>
           </ul>
-          <p class="pull-right">Logged in as <a href="#">username</a></p>
         </div>
       </div>
     </div>
 	
+		 #{if flash.error}
+		 	<div class="container">
+    			<div class="content">
+				 	<div class="alert-message error">
+					  <a class="close" href="#">×</a>
+					  <p><strong>${flash.error}</strong> </p>
+					</div>
+				</div>
+			</div>
+        #{/if}
+        #{if flash.success}
+        	<div class="container">
+    			<div class="content">
+		        	<div class="alert-message success">
+					  <a class="close" href="#">×</a>
+					  <p><strong>${flash.success}</strong> </p>
+					</div>
+				</div>
+			</div>
+        #{/if}
 	#{doLayout /}
     
 	<footer>
           <p>&copy; ReallyLateBooking 2012</p>
     </footer>
+    	<script type="text/javascript">
+			$(function() {
+				$(".alert-message").alert()
+			});
+		</script>
   </body>
 </html>

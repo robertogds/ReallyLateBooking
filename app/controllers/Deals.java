@@ -18,11 +18,27 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
 
+@With(Analytics.class)
 public class Deals extends Controller {
 	
-	@Before
-	static void analytics(){
-		Statistic.saveVisit(request.path);
+	@Before(only = {"show","list","bookingForm"})
+    static void checkConnected() {
+		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
+		Security.checkConnected();
+    }
+	
+	/**
+	 * Renders the booking form for the given deal
+	 **/
+	public static void bookingForm(Long id) {
+		Deal deal = Deal.findById(id);
+		if (deal != null){
+			deal.prepareImages();//just for iphone now, make configurable in the future
+			render(deal);
+		}
+		else{
+			notFound();
+		}
 	}
 	
 	public static void show(String cityUrl, Long id) {
@@ -38,9 +54,9 @@ public class Deals extends Controller {
 	
 	public static void list(String cityUrl) {
 		City city = City.findByName(cityUrl);
-		
 		if (city != null){
 			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
+			
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
 				deal.prepareImages();//just for iphone now, make configurable in the future

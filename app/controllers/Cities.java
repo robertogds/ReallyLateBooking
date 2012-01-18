@@ -1,24 +1,33 @@
 package controllers;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import models.*;
+import models.City;
+import models.Country;
+import models.User;
 import models.dto.CityDTO;
-import models.dto.CountryDTO;
-import play.*;
-import play.i18n.Lang;
+import play.Logger;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 
-
+@With(Analytics.class)
 public class Cities  extends Controller {
 	public static final String DEFAULT_COUNTRY = "spain";
 	
-	@Before
-	static void analytics(){
-		Statistic.saveVisit(request.path);
+	@Before(only = {"index"})
+    static void checkConnected() {
+		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
+		Security.checkConnected();
+    }
+	
+	public static void index() {
+		Collection<City> cities = City.findActiveCities();
+		render(cities); 
 	}
+	
 	
 	public static void cityListAll() {
         Collection<City> cities = City.findActiveCities();

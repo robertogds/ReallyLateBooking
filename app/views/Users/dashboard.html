@@ -2,6 +2,12 @@
 #{set title: user.firstName /}
 
 #{set 'moreScripts'}
+	<script src="@{'/public/js/jquery.tablesorter.min.js'}"></script>
+	<script type="text/javascript">
+		$(function() {
+			$("table#bookings").tablesorter();
+		});
+	</script>
 #{/set}
 
 <div class="container">
@@ -21,7 +27,67 @@
 					</ul>
 					<div id="my-tab-content" class="tab-content">
 			            <div class="tab-pane active" id="bookings">
-			              <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+			            	<div class="row">
+	        					<div class="span12 ">
+	        						#{if bookings.size == 0}
+	        							<h2>Todavía no has realizado ninguna reserva. ¿A qué estás esperando?</h2>
+		        						<div class="">
+		        						</div>
+	        						#{/if}
+	        						#{else}
+						            	<table class="zebra-striped" id="bookings">
+									        <thead>
+									          <tr>
+									            <th class="blue header">Fecha</th>
+									            <th class="blue header">Hotel</th>
+									            <th class="blue header">Ciudad</th>
+									            <th class="blue header">Identificador</th>
+									            <th class="blue header">Precio</th>
+									          </tr>
+									        </thead>
+									        <tbody>
+									        	#{list items:bookings, as:'booking'}
+									        		<tr class=summary>
+									        			
+											            <td>${booking.checkinDate.format('dd MMMM yyyy')}</td>
+											            <td>${booking.hotelName}</td>
+											            <td>${booking.city.name}</td>
+											            <td>${booking.code}</td>
+											            <td>${booking.salePriceCents}&euro;</td>
+											            <td><button data-controls-modal="${booking.code}" data-backdrop="true" data-keyboard="true" class="btn primary">Ver Reserva</button>
+											            </td>
+										        	</tr>
+										        	<div id="${booking.code}" class="modal hide fade in" >
+											            <div class="modal-header">
+											              <a href="#" class="close">×</a>
+											              <h3>Reserva en ${booking.hotelName} <small>${booking.deal.address} 
+											              		<span class="directions">
+														      	<a href="http://maps.google.com/maps?q=${booking.deal.latitude}, ${booking.deal.longitude}" target="_blank">como llegar</a>
+														      </span></small></h3>
+											            </div>
+											            <div class="modal-body">
+											              <p>Reserva <strong>${booking.code}</strong> a nombre de:
+											              		 #{if booking.bookingForEmail != ''}
+											        				${booking.bookingForFirstName} ${booking.bookingForLastName}. <strong> Email: </strong> ${booking.bookingForEmail}
+											        			#{/if}
+											        			#{else}
+											        				<strong>${user.firstName} ${user.lastName}.</strong> Email:  <strong> ${user.email}</strong>
+											        			#{/else}
+											        	 </p>
+											        	 <p>Fecha de entrada: <strong>${booking.checkinDate.format('dd MMMM yyyy')}</strong></p>
+											        	 <p>Noches: <strong>${booking.nights}</strong></p>
+											            </div>
+											            <!--  
+											            <div class="modal-footer">
+											              <a href="#" class="btn primary close">Cerrar</a>
+											            </div>-->
+											          </div>
+									        	#{/list}
+									         </tbody>
+									     </table>
+								     #{/else}
+								</div>
+							</div>
 			            </div>
 			            <div class="tab-pane" id="profile">
 			              <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>

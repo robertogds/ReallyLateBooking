@@ -18,6 +18,17 @@ footer p {
 .container-fluid {
 	min-width: 560px !important;
 }
+
+#cities .media-grid {
+    margin-left: 0;
+}
+#cities .media-grid a {
+    border: 0;
+    border-radius: 0;
+    box-shadow: 0;
+    margin: 0;
+    padding: 0;
+}
 .topbar{
 	margin-left: auto;
 	margin-right: auto;
@@ -306,6 +317,7 @@ div.title-black h1 {
     -moz-border-radius: 0 0 6px 6px;
 	-webkit-border-radius: 0 0 6px 6px;
     height: 100%;
+    min-height: 400px;
 }
 .dashboard ul.tabs{
 	padding-top: 10px;
@@ -333,7 +345,7 @@ div.title-black h1 {
 	-webkit-border-radius: 6px 0 0 6px;
 	}
 	
-.steps{
+.steps, .bordered-container{
 	margin-top: 20px;
 	margin-left: 50px !important;
 	margin-right:20px;

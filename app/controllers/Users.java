@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.List;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
 import notifiers.Mails;
@@ -11,6 +13,9 @@ import com.google.gson.JsonObject;
 
 import controllers.oauth.ApiSecurer;
 
+import models.Booking;
+import models.City;
+import models.Deal;
 import models.User;
 import models.dto.StatusMessage;
 import models.dto.UserDTO;
@@ -46,7 +51,12 @@ public class Users extends Controller {
 	/** RLB Web Methods **/
 	public static void dashboard(){
 		User user= User.findById(Long.valueOf(session.get("userId")));
-		render(user);
+		List<Booking> bookings = Booking.findByUser(user);
+		for (Booking booking: bookings){
+			booking.city = City.findById(booking.city.id);
+			booking.deal = Deal.findById(booking.deal.id);
+		}
+		render(user, bookings);
 	}
 	
 	/** RLB API Methods **/

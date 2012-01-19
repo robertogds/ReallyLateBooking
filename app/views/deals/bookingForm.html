@@ -21,6 +21,18 @@
 			}
 			$('.total-booking').html(totalPrice);
 		}
+		function updateExpiryCard(){
+			var month="1";
+			var year="2012";
+			 $("#credit_card_cc_expire_month option:selected").each(function () {
+				 month = $(this).val();
+	          });
+			 
+	          $("#credit_card_cc_expire_year option:selected").each(function () {
+	        	  year = $(this).val();
+	           });
+	          $('#creditCardExpiry').val(month+"/"+year);
+		}
 		$(function() {
 			$('.tooltip').twipsy();
 			var options = { html: true, content: function(){
@@ -36,6 +48,12 @@
 		        	  nights = $(this).val();
 		              });
 		          updatePrice(nights);
+		    });
+			$("#credit_card_cc_expire_month").change(function () {
+				updateExpiryCard();
+		    });
+			$("#credit_card_cc_expire_year").change(function () {
+				updateExpiryCard();
 		    });
 		});
 	</script>

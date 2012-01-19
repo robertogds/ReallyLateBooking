@@ -1,39 +1,46 @@
-<!-- Indices written at Wed, 18 Jan 2012 16:44:27 CET -->
+<!-- Indices written at Thu, 19 Jan 2012 14:01:03 CET -->
 
 <datastore-indexes>
 
-    <!-- Used 250 times in query history -->
+    <!-- Used 14 times in query history -->
+    <datastore-index kind="cities" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 25 times in query history -->
     <datastore-index kind="statistics" ancestor="false" source="auto">
         <property name="path" direction="asc"/>
         <property name="date" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 41 times in query history -->
+    <!-- Used 1 time in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
+        <property name="country" direction="asc"/>
         <property name="name" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 17 times in query history -->
-    <datastore-index kind="cities" ancestor="false" source="auto">
-        <property name="active" direction="asc"/>
-        <property name="root" direction="asc"/>
-        <property name="name" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 5 times in query history -->
+    <!-- Used 3 times in query history -->
     <datastore-index kind="deals" ancestor="false" source="auto">
         <property name="city" direction="asc"/>
         <property name="updated" direction="desc"/>
         <property name="position" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 13 times in query history -->
+    <!-- Used 6 times in query history -->
     <datastore-index kind="deals" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="city" direction="asc"/>
         <property name="position" direction="asc"/>
         <property name="priceCents" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="cities" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="root" direction="asc"/>
+        <property name="name" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

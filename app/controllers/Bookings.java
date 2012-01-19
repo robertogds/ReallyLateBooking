@@ -59,11 +59,14 @@ public class Bookings extends Controller{
 	
 	public static void doBooking(@Valid Booking booking, @Required Long dealId){
 		//Assign booking user to the current session user
-		User user = new User(Long.valueOf(session.get("userId")));
+		User user = User.findById(Long.valueOf(session.get("userId")));
 		booking.user = user;
 		Deal deal = Deal.findById(dealId);
 		booking.deal = deal;
 		booking.rooms = 1; //we dont allow more rooms by now
+		if (!validation.hasErrors()){ 
+			booking.validate(); //Custom validation
+		}
 		if (!validation.hasErrors()){ 
 			Logger.debug("Valid booking");
 			//we need to fetch all the info form user and deal 
@@ -80,10 +83,7 @@ public class Bookings extends Controller{
 				Mails.hotelBookingConfirmation(booking);
 			}
 			Mails.userBookingConfirmation(booking);
-			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
-					new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", 
-							Messages.get("booking.create.correct"), booking));
-			renderJSON(json);
+			Users.dashboard();
 		}
 		else{
 			params.flash(); // add http parameters to the flash scope

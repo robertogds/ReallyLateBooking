@@ -1,6 +1,7 @@
 package controllers;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import models.*;
@@ -17,6 +18,7 @@ public class Security extends Secure.Security {
 	}
 	
 	static boolean check(String profile) {
+		Logger.debug("User connected: " + connected());
 		User user = User.findByEmail(connected());
 	    if("admin".equals(profile)) {
 	        return user != null && user.isAdmin;
@@ -38,7 +40,7 @@ public class Security extends Secure.Security {
         	user.email = session.get("user");
         	user.firstName = session.get("firstName");
         	user.lastName = session.get("lastName");
-        	user.uuid = Long.valueOf(session.get("uuid"));
+        	user.uuid  = session.get("uuid");
             renderArgs.put("user", user);
         }
     }

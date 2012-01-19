@@ -23,6 +23,7 @@ import play.data.validation.MaxSize;
 import play.data.validation.Min;
 import play.data.validation.MinSize;
 import play.data.validation.Required;
+import play.data.validation.Valid;
 import play.data.validation.Validation;
 import play.data.validation.Validation.Validator;
 import play.i18n.Messages;
@@ -66,6 +67,7 @@ public class Booking extends Model {
     @MaxSize(value=70)
     public String creditCardName;
     @Required
+    @Valid
     public String creditCardExpiry;
     @Required
     @MinSize(value=3)
@@ -166,36 +168,9 @@ public class Booking extends Model {
         return price;
     }
     
-    public void creditCardValid(){
-    	Logger.debug("Credit card number: " + creditCard + " creditCardName: "+ creditCardName + " creditCardType: "+creditCardType + " creditCardCVC: " + creditCardCVC);
-    	if (Validation.valid("creditCard", this).message("booking.validation.creditcard").ok &&
-    			Validation.valid("creditCardName", this).message("booking.validation.creditcardname").ok &&
-    			Validation.valid("creditCardType", this).message("booking.validation.creditcardtype").ok&&
-    			Validation.valid("creditCardCVC", this).message("booking.validation.cvc").ok){
-    		if (!CreditCardHelper.validCC(this.creditCard)){
-    			Logger.debug("Credit card number algotrithm failed");
-    			Validation.addError("creditCard", Messages.get("booking.validation.creditcard"), creditCard);
-    		}
-    		else{
-    			Logger.debug("hola");
-    			creditCardExpiryValid();
-    		}
-    	}
-	}
-    
-	private void creditCardExpiryValid() {
-		 String[] parsers = new String[] {"M/yyyy", "M'/'yyyy"};
-		 Date date ;
-		 try {
-			 date = DateUtils.parseDate(this.creditCardExpiry, parsers);
-			 Logger.debug("Validating expiration date " + date.toString());
-			 Validation.future("creditCardExpiry", date, Calendar.getInstance().getTime()).message("booking.validation.creditcardexpiry");	
-		} catch (ParseException e) {
-			Logger.error("Error parsing expiration date ", e);
-		}
-	}
 
 	public void validate() {
+		Logger.debug("validate?");
 		Deal deal = Deal.findById(this.deal.id);
 		Logger.debug("Validating booking, we have: " + deal.quantity  + " and we book: " + this.getRooms());
 		//can't book if there are no enough rooms available
@@ -208,9 +183,31 @@ public class Booking extends Model {
 		} 
 		else {
 			creditCardValid();
+			creditCardExpiryValid();
 		}
 	}
 
+    public void creditCardValid(){
+    	Logger.debug("Credit card number: " + creditCard + " creditCardName: "+ creditCardName + " creditCardType: "+creditCardType + " creditCardCVC: " + creditCardCVC);
+    	if (!CreditCardHelper.validCC(this.creditCard)){
+    			Logger.debug("Credit card number algotrithm failed");
+    			Validation.addError("booking.creditCard", Messages.get("booking.validation.creditcard"), creditCard);
+		}
+	}
+    
+	private void creditCardExpiryValid() {
+		 Logger.debug("creditCardExpiryValid?");
+		 String[] parsers = new String[] {"M/yyyy", "M'/'yyyy"};
+		 Date date ;
+		 try {
+			 date = DateUtils.parseDate(this.creditCardExpiry, parsers);
+			 Logger.debug("Validating expiration date " + date.toString());
+			 Validation.future("booking.creditCardExpiry", date, Calendar.getInstance().getTime()).message("booking.validation.creditcardexpiry");	
+		 } catch (ParseException e) {
+			Logger.error("Error parsing expiration date ", e);
+		 }
+	}
+	
     public String getDescription() {
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
         return deal==null ? null : deal.hotelName + 

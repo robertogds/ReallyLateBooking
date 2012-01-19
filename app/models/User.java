@@ -34,7 +34,7 @@ public class User extends Model{
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
 	//Facebook id
-	public Long uuid;
+	public String uuid;
    
 	@CrudUnique
 	@Required
@@ -136,11 +136,13 @@ public class User extends Model{
 	}
     
     public void createUserSession(){
+    	Logger.debug("User session: " + Session.current().toString());
     	Session.current().put("user", this.email);
     	Session.current().put("firstName", this.firstName);
     	Session.current().put("lastName", this.lastName);
     	Session.current().put("userId", this.id);
     	Session.current().put("uuid", this.uuid);
+    	Logger.debug("User session: " + Session.current().toString());
     }
 
 	private void getUserDataFromFB(JsonObject data) {
@@ -148,7 +150,7 @@ public class User extends Model{
 		this.lastName = data.get("last_name").getAsString();
 		this.email = data.get("email").getAsString();
 		this.isFacebook = Boolean.TRUE;
-		this.uuid = data.get("id").getAsLong();
+		this.uuid = data.get("id").getAsString();
 		this.fbLink = data.get("link").getAsString();
 		this.fbUsername = data.get("username").getAsString();
 		this.gender = data.get("gender").getAsString();

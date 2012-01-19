@@ -90,6 +90,7 @@ public class Mails extends MailServiceFactory {
 	   	  params.put("booking", booking);
 	   	  Deal deal = Deal.findById(booking.deal.id);
 	   	  params.put("deal", deal);
+	   	  Logger.debug("Message to: " + message.getHtmlBody() + " to: " + message.getTo());
 	   	  send(message, template, params); 
 	   }
 

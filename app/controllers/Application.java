@@ -29,7 +29,12 @@ public class Application extends Controller {
     }
     
     public static void logout() {
+    	session.remove("username");
         session.remove("user");
+        session.remove("firstName");
+        session.remove("lastName");
+        session.remove("uuid");
+        session.remove("userId");
         redirect("Application.index");
     }
     
@@ -46,6 +51,7 @@ public class Application extends Controller {
         else{
         	// Mark user as connected
             User user = User.findByEmail(username);
+            Logger.debug("User founded by email : "+ username + " user: " + user.email);
         	if (user!= null){
         		user.createUserSession();
         	}

@@ -44,7 +44,9 @@ public class Deals extends Controller {
 	public static void show(String cityUrl, Long id) {
 		Deal deal = Deal.findById(id);
 		if (deal != null){
+			deal.city = City.findById(deal.city.id);
 			deal.prepareImages();//just for iphone now, make configurable in the future
+			deal.textToHtml();
 			render(deal);
 		}
 		else{

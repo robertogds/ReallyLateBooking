@@ -188,7 +188,7 @@ public class User extends Model{
 	public void updateDetails(User user) {
 		if (!this.email.equalsIgnoreCase(user.email.trim())){
 			this.email = user.email.trim().isEmpty() ? this.email : user.email.trim().toLowerCase();
-			this.validateEmail();
+			validateEmail();
 		}
 		this.password = user.password.trim().isEmpty() ? this.password : user.password.trim();
 		this.firstName = user.firstName.trim().isEmpty() ? this.firstName : user.firstName.trim();
@@ -201,8 +201,8 @@ public class User extends Model{
 	}
 	
 	private void validateEmail(){
-		if (Validation.valid("email", this).message(Messages.get("user.validation.email.invalid")).ok && User.findByEmail(this.email) != null){
-			Validation.addError("email", Messages.get("user.validation.email.unavailable"));
+		if (User.findByEmail(this.email) != null){
+			Validation.addError("user.email", Messages.get("user.validation.email.unavailable"));
 		}
 	}
 	

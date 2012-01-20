@@ -6,6 +6,9 @@
 	<script type="text/javascript">
 		$(function() {
 			$("table#bookings").tablesorter();
+			//get the current active tab from url hash
+			var activeTab = $(location).attr('hash');
+			$('a[href="'+activeTab+'"]').click();
 		});
 	</script>
 #{/set}
@@ -13,7 +16,6 @@
 <div class="container">
     
     <div class="content ">
-
        		<div class="row">
 	        	<div class="span12 title-black">
 		           <h1>Panel de control</h1>
@@ -22,18 +24,23 @@
 	        <div class="row">
 	        	<div class="span12 dashboard">
 	        		<ul class="tabs" data-tabs="tabs">
-					  <li class="active" ><a href="#bookings">Mis Reservas</a></li>
+					  <li class="active" ><a href="#mybookings">Mis Reservas</a></li>
 					  <li><a href="#profile">Mi Perfil</a></li>
 					</ul>
 					<div id="my-tab-content" class="tab-content">
 			            <div class="tab-pane active" id="bookings">
 			            	<div class="row">
 	        					<div class="span12 ">
-	        						#{if bookings.size == 0}
-	        							<h2>Todavía no has realizado ninguna reserva. ¿A qué estás esperando?</h2>
-		        						<div class="">
+	        						#{list items:bookings, as:'booking'}
+	        						#{/list}
+	        						#{else}
+	        							<div class="row">
+		        							<div class="span12 noBookings">
+		        								<h3>Todavía no has realizado ninguna reserva. ¿A qué estás esperando?</h3>
+		        								<p>As you purchase RLB deals, this page will contain a history of all purchased items for your personal reference.</p>
+			        						</div>
 		        						</div>
-	        						#{/if}
+	        						#{/else}
 	        						#{else}
 						            	<table class="zebra-striped" id="bookings">
 									        <thead>
@@ -90,8 +97,59 @@
 							</div>
 			            </div>
 			            <div class="tab-pane" id="profile">
-			              <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
-			            </div>
+			            	<div class="row">
+	        					<div class="span12 ">
+							  	<div id="login">
+									#{form @Users.updateAccount()}
+										
+           								<div class="clearfix #{ifError 'user.firstName'} error #{/ifError}">
+	          								<label for="firstName">&{'user.firstName'}</label>
+											<div class="input">
+								              <div class="input-prepend">
+								                <span class="add-on">F</span>
+								                <input class="medium #{ifError 'user.firstName'} error #{/ifError}" name="user.firstName" id="firstName" value="${user.firstName}"  type="text">
+								              	<span class="help-inline error">#{error 'user.firstName' /}</span>
+								              </div>
+								            </div>
+							            </div>
+							            <div class="clearfix #{ifError 'user.lastName'} error #{/ifError}">
+							            	<label for="lastName">&{'user.lastName'}</label>
+								            <div class="input">
+								              <div class="input-prepend">
+								                <span class="add-on">F</span>
+								                <input class="medium #{ifError 'user.lastName'} error #{/ifError}" name="user.lastName" id="lastName" value="${user.lastName}"  type="text">
+								             	<span class="help-inline error">#{error 'user.lastName' /}</span>
+								              </div>
+								            </div>
+							             </div> 
+							            <div class="clearfix #{ifError 'user.email'} error #{/ifError}">
+							            	<label for="email">&{'user.email'}</label>
+											<div class="input">
+								              <div class="input-prepend">
+								                <span class="add-on">@</span>
+								                <input class="medium #{ifError 'user.email'} error #{/ifError}" name="user.email" id="email" value="${user.email}"  type="text">
+								              	<span class="help-inline error">#{error 'user.email' /}</span>
+								              </div>
+								            </div>
+							             </div> 
+							            <div class="clearfix #{ifError 'user.password'} error #{/ifError}">
+							            	<label for="password">&{'user.password'}</label>
+							            	<div class="input"> 
+								              <div class="input-prepend">
+								                <span class="add-on">*</span>
+								                <input class="medium #{ifError 'user.password'} error #{/ifError}" type="password" name="user.password" id="password" value="${user.password}" >
+								              	<span class="help-inline error">#{error 'user.password' /}</span>
+								              </div>
+								             </div> 
+							              </div>  
+										<div class="actions">
+											<input class="btn primary large" type="submit" id="signin" value="Guardar cambios" />
+										</div>
+									#{/form}
+								</div>
+							  </div>
+							  </div>
+						</div>
 			        </div>
 		            <div class="row" >
 		            	<div class="span16">

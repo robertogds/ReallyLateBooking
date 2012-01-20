@@ -5,6 +5,8 @@ import helper.DateHelper;
 import java.security.InvalidParameterException;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 import models.City;
 import models.Deal;
 import models.User;
@@ -56,6 +58,7 @@ public class DealDTO {
 	public String aroundText;
 	public Date checkinDate;
 	public Boolean breakfastIncluded;
+	public String nights;
 
 	
 	
@@ -96,6 +99,7 @@ public class DealDTO {
 		this.foodDrinkText = deal.foodDrinkTextEN;
 		this.checkinDate = DateHelper.getTodayDate();
 		this.breakfastIncluded = deal.breakfastIncluded;
+		this.nights = getNights();
 		
 		String lang = Lang.get();
 		Logger.debug("Filling deal info with locale: " + lang);
@@ -118,6 +122,15 @@ public class DealDTO {
 
 	}
 
+	private String getNights(){
+		String nights = "1";
+		nights = this.priceDay2 != null ? "1-2" : nights;
+		nights = this.priceDay3 != null ? "1-3" : nights;
+		nights = this.priceDay4 != null ? "1-4" : nights;
+		nights = this.priceDay5 != null ? "1-5" : nights;
+		return nights;
+	}
+	
 	private void validateDeal(Deal deal) {
 		if (deal == null){
 			throw new InvalidParameterException("Object Deal cannot be null");

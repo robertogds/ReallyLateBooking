@@ -83,6 +83,7 @@ public class Bookings extends Controller{
 				Mails.hotelBookingConfirmation(booking);
 			}
 			Mails.userBookingConfirmation(booking);
+			flash.success("Tu reserva se ha realizado correctamente.");
 			Users.dashboard();
 		}
 		else{

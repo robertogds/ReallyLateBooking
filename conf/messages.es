@@ -126,3 +126,13 @@ invoice.add_row = Añadir linea de factura
 invoice.banktransfer=Por transferencia bancaria al número de cuenta IBAN: 0049 6109 62 2116345761. 
 
 city.notfound =Ciudad no encontrada
+
+web.hi = Hola, %s
+web.dashboard = Panel de control
+web.account = Perfil
+web.logout = Salir
+web.mybookings = Mis reservas
+web.howitworks = Cómo funciona
+web.contact = Contacto
+web.cities = Ciudades
+

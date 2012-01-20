@@ -1,34 +1,21 @@
-<!-- Indices written at Thu, 19 Jan 2012 14:01:03 CET -->
+<!-- Indices written at Fri, 20 Jan 2012 15:58:17 CET -->
 
 <datastore-indexes>
 
-    <!-- Used 14 times in query history -->
-    <datastore-index kind="cities" ancestor="false" source="auto">
-        <property name="active" direction="asc"/>
-        <property name="name" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 25 times in query history -->
+    <!-- Used 55 times in query history -->
     <datastore-index kind="statistics" ancestor="false" source="auto">
         <property name="path" direction="asc"/>
         <property name="date" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 21 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
-        <property name="country" direction="asc"/>
+        <property name="root" direction="asc"/>
         <property name="name" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 3 times in query history -->
-    <datastore-index kind="deals" ancestor="false" source="auto">
-        <property name="city" direction="asc"/>
-        <property name="updated" direction="desc"/>
-        <property name="position" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 6 times in query history -->
+    <!-- Used 20 times in query history -->
     <datastore-index kind="deals" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="city" direction="asc"/>
@@ -36,10 +23,9 @@
         <property name="priceCents" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 3 times in query history -->
+    <!-- Used 5 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
-        <property name="root" direction="asc"/>
         <property name="name" direction="asc"/>
     </datastore-index>
 

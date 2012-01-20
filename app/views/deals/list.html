@@ -1,6 +1,6 @@
 #{extends 'layout.html' /}
 #{set title: city.name /}
-
+#{set background: 'http://a0.ak.lscdn.net/imgs/61ac5113-826c-415e-bbd4-fbc797d74181/original_q60.jpg'/}
 
 <div class="container">
     
@@ -21,8 +21,8 @@
 		            	</div>
 			        	<div class="span6 deal-info">	
 			        		<div class="title">
-			        			<h2>${deal.hotelName} <small>${deal.address}</small></h2>
-			        			<p> %{ out.print(deal.hotelText) }%</p>
+			        			<h2>${deal.hotelName}</h2>
+			        			<p class="address">${deal.address}</p>
 			        		</div>
 				           
 				           <div class="main-info">
@@ -31,18 +31,51 @@
 				           				${deal.salePriceCents}<span>&euro;</span>
 				           			</div>
 				           			<div class="span3 more-info">
-				           				<a class="btn large primary" href="@{Deals.show(city.url,deal.id)}">Ver Oferta</a>
+				           				#{if deal.quantity > 0 }
+						           			<a class="btn large primary" href="@{Deals.show(city.url,deal.id)}">Ver Oferta</a>
+						           		#{/if}
+				           				#{else}
+				           					<a class="btn large primary disabled" href="@{Deals.show(city.url,deal.id)}">Agotado</a>
+				           				#{/else}
+				           				
 				           			</div>
 				           		</div>
 				           		<div class="row deal-info">
 				           			<div class="span2 before">
-				           				 ${deal.priceCents}<span>&euro;</span> <span>antes</span>
+				           				<div class="row">
+				           					<div class="span2"">
+				           						 ${deal.priceCents}<span>&euro;</span> 
+				           					</div>
+				           				</div>	
+				           				<div class="row">
+				           					<div class="span2"">
+				           						 <span>antes</span> 
+				           					</div>
+				           				</div>	 
 				           			</div>
 				           			<div class="span2 nights">
-				           				1-5 <span>noches</span>
+				           				<div class="row">
+				           					<div class="span2"">
+				           						${deal.nights} 
+				           					</div>
+				           				</div>	
+				           				<div class="row">
+				           					<div class="span2"">
+				           						 <span>noches</span> 
+				           					</div>
+				           				</div>	 
 				           			</div>
 				           			<div class="span2 rooms">
-				           				${deal.quantity} <span>quedan</span>
+				           				<div class="row">
+				           					<div class="span2"">
+				           						${deal.quantity} 
+				           					</div>
+				           				</div>	
+				           				<div class="row">
+				           					<div class="span2"">
+				           						<span>quedan</span>
+				           					</div>
+				           				</div>
 				           			</div>
 				           		</div>
 				           		

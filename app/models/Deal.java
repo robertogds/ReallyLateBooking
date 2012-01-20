@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
+
 import controllers.CRUD.Hidden;
 
 import play.Logger;
@@ -415,6 +417,29 @@ public class Deal extends Model {
 	public static double findMinDiscountByCity(City city, Date start, Date end) {
 		Deal deal = Deal.all().filter("city", city).filter("active", Boolean.TRUE).order("discount").get();
 		return deal != null ? deal.discount : 0;
+	}
+
+	public void textToHtml() {
+		this.detailText = parseToHtml(this.detailText);
+		this.aroundText = parseToHtml(this.aroundText);
+		this.foodDrinkText = parseToHtml(this.foodDrinkText);
+		this.roomText = parseToHtml(this.roomText);
+		this.hotelText = parseToHtml(this.hotelText);
+	}
+	
+	private static String parseToHtml(String text){
+		text = removeFirstBr(text, "*");
+		text = removeFirstBr(text, "-");
+		String html =  StringUtils.replace(text, "*", "<br>");
+		html =  StringUtils.replace(html, "-", "<br>");
+		return html;
+	}
+	
+	private static String removeFirstBr(String text, String remove){
+		if (StringUtils.startsWith(text, remove)){
+			text = StringUtils.removeStart(text, remove);
+		}
+		return text;
 	}
 
 }

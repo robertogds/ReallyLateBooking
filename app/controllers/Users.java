@@ -31,13 +31,13 @@ import siena.PersistenceManager;
 
 public class Users extends Controller {
 	
-	@Before(only = {"dashboard"})
+	@Before(only = {"dashboard", "updateAccount"})
     static void checkConnected() {
 		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
 		Security.checkConnected();
     }
 	
-	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","dashboard"})
+	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","dashboard","updateAccount"})
 	public static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -57,6 +57,27 @@ public class Users extends Controller {
 			booking.deal = Deal.findById(booking.deal.id);
 		}
 		render(user, bookings);
+	}
+	
+	public static void updateAccount(User user) {
+		validation.email("user.email",user.email);
+		validation.required("user.firstName",user.firstName);
+		validation.required("user.lastName",user.lastName);
+		Logger.debug("Update user " + user.email);
+	    User dbUser = User.findById(Long.valueOf(session.get("userId")));
+	    dbUser.updateDetails(user);
+	    if (!validation.hasErrors()){
+		    dbUser.update();
+		    flash.success("Los cambios se han guardado correctamente.");
+	    }
+	    else{
+	    	flash.error("Oops… parece que hay algún error en los datos. Revísalo y vuelve a guardar cambios.");
+	    	params.flash(); // add http parameters to the flash scope
+	        validation.keep(); // keep the errors for the next request
+	        Logger.debug("Errors " + validation.errorsMap().toString());
+	    }
+	    //TODO better ways to do this redirect?
+	    redirect("/dashboard#profile");
 	}
 	
 	/** RLB API Methods **/

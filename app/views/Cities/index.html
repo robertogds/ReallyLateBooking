@@ -1,10 +1,12 @@
 #{extends 'layout.html' /}
-#{set title:'Ciudades' /}
+#{set title: 'Ciudades' /}
+#{set background: 'http://a0.ak.lscdn.net/imgs/61ac5113-826c-415e-bbd4-fbc797d74181/original_q60.jpg'/}
 
 <div class="container-fluid">
     	
       <div class="content" id="cities">
         <div >
+        	*{
 	        <ul class="media-grid">
 			 	#{list items:cities, as:'city' }
 			 		<li id="${city.url}">
@@ -13,7 +15,77 @@
 					    </a>
 					</li>
 			    #{/list}
-			</ul>
+			</ul> }*
+			
+			<ul class="media-grid">
+					<li id="a_coruna">
+					    <a href="/web/deals/a_coruna">
+					      <img class="thumbnail span4" alt="coru&ntilde;a" src="/public/images/cities/a_coruna.jpg">
+					    </a>
+					</li>
+			 		<li id="barcelona">
+					    <a href="/web/deals/barcelona">
+					      <img class="thumbnail span4" alt="Barcelona" src="/public/images/cities/barcelona.jpg">
+					    </a>
+					</li>
+					<li id="berlin">
+					    <a href="/web/deals/berlin">
+					      <img class="thumbnail span4" alt="berlin" src="/public/images/cities/berlin.jpg">
+					    </a>
+					</li>
+					<li id="bilbao">
+					    <a href="/web/deals/bilbao">
+					      <img class="thumbnail span4" alt="bilbao" src="/public/images/cities/bilbao.jpg">
+					    </a>
+					</li>
+					<li id="london">
+					    <a href="/web/deals/london">
+					      <img class="thumbnail span4" alt="londres" src="/public/images/cities/london.jpg">
+
+					    </a>
+					</li>
+			    	<li id="madrid">
+					    <a href="/web/deals/madrid">
+					      <img class="thumbnail span4" alt="Madrid" src="/public/images/cities/madrid.jpg">
+					    </a>
+					</li>
+					<li id="milan">
+					    <a href="/web/deals/milan">
+
+					      <img class="thumbnail span4" alt="milan" src="/public/images/cities/milan.jpg">
+					    </a>
+					</li>
+					<li id="malaga">
+					    <a href="/web/deals/malaga">
+					      <img class="thumbnail span4" alt="malaga" src="/public/images/cities/malaga.jpg">
+					    </a>
+					</li>
+			    	<li id="paris">
+					    <a href="/web/deals/paris">
+					      <img class="thumbnail span4" alt="paris" src="/public/images/cities/paris.jpg">
+					    </a>
+					</li>
+			    	<li id="santiago">
+					    <a href="/web/deals/santiago">
+					      <img class="thumbnail span4" alt="santiago" src="/public/images/cities/santiago.jpg">
+					    </a>
+					</li>
+			    	<li id="sevilla">
+					    <a href="/web/deals/sevilla">
+					      <img class="thumbnail span4" alt="sevilla" src="/public/images/cities/sevilla.jpg">
+					    </a>
+					</li>
+					<li id="valencia">
+					    <a href="/web/deals/valencia">
+					      <img class="thumbnail span4" alt="valencia" src="/public/images/cities/valencia.jpg">
+					    </a>
+					</li>
+			    	<li id="valladolid">
+					    <a href="/web/deals/valladolid">
+					      <img class="thumbnail span4" alt="valladolid" src="/public/images/cities/valladolid.jpg">
+					    </a>
+					</li>
+			    </ul>
         	
         </div>
       </div>

@@ -40,7 +40,15 @@
 <div class="container">
     
     <div class="content">
-
+    		#{ifnot deal.active}
+			<div class="alert-message block-message warning">
+		        <a class="close" href="#">×</a>
+		        <p><strong>¡Has llegado tarde!</strong> La oferta en ${deal.hotelName} no esta activa para esta noche.</p>
+		        <div class="alert-actions">
+		          <a class="btn small" href="@{Deals.list(deal.city.url)}">Ver las ofertas de hoy</a>
+		        </div>
+		    </div>
+		    #{/ifnot}
        		<div class="row">
 	        	<div class="span12 title-black">
 		           <h1>Reserva este hotel para esta noche</h1>
@@ -68,25 +76,25 @@
 					           <div class="span8">
 					           		<div class="row">
 					           			<div class="span8">
-						           			<p>${deal.hotelText}</p>
+						           			<p>#{verbatim}${deal.hotelText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 					           		<div class="row">
 					           			<div class="span8">
 						           			<h2>Las habitaciones</h2>
-						           			<p>${deal.roomText}</p>
+						           			<p>#{verbatim}${deal.roomText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 					           		<div class="row">
 					           			<div class="span8">
 						           			<h2>Comer y beber</h2>
-						           			<p>${deal.foodDrinkText}</p>
+						           			<p>#{verbatim}${deal.foodDrinkText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 					           		<div class="row">
 					           			<div class="span8">
 						           			<h2>Los alrededores</h2>
-						           			<p>${deal.aroundText}</p>
+						           			<p>#{verbatim}${deal.aroundText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 					           </div>
@@ -104,7 +112,12 @@
 						           		</div>
 						           		<div class="row">
 						           			<div class="span4 buy-now">
-						           				<a class="btn large primary" href="@{Deals.bookingForm(deal.id)}">Comprar</a>
+						           				#{if deal.active && deal.quantity > 0 }
+						           					<a class="btn large primary" href="@{Deals.bookingForm(deal.id)}">Comprar</a>
+						           				#{/if}
+						           				#{else}
+						           					<a class="btn large primary disabled" href="#">Agotado</a>
+						           				#{/else}
 						           			</div>
 						           		</div>
 						           		<div class="row">
@@ -155,6 +168,12 @@
 								  </div>
 								</div>
 							</div>
+							<div class="row">
+					           			<div class="span12">
+						           			<h2>Los detalles de la oferta</h2>
+						           			<p>#{verbatim}${deal.detailText}#{/verbatim}</p>
+					           			</div>
+					           		</div>
 				        </div> <!--  deal-info end -->
 			        </div>
 				</div> <!-- deal-detail end -->

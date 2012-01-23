@@ -12,12 +12,13 @@
 				           <h1>Estas son las ofertas para hoy</h1>
 				        </div>
 			        </div>
+			     <div class="deal-list">
 			#{/if}
-	        <div class="row deal-list">
-	        	<div class="span12 deal" >
+	        <div class="row">
+	        	<div class="span12 deal #{if deal_isFirst }first-deal#{/if}" >
 		            <div class="row" >
 		            	<div class="span6 hotelImage">
-		            		<img alt="${deal.hotelName}" src="${deal.image10}">
+		            		<img class="span6" alt="${deal.hotelName}" src="${deal.image10}">
 		            	</div>
 			        	<div class="span6 deal-info">	
 			        		<div class="title">
@@ -79,15 +80,14 @@
 				           			</div>
 				           		</div>
 				           		
-				           		<div class="row social">
-				           			<div class="span3">
-				           			</div>
-				           		</div>
 				           </div>
 				        </div>
 			        </div>
 				</div>
 	        </div>
+	        #{if deal_isLast }
+			     </div> <!--  close deal-list -->
+			#{/if}
         #{/list}
     </div>
 	

@@ -29,9 +29,49 @@
     <link rel="apple-touch-icon" href="@{'/public/images/apple-touch-icon-72x72.png'}">
     <link rel="apple-touch-icon" href="@{'/public/images/apple-touch-icon-114x114.png'}">
     
+    <script type="text/javascript">
+	    var addthis_config = {"data_track_clickback":true};
+	</script>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=pubid=ra-4f1d2cf53577540c"></script>
+    
+    <meta property="og:site_name" content="ReallyLateBooking"/>
+    <meta property="og:merchant" content=" #{get 'merchant' /}"/>
+    <meta property="fb:app_id" content="195465620529574"/>
+    <meta property="og:type" content="reallylatebooking:deal"/>
+    <meta property="og:title" content="#{get 'title' /}"/>
+   <!--  <meta property="og:url" content="${request.url}"/>  -->
+    <meta property="og:image" content="#{get 'image' /}"/>
+    <meta property="og:description" content="#{get 'description' /}"/>
+    <meta property="og:locale" content="es"/>
+    
   </head>
-
   <body>
+  
+  *{*** FACEBOOK INTEGRATION ** Not in use
+   <div id="fb-root"></div>
+   <script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '195465620529574', // App ID
+	      channelUrl : '//localhost:8000/channel.html', // Channel File
+	      status     : true, // check login status
+	      cookie     : true, // enable cookies to allow the server to access the session
+	      xfbml      : true  // parse XFBML
+	    });
+	
+	    // Additional initialization code here
+	  };
+	
+	  // Load the SDK Asynchronously
+	  (function(d){
+	     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+	     js = d.createElement('script'); js.id = id; js.async = true;
+	     js.src = "//connect.facebook.net/en_US/all.js";
+	     d.getElementsByTagName('head')[0].appendChild(js);
+	   }(document));
+	</script>
+	****}*
+	
   <div id="background">
 	  <div class="fader">&nbsp;</div>
 	  <img src="#{get 'background' /}">
@@ -89,6 +129,12 @@
         <p>
           &copy; ReallyLateBooking 2012. Powered by IIPIR Software Solutions S.L.
         </p>
+		<div class="addthis_toolbox addthis_20x20_style addthis_default_style">
+		<a class="addthis_button_facebook_follow" addthis:userid="reallylatebooking"></a>
+		<a class="addthis_button_twitter_follow" addthis:userid="rlatebooking"></a>
+		<a class="addthis_button_youtube_follow" addthis:userid="ReallyLateBooking"></a>
+		<a class="addthis_button_rss_follow" addthis:url="http://blog.reallylatebooking.com"></a>
+		</div>
       </div>
     </footer>
     
@@ -104,12 +150,7 @@
     <script src="@{'/public/js/bootstrap-scrollspy.js'}"></script>
     <script src="@{'/public/js/bootstrap-tabs.js'}"></script>
     <script src="@{'/public/js/bootstrap-buttons.js'}"></script>
-    <script>
-	    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-	    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
-	    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-	    s.parentNode.insertBefore(g,s)}(document,'script'));
-    </script>
+
      #{get 'moreScripts' /}
     	<script type="text/javascript">
 			$(function() {

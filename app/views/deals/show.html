@@ -1,5 +1,8 @@
 #{extends 'layout.html' /}
 #{set title: deal.hotelName /}
+#{set merchant: deal.hotelName /}
+#{set image: deal.mainImageBig /}
+#{set description :  'Reserva con oferta en el hotel' + deal.hotelName /}
 
 #{set 'moreScripts'}
     <script type="text/javascript">
@@ -33,6 +36,7 @@
 		$(function() {
 			var options = {position: 10, placement: 'above', html: true};
 			$('.image-popover').popover(options);
+			$('.twipsy-link').twipsy();
 		});
 	</script>
 #{/set}
@@ -98,49 +102,48 @@
 					           			</div>
 					           		</div>
 					           </div>
-					            <div class="span3">
+					            <div class="span4">
 					            	<div class="buy-column">
-						           		<div class="row price-more">
-						           			<div class="span4 price">
+						           		<div class="price">
 						           				${deal.salePriceCents}<span>&euro;</span>
-						           			</div>
 						           		</div>
-						           		<div class="row">
-						           			<div class="span4 before">
+						           		<div class="before">
 						           				  <span>antes</span> ${deal.priceCents}<span>&euro;</span>
-						           			</div>
 						           		</div>
-						           		<div class="row">
-						           			<div class="span4 buy-now">
+						           		<div class="buy-now">
 						           				#{if deal.active && deal.quantity > 0 }
 						           					<a class="btn large primary" href="@{Deals.bookingForm(deal.id)}">Comprar</a>
 						           				#{/if}
 						           				#{else}
 						           					<a class="btn large primary disabled" href="#">Agotado</a>
 						           				#{/else}
-						           			</div>
 						           		</div>
-						           		<div class="row">
-						           			<div class="span4 info-list">
-						           				<ul class="unstyled">
-												  <li class="rooms">
-												  	<span>quedan</span>
-												    <span class="value">${deal.quantity}</span>
-												  </li>
-												  <li class="nights">
-												    <span class="value">1-5 </span>
-												    <span>noches</span>
-												  </li>
-												</ul>
-						           			</div>
-						           		</div>
-						           		<div class="row social">
-						           			<div class="span3">
-						           			</div>
+					           			<div class="info-list">
+					           				<ul class="unstyled">
+											  <li class="rooms">
+											  	<span>quedan</span>
+											    <span class="value">${deal.quantity}</span>
+											  </li>
+											  <li class="nights">
+											    <span class="value">1-5 </span>
+											    <span>noches</span>
+											  </li>
+											</ul>
+					           			</div>
+						           		<div class="social">
+						           				<p><strong>¿Lo quieres gratis?</strong><br>
+						           				<a href="#" class="twipsy-link" data-placement="right" rel='twipsy' title='Con cada invitación les regalas 12€ para su primera reserva y tú recibes otros 12€'>
+						           					<b>Invita a tus amigos</b>
+						           				</a>, y consigue créditos para reservar gratis</p>
+						           				<div class="social-buttons addthis_toolbox addthis_default_style addthis_32x32_style">
+						           						<a class="addthis_button_facebook"></a>
+						           					    <a class="addthis_button_twitter"></a>
+    													<a class="addthis_button_email"></a>
+												    	<a class="addthis_button_preferred_1"></a>
+												</div>
 						           		</div>
 					           		</div><!-- buy-column end -->
 					           	</div>
-					           	
 				           </div> <!-- main-content end -->
 				           
 				           <div class="row">

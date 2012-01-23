@@ -11,7 +11,18 @@ footer p {
 p {
 	padding-right: 20px;
 	}
-	
+
+.alpha60 {
+	/* Fallback for web browsers that doesn't support RGBa */
+	background: rgb(0, 0, 0) transparent;
+	/* RGBa with 0.6 opacity */
+	background: rgba(0, 0, 0, 0.6);
+	/* For IE 5.5 - 7*/
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+	/* For IE 8*/
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+}
+
 .footer {
 	background-color: #EEE;
 	min-width: 940px;
@@ -41,6 +52,17 @@ p {
     box-shadow: 0;
     margin: 0;
     padding: 0;
+    background-size: 220px auto;
+    height: 220px;
+    width: 220px;
+    text-decoration: none;
+    overflow: hidden;
+}
+#cities .media-grid a h2{
+    color: white;
+    margin-top: 180px;
+    text-align: center;
+    font-weight: normal;
 }
 .topbar{
 	margin-left: auto;
@@ -151,9 +173,16 @@ p {
 }
 
 .deal-list .deal{
-	height: 260px;
+	height: 200px;
 	margin-bottom: 30px;
 	}
+
+.deal-list .first-deal{
+	-webkit-border-radius:  0 0 6px 6px;
+	-moz-border-radius:  0 0 6px 6px;
+	border-radius:  0 0 6px 6px;
+}
+
 .deal-list .deal .address{	
 	color:#666666; 
 	}
@@ -181,13 +210,21 @@ div.title-black h1 {
 	font-weight: normal;
 	line-height: 24px;
 }
-
+.social {
+	text-align: center;
+	}
+.social p strong {
+	color: #F47536;
+}
+.social-buttons{
+	padding:13px;
+	}
 .hotelImage {
-	height: 260px;
+	height: 200px;
 	overflow: hidden;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
+	-webkit-border-radius: 6px 0 0 6px;
+	-moz-border-radius: 6px 0 0 6px;
+	border-radius: 6px 0 0 6px;
 }
 
 #deal_detail .hotelImage {
@@ -243,8 +280,9 @@ div.title-black h1 {
 	-webkit-border-radius: 7px;
 	-moz-border-radius: 7px;
 	border-radius: 7px;
-	width: 180px;
 	height: 400px;
+	padding: 10px;
+    width: 170px;
 }
 
 .black60 {
@@ -267,7 +305,7 @@ div.title-black h1 {
 	height: 45px;
 	}
 	
-.deal .price-more .price {
+.deal .price {
 	font-size: 70px;
 	line-height: 60px;
 	font-weight: bold;
@@ -275,7 +313,7 @@ div.title-black h1 {
 	overflow: hidden;
 	text-align: center;
 }
-.deal .price-more .price span{
+.deal .price span{
 	font-size: 35px;
 	}
 
@@ -292,7 +330,15 @@ div.title-black h1 {
 	text-align: center;
 	font-size: 22px;
 	color: #666;
-	margin-left: -1px;
+}
+.deal .main-info .deal-info div{
+	margin-right: -1px;
+	text-indent: -15px;
+}
+
+.buy-column .info-list li {
+    line-height: 30px;
+    border-bottom: 1px solid #D9D9D9;
 }
 .buy-column .before{
 	padding: 0 0 6px 0;

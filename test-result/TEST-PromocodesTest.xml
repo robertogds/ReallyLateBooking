@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<testsuite failures="0" time="0.109" errors="0" skipped="0" tests="2" name="PromocodesTest">
+  <testcase classname="PromocodesTest" name="activatePromocode" time="0.081">
+      </testcase>
+  <testcase classname="PromocodesTest" name="createUserandRetrievePromocode" time="0.028">
+      </testcase>
+</testsuite>

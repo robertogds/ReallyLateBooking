@@ -9,6 +9,10 @@
 		#{ifErrors}
 			nights = ${flash['booking.nights']};
 		#{/ifErrors}
+		var credits = 0;
+		#{if user.credits > 0}
+			credits= ${user.credits};
+		#{/if}
 		var totalPrice = ${deal.salePriceCents};
 		var creditCard = 'visa';
 		#{ifErrors}
@@ -19,6 +23,8 @@
 			for(var i=0; i<nights; i++) {
 				totalPrice = totalPrice + priceList[i];
 			}
+			$('#total-booking-precredits').html(totalPrice);
+			totalPrice = totalPrice - credits;
 			$('.total-booking').html(totalPrice);
 		}
 		function updateExpiryCard(){
@@ -36,7 +42,7 @@
 		$(function() {
 			$('.tooltip').twipsy();
 			var options = { html: true, content: function(){
-				var bookingText = "Al pulsar este botón haces una reserva de <strong class='nights'>"+nights+"</strong> noches en habitación doble <strong> para entrar hoy</strong>  por un coste total (impuestos incluidos) de <strong class='total-price'>"+totalPrice+"&euro;</strong>" ;
+				var bookingText = "&{'web.bookingForm.popover'}" ;
 				return bookingText;
 				}};
 			$('#confirm-booking').popover(options);
@@ -65,268 +71,308 @@
 			
 		    	#{ifErrors}
 			    	<div class="alert-message block-message error">
-				        <a class="close" href="#">×</a>
+				        <a class="close" href="#">x</a>
 						   <p><strong>Oops… parece que hay algún error en los datos.</strong> Revísalo y confirma tu reserva.</p>
 				   </div>
 				#{/ifErrors}
 				#{else}
 					<div class="alert-message block-message info">
-				        <a class="close" href="#">×</a>
-				        <p><strong>¡Estás a pocos segundos de tener tu reserva de hotel para esta noche!</strong> Es muy sencillo y rápido.</p>
-				     	<p> Recuerda que no puedes escoger la fecha: nuestros precios son <strong> sólo para esta noche</strong></p>
+				        <a class="close" href="#">x</a>
+				        <p><strong>&{'web.bookingForm.hint.strong'}</strong> &{'web.bookingForm.hint.simple'}</p>
+				     	<p> &{'web.bookingForm.hint.remember'}</p>
 				    </div>
 				#{/else}
-       		<div class="row">
-	        	<div class="span12 title-black">
-		           <h1>Reserva tu hotel para esta noche en un solo paso</h1>
-		        </div>
-	        </div>
-	        <div class="row">
-	        	<div class="span12 deal" >
-	        		#{form @@Bookings.doBooking(), class:''}
-	        		<input type="hidden" name="dealId" value="${deal.id}">
-		            <div class="row" >
-		            	<div class="span11 steps">
-		            		<h2>1. Detalles del hotel</h2>
-		            		<div class="bordered" id="step1">
-			            		<div class="row ">
-					        		<div class="span4">
-			            				<img class="span4" alt="${deal.hotelName}" src="${deal.image10}">
-			            			</div>
-					        		<div class="span7">
-					        			<h3>${deal.hotelName} <small>${deal.address}, ${deal.city.name}</small></h3>
-					        			<div class="row price-more">
-						           			<div class="span6 offset1 price">
-						           				<small>Esta noche</small> ${deal.salePriceCents}<span>&euro;</span>
-						           				 <small>antes ${deal.priceCents}&euro; </small>
-						           			</div>
-						           			
-						           		</div>
-					        			<p>${deal.detailText}</p>
-					        			
-					        		</div>
-					   			 </div>
-				   			 </div>
-		            	</div>
-		            </div>
-		            
-		             <div class="row" >
-		            	<div class="span11 steps">
-		            		<h2>2. Detalles de la reserva</h2>
-		            		<div class="bordered" id="step2">
-			            		<div class="row ">
-					        		<div class="span11">
-					        			<fieldset>
-								          <div class="clearfix">
-								            <label for="prependedInput">Fecha de entrada</label>
-								            <div class="input">
-								              <div class="input-prepend">
-								                <span class="add-on">@</span>
-								                <input class="large disabled" id="prependedInput" name="booking.checkinDate" 
-								                	disabled  type="text" value="Hoy, desde las 12pm hasta las 6am">
-								                <span class="help-block">Here's some help text</span>
-								              </div>
-								            </div>
-								          </div><!-- /clearfix -->
-								          <div class="clearfix">
-									            <label for="nightsSelect">Número de noches</label>
-									            <div class="input">
-									            <div class="input-prepend">
-									              <span class="add-on">N</span>
-									              <select class="large" name="booking.nights" id="nightsSelect">
-									                		<option  value="1">Esta Noche por ${deal.salePriceCents}&euro;</option>
-										                #{if deal.priceDay2 != null }
-										                	<option value="2">2 Noches por <span class="total-price">${deal.salePriceCents + deal.priceDay2}&euro;</span></option>
-										                #{/if}
-										                 #{if deal.priceDay3 != null }
-										                	<option  value="3">3 Noches por ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3}&euro;</option>
-										                #{/if}
-										                #{if deal.priceDay4 != null }
-										                	<option  value="4">4 Noches por ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay4}&euro;</option>
-										                #{/if}
-										                #{if deal.priceDay5 != null }
-										                	<option  value="5">5 Noches por ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay5}&euro;</option>
-										                #{/if}
-									              </select>
+			<div class="row">
+	        	<div class="span12">
+		       		<div class="row">
+			        	<div class="span12 title-black">
+				           <h1>&{'web.bookingForm.title', deal.hotelName}</h1>
+				        </div>
+			        </div>
+			        <div class="row">
+			        	<div class="span12 deal" >
+			        		#{form @@Bookings.doBooking(), class:''}
+			        		<input type="hidden" name="dealId" value="${deal.id}">
+				            <div class="row" >
+				            	<div class="span11 steps">
+				            		<h2>1. &{'web.bookingForm.1.title'}</h2>
+				            		<div class="bordered" id="step1">
+					            		<div class="row ">
+							        		<div class="span4">
+					            				<img class="span4" alt="${deal.hotelName}" src="${deal.image10}">
+					            			</div>
+							        		<div class="span7">
+							        			<h3>${deal.hotelName} <small>${deal.address}, ${deal.city.name}</small></h3>
+							        			<div class="row price-more">
+								           			<div class="span7 price">
+								           				<small>&{'web.bookingForm.1.tonight'}</small> ${deal.salePriceCents}<span>&euro;</span>
+								           				 <small>&{'web.bookingForm.1.before'} ${deal.priceCents}&euro; </small>
+								           			</div>
+								           			
+								           		</div>
+							        			<p>#{verbatim} ${deal.detailText} #{/verbatim}</p>
+							        			
+							        		</div>
+							   			 </div>
+						   			 </div>
+				            	</div>
+				            </div>
+				            
+				             <div class="row" >
+				            	<div class="span11 steps">
+				            		<h2>2. &{'web.bookingForm.2.title'}</h2>
+				            		<div class="bordered" id="step2">
+					            		<div class="row ">
+							        		<div class="span11">
+							        			<fieldset>
+										          <div class="clearfix">
+										            <label for="prependedInput"> &{'web.bookingForm.2.checkin'}</label>
+										            <div class="input">
+										              <div class="input-prepend">
+										                <span class="add-on">@</span>
+										                <input class="large disabled" id="prependedInput" name="booking.checkinDate" 
+										                	disabled  type="text" value=" &{'web.bookingForm.2.checkininfo'}">
+										                <span class="help-block">Here's some help text</span>
+										              </div>
+										            </div>
+										          </div><!-- /clearfix -->
+										          <div class="clearfix">
+											            <label for="nightsSelect"> &{'web.bookingForm.2.nights'}</label>
+											            <div class="input">
+											            <div class="input-prepend">
+											              <span class="add-on">N</span>
+											              <select class="large" name="booking.nights" id="nightsSelect">
+											                		<option  value="1"> &{'web.bookingForm.select.1'} ${deal.salePriceCents}&euro;</option>
+												                #{if deal.priceDay2 != null }
+												                	<option value="2">2 &{'web.bookingForm.select.n'}  <span class="total-price">${deal.salePriceCents + deal.priceDay2}&euro;</span></option>
+												                #{/if}
+												                 #{if deal.priceDay3 != null }
+												                	<option  value="3">3 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3}&euro;</option>
+												                #{/if}
+												                #{if deal.priceDay4 != null }
+												                	<option  value="4">4 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay4}&euro;</option>
+												                #{/if}
+												                #{if deal.priceDay5 != null }
+												                	<option  value="5">5 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay5}&euro;</option>
+												                #{/if}
+											              </select>
+											            </div>
+											            </div>
+										          </div><!-- /clearfix -->
+										          <div class="clearfix">
+										            <label for="prependedInput">&{'web.bookingForm.2.people'}</label>
+										            <div class="input">
+										              <div class="input-prepend">
+										                <span class="add-on">@</span>
+										                <input class="large disabled" id="prependedInput" name="clients" 
+										                	disabled  type="text" value="&{'web.bookingForm.2.people.max'}">
+										                <span class="help-block">&{'web.bookingForm.2.people.hint'}</span>
+										              </div>
+										            </div>
+										          </div><!-- /clearfix -->
+										          #{if user.credits > 0}
+										          <div class="clearfix">
+										            <label for="credits">&{'web.bookingForm.2.credits'}</label>
+										            <div class="input">
+										              <div class="input-prepend">
+										                <span class="add-on">&euro;</span>
+										                <input class="large disabled" id="credits" name="credits" 
+										                	disabled  type="text" value="&{'web.bookingForm.2.credits.value', user.credits}">
+										                <span class="help-block">&{'web.bookingForm.2.credits.hint'}</span>
+										              </div>
+										            </div>
+										          </div><!-- /clearfix -->
+										          #{/if}
+										        </fieldset>
+							        		</div>
+							   			 </div>
+							   			 <div class="row">
+								   			 <div class="span11 total">
+								   			 	<div class="row">
+										              <div class="span3">
+										               		<span>*</span> &{'web.bookingForm.2.total'}:
+										              </div>
+										              <div class="span7">
+										              		#{if user.credits > 0}
+										              			<span id="total-booking-precredits">${deal.salePriceCents}</span>&euro; - ${user.credits}&euro; = <span id="total-booking" class="total-booking">${deal.salePriceCents - user.credits}</span>&euro; <small>&{'web.bookingForm.2.tax'}</small>
+										              		#{/if}
+										              		#{else}
+										               			<span id="total-booking" class="total-booking">${deal.salePriceCents}</span>&euro; <small>&{'web.bookingForm.2.tax'}</small>
+										              		#{/else}
+										              </div>
 									            </div>
-									            </div>
-								          </div><!-- /clearfix -->
-								          <div class="clearfix">
-								            <label for="prependedInput">Húespedes</label>
-								            <div class="input">
-								              <div class="input-prepend">
-								                <span class="add-on">@</span>
-								                <input class="large disabled" id="prependedInput" name="clients" 
-								                	disabled  type="text" value="2 personas máximo">
-								                <span class="help-block">Todas las habitaciones son dobles</span>
-								              </div>
-								            </div>
-								          </div><!-- /clearfix -->
-								        </fieldset>
-					        		</div>
-					   			 </div>
-					   			 <div class="row">
-						   			 <div class="span11 total">
-						   			 	<div class="row">
-								              <div class="span3">
-								               		<span>*</span> Coste Total:
-								              </div>
-								              <div class="span7">
-								               		<span id="total-booking" class="total-booking">${deal.salePriceCents}</span>&euro; <small>(Todos los impuestos incluidos)</small>
-								              </div>
-							            </div>
-									 </div>
-								 </div>
-				   			 </div>
-		            	</div>
-		            </div>
-		            
-		            <div class="row" >
-		            	<div class="span11 steps">
-		            		<h2>3. ¿Reservas para un amigo?</h2>
-		            		<div class="bordered" id="step3">
-		            				<div class="alert-message block-message warning">
-								        <a class="close" href="#">×</a>
-								        <p><strong>${user.firstName}</strong>, si reservas para ti deja los campos en blanco y ve al paso 4.</p>
-								    </div>
-		            			   <fieldset>
-							          <div class="clearfix">
-							            <label for="firstName">Nombre</label>
-							            <div class="input">
-							                <input class="large " id="firstName" name="booking.bookingForFirstName" 
-							                	  type="text" value="${flash['booking.bookingForFirstName']}">
-							            </div>
-							          </div><!-- /clearfix -->
-							          <div class="clearfix">
-							            <label for="lastName">Apellidos</label>
-							            <div class="input">
-							                <input class="large " id="lastName" name="booking.bookingForLastName" 
-							                	  type="text" value="${flash['booking.bookingForLastName']}">
-							            </div>
-							          </div><!-- /clearfix -->
-							         
-							          <div class="clearfix">
-							            <label for="bookingForEmail">Email</label>
-							            <div class="input">
-							              <div class="input-prepend">
-							                <span class="add-on">@</span>
-							                <input class="large" id="bookingForEmail" name="booking.bookingForEmail" 
-							                	  type="text" value="${flash['booking.bookingForEmail']}">
-							              </div>
-							            </div>
-							          </div><!-- /clearfix -->
-							        </fieldset>
-				   			 </div>
-		            	</div>
-		            </div>
-		            
-		            <div class="row" >
-		            	<div class="span11 steps">
-		            		<h2>4. Método de pago</h2>
-		            		<div class="bordered" id="step4">
-		            				<div class="alert-message block-message warning">
-								        <a class="close" href="#">×</a>
-								        <p><strong>${user.firstName}</strong>, no se te cobrará nada en este momento. Harás el pago en el hotel.</p>
-								        <p>Recuerda que la reserva <strong>no es anulable</strong>.</p>
-								    </div>
-		            			   <fieldset>
-		            			   	<div id="cc_details">
-		            			   		 <div class="clearfix">
-								            <label  for="booking.creditCardType">Tipo de Tarjeta</label>
-								            <div class="input">
-								                <select class="large" id="credit_card_cc_type" name="booking.creditCardType">
-			                                		<option value="visa">Visa</option>
-													<option value="master">MasterCard</option>
-													<option value="american_express">American Express</option>
-													<option value="discover">Discover</option>
-											</select>
-								            </div>
-							            </div><!-- /clearfix -->
-							            <div class="clearfix #{ifError 'booking.creditCard'} error #{/ifError}">
-							            	<label  for="booking.creditCard">Número de Tarjeta</label>
-										 	 <div class="input">
-			                                	<input class="large #{ifError 'booking.creditCard'} error #{/ifError}" id="credit_card_cc_number" 
-			                                		name="booking.creditCard" type="text" value="${flash['booking.creditCard']}">
-			                                	<span class="help-inline error">#{error 'booking.creditCard' /}</span>
-			                                 </div>
-										</div><!-- /clearfix -->
-										 <div class="clearfix #{ifError 'booking.creditCardExpiry'} error #{/ifError}">
-			                                <label id="cc_expires_on_label" for="credit_card_cc_expire_month">Expira el</label>
-			                                <div class="input">
-				                                <select id="credit_card_cc_expire_month" class="small #{ifError 'booking.creditCardExpiry'} error #{/ifError}" name="credit_card[cc_expire_month]" >
-				                                	<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-													<option value="10">10</option>
-													<option value="11">11</option>
-													<option value="12">12</option>
-												</select>
-												<select id="credit_card_cc_expire_year" class="small #{ifError 'booking.creditCardExpiry'} error #{/ifError}" name="credit_card[cc_expire_year]" >
-													<option value="2012">2012</option>
-													<option value="2013">2013</option>
-													<option value="2014">2014</option>
-													<option value="2015">2015</option>
-													<option value="2016">2016</option>
-													<option value="2017">2017</option>
-													<option value="2018">2018</option>
-													<option value="2019">2019</option>
-													<option value="2020">2020</option>
-													<option value="2021">2021</option>
-													<option value="2022">2022</option>
-												</select>
-												<input type="hidden" id="creditCardExpiry" name="booking.creditCardExpiry" value="${flash['booking.creditCardExpiry']}">
-												<span class="help-inline error">#{error 'booking.creditCardExpiry' /}</span>
 											 </div>
-										</div><!-- /clearfix -->
-			                               <div class="clearfix #{ifError 'booking.creditCardCVC'} error #{/ifError}"> 
-			                               	<label id="credit_card_cc_security_code_label" for="credit_card_cc_security_code">Código de Seguridad</label>
-			                               <div class="input">
-			                                <input id="credit_card_cc_security_code" name="booking.creditCardCVC" type="text" value="${flash['booking.creditCardCVC']}"
-			                                	class="small #{ifError 'booking.creditCardCVC'} error #{/ifError}">
-			                                	<a  href="#" class="tooltip" rel="twipsy" data-placement="right" title="El valor de 3 ó 4 dígitos impreso en la tarjeta o tira con la firma.">
-			                                		<img alt="Questionmark_hover" src="https://a0.muscache.com/s/1300304855/images/icons/questionmark_hover.png">
-			                                	</a>
-			                                <span class="help-inline error">#{error 'booking.creditCardCVC' /}</span>
-			                                	
-			                                </div>
-			                                </div><!-- /clearfix -->
-			                            </div>
-							          <div class="clearfix #{ifError 'booking.creditCardName'} error #{/ifError}">
-							            <label for="firstName">Nombre y Apellidos</label>
-							            <div class="input">
-							                <input class="large #{ifError 'booking.creditCardName'} error #{/ifError} " id="firstName" name="booking.creditCardName" type="text" value="${flash['booking.creditCardName']}">
-							              	#{ifError 'booking.creditCardName'} 
-							              		<span class="help-inline error">#{error 'booking.creditCardName' /}</span>
-							                #{/ifError} 
-							                #{else}
-							                	<span class="help-block">Tal y como figura en la tarjeta</span>
-							                #{/else}
-							            </div>
-							            
-							          </div><!-- /clearfix -->
-							          
-							        </fieldset>
-				   			 </div>
-		            	</div>
-		            </div>
-		            
-		             <div class="row" >
-		            	<div class="span11 steps">
-				            <div class="well">
-				            	<input class="btn primary large" type="submit" id="confirm-booking" value="Reserva para esta noche" rel="popover"
-				            		data-original-title="Reserva en ${deal.hotelName}"/>
-						    </div>
-						</div>
-					</div>
-		            #{/form}
-				</div> <!-- deal end -->
-	        </div>
+										 </div>
+						   			 </div>
+				            	</div>
+				            </div>
+				            
+				            <div class="row" >
+				            	<div class="span11 steps">
+				            		<h2>3. &{'web.bookingForm.3.title'}</h2>
+				            		<div class="bordered" id="step3">
+				            				<div class="alert-message block-message warning">
+										        <p><strong>${user.firstName}</strong>, &{'web.bookingForm.3.hint'}</p>
+										    </div>
+				            			   <fieldset>
+									          <div class="clearfix">
+									            <label for="firstName">&{'web.bookingForm.3.name'}</label>
+									            <div class="input">
+									                <input class="large " id="firstName" name="booking.bookingForFirstName" 
+									                	  type="text" value="${flash['booking.bookingForFirstName']}">
+									            </div>
+									          </div><!-- /clearfix -->
+									          <div class="clearfix">
+									            <label for="lastName">&{'web.bookingForm.3.surname'}</label>
+									            <div class="input">
+									                <input class="large " id="lastName" name="booking.bookingForLastName" 
+									                	  type="text" value="${flash['booking.bookingForLastName']}">
+									            </div>
+									          </div><!-- /clearfix -->
+									         
+									          <div class="clearfix">
+									            <label for="bookingForEmail">&{'web.bookingForm.3.email'}</label>
+									            <div class="input">
+									              <div class="input-prepend">
+									                <span class="add-on">@</span>
+									                <input class="large" id="bookingForEmail" name="booking.bookingForEmail" 
+									                	  type="text" value="${flash['booking.bookingForEmail']}">
+									              </div>
+									            </div>
+									          </div><!-- /clearfix -->
+									        </fieldset>
+						   			 </div>
+				            	</div>
+				            </div>
+				            
+				            <div class="row" >
+				            	<div class="span11 steps">
+				            		<h2>4. &{'web.bookingForm.4.title'}</h2>
+				            		<div class="bordered" id="step4">
+				            				<div class="alert-message block-message warning">
+										        <p><strong>${user.firstName}</strong>, &{'web.bookingForm.4.warning.1'}</p>
+										        <p>&{'web.bookingForm.4.warning.2'}</p>
+										    </div>
+				            			   <fieldset>
+				            			   	<div id="cc_details">
+				            			   		 <div class="clearfix">
+										            <label  for="booking.creditCardType">&{'web.bookingForm.4.cardType'}Tipo de Tarjeta</label>
+										            <div class="input">
+										                <select class="large" id="credit_card_cc_type" name="booking.creditCardType">
+					                                		<option value="visa">Visa</option>
+															<option value="master">MasterCard</option>
+															<option value="american_express">American Express</option>
+															<option value="discover">Discover</option>
+													</select>
+										            </div>
+									            </div><!-- /clearfix -->
+									            <div class="clearfix #{ifError 'booking.creditCard'} error #{/ifError}">
+									            	<label  for="booking.creditCard">&{'web.bookingForm.4.cardNumber'}</label>
+												 	 <div class="input">
+					                                	<input class="large #{ifError 'booking.creditCard'} error #{/ifError}" id="credit_card_cc_number" 
+					                                		name="booking.creditCard" type="text" value="${flash['booking.creditCard']}">
+					                                	<span class="help-inline error">#{error 'booking.creditCard' /}</span>
+					                                 </div>
+												</div><!-- /clearfix -->
+												 <div class="clearfix #{ifError 'booking.creditCardExpiry'} error #{/ifError}">
+					                                <label id="cc_expires_on_label" for="credit_card_cc_expire_month">&{'web.bookingForm.4.expiration'}</label>
+					                                <div class="input">
+						                                <select id="credit_card_cc_expire_month" class="small #{ifError 'booking.creditCardExpiry'} error #{/ifError}" name="credit_card[cc_expire_month]" >
+						                                	<option value="1">1</option>
+															<option value="2">2</option>
+															<option value="3">3</option>
+															<option value="4">4</option>
+															<option value="5">5</option>
+															<option value="6">6</option>
+															<option value="7">7</option>
+															<option value="8">8</option>
+															<option value="9">9</option>
+															<option value="10">10</option>
+															<option value="11">11</option>
+															<option value="12">12</option>
+														</select>
+														<select id="credit_card_cc_expire_year" class="small #{ifError 'booking.creditCardExpiry'} error #{/ifError}" name="credit_card[cc_expire_year]" >
+															<option value="2012">2012</option>
+															<option value="2013">2013</option>
+															<option value="2014">2014</option>
+															<option value="2015">2015</option>
+															<option value="2016">2016</option>
+															<option value="2017">2017</option>
+															<option value="2018">2018</option>
+															<option value="2019">2019</option>
+															<option value="2020">2020</option>
+															<option value="2021">2021</option>
+															<option value="2022">2022</option>
+														</select>
+														<input type="hidden" id="creditCardExpiry" name="booking.creditCardExpiry" value="${flash['booking.creditCardExpiry']}">
+														<span class="help-inline error">#{error 'booking.creditCardExpiry' /}</span>
+													 </div>
+												</div><!-- /clearfix -->
+					                               <div class="clearfix #{ifError 'booking.creditCardCVC'} error #{/ifError}"> 
+					                               	<label id="credit_card_cc_security_code_label" for="credit_card_cc_security_code">&{'web.bookingForm.4.cvc'}</label>
+					                               <div class="input">
+					                                <input id="credit_card_cc_security_code" name="booking.creditCardCVC" type="text" value="${flash['booking.creditCardCVC']}"
+					                                	class="small #{ifError 'booking.creditCardCVC'} error #{/ifError}">
+					                                	<a  href="#" class="tooltip" rel="twipsy" data-placement="right" title="&{'web.bookingForm.4.cvc.hint'}">
+					                                		<img alt="Questionmark_hover" src="https://a0.muscache.com/s/1300304855/images/icons/questionmark_hover.png">
+					                                	</a>
+					                                <span class="help-inline error">#{error 'booking.creditCardCVC' /}</span>
+					                                	
+					                                </div>
+					                                </div><!-- /clearfix -->
+					                            </div>
+									          <div class="clearfix #{ifError 'booking.creditCardName'} error #{/ifError}">
+									            <label for="firstName">&{'web.bookingForm.4.cardname'}</label>
+									            <div class="input">
+									                <input class="large #{ifError 'booking.creditCardName'} error #{/ifError} " id="firstName" name="booking.creditCardName" type="text" value="${flash['booking.creditCardName']}">
+									              	#{ifError 'booking.creditCardName'} 
+									              		<span class="help-inline error">#{error 'booking.creditCardName' /}</span>
+									                #{/ifError} 
+									                #{else}
+									                	<span class="help-block">&{'web.bookingForm.4.cardname.hint'}</span>
+									                #{/else}
+									            </div>
+									            
+									          </div><!-- /clearfix -->
+									          
+									        </fieldset>
+						   			 </div>
+				            	</div>
+				            </div>
+				            
+				             <div class="row" >
+				            	<div class="span11 steps">
+						            <div class="well">
+						            	<input class="btn primary large" type="submit" id="confirm-booking" value="&{'web.bookingForm.button'}" rel="popover"
+						            		data-original-title="&{'web.bookingForm.popover.title', deal.hotelName}"/>
+								    </div>
+								</div>
+							</div>
+				            #{/form}
+						</div> <!-- deal end -->
+			        </div>
+			     </div> <!-- span12 end -->
+	        	<div class="span4"> 
+	        		<div class="couponForm">
+				     	#{form @Coupons.validate(), class:'form-stacked'}
+				     		<fieldset>
+	         					 <legend>Valida un cup�n:</legend>
+	        					<div class="clearfix #{ifError 'key'} error #{/ifError}">
+						              <div class="input-prepend">
+						                <span class="add-on">C</span>
+						                <input class="#{ifError 'key'} error #{/ifError}" style="width: 138px;" name="key" id="key" value="${flash.key}"  type="text">
+						              	<span class="help-inline error">#{error 'key' /}</span>
+						              </div>
+					            </div>
+				            	<input name="returnUrl" id="returnUrl" value="/web/deals/bookingForm/${deal.id}"  type="hidden">
+				            </fieldset>
+							<div style="text-align:center">
+								<input class="btn primary medium" type="submit" id="signin" value="Validar" />
+							</div>
+						#{/form}
+				     </div>
+	        	</div>
+	        </div>	
     </div> <!-- content end -->
 	
 </div> <!-- container end -->

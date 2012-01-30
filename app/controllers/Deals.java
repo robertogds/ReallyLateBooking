@@ -34,7 +34,9 @@ public class Deals extends Controller {
 		Deal deal = Deal.findById(id);
 		if (deal != null){
 			deal.prepareImages();//just for iphone now, make configurable in the future
-			render(deal);
+			deal.textToHtml();
+			User user= User.findById(Long.valueOf(session.get("userId")));
+			render(deal,user);
 		}
 		else{
 			notFound();
@@ -47,7 +49,8 @@ public class Deals extends Controller {
 			deal.city = City.findById(deal.city.id);
 			deal.prepareImages();//just for iphone now, make configurable in the future
 			deal.textToHtml();
-			render(deal);
+			User user= User.findById(Long.valueOf(session.get("userId")));
+			render(deal, user);
 		}
 		else{
 			notFound();

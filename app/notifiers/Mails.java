@@ -34,13 +34,17 @@ import play.templates.Template;
 import play.templates.TemplateLoader;
 
 public class Mails extends MailServiceFactory {
-	 
+   private static final String PRECIOS_MAIL = "precios@reallylatebooking.com";
+   private static final String ALTAS_MAIL = "altas@reallylatebooking";
+   private static final String RESERVAS_MAIL = "reservas@reallylatebooking";
+   private static final String HOLA_MAIL = "RLB <hola@reallylatebooking.com>";
+   
    public static void welcome(User user) {
 	   	  Message message = new Message();
 	   	  message.setSubject(Messages.get("mail.welcome.subject") + " " + user.firstName);
-	   	  message.setSender("RLB <hola@reallylatebooking.com>");
+	   	  message.setSender(HOLA_MAIL);
 	   	  message.setTo(user.email);
-	   	  message.setBcc("hola@reallylatebooking.com"); //easy way to know when a new user registers. delete after some weeks
+	   	  message.setBcc(ALTAS_MAIL); //easy way to know when a new user registers. delete after some weeks
 	   	  String template = "Mails/welcome";
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", user);
@@ -53,7 +57,7 @@ public class Mails extends MailServiceFactory {
 	   	  Lang.set("es");
 	   	  Message message = new Message();
 	   	  message.setSubject( user.firstName +", "+ Messages.get("mail.freenight.subject"));
-	   	  message.setSender("RLB <hola@reallylatebooking.com>");
+	   	  message.setSender(HOLA_MAIL);
 	   	  message.setTo(user.email);
 	   	  String template = "Mails/freeNightMadrid";
 	   	  Map<String, Object> params = new HashMap<String, Object>();
@@ -66,7 +70,8 @@ public class Mails extends MailServiceFactory {
    public static void lostPassword(User user) {
 	      Message message = new Message();
 	   	  message.setSubject(Messages.get("mail.remember.subject") + " "  + user.firstName);
-	   	  message.setSender("RLB <hola@reallylatebooking.com>");
+	   	  message.setSender(HOLA_MAIL);
+	   	  message.setBcc(ALTAS_MAIL);
 	   	  message.setTo(user.email);
 	   	  String template = "Mails/lostPassword";
 	   	  Map<String, Object> params = new HashMap<String, Object>();
@@ -82,9 +87,10 @@ public class Mails extends MailServiceFactory {
 	   else{
 	   	  Message message = new Message();
 	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.deal.hotelName);
-	   	  message.setSender("RLB <hola@reallylatebooking.com>");
+	   	  message.setSender(HOLA_MAIL);
 	   	  String template = "Mails/userBookingConfirmation";
 	   	  message.setTo(booking.user.email);
+	   	  message.setBcc(RESERVAS_MAIL);
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", booking.user);
 	   	  params.put("booking", booking);
@@ -99,11 +105,12 @@ public class Mails extends MailServiceFactory {
    private static void userBookingConfirmationForFriend(Booking booking) {
 	   	  Message message = new Message();
 	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.deal.hotelName);
-	   	  message.setSender("RLB <hola@reallylatebooking.com>");
+	   	  message.setSender(HOLA_MAIL);
 	   	  String template = "Mails/userBookingConfirmationForFriend";
 	   	  User user = booking.user;
 	   	  message.setTo(booking.bookingForEmail);
 	   	  message.setCc(booking.user.email);
+	   	  message.setBcc(RESERVAS_MAIL);
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", user);
 	   	  params.put("booking", booking);
@@ -122,9 +129,9 @@ public class Mails extends MailServiceFactory {
 	   else{
 	   	  Message message = new Message();
 	   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.deal.hotelName);
-	   	  message.setSender("RLB <hola@reallylatebooking.com>");
+	   	  message.setSender(HOLA_MAIL);
 	   	  message.setTo(booking.deal.contactEmail);
-	   	  message.setBcc("hola@reallylatebooking.com"); //easy way to know when a new booking is made
+	   	  message.setBcc(RESERVAS_MAIL); //easy way to know when a new booking is made
 	   	  String template = "Mails/hotelBookingConfirmation";
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", booking.user);
@@ -140,9 +147,9 @@ public class Mails extends MailServiceFactory {
    private static void hotelBookingConfirmationForFriend(Booking booking) {
 	  Message message = new Message();
    	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.deal.hotelName);
-   	  message.setSender("RLB <hola@reallylatebooking.com>");
+   	  message.setSender(HOLA_MAIL);
    	  message.setTo(booking.deal.contactEmail);
-   	  message.setBcc("hola@reallylatebooking.com"); //easy way to know when a new booking is made
+   	  message.setBcc(RESERVAS_MAIL); //easy way to know when a new booking is made
    	  String template = "Mails/hotelBookingConfirmationForFriend";
    	  Map<String, Object> params = new HashMap<String, Object>();
    	  params.put("user", booking.user);
@@ -160,8 +167,8 @@ public static void ownerUpdatedDeal(Deal deal) {
 	   	  City city = City.findById(deal.city.id);
 	   	  Message message = new Message();
 	   	  message.setSubject("Precios de hoy para el  "  + deal.hotelName + " de "+ city.name);
-	   	  message.setSender("RLB <hola@reallylatebooking.com>");
-	   	  message.setTo("precios@reallylatebooking.com");
+	   	  message.setSender(HOLA_MAIL);
+	   	  message.setTo(PRECIOS_MAIL);
 	   	  String template = "Mails/ownerUpdatedDeal";
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("deal", deal);

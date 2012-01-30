@@ -22,7 +22,7 @@ import play.mvc.Http;
 public class Application extends Controller {
 	
 	public static void index() {
-        if(session.contains("user")) {
+        if(session.contains("user") && User.findById(Long.valueOf(session.get("userId"))) != null) {
             Cities.index();
         }
         render();

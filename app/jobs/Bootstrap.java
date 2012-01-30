@@ -85,6 +85,7 @@ public class Bootstrap extends Job {
 		City madrid = new City("Madrid", "madrid");
 		madrid.active = Boolean.TRUE;
 		madrid.country = spain;
+		madrid.root = "madrid";
 		madrid.insert();
 		City barcelona = new City("Barcelona", "barcelona");
 		barcelona.active = Boolean.TRUE;
@@ -103,6 +104,11 @@ public class Bootstrap extends Job {
 		prueba.priceCents = 100;
 		prueba.owner = User.findByEmail("pablo@iipir.com");
 		prueba.quantity = 10;
+		prueba.salePriceCents = 55;
+		prueba.priceCents = 128;
+		prueba.priceDay2 = 80;
+		prueba.position = 3;
+		prueba.limitHour = 3;
 		prueba.insert();
 		Deal ritz = new Deal("Hotel DORMIRDCINE", madrid, Boolean.TRUE);
 		ritz.address = "castellana 43";
@@ -118,9 +124,16 @@ public class Bootstrap extends Job {
 		ritz.priceCents = 100;
 		ritz.owner = User.findByEmail("pablo@iipir.com");
 		ritz.quantity = 10;
+		ritz.salePriceCents = 105;
+		ritz.priceCents = 188;
+		ritz.priceDay2 = 80;
+		ritz.priceDay3 = 110;
+		ritz.priceDay4 = 110;
+		ritz.position = 2;
+		ritz.limitHour = 3;
 		ritz.insert();
 	    Deal cibeles = new Deal("Vincci Soho", madrid, Boolean.TRUE);
-	    cibeles.address = "castellana 43";
+	    cibeles.address = "calle castellana, 43, 28224";
 		cibeles.mainImageBig = "mainImage.jpg";
 		cibeles.mainImageSmall = "mainImageSmall.jpg";
 		cibeles.image1 = "image1.jpg";
@@ -128,11 +141,53 @@ public class Bootstrap extends Job {
 		cibeles.image3 = "image3.jpg";
 		cibeles.image4 = "image4.jpg";
 		cibeles.hotelCode = "614546";
-		cibeles.isHotUsa = Boolean.TRUE;
+		cibeles.isHotUsa = Boolean.FALSE;
 		cibeles.contactEmail = "pablo@iipir.com";
-		cibeles.priceCents = 100;
+		cibeles.salePriceCents = 145;
+		cibeles.priceCents = 188;
+		cibeles.priceDay2 = 80;
+		cibeles.priceDay3 = 110;
+		cibeles.position = 1;
+		cibeles.limitHour = 3;
+		cibeles.roomType = "lujo";
 		cibeles.owner = User.findByEmail("pablo@iipir.com");
 		cibeles.quantity = 10;
+		cibeles.latitude = "42.8814063452954";
+		cibeles.longitude = "-8.54341917990539";
+		cibeles.detailText = "* Desayuno NO incluído.* El precio es final e INCLUYE impuestos." +
+				"* El precio es por habitación DOBLE con una ocupación máxima de 2 personas." +
+				"* Para conseguir los mejores precios no podemos asegurar que podrás elegir entre cama de matrimonio y dos camas individuales. " +
+				"Depende de la disponibilidad  del hotel a tu llegada aunque SIEMPRE será una HABITACION DOBLE." +
+				"* Puedes llegar al hotel hasta las 6am. * La salida será antes de las 12 del mediodía." +
+				"	* Necesitarás tu carnet de identidad y una tarjeta de crédito al llegar al hotel.";
+		cibeles.hotelText = "Enclavado en un emblemático edificio del siglo XIX, totalmente reformado." +
+				"* En la recepción podrá alquilar gratis bicicletas y cochecitos para bebés. " +
+				"* Se admiten animales domésticos sin cargo adicional a petición." +
+				"* Se ofrece un servicio de traslado al aeropuerto gratuito (disponible bajo petición)." +
+				"* Puntuación de 7.7 en Booking." +
+				"* Barrio tranquilo y sin ruidos por la noche.";
+		cibeles.roomText = "Las habitaciones del Petit Palace Embassy son elegantes y espaciosas. " +
+				"Todas disponen de: * un ordenador con conexión a internet" +
+				"* un baño con ducha de hidromasaje" +
+				"* cama de matrimonio* minibar* caja fuerte gratuita* televisión de pantalla plana. ";
+		cibeles.foodDrinkText = "Cuenta con restaurante situado en la planta noble del edificio. " +
+				"Tiene una capacidad para 40 comensales y dispone de un espacio reservado dentro del propio local" +
+				" ideal para almuerzos de negocios hasta 10 comensales.* Restaurante recomendado por Guía Roja Michelín" +
+				"* Todas las mañanas se sirve un variado desayuno bufé." +
+				"* El restaurante del hotel, abierto para el almuerzo y la cena, sirve cocina española creativa.";
+	    cibeles.aroundText ="Está situado en la exclusiva zona comercial de la Milla De Oro de Madrid, y a tan solo un paseo del " +
+	    		"Parque del Retiro y de los principales Museos de la capital -Prado, Reina Sofía y Thyssen Bornemiza." +
+	    		"* Este exclusivo barrio del centro de Madrid es tranquilo y silencioso por las noches. Perfecto si no " +
+	    		"quieres que nadie moleste tus horas de sueño.";
+		cibeles.mainImageBig ="madrid/embassy/detalle.jpg";
+		cibeles.mainImageSmall = "madrid/embassy/listado.jpg";
+		cibeles.listImage = "madrid/embassy/completo10.jpg";
+		cibeles.image1 = "madrid/embassy/completo1.jpg";
+		cibeles.image2 = "madrid/embassy/completo2.jpg";
+		cibeles.image3 = "madrid/embassy/completo3.jpg";
+		cibeles.image4 = "madrid/embassy/completo4.jpg";
+		cibeles.image5 = "madrid/embassy/completo5.jpg";
+		cibeles.image10 = "madrid/embassy/completo10.jpg";
 	    cibeles.insert();
 	    Deal sol = new Deal("Hotel Conde Duque", madrid, Boolean.TRUE);
 	    sol.address = "castellana 43";

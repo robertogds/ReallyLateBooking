@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<testsuite failures="0" time="0.171" errors="0" skipped="0" tests="4" name="BasicTest">
+  <testcase classname="BasicTest" name="createAndRetrieveDeal" time="0.082">
+      </testcase>
+  <testcase classname="BasicTest" name="findDealsFromCity" time="0.083">
+      </testcase>
+  <testcase classname="BasicTest" name="validateCreditCard" time="0.003">
+      </testcase>
+  <testcase classname="BasicTest" name="validateInvalidCreditCard" time="0.003">
+      </testcase>
+</testsuite>

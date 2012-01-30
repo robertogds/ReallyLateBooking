@@ -1,33 +1,32 @@
 package controllers;
 
-import java.util.List;
-
-import org.apache.commons.codec.digest.DigestUtils;
-
-import notifiers.Mails;
 import helper.JsonHelper;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
-import controllers.oauth.ApiSecurer;
+import java.util.List;
 
 import models.Booking;
 import models.City;
 import models.Deal;
+import models.MyCoupon;
 import models.User;
 import models.dto.StatusMessage;
 import models.dto.UserDTO;
 import models.dto.UserStatusMessage;
+import notifiers.Mails;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
 import play.Logger;
 import play.data.validation.Valid;
 import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;
-import siena.Json;
-import siena.PersistenceManager;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import controllers.oauth.ApiSecurer;
 
 public class Users extends Controller {
 	
@@ -50,13 +49,15 @@ public class Users extends Controller {
 	
 	/** RLB Web Methods **/
 	public static void dashboard(){
+		Logger.debug("SESION: " + session);
 		User user= User.findById(Long.valueOf(session.get("userId")));
 		List<Booking> bookings = Booking.findByUser(user);
 		for (Booking booking: bookings){
 			booking.city = City.findById(booking.city.id);
 			booking.deal = Deal.findById(booking.deal.id);
 		}
-		render(user, bookings);
+		List<MyCoupon> coupons = MyCoupon.findByUser(user);
+		render(user, bookings, coupons);
 	}
 	
 	public static void updateAccount(User user) {

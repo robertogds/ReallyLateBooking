@@ -44,7 +44,7 @@ public class Invoice extends Model {
     public Long id;
     
     @Required
-    @Index("company_index")
+    @Index("company_invoice_index")
     public Company company;
     @DateTime
     public Date created;

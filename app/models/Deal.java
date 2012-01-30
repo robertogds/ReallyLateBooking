@@ -441,7 +441,6 @@ public class Deal extends Model {
 		}
 		return text;
 	}
-
 }
 
 

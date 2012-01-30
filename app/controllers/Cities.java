@@ -37,8 +37,8 @@ public class Cities  extends Controller {
 		cities.add(new City("Bilbao", "bilbao"));
 		cities.add(new City("Londres", "london"));
 		cities.add(new City("Madrid", "madrid"));
-		cities.add(new City("Milan", "milan"));
 		cities.add(new City("Málaga", "malaga"));
+		cities.add(new City("Milan", "milan"));
 		cities.add(new City("Paris", "paris"));
 		cities.add(new City("Santiago de Comp.", "santiago"));
 		cities.add(new City("Sevilla", "sevilla"));

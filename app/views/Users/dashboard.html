@@ -25,22 +25,22 @@
 	        	<div class="span12 dashboard">
 	        		<ul class="tabs" data-tabs="tabs">
 					  <li class="active" ><a href="#mybookings">Mis Reservas</a></li>
+					  <li><a href="#mycredits">Mis Créditos</a></li>
+					  <li><a href="#mycoupons">Mis Cupones</a></li>
 					  <li><a href="#profile">Mi Perfil</a></li>
 					</ul>
 					<div id="my-tab-content" class="tab-content">
-			            <div class="tab-pane active" id="bookings">
+			            <div class="tab-pane active" id="mybookings">
 			            	<div class="row">
 	        					<div class="span12 ">
-	        						#{list items:bookings, as:'booking'}
-	        						#{/list}
-	        						#{else}
+	        						#{ifnot bookings?.size > 0  }
 	        							<div class="row">
 		        							<div class="span12 noBookings">
-		        								<h3>Todav√≠a no has realizado ninguna reserva. ¬øA qu√© est√°s esperando?</h3>
+		        								<h3>Todavía no has realizado ninguna reserva. ¿A qué estás esperando?</h3>
 		        								<p>As you purchase RLB deals, this page will contain a history of all purchased items for your personal reference.</p>
 			        						</div>
 		        						</div>
-	        						#{/else}
+	        						#{/ifnot}
 	        						#{else}
 						            	<table class="zebra-striped" id="bookings">
 									        <thead>
@@ -89,6 +89,67 @@
 											              <a href="#" class="btn primary close">Cerrar</a>
 											            </div>-->
 											          </div>
+									        	#{/list}
+									         </tbody>
+									     </table>
+								     #{/else}
+								</div>
+							</div>
+			            </div> <!--  mybookings end -->
+			              <div class="tab-pane" id="mycredits">
+			            	<div class="row">
+	        					<div class="span12 ">
+	        						#{if user.credits == 0  }
+	        							<div class="row">
+		        							<div class="span12 noBookings">
+		        								<h3>No tienes ningún crédito. ¿quieres conseguir créditos para reservar habitaciones gratis?</h3>
+		        								<p>Invita a tus amigos y recibirás 12€ por cada amigo que realice una reserva en RLB</p>
+			        						</div>
+		        						</div>
+	        						#{/if}
+	        						#{else}
+	        							<div class="row">
+						            	<div class="span12 summary">
+								          <p>Actual credits  ${user.credits}&euro;</p>
+
+							        	</div>
+							        	</div>
+								     #{/else}
+								</div>
+							</div>
+			            </div>
+			            <div class="tab-pane" id="mycoupons">
+			            	<div class="row">
+	        					<div class="span12 ">
+	        						#{ifnot coupons?.size > 0  }
+	        							<div class="row">
+		        							<div class="span12 noBookings">
+		        								<h3>No tienes ningún crédito. ¿quieres conseguir créditos para reservar habitaciones gratis?</h3>
+		        								<p>Invita a tus amigos y recibirás 12€ por cada amigo que realice una reserva en RLB</p>
+			        						</div>
+		        						</div>
+	        						#{/ifnot}
+	        						#{else}
+						            	<table class="zebra-striped" id="bookings">
+									        <thead>
+									          <tr>
+									            <th class="blue header">Activación</th>
+									             <th class="blue header">Expira</th>
+									            <th class="blue header">Código</th>
+									            <th class="blue header">Créditos</th>
+									            <th class="blue header">Usado</th>
+									           </tr>
+									        </thead>
+									        <tbody>
+									        	#{list items:coupons, as:'coupon'}
+									        		<tr class=summary>
+											            <td>${coupon.created.format('dd MMMM yyyy')}</td>
+											            <td>${coupon.expire.format('dd MMMM yyyy')}</td>
+											            <td>${coupon.key}</td>
+											            <td>${coupon.credits}&euro;</td>
+											            <td>${coupon.used}</td>
+											            </td>
+										        	</tr>
 									        	#{/list}
 									         </tbody>
 									     </table>

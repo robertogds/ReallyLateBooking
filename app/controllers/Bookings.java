@@ -1,42 +1,35 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.w3c.dom.Document;
-
-import notifiers.Mails;
 import helper.HotUsaApiHelper;
 import helper.JsonHelper;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
-
-import controllers.oauth.ApiSecurer;
+import java.util.ArrayList;
+import java.util.List;
 
 import models.Booking;
 import models.City;
 import models.Deal;
+import models.MyCoupon;
 import models.User;
 import models.dto.BookingDTO;
 import models.dto.BookingStatusMessage;
 import models.dto.StatusMessage;
-import models.dto.UserStatusMessage;
+import notifiers.Mails;
+
+import org.apache.commons.lang.StringUtils;
+
 import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
-import play.data.validation.Validation;
 import play.i18n.Messages;
-import play.libs.WS;
-import play.libs.WS.HttpResponse;
-import play.libs.WS.WSRequest;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+
+import controllers.oauth.ApiSecurer;
 
 public class Bookings extends Controller{
 	
@@ -83,6 +76,10 @@ public class Bookings extends Controller{
 				Mails.hotelBookingConfirmation(booking);
 			}
 			Mails.userBookingConfirmation(booking);
+			if (StringUtils.isNotBlank(user.referer)){
+				activateCouponToReferal(user);
+			}
+			
 			flash.success("Tu reserva se ha realizado correctamente.");
 			Users.dashboard();
 		}
@@ -94,6 +91,13 @@ public class Bookings extends Controller{
 		}
 	}
 	
+	private static void activateCouponToReferal(User user) {
+		User referer = User.findByRefererId(user.referer);
+		MyCoupon coupon = MyCoupon.findByKeyAndUser(user.refererId, referer);
+		coupon.active = Boolean.TRUE;
+		coupon.update();
+		//TODO send mail to referal?
+	}
 	
 	/*** Json API methods ****/
 	

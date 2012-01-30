@@ -11,6 +11,9 @@ footer p {
 p {
 	padding-right: 20px;
 	}
+table th, table td {
+    text-align: center;
+}
 
 .alpha60 {
 	/* Fallback for web browsers that doesn't support RGBa */
@@ -296,10 +299,6 @@ div.title-black h1 {
 .deal .main-info {
 	height: 210px;
 	}
-.deal .price-more {
-	height: 74px;
-	}
-	
 	
 .deal .social-address {
 	height: 45px;
@@ -359,7 +358,8 @@ div.title-black h1 {
 }
 	
 .deal .more-info .btn{
-	margin-top: 12px;
+	margin-top: 8px;
+	font-size: 26px;
 }
 
 .image-gallery .media-grid a img {
@@ -415,8 +415,9 @@ div.title-black h1 {
 	
 #step1 .price {
     font-size: 40px;
-    line-height: 30px;
-    text-indent: 0px;
+    line-height: 40px;
+    padding-bottom: 12px;
+    text-indent: 0;
 }
 #step1 .price small{
 	font-size: 14px;
@@ -448,3 +449,18 @@ option span.total-price{
 	padding: 40px 0 0 0px;
 }
 
+.couponForm {
+	color: #3E342B;
+	background-color:#F9F4B8;
+    border: 1px solid #DDCC13;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.couponForm .form-stacked {
+    padding: 20px;
+    margin-bottom: 0px;
+}
+.couponForm .form-stacked .clearfix {
+    margin-bottom: 0px;
+}

@@ -7,10 +7,8 @@ import notifiers.Mails;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
-
-import com.google.gson.JsonObject;
-
-import controllers.Users;
+import org.apache.commons.lang.math.RandomUtils;
+import org.h2.util.MathUtils;
 
 import play.Logger;
 import play.data.validation.Email;
@@ -27,14 +25,16 @@ import siena.Model;
 import siena.Query;
 import siena.Table;
 
+import com.google.gson.JsonObject;
+
 
 @Table("users")
 public class User extends Model{
- 
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
+	
 	//Facebook id
-	public String uuid;
+	public String fbid;
    
 	@CrudUnique
 	@Required
@@ -42,6 +42,7 @@ public class User extends Model{
     public String email;
 	public String validationCode;
 	public boolean validated;
+	public boolean vip;
 	@Required
     @Password
     public String password;
@@ -56,9 +57,6 @@ public class User extends Model{
     public Date created;
     public String token;
     public String secret;  
-    public Integer credit;
-    public String inviteByCode;
-    public String inviteCode;
     public String fbLink;
     public String fbUsername;
     public String gender;
@@ -66,6 +64,9 @@ public class User extends Model{
     public String locale;
     public String fbAccessToken;
     public String fbExpires;
+    public String referer;
+    public int credits;
+	public String refererId;
     
     public User() {
     	super();
@@ -103,9 +104,25 @@ public class User extends Model{
         this.isAdmin = this.isAdmin!=null ? this.isAdmin : Boolean.FALSE;
 		this.isOwner = this.isOwner!=null ? this.isOwner : Boolean.FALSE;
 		this.isFacebook = this.isFacebook!=null ? this.isFacebook : Boolean.FALSE;
+		this.refererId = this.createRefererId();
     	super.insert();
+    	this.createUserCoupons();
 	}
     
+	private String createRefererId() {
+		return (this.firstName.trim() + this.lastName.trim() + RandomUtils.nextInt(100)).toUpperCase();
+	}
+
+	private void createUserCoupons(){
+		String key = this.refererId;
+		//Create his coupon for the first booking
+		MyCoupon myCoupon = new MyCoupon(this, key, Coupon.CREDITS_FIRST_DEFAULT);
+		myCoupon.insert();
+		//Create the coupon so his friends can find it
+		Coupon coupon =  new Coupon(key,Coupon.CREDITS_REFERER_DEFAULT, Coupon.CREDITS_REFERER_TYPE);
+		coupon.insert();
+	}
+	
 	public static void facebookOAuthCallback(JsonObject data){
 		Logger.debug("User Json from FB: " + data);
 		registerOrLogin(data);
@@ -141,7 +158,7 @@ public class User extends Model{
     	Session.current().put("firstName", this.firstName);
     	Session.current().put("lastName", this.lastName);
     	Session.current().put("userId", this.id);
-    	Session.current().put("uuid", this.uuid);
+    	Session.current().put("uuid", this.fbid);
     	Logger.debug("User session: " + Session.current().toString());
     }
 
@@ -150,7 +167,7 @@ public class User extends Model{
 		this.lastName = data.get("last_name").getAsString();
 		this.email = data.get("email").getAsString();
 		this.isFacebook = Boolean.TRUE;
-		this.uuid = data.get("id").getAsString();
+		this.fbid = data.get("id").getAsString();
 		this.fbLink = data.get("link").getAsString();
 		this.fbUsername = data.get("username").getAsString();
 		this.gender = data.get("gender").getAsString();
@@ -163,6 +180,10 @@ public class User extends Model{
 
 	public static User findByEmail(String email){
     	return User.all().filter("email", email.trim().toLowerCase()).get();
+    }
+	
+	public static User findByRefererId(String refererId){
+    	return User.all().filter("refererId", refererId.trim().toUpperCase()).get();
     }
     
     public static Query<User> all() {
@@ -231,5 +252,5 @@ public class User extends Model{
 							filter("created<", calEnd.getTime()).count();
 		return users;
 	}
-    
+
 }

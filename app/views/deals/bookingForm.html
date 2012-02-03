@@ -10,7 +10,7 @@
 			nights = ${flash['booking.nights']};
 		#{/ifErrors}
 		var credits = 0;
-		#{if user.credits > 0}
+		#{if user.credits > 0 && !deal.isHotUsa}
 			credits= ${user.credits};
 		#{/if}
 		var totalPrice = ${deal.salePriceCents};
@@ -70,9 +70,9 @@
     <div class="content">
 			
 		    	#{ifErrors}
-			    	<div class="alert-message block-message error">
+			    	<div class="alert-message error">
 				        <a class="close" href="#">x</a>
-						   <p><strong>Oops… parece que hay algún error en los datos.</strong> Revísalo y confirma tu reserva.</p>
+						   <p><strong>&{'web.bookingForm.error'}</strong></p>
 				   </div>
 				#{/ifErrors}
 				#{else}
@@ -170,7 +170,7 @@
 										              </div>
 										            </div>
 										          </div><!-- /clearfix -->
-										          #{if user.credits > 0}
+										          #{if user.credits > 0 && !deal.isHotUsa}
 										          <div class="clearfix">
 										            <label for="credits">&{'web.bookingForm.2.credits'}</label>
 										            <div class="input">
@@ -193,7 +193,7 @@
 										               		<span>*</span> &{'web.bookingForm.2.total'}:
 										              </div>
 										              <div class="span7">
-										              		#{if user.credits > 0}
+										              		#{if user.credits > 0 && !deal.isHotUsa}
 										              			<span id="total-booking-precredits">${deal.salePriceCents}</span>&euro; - ${user.credits}&euro; = <span id="total-booking" class="total-booking">${deal.salePriceCents - user.credits}</span>&euro; <small>&{'web.bookingForm.2.tax'}</small>
 										              		#{/if}
 										              		#{else}
@@ -353,7 +353,11 @@
 			        </div>
 			     </div> <!-- span12 end -->
 	        	<div class="span4"> 
-	        		<div class="couponForm">
+	        		#{if deal.isHotUsa}
+	        			No se pueden usar creditos con este hotel.
+	        		#{/if}
+	        		#{else}
+	        			<div class="couponForm">
 				     	#{form @Coupons.validate(), class:'form-stacked'}
 				     		<fieldset>
 	         					 <legend>Valida un cup�n:</legend>
@@ -371,6 +375,8 @@
 							</div>
 						#{/form}
 				     </div>
+	        		#{/else}
+	        		
 	        	</div>
 	        </div>	
     </div> <!-- content end -->

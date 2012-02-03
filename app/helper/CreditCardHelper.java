@@ -26,8 +26,7 @@ public class CreditCardHelper {
    */
   public static boolean validCC(String number){  
 	Logger.debug("Validatind credit card number: "+number);
-    int CardID;
-    if ( (CardID = getCardID(number)) != -1)
+    if ( getCardID(number) != -1)
         return validCCNumber(number);
     return false;
     }
@@ -105,7 +104,7 @@ public class CreditCardHelper {
     
   public static boolean isNumber(String n) {
     try  {
-      double d = Double.valueOf(n).doubleValue();
+      Double.valueOf(n).doubleValue();
       return true;
       }
     catch (NumberFormatException e) {

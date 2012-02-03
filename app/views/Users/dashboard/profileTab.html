@@ -1,0 +1,52 @@
+<div class="row">
+	        					<div class="span12 ">
+							  	<div id="login">
+									#{form @Users.updateAccount()}
+										
+           								<div class="clearfix #{ifError 'user.firstName'} error #{/ifError}">
+	          								<label for="firstName">&{'user.firstName'}</label>
+											<div class="input">
+								              <div class="input-prepend">
+								                <span class="add-on">F</span>
+								                <input class="medium #{ifError 'user.firstName'} error #{/ifError}" name="user.firstName" id="firstName" value="${user.firstName}"  type="text">
+								              	<span class="help-inline error">#{error 'user.firstName' /}</span>
+								              </div>
+								            </div>
+							            </div>
+							            <div class="clearfix #{ifError 'user.lastName'} error #{/ifError}">
+							            	<label for="lastName">&{'user.lastName'}</label>
+								            <div class="input">
+								              <div class="input-prepend">
+								                <span class="add-on">F</span>
+								                <input class="medium #{ifError 'user.lastName'} error #{/ifError}" name="user.lastName" id="lastName" value="${user.lastName}"  type="text">
+								             	<span class="help-inline error">#{error 'user.lastName' /}</span>
+								              </div>
+								            </div>
+							             </div> 
+							            <div class="clearfix #{ifError 'user.email'} error #{/ifError}">
+							            	<label for="email">&{'user.email'}</label>
+											<div class="input">
+								              <div class="input-prepend">
+								                <span class="add-on">@</span>
+								                <input class="medium #{ifError 'user.email'} error #{/ifError}" name="user.email" id="email" value="${user.email}"  type="text">
+								              	<span class="help-inline error">#{error 'user.email' /}</span>
+								              </div>
+								            </div>
+							             </div> 
+							            <div class="clearfix #{ifError 'user.password'} error #{/ifError}">
+							            	<label for="password">&{'user.password'}</label>
+							            	<div class="input"> 
+								              <div class="input-prepend">
+								                <span class="add-on">*</span>
+								                <input class="medium #{ifError 'user.password'} error #{/ifError}" type="password" name="user.password" id="password" value="${user.password}" >
+								              	<span class="help-inline error">#{error 'user.password' /}</span>
+								              </div>
+								             </div> 
+							              </div>  
+										<div class="actions">
+											<input class="btn primary large" type="submit" id="signin" value="Guardar cambios" />
+										</div>
+									#{/form}
+								</div>
+							  </div>
+							  </div>

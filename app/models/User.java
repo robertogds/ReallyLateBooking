@@ -241,7 +241,7 @@ public class User extends Model{
     }
 
 	public Boolean checkFacebookUserExists() {
-		if (this.isFacebook != null && this.isFacebook && User.findByEmail(this.email) != null){
+		if (this.isFacebook != null && this.isFacebook && this.email!= null && User.findByEmail(this.email) != null){
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;

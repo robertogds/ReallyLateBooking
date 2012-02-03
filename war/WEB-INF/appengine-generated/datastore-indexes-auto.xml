@@ -1,32 +1,32 @@
-<!-- Indices written at Mon, 30 Jan 2012 19:15:32 CET -->
+<!-- Indices written at Fri, 3 Feb 2012 13:13:19 CET -->
 
 <datastore-indexes>
 
-    <!-- Used 5 times in query history -->
-    <datastore-index kind="mycoupons" ancestor="false" source="auto">
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
-        <property name="key" direction="asc"/>
-        <property name="user" direction="asc"/>
-        <property name="created" direction="desc"/>
+        <property name="name" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 3 times in query history -->
-    <datastore-index kind="coupons" ancestor="false" source="auto">
-        <property name="key" direction="asc"/>
-        <property name="created" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 34 times in query history -->
+    <!-- Used 2 times in query history -->
     <datastore-index kind="statistics" ancestor="false" source="auto">
         <property name="path" direction="asc"/>
         <property name="date" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 4 times in query history -->
-    <datastore-index kind="mycoupons" ancestor="false" source="auto">
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
-        <property name="user" direction="asc"/>
-        <property name="created" direction="desc"/>
+        <property name="root" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="deals" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="city" direction="asc"/>
+        <property name="position" direction="asc"/>
+        <property name="priceCents" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>

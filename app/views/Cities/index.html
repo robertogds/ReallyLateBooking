@@ -2,20 +2,28 @@
 #{set title: 'Ciudades' /}
 #{set background: 'http://d2f5bmx5jz1oq8.cloudfront.net/web/backgrounds/general.jpg'/}
 
-<div class="container-fluid">
-    	
-      <div class="content" id="cities">
-        <div >
-	        <ul class="media-grid">
-			 	#{list items:cities, as:'city' }
-			 		<li id="${city.url}">
-					    <a href="@{Deals.list(city.url)}" style="background-image: url('@{'/public/images/cities/'+city.url+'.jpg'}');">
-					    	<h2 class="alpha60"> ${city.name}</h2>
-					    	
-					    </a>
-					</li>
-			    #{/list}
-			</ul> 
-        </div>
-      </div>
+    <div class="row">
+	      <div class="span9" id="cities">
+	      			<div class="row">
+	     				 <div class="span9 title-black">
+	     				 	<h1>Estas son las ciudades en las que tenemos ofertas</h1>
+	     				 </div>
+	     			</div>
+	     			<div class="row">
+	     				 <div class="span9">
+					 	#{list items:cities, as:'city' }
+					 		<div id="${city.url}" class="city">
+							    <a href="@{Deals.list(city.url)}" style="background-image: url('@{'/public/images/cities/'+city.url+'.jpg'}');">
+							    	<h2> ${city.name}</h2>
+							    </a>
+							</div>
+					    #{/list}
+				    	 </div>
+	     			</div>
+	      </div>
+	      <div class="span3">
+	      		<div class="row">
+	     				#{include 'components/beVip.html'/}
+	     		</div>
+	      </div>
     </div>

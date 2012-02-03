@@ -65,6 +65,7 @@ public class Deals extends Controller {
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
 				deal.prepareImages();//just for iphone now, make configurable in the future
+				deal.fecthCity(); //retrieves city object to not to send just the city id
 				dealsDtos.add(new DealDTO(deal));
 			}
 	        render(city, dealsDtos);

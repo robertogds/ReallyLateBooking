@@ -61,6 +61,7 @@ public class Coupons extends Controller {
 	private static void useMyCoupon(MyCoupon coupon){
 		try {
 			coupon.use();
+			flash.put("success", "El cupón es válido y se te han aplicado los créditos de descuento.");
 		} catch (InvalidCouponException e) {
 			validation.addError("key", "Ya has usado este cupón o ha caducado");
 			saveErrors();
@@ -68,9 +69,7 @@ public class Coupons extends Controller {
 	}
 	
 	private static void saveErrors(){
-		flash.error("Oops… parece que hay algún error en los datos.");
 		params.flash(); // add http parameters to the flash scope
 	    validation.keep(); // keep the errors for the next request
 	}
-
 }

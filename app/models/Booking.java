@@ -80,6 +80,9 @@ public class Booking extends Model {
 	public Integer priceDay3;
 	public Integer priceDay4;
 	public Integer priceDay5;
+	public Integer totalSalePrice;
+	public Integer finalPrice;
+	public Integer credits;
 	public String hotelName;
 	public Boolean needConfirmation;
 	public Boolean canceled;
@@ -109,11 +112,29 @@ public class Booking extends Model {
     	this.priceDay5 = this.deal.priceDay5;
     	this.hotelName = this.deal.hotelName;
     	this.priceCents = this.getTotalPrice(); //save actual deal price
-    	this.salePriceCents = this.getTotal();
+    	this.salePriceCents = this.deal.salePriceCents;
+    	this.totalSalePrice =  this.getTotal();
+    	this.credits = this.getUserCredits();
+    	this.finalPrice = this.totalSalePrice - this.credits;
     	this.invoiced = Boolean.FALSE;
     	this.canceled = Boolean.FALSE;
-    	
     	super.insert();
+	}
+	
+	/*
+	 * Returns the total credits used for the current booking
+	 * If the user has more credits than the booking total price they cant be used.
+	 * If its hotusa we cant use credits
+	 * */
+	private Integer getUserCredits(){
+		if (this.deal.isHotUsa){
+			return 0;
+		}
+		else{
+			this.user.get();
+			int credits = this.user.credits <= this.totalSalePrice ? this.user.credits : this.totalSalePrice;
+	    	return credits;
+		}
 	}
 	
 	private Integer getTotalNights(){
@@ -151,19 +172,19 @@ public class Booking extends Model {
    
     public Integer getTotal() {
     	Integer price = this.deal.salePriceCents;
-    	if (nights >= 2){
-    		price += priceDay2;
+    	if (this.nights >= 2){
+    		price += this.deal.priceDay2;
     	}
-    	if (nights >= 3){
-    		price += priceDay3;
+    	if (this.nights >= 3){
+    		price += this.deal.priceDay3;
     	}
-    	if (nights >= 4){
-    		price += priceDay4;
+    	if (this.nights >= 4){
+    		price += this.deal.priceDay4;
     	}
-    	if (nights == 5){
-    		price += priceDay5;
+    	if (this.nights == 5){
+    		price += this.deal.priceDay5;
     	}
-    	Logger.debug("Total price: " + price);
+    	Logger.debug("Total Sale price: " + price);
 
         return price;
     }

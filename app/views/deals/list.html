@@ -2,93 +2,119 @@
 #{set title: city.name /}
 #{set background: 'http://a0.ak.lscdn.net/imgs/61ac5113-826c-415e-bbd4-fbc797d74181/original_q60.jpg'/}
 
-<div class="container">
-    
-    <div class="content">
-        #{list items:dealsDtos, as:'deal' }
-        	#{if deal_isFirst }
-		            <div class="row">
-			        	<div class="span12 title-black">
-				           <h1>Estas son las ofertas para hoy</h1>
+
+#{set 'moreScripts'}
+	<script type="text/javascript">
+		$(function() {
+			$('#zonesNav').scrollspy();
+			// fix sub nav on scroll
+		    var $win = $(window)
+		      , $nav = $('#zonesNav')
+		      , navTop = $('#zonesNav').length && $('#zonesNav').offset().top - 50
+		      , isFixed = 0
+
+		    processScroll()
+
+		    $win.on('scroll', processScroll)
+
+		    function processScroll() {
+		      var i, scrollTop = $win.scrollTop()
+		      if (scrollTop >= navTop && !isFixed) {
+		        isFixed = 1
+		        $nav.addClass('zonesNav-fixed')
+		      } else if (scrollTop <= navTop && isFixed) {
+		        isFixed = 0
+		        $nav.removeClass('zonesNav-fixed')
+		      }
+		    }
+		});
+	</script>
+#{/set}
+<div class="row">
+	<div class="span9">
+		<div id="zonesNav" class="row">
+			        	<div class="span9 title-black">
+			        		<div class="row">
+				           			<div class="span6">
+			                			<h1>Estas son las ofertas para hoy en ${city.name}</h1>
+			                		 </div>
+				           			<div class="span3">
+						                <ul class="nav nav-pills">
+							                 <li><a href="#madrid">Madrid</a></li>
+											<li><a href="#madrid_north">Madrid Norte</a></li>
+						                </ul>
+								   </div>
+					        </div>             
 				        </div>
 			        </div>
-			     <div class="deal-list">
+			    
+		 #{list items:dealsDtos, as:'deal' }
+		 	<div id="${deal.city.url}"></div>	
+        	#{if deal_isFirst }
+        		%{
+			   		zone = deal.city.id;
+				}%
+			     <div class="deal-list first-deal">
+			     	<h2>${deal.city.name}</h2>
 			#{/if}
-	        <div class="row">
-	        	<div class="span12 deal #{if deal_isFirst }first-deal#{/if}" >
-		            <div class="row" >
-		            	<div class="span6 hotelImage">
-		            		<img class="span6" alt="${deal.hotelName}" src="${deal.image10}">
-		            	</div>
-			        	<div class="span6 deal-info">	
+			#{elseif zone != deal.city.id }
+				 </div>
+				 %{
+			   		zone = deal.city.id;
+				}%
+				<div class="deal-list">
+					<h2>${deal.city.name}</h2>
+			#{/elseif}
+	        	<div class="deal"  style="background-image: url('${deal.image10}');">
+			        	<div class="hotelInfo">	
 			        		<div class="title">
-			        			<h2>${deal.hotelName}</h2>
+			        			<h2>${deal.hotelName}</h2> 
 			        			<p class="address">${deal.address}</p>
 			        		</div>
 				           
 				           <div class="main-info">
-				           		<div class="row price-more">
+				           		<div class="row">
 				           			<div class="span3 price">
-				           				${deal.salePriceCents}<span>&euro;</span>
+				           				<span>esta noche</span> ${deal.salePriceCents}&euro;
 				           			</div>
-				           			<div class="span3 more-info">
+				           			<div class="span2 more-info">
 				           				#{if deal.quantity > 0 }
-						           			<a class="btn large primary" href="@{Deals.show(city.url,deal.id)}">Ver Oferta</a>
+						           			<a class="btn btn-primary btn-large" href="@{Deals.show(city.url,deal.id)}">Ver Oferta</a>
 						           		#{/if}
 				           				#{else}
-				           					<a class="btn large primary disabled" href="@{Deals.show(city.url,deal.id)}">Agotado</a>
+				           					<a class="btn btn-primary btn-large disabled" href="@{Deals.show(city.url,deal.id)}">Agotado</a>
 				           				#{/else}
 				           				
 				           			</div>
 				           		</div>
 				           		<div class="row deal-info">
-				           			<div class="span2 before">
-				           				<div class="row">
-				           					<div class="span2"">
-				           						 ${deal.priceCents}<span>&euro;</span> 
-				           					</div>
-				           				</div>	
-				           				<div class="row">
-				           					<div class="span2"">
-				           						 <span>antes</span> 
-				           					</div>
+				           			<div class="span5">
+				           				<div class="before">
+				           						 antes <br>
+				           						 <strong>${deal.priceCents}</strong><span>&euro;</span> 
 				           				</div>	 
-				           			</div>
-				           			<div class="span2 nights">
-				           				<div class="row">
-				           					<div class="span2"">
-				           						${deal.nights} 
-				           					</div>
-				           				</div>	
-				           				<div class="row">
-				           					<div class="span2"">
-				           						 <span>noches</span> 
-				           					</div>
+				           				<div class="nights">
+				           						 reserva <br>
+				           						 <strong>${deal.nights}</strong> <span>noches</span> 
 				           				</div>	 
-				           			</div>
-				           			<div class="span2 rooms">
-				           				<div class="row">
-				           					<div class="span2"">
-				           						${deal.quantity} 
-				           					</div>
-				           				</div>	
-				           				<div class="row">
-				           					<div class="span2"">
-				           						<span>quedan</span>
-				           					</div>
+				           				<div class="rooms">
+				           						quedan <strong>${deal.quantity}</strong>  <br>
+				           						habitaciones
 				           				</div>
 				           			</div>
 				           		</div>
-				           		
 				           </div>
 				        </div>
-			        </div>
 				</div>
-	        </div>
-	        #{if deal_isLast }
+	        #{if deal_isLast || zone != deal.city.id}
 			     </div> <!--  close deal-list -->
 			#{/if}
         #{/list}
     </div>
-	
+    <div class="span3">
+	      		<div class="row">
+	     				#{include 'components/beVip.html'/}
+	     		</div>
+	</div>
 </div>
+

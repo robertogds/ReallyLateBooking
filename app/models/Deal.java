@@ -256,7 +256,7 @@ public class Deal extends Model {
 	
 	public void fecthCity(){
 		if (this.city != null){
-			this.city = City.findById(this.city.id);
+			this.city.get();
 		}	
 	}
 		

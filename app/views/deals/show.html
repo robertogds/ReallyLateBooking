@@ -54,55 +54,55 @@
 		    </div>
 		    #{/ifnot}
        		<div class="row">
-	        	<div class="span12 title-black">
+	        	<div class="span9 title-black">
 		           <h1>Reserva este hotel para esta noche</h1>
 		        </div>
 	        </div>
 	        <div class="row">
-	        	<div class="span12 deal" id="deal_detail">
+	        	<div class="span9 deal" id="deal_detail">
 		            <div class="row" >
-		            	<div class="span12 hotelImage">
+		            	<div class="span9 hotelImage">
 		            		<div class="imageContainer">
 		            			<img alt="${deal.hotelName}" src="${deal.mainImageBig}">
 		            		</div>
-		            		<div class="span12 captions black60">
+		            		<div class="span9 captions black60">
 		            		</div>
 		            	</div>
 		            </div>
 		            <div class="row" >
-				        		<div class="title span12">
+				        		<div class="title span9">
 				        			<h1>${deal.hotelName} <small>${deal.address}</small></h1>
 				        		</div>
 				    </div>
 		            <div class="row" >
-			        	<div class="span12 deal-info">	
+			        	<div class="span9 deal-info">	
 				           <div class="row main-content" >
-					           <div class="span8">
+					           <div class="span6">
 					           		<div class="row">
-					           			<div class="span8">
+					           			<div class="span6">
 						           			<p>#{verbatim}${deal.hotelText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 					           		<div class="row">
-					           			<div class="span8">
+					           			<div class="span6">
 						           			<h2>Las habitaciones</h2>
 						           			<p>#{verbatim}${deal.roomText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 					           		<div class="row">
-					           			<div class="span8">
+					           			<div class="span6">
 						           			<h2>Comer y beber</h2>
 						           			<p>#{verbatim}${deal.foodDrinkText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 					           		<div class="row">
-					           			<div class="span8">
+					           			<div class="span6">
 						           			<h2>Los alrededores</h2>
 						           			<p>#{verbatim}${deal.aroundText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 					           </div>
-					            <div class="span4">
+					            <div class="span3">
 					            	<div class="buy-column">
 						           		<div class="price">
 						           				${deal.salePriceCents}<span>&euro;</span>
@@ -112,10 +112,10 @@
 						           		</div>
 						           		<div class="buy-now">
 						           				#{if deal.active && deal.quantity > 0 }
-						           					<a class="btn large primary" href="@{Deals.bookingForm(deal.id)}">Comprar</a>
+						           					<a class="btn btn-primary btn-large" href="@{Deals.bookingForm(deal.id)}">Comprar</a>
 						           				#{/if}
 						           				#{else}
-						           					<a class="btn large primary disabled" href="#">Agotado</a>
+						           					<a class="btn btn-primary btn-large disabled" href="#">Agotado</a>
 						           				#{/else}
 						           		</div>
 					           			<div class="info-list">
@@ -147,7 +147,7 @@
 				           </div> <!-- main-content end -->
 				           
 				           <div class="row">
-								<div class="span12 image-gallery">
+								<div class="span9 image-gallery">
 									<h2>Fotos</h2>
 									<ul class="media-grid">
 								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image1}' alt='Hotel Image' />"><img src="${deal.image1}" alt="Hotel Image" /></a></li>
@@ -159,7 +159,7 @@
 								</div>
 							</div>
 			           		<div class="row">
-				           		<div class="span12 location location-wide">
+				           		<div class="span9 location location-wide">
 								  <h2>Location</h2>
 								  <div id="map_canvas" style="width: 670px; height: 300px"></div>
 								  <div class="meta">
@@ -172,7 +172,7 @@
 								</div>
 							</div>
 							<div class="row">
-					           			<div class="span12">
+					           			<div class="span9">
 						           			<h2>Los detalles de la oferta</h2>
 						           			<p>#{verbatim}${deal.detailText}#{/verbatim}</p>
 					           			</div>

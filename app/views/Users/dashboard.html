@@ -2,10 +2,9 @@
 #{set title: user.firstName /}
 
 #{set 'moreScripts'}
-	<script src="@{'/public/js/jquery.tablesorter.min.js'}"></script>
 	<script type="text/javascript">
 		$(function() {
-			$("table#bookings").tablesorter();
+			//$("table#bookings").tablesorter();
 			//get the current active tab from url hash
 			var activeTab = $(location).attr('hash');
 			$('a[href="'+activeTab+'"]').click();
@@ -14,209 +13,46 @@
 #{/set}
 
 <div class="container">
-    
     <div class="content ">
        		<div class="row">
 	        	<div class="span12 title-black">
-		           <h1>Panel de control</h1>
+		           <h1>&{'web.dashboard.title'}</h1>
 		        </div>
 	        </div>
 	        <div class="row">
-	        	<div class="span12 dashboard">
-	        		<ul class="tabs" data-tabs="tabs">
-					  <li class="active" ><a href="#mybookings">Mis Reservas</a></li>
-					  <li><a href="#mycredits">Mis Créditos</a></li>
-					  <li><a href="#mycoupons">Mis Cupones</a></li>
-					  <li><a href="#profile">Mi Perfil</a></li>
+	        	<div class="span12 dashboard tabbable">
+	        		<ul class="nav nav-tabs" >
+					  <li class="active" ><a href="#mybookings" data-toggle="tab"><i class="icon-shopping-cart"></i>
+					    &{'web.dashboard.mybookings.title'}</a>
+					  </li>
+					  <li><a href="#mycredits" data-toggle="tab"><i class="icon-road"></i>
+					  	 &{'web.dashboard.mycredits.title'}</a></li>
+					  <li><a href="#mycoupons" data-toggle="tab"><i class="icon-gift"></i>
+					  	&{'web.dashboard.mycoupons.title'}</a>
+					  </li>
+					  <li><a href="#invite" data-toggle="tab"><i class="icon-share"></i> 
+					  	&{'web.dashboard.invite.title'}</a></li>
+					  <li><a href="#profile" data-toggle="tab"><i class="icon-user"></i>
+					  	&{'web.dashboard.profile.title'}</a>
+					  </li>
 					</ul>
 					<div id="my-tab-content" class="tab-content">
 			            <div class="tab-pane active" id="mybookings">
-			            	<div class="row">
-	        					<div class="span12 ">
-	        						#{ifnot bookings?.size > 0  }
-	        							<div class="row">
-		        							<div class="span12 noBookings">
-		        								<h3>Todavía no has realizado ninguna reserva. ¿A qué estás esperando?</h3>
-		        								<p>As you purchase RLB deals, this page will contain a history of all purchased items for your personal reference.</p>
-			        						</div>
-		        						</div>
-	        						#{/ifnot}
-	        						#{else}
-						            	<table class="zebra-striped" id="bookings">
-									        <thead>
-									          <tr>
-									            <th class="blue header">Fecha</th>
-									            <th class="blue header">Hotel</th>
-									            <th class="blue header">Ciudad</th>
-									            <th class="blue header">Identificador</th>
-									            <th class="blue header">Precio</th>
-									          </tr>
-									        </thead>
-									        <tbody>
-									        	#{list items:bookings, as:'booking'}
-									        		<tr class=summary>
-									        			
-											            <td>${booking.checkinDate.format('dd MMMM yyyy')}</td>
-											            <td>${booking.hotelName}</td>
-											            <td>${booking.city.name}</td>
-											            <td>${booking.code}</td>
-											            <td>${booking.salePriceCents}&euro;</td>
-											            <td><button data-controls-modal="${booking.code}" data-backdrop="true" data-keyboard="true" class="btn primary">Ver Reserva</button>
-											            </td>
-										        	</tr>
-										        	<div id="${booking.code}" class="modal hide fade in" >
-											            <div class="modal-header">
-											              <a href="#" class="close">√ó</a>
-											              <h3>Reserva en ${booking.hotelName} <small>${booking.deal.address} 
-											              		<span class="directions">
-														      	<a href="http://maps.google.com/maps?q=${booking.deal.latitude}, ${booking.deal.longitude}" target="_blank">como llegar</a>
-														      </span></small></h3>
-											            </div>
-											            <div class="modal-body">
-											              <p>Reserva <strong>${booking.code}</strong> a nombre de:
-											              		 #{if booking.bookingForEmail != ''}
-											        				${booking.bookingForFirstName} ${booking.bookingForLastName}. <strong> Email: </strong> ${booking.bookingForEmail}
-											        			#{/if}
-											        			#{else}
-											        				<strong>${user.firstName} ${user.lastName}.</strong> Email:  <strong> ${user.email}</strong>
-											        			#{/else}
-											        	 </p>
-											        	 <p>Fecha de entrada: <strong>${booking.checkinDate.format('dd MMMM yyyy')}</strong></p>
-											        	 <p>Noches: <strong>${booking.nights}</strong></p>
-											            </div>
-											            <!--  
-											            <div class="modal-footer">
-											              <a href="#" class="btn primary close">Cerrar</a>
-											            </div>-->
-											          </div>
-									        	#{/list}
-									         </tbody>
-									     </table>
-								     #{/else}
-								</div>
-							</div>
+			            	#{include 'Users/dashboard/myBookingsTab.html'/}
 			            </div> <!--  mybookings end -->
 			              <div class="tab-pane" id="mycredits">
-			            	<div class="row">
-	        					<div class="span12 ">
-	        						#{if user.credits == 0  }
-	        							<div class="row">
-		        							<div class="span12 noBookings">
-		        								<h3>No tienes ningún crédito. ¿quieres conseguir créditos para reservar habitaciones gratis?</h3>
-		        								<p>Invita a tus amigos y recibirás 12€ por cada amigo que realice una reserva en RLB</p>
-			        						</div>
-		        						</div>
-	        						#{/if}
-	        						#{else}
-	        							<div class="row">
-						            	<div class="span12 summary">
-								          <p>Actual credits  ${user.credits}&euro;</p>
-
-							        	</div>
-							        	</div>
-								     #{/else}
-								</div>
-							</div>
+			              	#{include 'Users/dashboard/myCreditsTab.html'/}
 			            </div>
 			            <div class="tab-pane" id="mycoupons">
-			            	<div class="row">
-	        					<div class="span12 ">
-	        						#{ifnot coupons?.size > 0  }
-	        							<div class="row">
-		        							<div class="span12 noBookings">
-		        								<h3>No tienes ningún crédito. ¿quieres conseguir créditos para reservar habitaciones gratis?</h3>
-		        								<p>Invita a tus amigos y recibirás 12€ por cada amigo que realice una reserva en RLB</p>
-			        						</div>
-		        						</div>
-	        						#{/ifnot}
-	        						#{else}
-						            	<table class="zebra-striped" id="bookings">
-									        <thead>
-									          <tr>
-									            <th class="blue header">Activación</th>
-									             <th class="blue header">Expira</th>
-									            <th class="blue header">Código</th>
-									            <th class="blue header">Créditos</th>
-									            <th class="blue header">Usado</th>
-									           </tr>
-									        </thead>
-									        <tbody>
-									        	#{list items:coupons, as:'coupon'}
-									        		<tr class=summary>
-											            <td>${coupon.created.format('dd MMMM yyyy')}</td>
-											            <td>${coupon.expire.format('dd MMMM yyyy')}</td>
-											            <td>${coupon.key}</td>
-											            <td>${coupon.credits}&euro;</td>
-											            <td>${coupon.used}</td>
-											            </td>
-										        	</tr>
-									        	#{/list}
-									         </tbody>
-									     </table>
-								     #{/else}
-								</div>
-							</div>
+			            	#{include 'Users/dashboard/myCouponsTab.html'/}
+			            </div>
+			             <div class="tab-pane" id="invite">
+			             	#{include 'Users/dashboard/inviteTab.html'/}
 			            </div>
 			            <div class="tab-pane" id="profile">
-			            	<div class="row">
-	        					<div class="span12 ">
-							  	<div id="login">
-									#{form @Users.updateAccount()}
-										
-           								<div class="clearfix #{ifError 'user.firstName'} error #{/ifError}">
-	          								<label for="firstName">&{'user.firstName'}</label>
-											<div class="input">
-								              <div class="input-prepend">
-								                <span class="add-on">F</span>
-								                <input class="medium #{ifError 'user.firstName'} error #{/ifError}" name="user.firstName" id="firstName" value="${user.firstName}"  type="text">
-								              	<span class="help-inline error">#{error 'user.firstName' /}</span>
-								              </div>
-								            </div>
-							            </div>
-							            <div class="clearfix #{ifError 'user.lastName'} error #{/ifError}">
-							            	<label for="lastName">&{'user.lastName'}</label>
-								            <div class="input">
-								              <div class="input-prepend">
-								                <span class="add-on">F</span>
-								                <input class="medium #{ifError 'user.lastName'} error #{/ifError}" name="user.lastName" id="lastName" value="${user.lastName}"  type="text">
-								             	<span class="help-inline error">#{error 'user.lastName' /}</span>
-								              </div>
-								            </div>
-							             </div> 
-							            <div class="clearfix #{ifError 'user.email'} error #{/ifError}">
-							            	<label for="email">&{'user.email'}</label>
-											<div class="input">
-								              <div class="input-prepend">
-								                <span class="add-on">@</span>
-								                <input class="medium #{ifError 'user.email'} error #{/ifError}" name="user.email" id="email" value="${user.email}"  type="text">
-								              	<span class="help-inline error">#{error 'user.email' /}</span>
-								              </div>
-								            </div>
-							             </div> 
-							            <div class="clearfix #{ifError 'user.password'} error #{/ifError}">
-							            	<label for="password">&{'user.password'}</label>
-							            	<div class="input"> 
-								              <div class="input-prepend">
-								                <span class="add-on">*</span>
-								                <input class="medium #{ifError 'user.password'} error #{/ifError}" type="password" name="user.password" id="password" value="${user.password}" >
-								              	<span class="help-inline error">#{error 'user.password' /}</span>
-								              </div>
-								             </div> 
-							              </div>  
-										<div class="actions">
-											<input class="btn primary large" type="submit" id="signin" value="Guardar cambios" />
-										</div>
-									#{/form}
-								</div>
-							  </div>
-							  </div>
+			            	#{include 'Users/dashboard/profileTab.html'/}
 						</div>
 			        </div>
-		            <div class="row" >
-		            	<div class="span16">
-		            		
-		            	</div>
-		            </div>
 				</div> <!-- deal-detail end -->
 	        </div>
     </div> <!-- content end -->

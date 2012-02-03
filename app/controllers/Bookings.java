@@ -73,12 +73,11 @@ public class Bookings extends Controller{
 			}
 			else{
 				updateDealRooms(booking.deal.id, booking.rooms);
+				updateUserCredits(booking, user);
+				activateCouponToReferal(user);
 				Mails.hotelBookingConfirmation(booking);
 			}
 			Mails.userBookingConfirmation(booking);
-			if (StringUtils.isNotBlank(user.referer)){
-				activateCouponToReferal(user);
-			}
 			
 			flash.success("Tu reserva se ha realizado correctamente.");
 			Users.dashboard();
@@ -91,12 +90,19 @@ public class Bookings extends Controller{
 		}
 	}
 	
+	private static void updateUserCredits(Booking booking, User user) {
+		user.credits = user.credits - booking.credits;
+		user.update();
+	}
+
 	private static void activateCouponToReferal(User user) {
-		User referer = User.findByRefererId(user.referer);
-		MyCoupon coupon = MyCoupon.findByKeyAndUser(user.refererId, referer);
-		coupon.active = Boolean.TRUE;
-		coupon.update();
-		//TODO send mail to referal?
+		if (StringUtils.isNotBlank(user.referer)){
+			User referer = User.findByRefererId(user.referer);
+			MyCoupon coupon = MyCoupon.findByKeyAndUser(user.refererId, referer);
+			coupon.active = Boolean.TRUE;
+			coupon.update();
+			//TODO send mail to referal?
+		}
 	}
 	
 	/*** Json API methods ****/
@@ -149,6 +155,7 @@ public class Bookings extends Controller{
 			}
 			else{
 				updateDealRooms(booking.deal.id, booking.rooms);
+				
 				Mails.hotelBookingConfirmation(booking);
 			}
 

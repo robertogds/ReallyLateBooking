@@ -6099,6 +6099,38 @@ input {
   min-width: 50%;
   min-height: 100%;
 }
+.android-btn {
+  background-image: url("http://reallylatebooking.com/public/images/Android_Store_Badge_ES_400-TR.original.png");
+  -webkit-background-size: 150px;
+  -moz-background-size: 150px;
+  -o-background-size: 150px;
+  background-size: 150px;
+  -webkit-background-size: 150px;
+  -moz-background-size: 150px;
+  -o-background-size: 150px;
+  background-size: 150px;
+  background-repeat: no-repeat;
+  border-style: none;
+  display: block;
+  height: 60px;
+  width: 150px;
+}
+.iphone-btn {
+  background-image: url("http://reallylatebooking.com/public/images/App_Store_Badge_ES_400-TR.original.png");
+  -webkit-background-size: 150px;
+  -moz-background-size: 150px;
+  -o-background-size: 150px;
+  background-size: 150px;
+  -webkit-background-size: 150px;
+  -moz-background-size: 150px;
+  -o-background-size: 150px;
+  background-size: 150px;
+  background-repeat: no-repeat;
+  border-style: none;
+  display: block;
+  height: 60px;
+  width: 150px;
+}
 /* Main navigation Bar */
 .navbar {
   display: block;
@@ -6137,14 +6169,14 @@ input {
 }
 /************** INIT Login PAGE  *****************/
 .hero-unit {
-  height: 300px;
+  height: 415px;
 }
-.hero-unit .fbLogin, .hero-unit .emailLogin {
+.hero-unit .register, .hero-unit .login {
   float: left;
-  height: 300px;
-  width: 375px;
+  height: 415px;
+  width: 345px;
 }
-.hero-unit .emailLogin .well {
+.hero-unit .register .well, .hero-unit .login .well {
   background-color: #ffffff;
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
@@ -6153,11 +6185,37 @@ input {
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
-.hero-unit .fbLogin .fb-button-container-centered {
-  padding-top: 20px;
+.hero-unit .register .well strong, .hero-unit .login .well strong {
+  color: #0088cc;
+}
+.hero-unit .register {
+  padding-right: 30px;
+}
+.hero-unit .register h2 {
+  padding-bottom: 16px;
+}
+.hero-unit .register small {
+  font-size: 18px;
+  font-weight: 200;
+}
+.hero-unit .register .btn-container {
+  margin: 16px 0;
   text-align: center;
 }
-.hero-unit .fbLogin .fb-button-container-centered .play-fbconnect-button {
+.hero-unit .register .download {
+  height: 108px;
+}
+.hero-unit .register .download .android-btn, .hero-unit .register .download .iphone-btn {
+  float: left;
+}
+.hero-unit .login {
+  padding-left: 30px;
+}
+.hero-unit .login .fb-button-container-centered {
+  padding: 0px 0;
+  text-align: center;
+}
+.hero-unit .login .fb-button-container-centered .play-fbconnect-button {
   left: auto;
   margin-bottom: 13px;
   float: none;
@@ -6169,28 +6227,28 @@ input {
   -webkit-border-radius: 4px;
   text-align: center;
 }
-.hero-unit .fbLogin .fb-button-container-centered .play-fbconnect-button :hover {
+.hero-unit .login .fb-button-container-centered .play-fbconnect-button:hover {
   box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.3), inset 0 0 0.2em rgba(255, 255, 255, 0.3), 0 1px 5px rgba(0, 0, 0, 0.6);
   -o-box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.3), inset 0 0 0.2em rgba(255, 255, 255, 0.3), 0 1px 5px rgba(0, 0, 0, 0.6);
   -moz-box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.3), inset 0 0 0.2em rgba(255, 255, 255, 0.3), 0 1px 5px rgba(0, 0, 0, 0.6);
   -webkit-box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.3), inset 0 0 0.2em rgba(255, 255, 255, 0.3), 0 1px 5px rgba(0, 0, 0, 0.6);
-  text-decoration: none !important;
+  text-decoration: none!important;
 }
-.hero-unit .fbLogin .fb-button-container-centered .fb-button-left {
+.hero-unit .login .fb-button-container-centered .fb-button-left {
   width: 40px;
 }
-.hero-unit .fbLogin .fb-button-container-centered .fb-button-right, .hero-unit .fbLogin .fb-button-container-centered .fb-button-center, .hero-unit .fbLogin .fb-button-container-centered .fb-button-left {
+.hero-unit .login .fb-button-container-centered .fb-button-right, .hero-unit .login .fb-button-container-centered .fb-button-center, .hero-unit .login .fb-button-container-centered .fb-button-left {
   float: left;
   height: 40px;
   background: url(https://a2.muscache.com/s/1326620451/images/uiwidgets/fb-button-sprite.png?1307134456) left top no-repeat;
 }
-.hero-unit .fbLogin .fb-button-container-centered .fb-button,
-.hero-unit .fbLogin .fb-button-container-centered .fb-button-right,
-.hero-unit .fbLogin .fb-button-container-centered .fb-button-center,
-.hero-unit .fbLogin .fb-button-container-centered .fb-button-left {
+.hero-unit .login .fb-button-container-centered .fb-button,
+.hero-unit .login .fb-button-container-centered .fb-button-right,
+.hero-unit .login .fb-button-container-centered .fb-button-center,
+.hero-unit .login .fb-button-container-centered .fb-button-left {
   display: block;
 }
-.hero-unit .fbLogin .fb-button-container-centered .fb-button-center {
+.hero-unit .login .fb-button-container-centered .fb-button-center {
   padding: 0 5px 0 8px;
   line-height: 40px;
   font-size: 16px;
@@ -6199,7 +6257,7 @@ input {
   background-position: left -40px;
   background-repeat: repeat-x;
 }
-.hero-unit .fbLogin .fb-button-container-centered .fb-button-right {
+.hero-unit .login .fb-button-container-centered .fb-button-right {
   width: 6px;
   background-position: 100% -80px;
 }

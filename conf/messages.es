@@ -10,6 +10,7 @@ hotelCategory = Categoría del hotel
 address = Dirección del hotel
 breakfastIncluded = Desayuno Incluído
 updated = Actualizado
+secure.email=Email
 
 user.login.correct = El usuario está logado
 user.login.incorrect = Usuario o contraseña incorrecta
@@ -127,6 +128,16 @@ invoice.banktransfer=Por transferencia bancaria al número de cuenta IBAN: 0049 
 
 city.notfound =Ciudad no encontrada
 
+web.index.title=ReallyLateBooking, reserva hotel para esta noche con descuento
+web.index.h1=Hotel para esta noche
+web.index.h1.small=Consigue descuentos de hasta el 70&#37; en los mejores hoteles.
+web.index.register.h2=!Sé un lateBooker ahora!
+web.index.register.club=Somos un <strong>club privado</strong> para seguir ofreciendo a nuestros miembros los mayores descuentos en hoteles.
+web.index.register.btn=¡Quiero ser un latebooker!
+web.index.register.download=Si no quieres esperar por tu invitación puedes hacerte miembro ahora mismo con nuestra aplicación móvil. ¡Gratis!
+web.index.login.fb.button=<strong>Ingresar</strong> con <strong>Facebook</strong>
+web.index.login.email.h2=Soy miembro del club
+web.index.login.email.button= Entrar
 web.hi = Hola, %s
 web.dashboard = Panel de control
 web.account = Perfil

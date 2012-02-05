@@ -26,7 +26,7 @@ p {
 footer{
 	.center-block();
 	margin-top:  @verticalMarging;
-	margin-bottom:  @verticalMarging;  
+	margin-bottom:  @verticalMarging;   
 	padding: 6px 0 0;
 	#gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
 	.border-radius(6px);
@@ -71,6 +71,24 @@ input{
 	    min-height:100%;
 	}
 }
+.android-btn{
+	background-image: url("http://reallylatebooking.com/public/images/Android_Store_Badge_ES_400-TR.original.png");
+	.background-size(150px);
+    background-repeat: no-repeat;
+    border-style: none;
+	display: block;
+	height: 60px;
+    width: 150px;
+}
+.iphone-btn{
+	background-image: url("http://reallylatebooking.com/public/images/App_Store_Badge_ES_400-TR.original.png");
+	.background-size(150px);
+    background-repeat: no-repeat;
+    border-style: none;
+	display: block;
+	height: 60px;
+    width: 150px;
+}
 
 /* Main navigation Bar */
 .navbar{
@@ -98,23 +116,45 @@ input{
 
 /************** INIT Login PAGE  *****************/
 .hero-unit{
-	@divHeight: 300px;
-	@divWidth:	375px;
+	@divHeight: 415px;
+	@divWidth:	345px;
 	height: @divHeight;
-	.fbLogin, .emailLogin {
+	.register, .login {
 		.pull-left();
 		height: @divHeight;
 	    width: @divWidth;
-	}
-	.emailLogin{
 		.well{
 			background-color: @white;
 			.box-shadow();
+			strong{
+				color: @linkColor;
+			}
 		}
 	}
-	.fbLogin{
+	.register{
+		padding-right:30px;
+		h2{
+		    padding-bottom: 16px;
+		}
+		small{
+			font-size: 18px;
+		    font-weight: 200;
+		}
+		.btn-container{
+			margin: 16px 0;
+			text-align: center;
+		}
+		.download{
+			height: 108px;
+			.android-btn, .iphone-btn{
+				.pull-left();
+			}
+		}
+	}
+	.login{
+		padding-left:30px;
 		.fb-button-container-centered {
-			padding-top: 20px;
+			padding: 0px 0;
 			text-align: center;
 			.play-fbconnect-button {
 				left: auto;
@@ -127,12 +167,12 @@ input{
 				moz-border-radius: 4px;
 				-webkit-border-radius: 4px;
 				text-align: center;
-				:hover{
+				&:hover{
 					box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
 					-o-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
 					-moz-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
 					-webkit-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
-					text-decoration:none!important
+					text-decoration:none!important;
 				}
 			}
 			.fb-button-left {

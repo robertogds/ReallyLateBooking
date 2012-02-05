@@ -1,28 +1,46 @@
 #{extends 'layout.html' /}
-#{set title:'Home' /}
+#{set 'title'}
+	&{'web.index.title'}
+#{/set}
 #{set background: 'http://d2f5bmx5jz1oq8.cloudfront.net/web/backgrounds/general.jpg'/}
 
       <div class="row">
         <div class="span9">
         	<div class="hero-unit">
-	          <h1>Hotel para esta noche</h1>
-	          <p>Consigue descuentos de hasta el 70% en los mejores hoteles.</p>
-				  <div class="fbLogin">
-				   	<div class="fb-button-container-centered">
-				   		#{fbconnect.button label:'<span class="fb-button-left"></span>
-							<span class="fb-button-center"><strong>Ingresar</strong> con <strong>Facebook</strong></span>
-							<span class="fb-button-right"></span>', scope:'email' /}
-				  	</div>
+	          <h1>&{'web.index.h1'}</h1>
+	          <p> &{'web.index.h1.small'}</p>
+				  <div class="register">
+				   		<div class= "well">
+				   			<h2>&{'web.index.register.h2'}</h2>
+				   			<small>&{'web.index.register.club'}</small>
+				   			<div class= "btn-container">
+				   				<a href="#" class="btn btn-large btn-danger">&{'web.index.register.btn'}</a>
+				   			</div>
+				   			<div class= "download">
+				   			<small>&{'web.index.register.download'}</small>
+				   			<a class="iphone-btn" target="_self" href="http://itunes.apple.com/es/app/reallylatebooking-las-mejores/id448918487?mt" 
+				   				onclick="_gaq.push(['_trackEvent', 'iphone', 'Download', 'Spanish']);" ></a>
+				   			<a class="android-btn" target="_self" href="https://market.android.com/details?id=com.iipir.rlb" 
+				   				onclick="_gaq.push(['_trackEvent', 'android', 'Download', 'Spanish']);" ></a>
+				   			</div>
+				   		</div>
 				  </div>
-				  <div class="emailLogin">
-				  	<div id="login">
-				  		#{form @authenticate() , class:'well'}
-				  			<h2>Entra con tu email</h2>
+				  <div class="login">
+				  	<div id="login" class= "well">
+				  		<h2>&{'web.index.login.email.h2'}</h2>
+				  		
+				  		<div class="fb-button-container-centered">
+				   		#{fbconnect.button label:'<span class="fb-button-left"></span>
+							<span class="fb-button-center"> Facebook Login </span>
+							<span class="fb-button-right"></span>', scope:'email' /}
+				  		</div>
+				  		#{form @authenticate() }
+				  			
 				  			<div class="input-prepend">
 							  <label for="username">&{'secure.email'}</label>
 				              <div class="input-prepend">
 				                <span class="add-on">@</span>
-				                <input class="medium" name="username" id="username" value="${flash.username}" placeholder="Type your email" type="text">
+				                <input class="medium" name="username" id="username" value="${flash.username}" type="text">
 				              </div>
 				            </div>
 				            <div class="input-prepend"> 
@@ -32,7 +50,7 @@
 				                <input class="medium" type="password" name="password" id="password" value=""  size="16">
 				              </div>
 				             </div>  
-					        <button type="submit" class="btn btn-large btn-primary" >&{'secure.signin'}</button>
+					        <button type="submit" class="btn btn-large btn-primary" >&{'web.index.login.email.button'}</button>
 						#{/form}
 					</div>
 				  </div>

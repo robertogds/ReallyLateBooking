@@ -40,8 +40,20 @@
 			                		 </div>
 				           			<div class="span3">
 						                <ul class="nav nav-pills">
-							                 <li><a href="#madrid">Madrid</a></li>
-											<li><a href="#madrid_north">Madrid Norte</a></li>
+						                	#{list items:dealsDtos, as:'deal' }
+						                		#{if deal_isFirst }
+									        		%{
+												   		actualCity = deal.city;
+													}%
+													<li><a href="#${actualCity.url}">${actualCity.name}</a></li>
+												#{/if}
+												#{elseif actualCity != deal.city }
+													 %{
+												   		actualCity = deal.city;
+													}%
+													<li><a href="#${actualCity.url}">${actualCity.name}</a></li>
+												#{/elseif}
+											#{/list}
 						                </ul>
 								   </div>
 					        </div>             
@@ -68,10 +80,8 @@
 	        	<div class="deal"  style="background-image: url('${deal.image10}');">
 			        	<div class="hotelInfo">	
 			        		<div class="title">
-			        			<h2>${deal.hotelName}</h2> 
-			        			<p class="address">${deal.address}</p>
+			        			<h2>${deal.hotelName} <br><small>${deal.address}</small></h2> 
 			        		</div>
-				           
 				           <div class="main-info">
 				           		<div class="row">
 				           			<div class="span3 price">

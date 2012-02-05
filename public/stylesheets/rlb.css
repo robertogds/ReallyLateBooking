@@ -6017,6 +6017,8 @@ a.thumbnail:hover {
     margin-left: 30px;
   }
 }
+/************** VARIABLES *****************/
+/************** GENERAL ELEMENTS  *****************/
 body {
   padding-top: 60px;
 }
@@ -6076,6 +6078,9 @@ footer p {
 footer p small {
   color: #555555;
 }
+input {
+  height: 28px;
+}
 #background {
   position: fixed;
   top: 0;
@@ -6094,6 +6099,7 @@ footer p small {
   min-width: 50%;
   min-height: 100%;
 }
+/* Main navigation Bar */
 .navbar {
   display: block;
   margin-left: auto;
@@ -6129,6 +6135,75 @@ footer p small {
   margin-right: auto;
   min-width: 560px !important;
 }
+/************** INIT Login PAGE  *****************/
+.hero-unit {
+  height: 300px;
+}
+.hero-unit .fbLogin, .hero-unit .emailLogin {
+  float: left;
+  height: 300px;
+  width: 375px;
+}
+.hero-unit .emailLogin .well {
+  background-color: #ffffff;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.hero-unit .fbLogin .fb-button-container-centered {
+  padding-top: 20px;
+  text-align: center;
+}
+.hero-unit .fbLogin .fb-button-container-centered .play-fbconnect-button {
+  left: auto;
+  margin-bottom: 13px;
+  float: none;
+  display: inline-block;
+  position: relative;
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  text-align: center;
+}
+.hero-unit .fbLogin .fb-button-container-centered .play-fbconnect-button :hover {
+  box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.3), inset 0 0 0.2em rgba(255, 255, 255, 0.3), 0 1px 5px rgba(0, 0, 0, 0.6);
+  -o-box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.3), inset 0 0 0.2em rgba(255, 255, 255, 0.3), 0 1px 5px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.3), inset 0 0 0.2em rgba(255, 255, 255, 0.3), 0 1px 5px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.3), inset 0 0 0.2em rgba(255, 255, 255, 0.3), 0 1px 5px rgba(0, 0, 0, 0.6);
+  text-decoration: none !important;
+}
+.hero-unit .fbLogin .fb-button-container-centered .fb-button-left {
+  width: 40px;
+}
+.hero-unit .fbLogin .fb-button-container-centered .fb-button-right, .hero-unit .fbLogin .fb-button-container-centered .fb-button-center, .hero-unit .fbLogin .fb-button-container-centered .fb-button-left {
+  float: left;
+  height: 40px;
+  background: url(https://a2.muscache.com/s/1326620451/images/uiwidgets/fb-button-sprite.png?1307134456) left top no-repeat;
+}
+.hero-unit .fbLogin .fb-button-container-centered .fb-button,
+.hero-unit .fbLogin .fb-button-container-centered .fb-button-right,
+.hero-unit .fbLogin .fb-button-container-centered .fb-button-center,
+.hero-unit .fbLogin .fb-button-container-centered .fb-button-left {
+  display: block;
+}
+.hero-unit .fbLogin .fb-button-container-centered .fb-button-center {
+  padding: 0 5px 0 8px;
+  line-height: 40px;
+  font-size: 16px;
+  color: white;
+  background-color: #6385BA;
+  background-position: left -40px;
+  background-repeat: repeat-x;
+}
+.hero-unit .fbLogin .fb-button-container-centered .fb-button-right {
+  width: 6px;
+  background-position: 100% -80px;
+}
+/************** DEALS LIST PAGE  *****************/
 .title-black {
   background-color: #2c2c2c;
   background-image: -moz-linear-gradient(top, #333333, #222222);
@@ -6277,10 +6352,14 @@ footer p small {
 }
 .deal .hotelInfo .title {
   overflow: hidden;
+  padding: 5px 0;
+}
+.deal .hotelInfo .title h2 {
+  line-height: 25px;
 }
 .deal .hotelInfo .main-info .price {
   font-size: 65px;
-  line-height: 65px;
+  line-height: 58.5px;
   color: #f99431;
   overflow: hidden;
   text-align: right;
@@ -6293,6 +6372,7 @@ footer p small {
 }
 .deal .hotelInfo .main-info .deal-info {
   text-align: center;
+  padding: 8px 0;
 }
 .deal .hotelInfo .main-info .deal-info .before, .deal .hotelInfo .main-info .deal-info .nights, .deal .hotelInfo .main-info .deal-info .rooms {
   float: left;
@@ -6301,8 +6381,8 @@ footer p small {
 .deal .hotelInfo .main-info .deal-info .before, .deal .hotelInfo .main-info .deal-info .nights {
   border-right: 1px solid #555555;
 }
-.deal .hotelInfo .main-info .more-info .btn {
-  margin-top: 8px;
+.deal .hotelInfo .main-info .btn {
+  margin-top: 5px;
   font-size: 26px;
 }
 .deal .social-address {

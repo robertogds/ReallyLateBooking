@@ -1,6 +1,7 @@
 @import "bootstrap.less";
 @import "responsive.less";
 
+/************** VARIABLES *****************/
 @horizontalPadding: 20px;
 @navbarPadding: 	@horizontalPadding;
 @cityImageSize: 	174px;
@@ -12,6 +13,7 @@
 @zonesNavHeight:	42px;
 
 
+/************** GENERAL ELEMENTS  *****************/
 body {
   padding-top: @navbarHeight + @navbarPadding; 
 }
@@ -47,6 +49,10 @@ footer{
 	}
 }
 
+input{
+	height: 28px;
+}
+
 #background {
 	position:fixed;
     top: 0;
@@ -66,6 +72,7 @@ footer{
 	}
 }
 
+/* Main navigation Bar */
 .navbar{
 	.center-block();
 	.navbar-inner{
@@ -89,6 +96,76 @@ footer{
 	min-width: 560px !important;
 }
 
+/************** INIT Login PAGE  *****************/
+.hero-unit{
+	@divHeight: 300px;
+	@divWidth:	375px;
+	height: @divHeight;
+	.fbLogin, .emailLogin {
+		.pull-left();
+		height: @divHeight;
+	    width: @divWidth;
+	}
+	.emailLogin{
+		.well{
+			background-color: @white;
+			.box-shadow();
+		}
+	}
+	.fbLogin{
+		.fb-button-container-centered {
+			padding-top: 20px;
+			text-align: center;
+			.play-fbconnect-button {
+				left: auto;
+				margin-bottom: 13px;
+				float: none;
+				display: inline-block;
+				position: relative;
+				text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.6);
+				border-radius: 4px;
+				moz-border-radius: 4px;
+				-webkit-border-radius: 4px;
+				text-align: center;
+				:hover{
+					box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+					-o-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+					-moz-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+					-webkit-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+					text-decoration:none!important
+				}
+			}
+			.fb-button-left {
+				width: 40px;
+			}
+			.fb-button-right, .fb-button-center, .fb-button-left {
+				float: left;
+				height: 40px;
+				background: url(https://a2.muscache.com/s/1326620451/images/uiwidgets/fb-button-sprite.png?1307134456) left top no-repeat;
+			}
+
+			.fb-button, .fb-button-right, .fb-button-center, .fb-button-left {
+				display: block;
+			}
+			.fb-button-center {
+				padding: 0 5px 0 8px;
+				line-height: 40px;
+				font-size: 16px;
+				color: white;
+				background-color: #6385BA;
+				background-position: left -40px;
+				background-repeat: repeat-x;
+			}
+
+			.fb-button-right {
+				width: 6px;
+				background-position: 100% -80px;
+			}
+		}
+	}
+}
+
+/************** DEALS LIST PAGE  *****************/
 .title-black {
 	#gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
 	.border-radius(6px 6px 0 0);
@@ -172,12 +249,16 @@ footer{
 		margin-left: @dealListWidth * 0.35;
 	    padding-left: @dealListWidth * 0.05;
 		.title{
+			h2{
+				line-height: 25px;
+			}
 			overflow: hidden;
+			padding: 5px 0;
 		}
 		.main-info {
 			.price {
 				font-size: @baseFontSize * 5;
-				line-height:  @baseFontSize * 5;	
+				line-height:  @baseFontSize * 4.5;	
 				color: @orange;
 				overflow: hidden;
 				text-align: right;
@@ -190,16 +271,17 @@ footer{
 			}
 			.deal-info{
 				text-align: center;
+				padding: 8px 0;
 				.before, .nights, .rooms{
-					float:left;
+					.pull-left();
 					width: 440px /3;
 				}
 				.before, .nights {
 					border-right: 1px solid @gray;
 				}
 			}
-			.more-info .btn{
-				margin-top: 8px;
+			.btn{
+				margin-top: 5px;
 				font-size: @baseFontSize * 2;
 			}
 		}

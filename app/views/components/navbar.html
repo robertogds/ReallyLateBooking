@@ -1,0 +1,28 @@
+<div class="row">
+	    <div class="navbar navbar-fixed-top span12">
+	    	<div class="row">
+		      <div class="navbar-inner span9">
+		        <div class="container-fluid">
+		          <a class="brand" href="/"><img src="http://reallylatebooking.com/public/images/logo_black_400.original_4o3nb3f2h20bxatc.png" alt="ReallyLateBooking" title="ReallyLateBooking"></a>
+		          <ul class="nav">
+		          	 #{if user}
+		          	 	<li class="dropdown" id="panel-dropdown">
+			              <a href="#panel-dropdown" class="dropdown-toggle" data-toggle="dropdown" >&{'web.hi',user.firstName} <b class="caret"></b></a>
+			              <ul class="dropdown-menu">
+			                <li><a href="@{Users.dashboard()}">&{'web.dashboard'}</a></li>
+			                <li class="divider"></li>
+			                <li><a href="@{Users.dashboard()}#account">&{'web.account'}</a></li>
+			                <li><a href="@{Application.logout()}">&{'web.logout'}</a></li>
+			              </ul>
+			            </li>
+			             <li><a href="@{Users.dashboard()}#mybookings">&{'web.mybookings'}</a></li>
+			       	 #{/if}
+			       	
+		            <li><a href="#about" class="active">&{'web.howitworks'}</a></li>
+		            <li><a href="#contact">&{'web.contact'}</a></li>
+		          </ul>
+		        </div>
+		      </div>
+	      	</div>
+	    </div> <!-- END navbar -->
+	  </div>

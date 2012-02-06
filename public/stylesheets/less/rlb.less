@@ -18,10 +18,6 @@ body {
   padding-top: @navbarHeight + @navbarPadding; 
 }
 
-p {
-	padding-right: @horizontalPadding;
-	padding-left:  @horizontalPadding;
-}
 
 footer{
 	.center-block();
@@ -53,6 +49,9 @@ input{
 	height: 28px;
 }
 
+.alert{
+
+}
 #background {
 	position:fixed;
     top: 0;
@@ -70,6 +69,11 @@ input{
 	    min-width:50%;
 	    min-height:100%;
 	}
+}
+.terms p{
+	font-size: @baseFontSize;
+	font-weight: normal;
+	line-height: @baseLineHeight;
 }
 .android-btn{
 	background-image: url("http://reallylatebooking.com/public/images/Android_Store_Badge_ES_400-TR.original.png");
@@ -96,15 +100,18 @@ input{
 	.navbar-inner{
 		.border-radius(0 0 6px 6px);
 		height: 45px;
-	}
-	.brand {
-	    padding: 0 5px;
-	}
-	.nav li{
-		margin-top: 5px;
-		ul li {
-		    padding: 0;
+		.brand {
+		    padding: 0 5px;
 		}
+		.nav{
+			.pull-right();
+			li{
+				margin-top: 5px;
+				ul li {
+				    padding: 0;
+				}
+			}
+		} 
 	}
 }
 
@@ -116,8 +123,10 @@ input{
 
 /************** INIT Login PAGE  *****************/
 .hero-unit{
-	@divHeight: 415px;
+	@divHeight: 475px;
 	@divWidth:	345px;
+	@verticalMargin: 16px;
+	.box-shadow(5px 5px 8px rgba(0,0,0,.8));
 	height: @divHeight;
 	.register, .login {
 		.pull-left();
@@ -129,31 +138,55 @@ input{
 			strong{
 				color: @linkColor;
 			}
-		}
+			small{
+				font-size: 17px;
+			    font-weight: 200;
+			}
+			h2{
+			    padding-bottom: 16px;
+			}
+		}		
 	}
+	
 	.register{
 		padding-right:30px;
-		h2{
-		    padding-bottom: 16px;
-		}
-		small{
-			font-size: 18px;
-		    font-weight: 200;
-		}
 		.btn-container{
-			margin: 16px 0;
+			margin: @verticalMargin 0;
 			text-align: center;
+			padding-top: 5px;
 		}
 		.download{
-			height: 108px;
+			height: 142px; 
 			.android-btn, .iphone-btn{
 				.pull-left();
+			}
+		}
+		.input-prepend{
+		    width: 238px;
+			.center-block();
+			margin-top: 10px;
+		}
+		#askInvite{
+			small.help-block{
+				font-size: 12px;
 			}
 		}
 	}
 	.login{
 		padding-left:30px;
+		text-align: center;
+		form{
+			margin: @verticalMargin 0;
+			width: 240px;
+			.center-block();
+			text-align: left;
+			.login-center{
+				.center-block();
+				text-align: center;
+			}
+		}
 		.fb-button-container-centered {
+			margin:  14px 0 4px;
 			padding: 0px 0;
 			text-align: center;
 			.play-fbconnect-button {

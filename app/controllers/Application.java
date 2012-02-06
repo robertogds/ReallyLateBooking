@@ -2,22 +2,18 @@ package controllers;
 
 import helper.HotUsaApiHelper;
 
-import java.util.Collection;
 import java.util.List;
 
 import jobs.Bootstrap;
 import models.Booking;
-import models.City;
 import models.Deal;
 import models.User;
 import notifiers.Mails;
 import play.Logger;
 import play.Play;
 import play.data.validation.Required;
-import play.libs.Crypto;
-import play.mvc.Before;
+import play.i18n.Messages;
 import play.mvc.Controller;
-import play.mvc.Http;
 
 public class Application extends Controller {
 	
@@ -45,7 +41,8 @@ public class Application extends Controller {
          
         if(validation.hasErrors() || !allowed) {
             flash.keep("url");
-            flash.error("Nombre de usuario o contraseña incorrecta");
+            flash.error(Messages.get("web.login.incorrect"));
+            
             params.flash();
         }
         else{
@@ -60,7 +57,7 @@ public class Application extends Controller {
         // Redirect to the original URL (or /)
         Secure.redirectToOriginalURL();
     }
-	
+    
 	public static void mobile(){
 		if (Play.mode.isDev()){
 			//Workaround needed because jobs dont work on gae
@@ -68,11 +65,7 @@ public class Application extends Controller {
 			job.doJob();
 			//End of workaround
 		}
-		
-		
-		Collection<City> cities = City.findActiveCities();
-		Logger.debug("Number of cities: " + cities.size());
-		render(cities); 
+		render(); 
 	}
 	
 	

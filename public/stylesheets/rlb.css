@@ -6022,10 +6022,6 @@ a.thumbnail:hover {
 body {
   padding-top: 60px;
 }
-p {
-  padding-right: 20px;
-  padding-left: 20px;
-}
 footer {
   display: block;
   margin-left: auto;
@@ -6099,6 +6095,11 @@ input {
   min-width: 50%;
   min-height: 100%;
 }
+.terms p {
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+}
 .android-btn {
   background-image: url("http://reallylatebooking.com/public/images/Android_Store_Badge_ES_400-TR.original.png");
   -webkit-background-size: 150px;
@@ -6149,13 +6150,16 @@ input {
   border-radius: 0 0 6px 6px;
   height: 45px;
 }
-.navbar .brand {
+.navbar .navbar-inner .brand {
   padding: 0 5px;
 }
-.navbar .nav li {
+.navbar .navbar-inner .nav {
+  float: right;
+}
+.navbar .navbar-inner .nav li {
   margin-top: 5px;
 }
-.navbar .nav li ul li {
+.navbar .navbar-inner .nav li ul li {
   padding: 0;
 }
 .container-fluid {
@@ -6169,11 +6173,17 @@ input {
 }
 /************** INIT Login PAGE  *****************/
 .hero-unit {
-  height: 415px;
+  -webkit-box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
+  height: 475px;
 }
 .hero-unit .register, .hero-unit .login {
   float: left;
-  height: 415px;
+  height: 475px;
   width: 345px;
 }
 .hero-unit .register .well, .hero-unit .login .well {
@@ -6188,30 +6198,66 @@ input {
 .hero-unit .register .well strong, .hero-unit .login .well strong {
   color: #0088cc;
 }
-.hero-unit .register {
-  padding-right: 30px;
+.hero-unit .register .well small, .hero-unit .login .well small {
+  font-size: 17px;
+  font-weight: 200;
 }
-.hero-unit .register h2 {
+.hero-unit .register .well h2, .hero-unit .login .well h2 {
   padding-bottom: 16px;
 }
-.hero-unit .register small {
-  font-size: 18px;
-  font-weight: 200;
+.hero-unit .register {
+  padding-right: 30px;
 }
 .hero-unit .register .btn-container {
   margin: 16px 0;
   text-align: center;
+  padding-top: 5px;
 }
 .hero-unit .register .download {
-  height: 108px;
+  height: 142px;
 }
 .hero-unit .register .download .android-btn, .hero-unit .register .download .iphone-btn {
   float: left;
 }
+.hero-unit .register .input-prepend {
+  width: 238px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
+.hero-unit .register #askInvite small.help-block {
+  font-size: 12px;
+}
 .hero-unit .login {
   padding-left: 30px;
+  text-align: center;
+}
+.hero-unit .login form {
+  margin: 16px 0;
+  width: 240px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+.hero-unit .login form .login-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 .hero-unit .login .fb-button-container-centered {
+  margin: 14px 0 4px;
   padding: 0px 0;
   text-align: center;
 }

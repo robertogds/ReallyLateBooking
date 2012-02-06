@@ -1,0 +1,20 @@
+		 #{if flash.error}
+    	<div class="row">
+				 	<div class="span9">
+				 		<div class="alert alert-error">
+					  <a class="close" data-dismiss="alert" href="#">&times;</a>
+					  <strong>${flash.error}</strong>
+					</div>
+				</div>
+		</div>
+        #{/if}
+        #{if flash.success}
+    	<div class="row">
+    			<div class="span9">
+		        	<div class="alert  alert-success">
+					  <a class="close" data-dismiss="alert" href="#">&times;</a>
+					  <strong>${flash.success}</strong> 
+					</div>
+				</div>
+		</div>
+        #{/if}

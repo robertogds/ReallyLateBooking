@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import play.data.validation.Required;
 import siena.DateTime;
 import siena.Generator;
@@ -42,11 +44,13 @@ public class City extends Model {
 	public String hotusaProvCode;
 	public String hotusaCode;
 	
+	@Index("zone_index")
+	public City mainZone;
+	
 	public City(String name, String url){
 		this.name = name;
 		this.url = url;
 	}
-	
 	
 	public static Query<City> all() {
     	return Model.all(City.class);
@@ -83,6 +87,12 @@ public class City extends Model {
 			cities.add(city);
 		}
 	}
+
+	public boolean isRootCity() {
+		return StringUtils.isBlank(this.root);
+	}
+
+	
 	
 	
 }

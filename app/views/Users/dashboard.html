@@ -12,19 +12,19 @@
 	</script>
 #{/set}
 
-<div class="container">
-    <div class="content ">
        		<div class="row">
-	        	<div class="span12 title-black">
+	        	<div class="span9 title-black">
 		           <h1>&{'web.dashboard.title'}</h1>
 		        </div>
 	        </div>
 	        <div class="row">
-	        	<div class="span12 dashboard tabbable">
+	        	<div class="span9 dashboard tabbable">
+	        		<div class="tabs-container">
 	        		<ul class="nav nav-tabs" >
 					  <li class="active" ><a href="#mybookings" data-toggle="tab"><i class="icon-shopping-cart"></i>
 					    &{'web.dashboard.mybookings.title'}</a>
 					  </li>
+					  *{* Not in use 
 					  <li><a href="#mycredits" data-toggle="tab"><i class="icon-road"></i>
 					  	 &{'web.dashboard.mycredits.title'}</a></li>
 					  <li><a href="#mycoupons" data-toggle="tab"><i class="icon-gift"></i>
@@ -32,6 +32,7 @@
 					  </li>
 					  <li><a href="#invite" data-toggle="tab"><i class="icon-share"></i> 
 					  	&{'web.dashboard.invite.title'}</a></li>
+					  	*}*
 					  <li><a href="#profile" data-toggle="tab"><i class="icon-user"></i>
 					  	&{'web.dashboard.profile.title'}</a>
 					  </li>
@@ -40,6 +41,7 @@
 			            <div class="tab-pane active" id="mybookings">
 			            	#{include 'Users/dashboard/myBookingsTab.html'/}
 			            </div> <!--  mybookings end -->
+			            *{* Not in use 
 			              <div class="tab-pane" id="mycredits">
 			              	#{include 'Users/dashboard/myCreditsTab.html'/}
 			            </div>
@@ -49,12 +51,11 @@
 			             <div class="tab-pane" id="invite">
 			             	#{include 'Users/dashboard/inviteTab.html'/}
 			            </div>
+			            	*}*
 			            <div class="tab-pane" id="profile">
 			            	#{include 'Users/dashboard/profileTab.html'/}
 						</div>
 			        </div>
+			        </div>
 				</div> <!-- deal-detail end -->
 	        </div>
-    </div> <!-- content end -->
-	
-</div> <!-- container end -->

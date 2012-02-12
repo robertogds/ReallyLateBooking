@@ -1,0 +1,6 @@
+Nombre: ${name}
+Email: ${email}
+Mensaje:
+${text}
+								
+&{'mails.rlb.footer'}

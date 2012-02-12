@@ -1,22 +1,25 @@
 <div class="row">
-  					<div class="span12 ">
-  						#{ifnot bookings?.size > 0  }
+  					<div class="span8">
+  						#{if totalBookings == 0 }
   							<div class="row">
    							<div class="span12 noBookings">
-   								<h3>Todavía no has realizado ninguna reserva. ¿A qué estás esperando?</h3>
-   								<p>As you purchase RLB deals, this page will contain a history of all purchased items for your personal reference.</p>
+   								<p>&{'web.dashboard.mybookings.nobookings.p'}</p>
+   								
+   								<h3>&{'web.dashboard.mybookings.nobookings.h3'}</h3>
+   								
+   								<a href="/" class="btn btn-large btn-success"> &{'web.dashboard.mybookings.nobookings.btn'}</a>
     						</div>
    						</div>
-  						#{/ifnot}
+  						#{/if}
   						#{else}
-           	<table class="zebra-striped" id="bookings">
+           	<table class="table table-bordered" id="bookings">
 		        <thead>
 		          <tr>
-		            <th class="blue header">Fecha</th>
-		            <th class="blue header">Hotel</th>
-		            <th class="blue header">Ciudad</th>
-		            <th class="blue header">Identificador</th>
-		            <th class="blue header">Precio</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.date'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.hotel'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.city'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.code'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.price'}</th>
 		          </tr>
 		        </thead>
 		        <tbody>
@@ -32,39 +35,41 @@
 				            #{else}
 				            	<td>${booking.salePriceCents}&euro;</td>
 				            #{/else}
-				            <td><button data-controls-modal="${booking.code}" data-backdrop="true" data-keyboard="true" class="btn primary">Ver Reserva</button>
+				            <td>
+				            <a  data-toggle="modal" href="#${booking.code}" >&{'web.dashboard.mybookings.table.seebooking'}</a>
 				            </td>
 			        	</tr>
-			        	<div id="${booking.code}" class="modal hide fade in" >
+			        	<div id="${booking.code}" class="modal fade" >
 				            <div class="modal-header">
-				              <a href="#" class="close">x</a>
-				              <h3>Reserva en ${booking.hotelName} <small>${booking.deal.address} 
+				              <a href="#" class="close" data-dismiss="modal">x</a>
+				              <h3>&{'web.dashboard.mybookings.booking.h3', booking.hotelName} <small>${booking.deal.address} 
 				              		<span class="directions">
-							      	<a href="http://maps.google.com/maps?q=${booking.deal.latitude}, ${booking.deal.longitude}" target="_blank">como llegar</a>
+							      	<a href="http://maps.google.com/maps?q=${booking.deal.latitude}, ${booking.deal.longitude}" target="_blank">&{'web.dashboard.mybookings.booking.directions'}</a>
 							      </span></small></h3>
 				            </div>
 				            <div class="modal-body">
-				              <p>Reserva <strong>${booking.code}</strong> a nombre de:
+				              <p>&{'web.dashboard.mybookings.booking.p.name', booking.code}
 				              		 #{if booking.bookingForEmail != ''}
-				        				${booking.bookingForFirstName} ${booking.bookingForLastName}. <strong> Email: </strong> ${booking.bookingForEmail}
+				        				${booking.bookingForFirstName} ${booking.bookingForLastName}. <strong>&{'web.dashboard.mybookings.booking.email'} </strong> ${booking.bookingForEmail}
 				        			#{/if}
 				        			#{else}
-				        				<strong>${user.firstName} ${user.lastName}.</strong> Email:  <strong> ${user.email}</strong>
+				        				<strong>${user.firstName} ${user.lastName}.</strong> &{'web.dashboard.mybookings.booking.email'}  <strong> ${user.email}</strong>
 				        			#{/else}
 				        	 </p>
-				        	 <p>Fecha de entrada: <strong>${booking.checkinDate.format('dd MMMM yyyy')}</strong></p>
-				        	 <p>Noches: <strong>${booking.nights}</strong></p>
+				        	 <p>&{'web.dashboard.mybookings.booking.checkin'} <strong>${booking.checkinDate.format('dd MMMM yyyy')}</strong></p>
+				        	 <p>&{'web.dashboard.mybookings.booking.nights'} <strong>${booking.nights}</strong></p>
 				        	  #{if booking.finalPrice > 0}
-				            	<p>Precio: ${booking.totalSalePrice}&euro; Créditos usados:${booking.credits}&euro;  Precio final: ${booking.finalPrice}&euro;(impuestos incluídos)</p>
+				            	<p>&{'web.dashboard.mybookings.booking.price'} ${booking.totalSalePrice}&euro; &{'web.dashboard.mybookings.booking.credits'} ${booking.credits}&euro;  
+				            	&{'web.dashboard.mybookings.booking.finalprice'} ${booking.finalPrice}&euro; &{'web.dashboard.mybookings.booking.tax'}</p>
 				            #{/if}
 				            #{else}
-				            	<p>Precio final: ${booking.salePriceCents}&euro; (impuestos incluídos)</p>
+				            	<p>&{'web.dashboard.mybookings.booking.finalprice'} ${booking.salePriceCents}&euro;  &{'web.dashboard.mybookings.booking.tax'}</p>
 				            #{/else}
 				            </div>
-				            <!--  
+				       
 				            <div class="modal-footer">
-				              <a href="#" class="btn primary close">Cerrar</a>
-				            </div>-->
+				              <a href="#" class="btn primary close" data-dismiss="modal"> &{'web.modal.close'}</a>
+				            </div>
 				          </div>
 		        	#{/list}
 		         </tbody>

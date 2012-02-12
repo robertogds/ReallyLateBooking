@@ -52,27 +52,31 @@ public class Users extends Controller {
 		Logger.debug("SESION: " + session);
 		User user= User.findById(Long.valueOf(session.get("userId")));
 		List<Booking> bookings = Booking.findByUser(user);
+		Integer totalBookings = bookings.size();
 		for (Booking booking: bookings){
 			booking.city = City.findById(booking.city.id);
 			booking.deal = Deal.findById(booking.deal.id);
 		}
 		List<MyCoupon> coupons = MyCoupon.findByUser(user);
-		render(user, bookings, coupons);
+		render(user, bookings, totalBookings, coupons);
 	}
 	
 	public static void updateAccount(User user) {
 		validation.email("user.email",user.email);
 		validation.required("user.firstName",user.firstName);
 		validation.required("user.lastName",user.lastName);
+		validation.required("user.password",user.password);
 		Logger.debug("Update user " + user.email);
 	    User dbUser = User.findById(Long.valueOf(session.get("userId")));
+	    //encryt password
+	    user.password = DigestUtils.md5Hex(user.password);
 	    dbUser.updateDetails(user);
 	    if (!validation.hasErrors()){
 		    dbUser.update();
-		    flash.success("Los cambios se han guardado correctamente.");
+		    flash.success(Messages.get("web.users.updateaccount.success"));
 	    }
 	    else{
-	    	flash.error("Oops… parece que hay algún error en los datos. Revísalo y vuelve a guardar cambios.");
+	    	flash.error(Messages.get("web.users.updateaccount.error"));
 	    	params.flash(); // add http parameters to the flash scope
 	        validation.keep(); // keep the errors for the next request
 	        Logger.debug("Errors " + validation.errorsMap().toString());

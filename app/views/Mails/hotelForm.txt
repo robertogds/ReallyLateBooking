@@ -1,0 +1,8 @@
+Persona de contacto: ${name}
+Hotel: ${hotelName}
+Email: ${email}
+Telefono: ${phone}
+Mensaje:
+${text}
+								
+&{'mails.rlb.footer'}

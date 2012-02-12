@@ -26,7 +26,6 @@ public class Cities  extends Controller {
 	public static void index() {
 		Collection<City> cities = staticCities();
 		render(cities); 
-		render();
 	}
 	
 	private static Collection<City> staticCities() {
@@ -35,12 +34,14 @@ public class Cities  extends Controller {
 		cities.add(new City("Barcelona", "barcelona"));
 		cities.add(new City("Berlin", "berlin"));
 		cities.add(new City("Bilbao", "bilbao"));
+		cities.add(new City("Lisboa", "lisbon"));
 		cities.add(new City("Londres", "london"));
 		cities.add(new City("Madrid", "madrid"));
 		cities.add(new City("Málaga", "malaga"));
+		cities.add(new City("Mallorca", "mallorca"));
 		cities.add(new City("Milan", "milan"));
 		cities.add(new City("Paris", "paris"));
-		cities.add(new City("Santiago de Comp.", "santiago"));
+		cities.add(new City("Santiago", "santiago_de_compostela"));
 		cities.add(new City("Sevilla", "sevilla"));
 		cities.add(new City("Valencia", "valencia"));
 		cities.add(new City("Valladolid", "valladolid"));

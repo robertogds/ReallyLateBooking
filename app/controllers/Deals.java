@@ -50,13 +50,21 @@ public class Deals extends Controller {
 			deal.prepareImages();//just for iphone now, make configurable in the future
 			deal.textToHtml();
 			User user= User.findById(Long.valueOf(session.get("userId")));
-			render(deal, user);
+			DealDTO dealDto = new DealDTO(deal);
+			renderArgs.put("deal", dealDto);
+			render(user);
 		}
 		else{
 			notFound();
 		}
 	}
 	
+	/**
+	 * Retrieves all the active deals from all the active locations
+	 * in the required city.
+	 * Renders html page 
+	 * @param cityUrl
+	 */
 	public static void list(String cityUrl) {
 		City city = City.findByName(cityUrl);
 		if (city != null){
@@ -75,10 +83,12 @@ public class Deals extends Controller {
 		}
 	}
 	
-	/*
+	/**
 	 * Retrieves all the active deals from all the active locations
 	 * in the required city.
-	 * */
+	 * Renders JSON 
+	 * @param cityUrl
+	 */
 	public static void listV2(String cityUrl) {
 		City city = City.findByName(cityUrl);
 		
@@ -97,9 +107,21 @@ public class Deals extends Controller {
 		}
 	}
 	
+	/**
+	 * Retrieves all the active deals from all the active locations
+	 * in the required city.
+	 * Renders JSON 
+	 * @param cityUrl
+	 */
+	@Deprecated
 	public static void iPhoneList(String cityUrl) {
 		City city = City.findByName(cityUrl);
 		if (city != null){
+			//odd workaround to maintain backwards compatibility with the city zones
+			if (city.isRootCity()){
+				city = city.mainZone;
+				city.get();
+			}
 			Collection<Deal> deals = Deal.findActiveDealsByCity(city);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
@@ -113,30 +135,6 @@ public class Deals extends Controller {
 			renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("city.notfound")));
 		}
 	}
-	
-	/*
-	 * Send to hoteliers the current status of their hotels
-	 * Not sure if we'll do it
-	 */
-	public static void sendStatusEmailToOwners(){
-		Collection<City> cities = City.all().fetch();
-		for (City city : cities){
-			sendStatusEmailToOwnersByCity(city);
-		}
-	}
-	
-	private static void sendStatusEmailToOwnersByCity(City city){
-		Collection<Deal> deals = Deal.findActiveDealsByCity(city);
-		for (Deal deal: deals){
-			if (deal.active){
-				//TODO send an email if deal is active
-			}
-			else{
-				//TODO send a different email if deal is inactive
-			}
-		}
-	}
-	
 	
 	/*
 	 * Refresh prices and availability from hotUsa hotels

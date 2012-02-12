@@ -178,6 +178,35 @@ public static void ownerUpdatedDeal(Deal deal) {
 	   	  //set language to client original language
 	   	  Lang.set(lang);
    }
+
+	public static void contactForm(String email, String name, String text) {
+		Message message = new Message();
+	 	message.setSubject("Email de contacto desde la web de " + email);
+	 	message.setSender(HOLA_MAIL);
+	 	message.setTo(HOLA_MAIL);
+	 	String template = "Mails/contactForm";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("text", text);
+	    params.put("email", email);
+	    params.put("name", name);
+	 	send(message, template, params);
+	}
+   
+	public static void hotelForm(String email, String name, String hotelName,
+			String phone, String text) {
+		Message message = new Message();
+	 	message.setSubject("Uno hotel interesado desde la web: " + hotelName);
+	 	message.setSender(HOLA_MAIL);
+	 	message.setTo(HOLA_MAIL);
+	 	String template = "Mails/hotelForm";
+	 	Map<String, Object> params = new HashMap<String, Object>();
+	 	params.put("text", text);
+	    params.put("email", email);
+	    params.put("name", name);
+	    params.put("hotelName", hotelName);
+	    params.put("phone", phone);
+	 	send(message, template, params);
+	}
    
    protected static void send(Message message, String template, Map<String, Object> params) {
 
@@ -217,6 +246,7 @@ public static void ownerUpdatedDeal(Deal deal) {
        }
 	   
    }
-   
+
+
 }
 

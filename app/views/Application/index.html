@@ -20,7 +20,7 @@
 								    <a class="close" data-dismiss="modal">&times;</a>
 								    <h3>&{'web.index.invite.h3'}</h3>
 								  </div>
-								   #{form @Invitations.getInvite() }
+								  #{form @Invitations.getInvite()}
 								  <div class="modal-body">
 								    <small>&{'web.index.invite.entry'}</small>
 								    	 <div class="input-prepend">
@@ -59,16 +59,15 @@
 							<span class="fb-button-right"></span>', scope:'email' /}
 				  		</div>
 				  		<small>&{'web.index.login.email'}</small>
-				  		#{form @authenticate() }
-				  			
-				  			<div class="input-prepend">
-				              <div class="input-prepend">
+							#{form @authenticate()}
+				  			<div class="control-group #{ifError 'username'} error #{/ifError}">
+				              <div class="input-prepend controls">
 				                <span class="add-on"><i class="icon-envelope"></i></span>
 				                <input class="input-large" name="username" id="username" value="${flash.username}" type="text" placeholder="&{'secure.email'}">
 				              </div>
 				            </div>
-				            <div class="input-prepend"> 
-				              <div class="input-prepend">
+				            <div class="control-group #{ifError 'password'} error #{/ifError}"> 
+				              <div class="input-prepend controls">
 				                <span class="add-on"><i class="icon-lock"></i></span>
 				                <input class="input-large" type="password" name="password" id="password" value=""  size="16"  placeholder="&{'secure.password'}">
 				              </div>

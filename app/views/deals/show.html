@@ -2,7 +2,9 @@
 #{set title: deal.hotelName /}
 #{set merchant: deal.hotelName /}
 #{set image: deal.mainImageBig /}
-#{set description :  'Reserva con oferta en el hotel' + deal.hotelName /}
+#{set 'description'}
+  	&{'web.deal.detail.meta.description', deal.hotelName }
+ #{/set}
 
 #{set 'moreScripts'}
     <script type="text/javascript">
@@ -34,32 +36,35 @@
 	</script>
 	<script type="text/javascript">
 		$(function() {
-			var options = {position: 10, placement: 'above', html: true};
-			$('.image-popover').popover(options);
-			$('.twipsy-link').twipsy();
+			var options = {placement: 'top'};
+			$('.thumbnail').popover(options);
+			$('.twipsy-link').tooltip();
 		});
 	</script>
 #{/set}
 
-<div class="container">
-    
-    <div class="content">
     		#{ifnot deal.active}
-			<div class="alert-message block-message warning">
-		        <a class="close" href="#">×</a>
-		        <p><strong>¡Has llegado tarde!</strong> La oferta en ${deal.hotelName} no esta activa para esta noche.</p>
-		        <div class="alert-actions">
-		          <a class="btn small" href="@{Deals.list(deal.city.url)}">Ver las ofertas de hoy</a>
-		        </div>
-		    </div>
+    		 	<div class="row">
+				 	<div class="span9">
+				 		<div class="alert alert-warning">
+					     <a class="close" data-dismiss="alert" href="#">&times;</a>
+					     <strong>&{'web.deal.detail.alert.late'}</strong> &{'web.deal.detail.alert.late.hotel', deal.hotelName}
+				        <div class="alert-actions">
+				          <a class="btn btn-info" href="@{Deals.list(deal.city.url)}">&{'web.deal.detail.alert.seeactive'}</a>
+				        </div>
+						</div>
+					</div>
+		    	</div>
 		    #{/ifnot}
-       		<div class="row">
-	        	<div class="span9 title-black">
-		           <h1>Reserva este hotel para esta noche</h1>
-		        </div>
-	        </div>
+
 	        <div class="row">
-	        	<div class="span9 deal" id="deal_detail">
+	        	<div class="span9">
+	        	    <div id="deal_detail" class="deal">
+	        		<div class="row">
+			        	<div class="span9 title-black">
+				           <h1>&{'web.deal.detail.h1'}</h1>
+				        </div>
+			        </div>
 		            <div class="row" >
 		            	<div class="span9 hotelImage">
 		            		<div class="imageContainer">
@@ -85,19 +90,19 @@
 					           		</div>
 					           		<div class="row">
 					           			<div class="span6">
-						           			<h2>Las habitaciones</h2>
+						           			<h2>&{'web.deal.detail.rooms.h2'}</h2>
 						           			<p>#{verbatim}${deal.roomText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 					           		<div class="row">
 					           			<div class="span6">
-						           			<h2>Comer y beber</h2>
+						           			<h2>&{'web.deal.detail.food.h2'}</h2>
 						           			<p>#{verbatim}${deal.foodDrinkText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 					           		<div class="row">
 					           			<div class="span6">
-						           			<h2>Los alrededores</h2>
+						           			<h2>&{'web.deal.detail.around.h2'}</h2>
 						           			<p>#{verbatim}${deal.aroundText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
@@ -108,34 +113,44 @@
 						           				${deal.salePriceCents}<span>&euro;</span>
 						           		</div>
 						           		<div class="before">
-						           				  <span>antes</span> ${deal.priceCents}<span>&euro;</span>
+						           				  <span> &{'web.deal.detail.before'}</span> ${deal.priceCents}<span>&euro;</span>
 						           		</div>
 						           		<div class="buy-now">
 						           				#{if deal.active && deal.quantity > 0 }
-						           					<a class="btn btn-primary btn-large" href="@{Deals.bookingForm(deal.id)}">Comprar</a>
+						           					<a class="btn btn-primary btn-large" href="@{Deals.bookingForm(deal.id)}">&{'web.deal.detail.buy.btn'}</a>
 						           				#{/if}
 						           				#{else}
-						           					<a class="btn btn-primary btn-large disabled" href="#">Agotado</a>
+						           					<a class="btn btn-primary btn-large disabled" href="#">&{'web.deal.detail.soldedout.btn'}</a>
 						           				#{/else}
 						           		</div>
 					           			<div class="info-list">
 					           				<ul class="unstyled">
 											  <li class="rooms">
-											  	<span>quedan</span>
+											  	<span>&{'web.deal.detail.left'}</span>
 											    <span class="value">${deal.quantity}</span>
 											  </li>
 											  <li class="nights">
-											    <span class="value">1-5 </span>
-											    <span>noches</span>
+											    <span class="value">${deal.nights}</span>
+											    <span>&{'web.deal.detail.nights'}</span>
 											  </li>
 											</ul>
 					           			</div>
 						           		<div class="social">
-						           				<p><strong>¿Lo quieres gratis?</strong><br>
-						           				<a href="#" class="twipsy-link" data-placement="right" rel='twipsy' title='Con cada invitación les regalas 12€ para su primera reserva y tú recibes otros 12€'>
-						           					<b>Invita a tus amigos</b>
-						           				</a>, y consigue créditos para reservar gratis</p>
-						           				<div class="social-buttons addthis_toolbox addthis_default_style addthis_32x32_style">
+						           				<p><strong>&{'web.deal.detail.free'}</strong><br>
+						           				<a data-toggle="modal" href="#notyet" class="twipsy-link" data-placement="right" rel='twipsy' title='&{"web.deal.detail.free.hint"}'>
+						           					<b>&{'web.deal.detail.free.invite'}</b>
+						           				</a>, &{'web.deal.detail.free.getcredits'}</p>
+						           				<div class="modal" id="notyet">
+						           					<div class="modal-header">
+													    <a class="close" data-dismiss="modal">×</a>
+													    <h3>&{'web.deal.detail.free.notyet.h3'}</h3>
+													  </div>
+												  <div class="modal-body">
+												    <p>&{'web.deal.detail.free.notyet.p'}
+												    </p>
+												  </div>
+												</div>
+												<div class="social-buttons addthis_toolbox addthis_default_style addthis_32x32_style">
 						           						<a class="addthis_button_facebook"></a>
 						           					    <a class="addthis_button_twitter"></a>
     													<a class="addthis_button_email"></a>
@@ -147,40 +162,67 @@
 				           </div> <!-- main-content end -->
 				           
 				           <div class="row">
-								<div class="span9 image-gallery">
-									<h2>Fotos</h2>
-									<ul class="media-grid">
-								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image1}' alt='Hotel Image' />"><img src="${deal.image1}" alt="Hotel Image" /></a></li>
-								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image2}' alt='Hotel Image' />"><img src="${deal.image2}" alt="Hotel Image" /></a></li>
-								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image3}' alt='Hotel Image' />"><img src="${deal.image3}" alt="Hotel Image" /></a></li>
-								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image4}' alt='Hotel Image' />"><img src="${deal.image4}" alt="Hotel Image" /></a></li>
-								    		<li><a href="#" class="image-popover" data-content="<img src='${deal.image5}' alt='Hotel Image' />"><img src="${deal.image5}" alt="Hotel Image" /></a></li>
+								<div class="span6 image-gallery">
+									<h2>&{'web.deal.detail.photos.h2'}</h2>
+									<ul class="thumbnails">
+								    		<li><a data-toggle="modal" href="#photosModal" class="thumbnail" data-content="<img src='${deal.image1}' alt='Hotel Image' />"><img src="${deal.image1}" alt="Hotel Image" /></a></li>
+								    		<li><a data-toggle="modal" href="#photosModal" class="thumbnail" data-content="<img src='${deal.image2}' alt='Hotel Image' />"><img src="${deal.image2}" alt="Hotel Image" /></a></li>
+								    		<li><a data-toggle="modal" href="#photosModal" class="thumbnail" data-content="<img src='${deal.image3}' alt='Hotel Image' />"><img src="${deal.image3}" alt="Hotel Image" /></a></li>
+								    		<li><a data-toggle="modal" href="#photosModal" class="thumbnail" data-content="<img src='${deal.image4}' alt='Hotel Image' />"><img src="${deal.image4}" alt="Hotel Image" /></a></li>
+								    		<li><a data-toggle="modal" href="#photosModal" class="thumbnail" data-content="<img src='${deal.image5}' alt='Hotel Image' />"><img src="${deal.image5}" alt="Hotel Image" /></a></li>
 								    </ul>
+								</div>
+								<div class="modal" id="photosModal">
+								 	<div id="myCarousel" class="carousel slide">
+							            <div class="carousel-inner">
+							              <div class="item active">
+							                <img src="${deal.image1}" alt="Hotel Image" />
+							              </div>
+							              <div class="item">
+							                <img src="${deal.image2}" alt="Hotel Image" />
+							              </div>
+							              <div class="item">
+							                <img src="${deal.image3}" alt="Hotel Image" />
+							              </div>
+							              <div class="item">
+							                <img src="${deal.image4}" alt="Hotel Image" />
+							              </div>
+							              <div class="item">
+							                <img src="${deal.image5}" alt="Hotel Image" />
+							              </div>
+							            </div>
+							            <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+							            <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+							          </div>
 								</div>
 							</div>
 			           		<div class="row">
 				           		<div class="span9 location location-wide">
-								  <h2>Location</h2>
-								  <div id="map_canvas" style="width: 670px; height: 300px"></div>
-								  <div class="meta">
-								      <span class="street_1">${deal.address}</span>
-								      <span class="city">${deal.city.name}</span>
-								      <span class="directions">
-								      	<a href="http://maps.google.com/maps?q=${deal.latitude}, ${deal.longitude}" target="_blank">como llegar</a>
-								      </span>
-								  </div>
+								  <h2>&{'web.deal.detail.location.h2'}</h2>
+								  <div id="map_canvas"></div>
+								    <address>
+								     ${deal.address} ${deal.city.name} <a href="http://maps.google.com/maps?q=${deal.latitude}, ${deal.longitude}" target="_blank">&{'web.deal.detail.location.directions'}</a>
+								    </address>
 								</div>
 							</div>
 							<div class="row">
 					           			<div class="span9">
-						           			<h2>Los detalles de la oferta</h2>
+						           			<h2>&{'web.deal.detail.details.h2'}</h2>
 						           			<p>#{verbatim}${deal.detailText}#{/verbatim}</p>
 					           			</div>
 					           		</div>
 				        </div> <!--  deal-info end -->
 			        </div>
 				</div> <!-- deal-detail end -->
+				</div>
+				<div class="span3">
+			     		<div class="row">
+			    				
+			    		</div>
+				</div>
 	        </div>
-    </div> <!-- content end -->
+
+
 	
-</div> <!-- container end -->
+
+	        

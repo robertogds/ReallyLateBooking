@@ -1,0 +1,25 @@
+			<div class="span3"> 
+	        		#{if deal.isHotUsa}
+	        			No se pueden usar creditos con este hotel.
+	        		#{/if}
+	        		#{else}
+	        			<div class="couponForm">
+				     	#{form @Coupons.validate(), class:'form-stacked'}
+				     		<fieldset>
+	         					 <legend>Valida un cup—n:</legend>
+	        					<div class="clearfix #{ifError 'key'} error #{/ifError}">
+						              <div class="input-prepend">
+						                <span class="add-on">C</span>
+						                <input class="#{ifError 'key'} error #{/ifError}" style="width: 138px;" name="key" id="key" value="${flash.key}"  type="text">
+						              	<span class="help-inline error">#{error 'key' /}</span>
+						              </div>
+					            </div>
+				            	<input name="returnUrl" id="returnUrl" value="/web/deals/bookingForm/${deal.id}"  type="hidden">
+				            </fieldset>
+							<div style="text-align:center">
+								<input class="btn primary medium" type="submit" id="signin" value="Validar" />
+							</div>
+						#{/form}
+				     </div>
+	        		#{/else}
+	        	</div>

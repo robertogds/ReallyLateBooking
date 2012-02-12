@@ -1,50 +1,50 @@
 <div class="row">
-	        					<div class="span12 ">
+	        					<div class="span9 ">
 							  	<div id="login">
 									#{form @Users.updateAccount()}
 										
-           								<div class="clearfix #{ifError 'user.firstName'} error #{/ifError}">
+           								<div class="span4 control-group #{ifError 'user.firstName'} error #{/ifError}">
 	          								<label for="firstName">&{'user.firstName'}</label>
-											<div class="input">
+											<div class="controls">
 								              <div class="input-prepend">
-								                <span class="add-on">F</span>
+								                <span class="add-on"><i class="icon-user"></i></span>
 								                <input class="medium #{ifError 'user.firstName'} error #{/ifError}" name="user.firstName" id="firstName" value="${user.firstName}"  type="text">
 								              	<span class="help-inline error">#{error 'user.firstName' /}</span>
 								              </div>
 								            </div>
 							            </div>
-							            <div class="clearfix #{ifError 'user.lastName'} error #{/ifError}">
+							            <div class="span4 control-group #{ifError 'user.lastName'} error #{/ifError}">
 							            	<label for="lastName">&{'user.lastName'}</label>
-								            <div class="input">
+								            <div class="controls">
 								              <div class="input-prepend">
-								                <span class="add-on">F</span>
+								                <span class="add-on"><i class="icon-user"></i></span>
 								                <input class="medium #{ifError 'user.lastName'} error #{/ifError}" name="user.lastName" id="lastName" value="${user.lastName}"  type="text">
 								             	<span class="help-inline error">#{error 'user.lastName' /}</span>
 								              </div>
 								            </div>
 							             </div> 
-							            <div class="clearfix #{ifError 'user.email'} error #{/ifError}">
+							            <div class="span4 control-group #{ifError 'user.email'} error #{/ifError}">
 							            	<label for="email">&{'user.email'}</label>
-											<div class="input">
+											<div class="controls">
 								              <div class="input-prepend">
-								                <span class="add-on">@</span>
+								                <span class="add-on"><i class="icon-envelope"></i></span>
 								                <input class="medium #{ifError 'user.email'} error #{/ifError}" name="user.email" id="email" value="${user.email}"  type="text">
 								              	<span class="help-inline error">#{error 'user.email' /}</span>
 								              </div>
 								            </div>
 							             </div> 
-							            <div class="clearfix #{ifError 'user.password'} error #{/ifError}">
+							            <div class="span4 control-group #{ifError 'user.password'} error #{/ifError}">
 							            	<label for="password">&{'user.password'}</label>
-							            	<div class="input"> 
+							            	<div class="controls"> 
 								              <div class="input-prepend">
-								                <span class="add-on">*</span>
+								                <span class="add-on"><i class="icon-lock"></i></span>
 								                <input class="medium #{ifError 'user.password'} error #{/ifError}" type="password" name="user.password" id="password" value="${user.password}" >
 								              	<span class="help-inline error">#{error 'user.password' /}</span>
 								              </div>
 								             </div> 
 							              </div>  
-										<div class="actions">
-											<input class="btn primary large" type="submit" id="signin" value="Guardar cambios" />
+										<div class="actions span8">
+											<input class="btn btn-primary btn-large" type="submit" id="signin" value="&{'web.dashboard.profile.save'}" />
 										</div>
 									#{/form}
 								</div>

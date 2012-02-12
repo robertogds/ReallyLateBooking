@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,6 +30,10 @@ import siena.Model;
 import siena.Query;
 import siena.Table;
 
+/**
+ * @author pablopr
+ *
+ */
 @Table("deals")
 public class Deal extends Model {
 	public static final int MAXDEALS = 3;
@@ -163,88 +168,22 @@ public class Deal extends Model {
 		return all().filter("isHotUsa", Boolean.TRUE).filter("city", city).fetch();
 	}
 	
-	public static Collection<Deal> findActiveDealsByCityV2(City city) {
-		Integer hour = DateHelper.getCurrentHour();
-		Logger.debug("Hour time right now is: " + hour);
-		//If hour is between 6am and 12pm we return an empty list
-		if (hour >= 6 && hour < 12){
-			Logger.info("We are closed ");
-			return new ArrayList<Deal>();
-		}
-		// between 12 and 23 all deals are open
-		else{
-			List<Deal> activeDeals = findAllActiveDealsByCityV2(city, MAXDEALS);
-			if (hour >= 12 && hour < 24){
-				Logger.info("We are all opened");
-				return activeDeals;
-			}
-			return findActiveDealsByNight(activeDeals, hour);
-		}
-	}
-	
-	public static List<Deal> findActiveDealsByCity(City city){
-		Integer hour = DateHelper.getCurrentHour();
-		Logger.debug("Hour time right now is: " + hour);
-		//If hour is between 6am and 12pm we return an empty list
-		
-		if (hour >= 6 && hour < 12){
-			Logger.info("We are closed ");
-			return new ArrayList<Deal>();
-		}
-		// between 12 and 23 all deals are open
-		else if (hour >= 12 && hour < 24){
-			Logger.info("We are all opened ");
-			return findAllActiveDealsByCity(city, MAXDEALS);
-		}
-		
-		List<Deal> activeDeals = all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch();
-		return findActiveDealsByNight(activeDeals, hour);
-	}
-	
-	private static List<Deal> findActiveDealsByNight(List<Deal> deals, Integer hour){
-		
-		List<Deal> active = new ArrayList<Deal>();
-		Logger.debug("Is between 0am and 6am. Hour:  " + hour);
-		// after 24 we check the limitHour
-		for (Deal deal : deals){
-			if (deal.limitHour != null && deal.limitHour > hour){
-				active.add(deal);
-				if (active.size() == MAXDEALS){
-					return active;
-				}
-			}
-		}
-		return active;
-	}
-	
-	/*
-	 * Returns all deals by city independently of the time
-	 * */
-	public static List<Deal> findAllActiveDealsByCity(City city, Integer maxDeals){
-		return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(maxDeals);
-	}
-	/*
-	 * Returns all deals by city independently of the time
-	 * V2 returns all the deals from all the locations in a city
-	 * */
-	public static List<Deal> findAllActiveDealsByCityV2(City city, Integer maxDeals){
-		List<Deal> active = new ArrayList<Deal>();
-		List<City> cities = City.findActiveCitiesByRoot(city.url);
-		for (City location: cities) {
-			active.addAll(all().filter("city", location).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch(maxDeals));
-		}
-		return active;
-	}
-	
 	public static List<Deal> findByCity(City city) {
         return all().filter("city", city).order("-updated").order("position").fetch();
     }
 	
 	public static List<Deal> findAllActiveDealsByCityId(Long cityId){
 		City city = City.findById(cityId);
-		return findAllActiveDealsByCity(city,10);
+		return findAllActiveDealsByCity(city).fetch();
 	}
 	
+	public static Deal findById(Long id) {
+		return all().filter("id", id).get();
+	}
+	
+	public static Deal findByHotelCode(String hotelCode) {
+		return all().filter("hotelCode", hotelCode).get();
+	}
 	
 	public static Query<Deal> all() {
     	return Deal.all(Deal.class);
@@ -254,25 +193,113 @@ public class Deal extends Model {
 		return hotelName;
 	}
 	
+	/**
+	 * Version 2. Cities can have root cities and zones.
+	 * @param city
+	 * @return all the active deals by city base on current time
+	 */
+	public static Collection<Deal> findActiveDealsByCityV2(City city) {
+		Integer hour = DateHelper.getCurrentHour();
+		Logger.debug("V2. Hour time right now is: " + hour);
+		//If hour is between 6am and 12pm we return an empty list
+		if (hour >= 6 && hour < 12){
+			Logger.info("V2. We are closed ");
+			return new ArrayList<Deal>();
+		}
+		else{
+			HashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
+			// between 12 and 23 all deals are open
+			if (hour >= 12 && hour < 24){
+				Logger.info("V2. We are all opened");
+				return dealsMapToListWithMax(dealsMap);
+			}
+			else{
+				Logger.debug("V2. Is between 0am and 6am. Hour:  " + hour);
+				return findActiveDealsByNight(dealsMap, hour);
+			}
+		}
+	}
+
+	/**
+	 * Version 1. Theres no zones, just cities
+	 * @param city
+	 * @return all the active deals by city base on current time
+	 */
+	@Deprecated
+	public static List<Deal> findActiveDealsByCity(City city){
+		Integer hour = DateHelper.getCurrentHour();
+		Logger.debug("Hour time right now is: " + hour);
+		//If hour is between 6am and 12pm we return an empty list
+		if (hour >= 6 && hour < 12){
+			Logger.info("We are closed ");
+			return new ArrayList<Deal>();
+		}
+		// between 12 and 23 all deals are open
+		else if (hour >= 12 && hour < 24){
+			Logger.info("We are all opened ");
+			return findAllActiveDealsByCity(city).fetch(MAXDEALS);
+		}
+		//Is between 0am and 6am. Fetch all active deals and select the first MAXDEALS active
+		else{
+			Logger.debug("Is between 0am and 6am. Hour:  " + hour);
+			List<Deal> activeDeals = findAllActiveDealsByCity(city).fetch();
+			return selectMaxDealsByHour(activeDeals, hour);
+		}
+	}	
+
+	/**
+	 * @param city
+	 * @return Returns Query<Deal> with all deals by city independently of the time
+	 */
+	@Deprecated
+	public static Query<Deal> findAllActiveDealsByCity(City city){
+		return all().filter("city", city).filter("active", Boolean.TRUE)
+			.order("position").order("-priceCents");
+	}
+	
+
+	/**
+	 * V2 returns all the deals from all the locations in a city
+	 * @param city
+	 * @return Returns all deals by city independently of the time
+	 */
+	public static HashMap<City, List<Deal>> findAllActiveDealsByCityV2(City city){
+		HashMap<City, List<Deal>> dealsMap = new HashMap<City, List<Deal>>();
+		List<City> cities = City.findActiveCitiesByRoot(city.url);
+		for (City location: cities) {
+			List<Deal> active = new ArrayList<Deal>();
+			active.addAll(all().filter("city", location).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch());
+			dealsMap.put(location, active);
+		}
+		return dealsMap;
+	}
+	
+	/*
+	 * needed?
+	 */
 	public void fecthCity(){
 		if (this.city != null){
 			this.city.get();
 		}	
 	}
 		
+	/**
+	 * Prepares the deal to be published setting the routes 
+	 * to hotel images at Amazon S3
+	 */
 	public void prepareImages(){
 		ImageHelper.prepareImagesRoutes(this);
 	}
 	
-
-	public static Deal findById(Long id) {
-		return all().filter("id", id).get();
-	}
-	
-	public static Deal findByHotelCode(String hotelCode) {
-		return all().filter("hotelCode", hotelCode).get();
-	}
-	
+	/**
+	 * Updates the deal hotel price, quantity and breakfast for a given day based on the hotusa API 
+	 * @param hotelCode
+	 * @param quantity
+	 * @param price
+	 * @param breakfastIncluded
+	 * @param lin
+	 * @param day
+	 */
 	public static void updateDealByCode(String hotelCode, int quantity, Integer price, Boolean breakfastIncluded, String lin, int day){
 	    Deal deal = Deal.findByHotelCode(hotelCode);
 	    //Some objects from datastore could come null so we check it
@@ -319,9 +346,15 @@ public class Deal extends Model {
 	    deal.update();
 	}
 	
+	/**
+	 * Updates the deal hotel price for a given day based on the hotusa API 
+	 * @param hotelCode
+	 * @param price
+	 * @param lin
+	 * @param day
+	 */
 	public static void updatePriceByCode(String hotelCode, Integer price, String lin, int day){
-	    Deal deal = Deal.findByHotelCode(hotelCode);
-	    
+	    Deal deal = Deal.findByHotelCode(hotelCode);	    
 	    switch (day) {
 			case 0:
 				 //If isFake we dont want to change the price automatically by the cron task
@@ -354,7 +387,13 @@ public class Deal extends Model {
 	    deal.updated = Calendar.getInstance().getTime();
 	    deal.update();
 	}
-
+	
+	/**
+	 * Hotusa API method
+	 * @param hotelCode code to find the hotel
+	 * @param day last day the deal has received prices
+	 * Deletes deal prices for the days after the given day and updates the deal in BD
+	 * */
 	public static void cleanNextDays(String hotelCode, int day) {
 		Deal deal = Deal.findByHotelCode(hotelCode);		
 		switch (day) {
@@ -398,7 +437,10 @@ public class Deal extends Model {
 		}
 	    deal.update();
 	}
-
+	
+	/*
+	 * Count methods needed for the control panel.
+	 */
 	public static int countHotelsByCity(City city, Date start, Date end) {
 		int hotels = Deal.all().filter("city", city).filter("active", Boolean.TRUE).count();
 		return hotels;
@@ -418,7 +460,11 @@ public class Deal extends Model {
 		Deal deal = Deal.all().filter("city", city).filter("active", Boolean.TRUE).order("discount").get();
 		return deal != null ? deal.discount : 0;
 	}
-
+	
+	/**
+	 * adapts the info text so we can display the text correctly at the web
+	 * Just a workaround to avoid rewrite all the info
+	 * */
 	public void textToHtml() {
 		this.detailText = parseToHtml(this.detailText);
 		this.aroundText = parseToHtml(this.aroundText);
@@ -427,14 +473,93 @@ public class Deal extends Model {
 		this.hotelText = parseToHtml(this.hotelText);
 	}
 	
+	
+	/**
+	 * Limits the deals number per city zone to the MAXDEALS
+	 * @param dealsMap
+	 * @return Returns all the active deals in all the zones of a city.
+	 */
+	private static List<Deal> dealsMapToListWithMax(HashMap<City, List<Deal>> dealsMap) {
+		List<Deal> deals = new ArrayList<Deal>();
+		for(City city: dealsMap.keySet()){
+			List<Deal> zoneDeals = selectMaxDeals(dealsMap.get(city));
+			deals.addAll(zoneDeals);
+		}
+		return deals;
+	}
+	
+	/**
+	 * Check each deal limit hour to show it as active or not.
+	 * Also limits the deals number per city zone to the MAXDEALS
+	 * @param dealsMap
+	 * @param hour
+	 * @return Returns all the active deals in all the zones of a city at a given hour.
+	 */
+	private static List<Deal> findActiveDealsByNight(HashMap<City, List<Deal>> dealsMap, Integer hour){
+		List<Deal> activeDeals = new ArrayList<Deal>();
+		Logger.debug("Is between 0am and 6am. Hour:  " + hour);
+		// iterate over zones to limit deals list to MAXDEALS
+		for(City city: dealsMap.keySet()){
+			List<Deal> zoneDeals = selectMaxDealsByHour(dealsMap.get(city), hour);
+			activeDeals.addAll(zoneDeals);
+		}
+		return activeDeals;
+	}
+	
+	/**
+	 * Limits the deals number per city zone to the MAXDEALS
+	 * @param list
+	 * @return
+	 */
+	private static List<Deal> selectMaxDeals(List<Deal> list) {
+		List<Deal> zoneDeals = new ArrayList<Deal>();
+		for (Deal deal : list){
+			zoneDeals.add(deal);
+			if (zoneDeals.size() == MAXDEALS){
+				break;
+			}
+		}
+		return zoneDeals;
+	}
+	
+	/**
+	 * Also limit the deals number per city zone to the MAXDEALS
+	 * @param list
+	 * @param hour
+	 * @return
+	 */
+	private static List<Deal> selectMaxDealsByHour(List<Deal> list, Integer hour) {
+		List<Deal> zoneDeals = new ArrayList<Deal>();
+		for (Deal deal : list){
+			// after 24 we check the limitHour
+			if (deal.limitHour != null && deal.limitHour > hour){
+				zoneDeals.add(deal);
+				if (zoneDeals.size() == MAXDEALS){
+					break;
+				}
+			}
+		}
+		return zoneDeals;
+	}
+
+	/*
+	 * Returns the html version of the text.
+	 * just changes * and - by <br>
+	 * */
 	private static String parseToHtml(String text){
 		text = removeFirstBr(text, "*");
 		text = removeFirstBr(text, "-");
 		String html =  StringUtils.replace(text, "*", "<br>");
-		html =  StringUtils.replace(html, "-", "<br>");
+		html =  StringUtils.replace(html, " -", "<br>");
 		return html;
 	}
 	
+	/*
+	 * Removes the first BR  
+	 * @param text
+	 * @param remove
+	 * @return
+	 */
 	private static String removeFirstBr(String text, String remove){
 		if (StringUtils.startsWith(text, remove)){
 			text = StringUtils.removeStart(text, remove);

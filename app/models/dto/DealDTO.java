@@ -59,6 +59,7 @@ public class DealDTO {
 	public Date checkinDate;
 	public Boolean breakfastIncluded;
 	public String nights;
+	public Boolean active;
 
 	
 	
@@ -100,6 +101,7 @@ public class DealDTO {
 		this.checkinDate = DateHelper.getTodayDate();
 		this.breakfastIncluded = deal.breakfastIncluded;
 		this.nights = getNights();
+		this.active = deal.active;
 		
 		String lang = Lang.get();
 		Logger.debug("Filling deal info with locale: " + lang);

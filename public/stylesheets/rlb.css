@@ -6057,6 +6057,9 @@ footer {
   -moz-border-radius: 6px;
   border-radius: 6px;
 }
+footer a {
+  color: #999;
+}
 footer a:hover {
   color: #ffffff;
 }
@@ -6080,10 +6083,12 @@ input {
 #background {
   position: fixed;
   top: 0;
-  left: -50%;
+  left: -185px;
   width: 200%;
   min-height: 950px;
   z-index: -1;
+  background-color: #49A8D7;
+  background: transparent url('http://behance.vo.llnwd.net/profiles/88164/prosite/2-108587-b5be9f1ae871a396036da177a5d428ae.jpg') repeat top center;
 }
 #background img {
   position: absolute;
@@ -6094,6 +6099,9 @@ input {
   margin: auto;
   min-width: 50%;
   min-height: 100%;
+}
+.modal {
+  display: none;
 }
 .terms p {
   font-size: 13px;
@@ -6134,6 +6142,7 @@ input {
 }
 /* Main navigation Bar */
 .navbar {
+  z-index: 2000;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -6153,6 +6162,9 @@ input {
 .navbar .navbar-inner .brand {
   padding: 0 5px;
 }
+.navbar .navbar-inner .brand img {
+  width: 290px;
+}
 .navbar .navbar-inner .nav {
   float: right;
 }
@@ -6162,24 +6174,46 @@ input {
 .navbar .navbar-inner .nav li ul li {
   padding: 0;
 }
-.container-fluid {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  min-width: 560px !important;
+/* The white background rounded content wrapper */
+.white_buble_for_list {
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-background-size: 297.5px;
+  -moz-background-size: 297.5px;
+  -o-background-size: 297.5px;
+  background-size: 297.5px;
+  -webkit-background-size: 297.5px;
+  -moz-background-size: 297.5px;
+  -o-background-size: 297.5px;
+  background-size: 297.5px;
+  background-repeat: no-repeat;
+  background-color: #ffffff;
+  color: #555555;
+  overflow: hidden;
+}
+.white_buble_for_list address {
+  font-size: 13px;
 }
 /************** INIT Login PAGE  *****************/
 .hero-unit {
-  -webkit-box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
-  -moz-box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
-  box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
-  -webkit-box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
-  -moz-box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
-  box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
   height: 475px;
+  padding: 30px 60px;
 }
 .hero-unit .register, .hero-unit .login {
   float: left;
@@ -6338,7 +6372,7 @@ input {
 .title-black h1 {
   color: #eeeeee;
   text-transform: lowercase;
-  padding: 8px 20px;
+  padding: 9px 20px;
   font-size: 17.55px;
   font-weight: normal;
   line-height: 24.3px;
@@ -6350,33 +6384,50 @@ input {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
-  background-color: #eeeeee;
+  background-color: transparent;
 }
 #cities .city {
+  margin: 8px;
   overflow: hidden;
-  width: 174px;
-  height: 174px;
-  width: 174px;
-  height: 174px;
-  width: 174px;
-  height: 174px;
-  width: 174px;
-  height: 174px;
+  width: 158px;
+  height: 158px;
+  width: 158px;
+  height: 158px;
+  width: 158px;
+  height: 158px;
+  width: 158px;
+  height: 158px;
   float: left;
+  -webkit-box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.8);
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
 }
 #cities .city a {
-  background-size: 174px auto;
+  background-size: 158px auto;
   display: block;
-  padding-top: 138px;
+  padding-top: 123.80000000000001px;
   text-decoration: none;
-  width: 174px;
+  width: 158px;
 }
 #cities .city a h2 {
   background-color: rgba(0, 0, 0, 0.6);
   background-color: rgba(0, 0, 0, 0.6);
   color: #eeeeee;
-  font-weight: normal;
+  font-weight: lighter;
   text-align: center;
+  font-size: 20px;
+}
+#cities .city a h2:hover {
+  background-color: transparent;
 }
 #beVip {
   -webkit-border-radius: 6px;
@@ -6406,7 +6457,49 @@ input {
   background-color: #e9e9e9;
 }
 .deal-list .deal {
+  height: 200px;
   margin-bottom: 20px;
+  width: 850px;
+}
+.deal-list .deal .hotelInfo {
+  width: 552.5px;
+  margin-left: 297.5px;
+  padding-left: 42.5px;
+}
+.deal-list .deal .hotelInfo .title {
+  overflow: hidden;
+  padding: 5px 0;
+}
+.deal-list .deal .hotelInfo .title h2 {
+  line-height: 25px;
+}
+.deal-list .deal .hotelInfo .main-info .price {
+  font-size: 65px;
+  line-height: 58.5px;
+  color: #f99431;
+  overflow: hidden;
+  text-align: right;
+  font-weight: bold;
+}
+.deal-list .deal .hotelInfo .main-info .price span {
+  font-weight: normal;
+  font-size: 19.5px;
+  color: #555555;
+}
+.deal-list .deal .hotelInfo .main-info .deal-info {
+  text-align: center;
+  padding: 8px 0;
+}
+.deal-list .deal .hotelInfo .main-info .deal-info .before, .deal-list .deal .hotelInfo .main-info .deal-info .nights, .deal-list .deal .hotelInfo .main-info .deal-info .rooms {
+  float: left;
+  width: 146.66666666666666px;
+}
+.deal-list .deal .hotelInfo .main-info .deal-info .before, .deal-list .deal .hotelInfo .main-info .deal-info .nights {
+  border-right: 1px solid #555555;
+}
+.deal-list .deal .hotelInfo .main-info .btn {
+  margin-top: 5px;
+  font-size: 26px;
 }
 .deal-list h2 {
   line-height: 50px;
@@ -6419,7 +6512,6 @@ input {
   -moz-border-radius: 0 0 6px 6px;
   border-radius: 0 0 6px 6px;
 }
-/* The whiteSmoke background content wrapper */
 .deal {
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
@@ -6442,82 +6534,308 @@ input {
   -o-background-size: 297.5px;
   background-size: 297.5px;
   background-repeat: no-repeat;
-  width: 850px;
   background-color: #ffffff;
-  height: 200px;
   color: #555555;
+  overflow: hidden;
   font-size: 19.5px;
-  overflow: hidden;
 }
-.deal .hotelInfo {
-  width: 552.5px;
-  margin-left: 297.5px;
-  padding-left: 42.5px;
-}
-.deal .hotelInfo .title {
-  overflow: hidden;
-  padding: 5px 0;
-}
-.deal .hotelInfo .title h2 {
-  line-height: 25px;
-}
-.deal .hotelInfo .main-info .price {
-  font-size: 65px;
-  line-height: 58.5px;
-  color: #f99431;
-  overflow: hidden;
-  text-align: right;
-  font-weight: bold;
-}
-.deal .hotelInfo .main-info .price span {
-  font-weight: normal;
-  font-size: 19.5px;
-  color: #555555;
-}
-.deal .hotelInfo .main-info .deal-info {
-  text-align: center;
-  padding: 8px 0;
-}
-.deal .hotelInfo .main-info .deal-info .before, .deal .hotelInfo .main-info .deal-info .nights, .deal .hotelInfo .main-info .deal-info .rooms {
-  float: left;
-  width: 146.66666666666666px;
-}
-.deal .hotelInfo .main-info .deal-info .before, .deal .hotelInfo .main-info .deal-info .nights {
-  border-right: 1px solid #555555;
-}
-.deal .hotelInfo .main-info .btn {
-  margin-top: 5px;
-  font-size: 26px;
-}
-.deal .social-address {
-  height: 45px;
-}
-.buy-column {
-  padding-top: 18px;
-}
-.buy-column .before,
-.buy-column .buy-now,
-.buy-column .deal-info,
-.buy-column .rooms,
-.buy-column .nights,
-.buy-column .info-list {
-  text-align: center;
-  font-size: 22px;
-  color: #666;
+.deal address {
+  font-size: 13px;
 }
 #zonesNav {
+  font-size: 17.55px;
   height: 42px;
 }
-#zonesNav .nav {
+#zonesNav .zones {
+  margin-bottom: 0px;
+  z-index: 0;
+}
+#zonesNav .zones .nav {
+  float: right;
   margin-bottom: 0;
   padding-top: 2px;
 }
 .zonesNav-fixed {
   position: fixed;
-  z-index: 1030;
+  z-index: 2500;
   top: 0px;
 }
-/* Subnav */
+/***********  Deal Detail Page  ************/
+#deal_detail .title {
+  height: 48px;
+  margin-bottom: 0;
+  padding: 15px 0px;
+  background-color: #373738;
+}
+#deal_detail .title h1 {
+  padding: 0 15px;
+  font-weight: normal;
+  font-size: 30px;
+  color: white;
+}
+#deal_detail .title h1 small {
+  font-size: 16px;
+}
+#deal_detail .hotelImage img {
+  height: 260px;
+  width: 870px;
+}
+#deal_detail .deal-info {
+  padding: 15px;
+}
+#deal_detail .deal-info .main-content .buy-column {
+  border: 1px solid #d9d9d9;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  height: 400px;
+  padding: 10px;
+  width: 170px;
+  text-align: center;
+  font-size: 22px;
+  color: #666;
+}
+#deal_detail .deal-info .main-content .buy-column .info-list li {
+  line-height: 30px;
+  border-bottom: 1px solid #d9d9d9;
+}
+#deal_detail .deal-info .main-content .buy-column .price {
+  font-size: 70px;
+  line-height: 60px;
+  font-weight: bold;
+  color: #f99431;
+  overflow: hidden;
+}
+#deal_detail .deal-info .main-content .buy-column .price span {
+  font-size: 35px;
+}
+#deal_detail .deal-info .main-content .buy-column .before {
+  padding: 0 0 6px 0;
+  height: 20px !important;
+}
+#deal_detail .deal-info .main-content .buy-column .buy-now {
+  padding: 18px 0;
+  height: 58px;
+}
+#deal_detail .deal-info .main-content .buy-column .buy-now .btn {
+  font-size: 30px !important;
+}
+#deal_detail .deal-info .main-content .buy-column .social p strong {
+  color: #f99431;
+}
+#deal_detail .deal-info .main-content .buy-column .social .social-buttons {
+  padding: 13px;
+}
+#deal_detail .deal-info .main-content .buy-column .social #notyet .modal-body {
+  text-align: left;
+}
+#deal_detail .deal-info .image-gallery .thumbnails {
+  margin-left: -16px;
+}
+#deal_detail .deal-info .image-gallery .thumbnails li {
+  margin-left: 16px;
+}
+#deal_detail .deal-info .image-gallery .thumbnails li a img {
+  width: 90px;
+}
+#deal_detail .deal-info #map_canvas {
+  width: 840px;
+  height: 300px;
+}
+#deal_detail #photosModal {
+  width: auto;
+}
+#deal_detail .popover .inner {
+  width: 350px !important;
+}
+/********* booking form ***********/
+.steps {
+  padding: 0 10px 1px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  background-color: #e9e9e9;
+}
+.steps label {
+  font-weight: bold;
+}
+.steps [id*="step"] {
+  margin-bottom: 20px;
+  width: 850px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-background-size: 297.5px;
+  -moz-background-size: 297.5px;
+  -o-background-size: 297.5px;
+  background-size: 297.5px;
+  -webkit-background-size: 297.5px;
+  -moz-background-size: 297.5px;
+  -o-background-size: 297.5px;
+  background-size: 297.5px;
+  background-repeat: no-repeat;
+  background-color: #ffffff;
+  color: #555555;
+  overflow: hidden;
+}
+.steps [id*="step"] address {
+  font-size: 13px;
+}
+.steps [id*="step"] .padding-centered {
+  padding: 40px;
+}
+.steps [id*="step"] .alert {
+  margin-bottom: 0px;
+}
+.steps #step1 {
+  height: 227px;
+}
+.steps #step1 .hotelInfo {
+  width: 552.5px;
+  margin-left: 297.5px;
+  padding-left: 42.5px;
+}
+.steps #step1 .hotelInfo .price {
+  font-size: 40px;
+  line-height: 40px;
+  padding-bottom: 12px;
+  text-indent: 0;
+  color: #f99431;
+}
+.steps #step1 .hotelInfo .price small {
+  font-size: 14px;
+  color: #404040;
+}
+.steps #step1 .hotelInfo .detail-text {
+  width: 500px;
+  height: 108px;
+  overflow: hidden;
+}
+.steps #step1 img {
+  -webkit-border-radius: 6px 0 0 6px;
+  -moz-border-radius: 6px 0 0 6px;
+  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 6px 0 0 6px;
+  -moz-border-radius: 6px 0 0 6px;
+  border-radius: 6px 0 0 6px;
+}
+.steps #step2 .total {
+  background: #FFFDBC;
+  border: 1px solid #D1D1C9;
+  border-width: 1px 0 0 0;
+  height: 20px;
+  line-height: 15px;
+  color: #5F5F57;
+  padding: 18px;
+  font-size: 18px;
+}
+.steps #step2 #total-booking {
+  font-size: 40px;
+}
+.steps #step2 option span.total-price {
+  float: right;
+}
+.steps #step4 #cc_details {
+  background: url(/public/images/cc_logos.png?1300304855) no-repeat 30px 0;
+  padding: 40px 0 0 0px;
+}
+.steps .purchase {
+  background: #FFFDBC;
+  border: 1px solid #D1D1C9;
+  border-width: 1px;
+  padding: 30px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.steps .purchase #confirm-booking {
+  font-size: 19.5px;
+  margin-top: 6px;
+}
+.couponForm {
+  color: #3E342B;
+  background-color: #F9F4B8;
+  border: 1px solid #DDCC13;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.couponForm .form-stacked {
+  padding: 20px;
+  margin-bottom: 0px;
+}
+.couponForm .form-stacked .clearfix {
+  margin-bottom: 0px;
+}
+/********* dashboard ***********/
+.dashboard {
+  margin-bottom: 20px;
+  background-color: white;
+  -webkit-border-radius: 0 0 6px 6px;
+  -moz-border-radius: 0 0 6px 6px;
+  border-radius: 0 0 6px 6px;
+  -webkit-border-radius: 0 0 6px 6px;
+  -moz-border-radius: 0 0 6px 6px;
+  border-radius: 0 0 6px 6px;
+  min-height: 400px;
+}
+.dashboard .tabs-container {
+  padding: 40px;
+}
+.dashboard ul.tabs {
+  padding-top: 10px;
+  padding-left: 10px;
+}
+.dashboard .noBookings {
+  text-indent: 10px;
+}
+.dashboard .noBookings .btn {
+  font-size: 18px;
+  margin: 80px 200px;
+}
+.dashboard .actions {
+  margin-top: 16px;
+}
+.dashboard table th, .dashboard table td {
+  text-align: center;
+}
+.dashboard #bookings {
+  margin: 10px;
+}
 /* Fixed subnav on scroll, but only for 980px and up (sorry IE!) */
 @media (min-width: 980px) {
   .subnav-fixed {

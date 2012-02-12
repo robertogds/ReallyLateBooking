@@ -35,25 +35,31 @@
 		<div id="zonesNav" class="row">
 			        	<div class="span9 title-black">
 			        		<div class="row">
-				           			<div class="span6">
-			                			<h1>Estas son las ofertas para hoy en ${city.name}</h1>
+				           			<div class="span5">
+			                			<h1>&{'web.deal.list.h1', city.name}</h1>
 			                		 </div>
-				           			<div class="span3">
-						                <ul class="nav nav-pills">
-						                	#{list items:dealsDtos, as:'deal' }
-						                		#{if deal_isFirst }
-									        		%{
-												   		actualCity = deal.city;
-													}%
-													<li><a href="#${actualCity.url}">${actualCity.name}</a></li>
-												#{/if}
-												#{elseif actualCity != deal.city }
-													 %{
-												   		actualCity = deal.city;
-													}%
-													<li><a href="#${actualCity.url}">${actualCity.name}</a></li>
-												#{/elseif}
-											#{/list}
+				           			<div class="span4 navbar zones">
+						                <ul class="nav">
+						                	<li class="dropdown" id="zones-dropdown">
+								              <a href="#zones-dropdown" class="dropdown-toggle" data-toggle="dropdown">zonas de ${city.name}<b class="caret"></b></a>
+								              <ul class="dropdown-menu" >
+								                #{list items:dealsDtos, as:'deal' }
+								                		#{if deal_isFirst }
+											        		%{
+														   		actualCity = deal.city;
+															}%
+															<li><a href="#${actualCity.url}">${actualCity.name}</a></li>
+														#{/if}
+														#{elseif actualCity != deal.city }
+															 %{
+														   		actualCity = deal.city;
+															}%
+															<li><a href="#${actualCity.url}">${actualCity.name}</a></li>
+														#{/elseif}
+													#{/list}
+								              </ul>
+								            </li>
+						                	
 						                </ul>
 								   </div>
 					        </div>             
@@ -85,14 +91,14 @@
 				           <div class="main-info">
 				           		<div class="row">
 				           			<div class="span3 price">
-				           				<span>esta noche</span> ${deal.salePriceCents}&euro;
+				           				<span>&{'web.deal.tonight'}</span> ${deal.salePriceCents}&euro;
 				           			</div>
 				           			<div class="span2 more-info">
 				           				#{if deal.quantity > 0 }
-						           			<a class="btn btn-primary btn-large" href="@{Deals.show(city.url,deal.id)}">Ver Oferta</a>
+						           			<a class="btn btn-primary btn-large" href="@{Deals.show(city.url,deal.id)}">&{'web.deal.list.show'}</a>
 						           		#{/if}
 				           				#{else}
-				           					<a class="btn btn-primary btn-large disabled" href="@{Deals.show(city.url,deal.id)}">Agotado</a>
+				           					<a class="btn btn-primary btn-large disabled" href="@{Deals.show(city.url,deal.id)}">&{'web.deal.list.soldedout'}</a>
 				           				#{/else}
 				           				
 				           			</div>
@@ -100,16 +106,16 @@
 				           		<div class="row deal-info">
 				           			<div class="span5">
 				           				<div class="before">
-				           						 antes <br>
+				           						 &{'web.deal.detail.before'} <br>
 				           						 <strong>${deal.priceCents}</strong><span>&euro;</span> 
 				           				</div>	 
 				           				<div class="nights">
-				           						 reserva <br>
-				           						 <strong>${deal.nights}</strong> <span>noches</span> 
+				           						 &{'web.deal.detail.book'} <br>
+				           						 <strong>${deal.nights}</strong> <span>&{'web.deal.detail.nights'}</span> 
 				           				</div>	 
 				           				<div class="rooms">
-				           						quedan <strong>${deal.quantity}</strong>  <br>
-				           						habitaciones
+				           						&{'web.deal.detail.left'} <strong>${deal.quantity}</strong>  <br>
+				           						&{'web.deal.detail.rooms'}
 				           				</div>
 				           			</div>
 				           		</div>
@@ -123,7 +129,6 @@
     </div>
     <div class="span3">
 	      		<div class="row">
-	     				#{include 'components/beVip.html'/}
 	     		</div>
 	</div>
 </div>

@@ -8,7 +8,7 @@
     <!-- Siempre forzar el último motor de rendering de IE (incluso en intranet) & Chrome Frame -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>#{get 'title' /}</title>
-    <meta name="description" content="">
+    <meta name="description" content="#{get 'description' /}">
     <meta name="author" content="">
 	<!-- Optimización para dispositivos moviles: j.mp/bplateviewport -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,11 +30,6 @@
     <link rel="apple-touch-icon" href="@{'/public/images/apple-touch-icon.png'}">
     <link rel="apple-touch-icon" href="@{'/public/images/apple-touch-icon-72x72.png'}">
     <link rel="apple-touch-icon" href="@{'/public/images/apple-touch-icon-114x114.png'}">
-    
-    <script type="text/javascript">
-	    var addthis_config = {"data_track_clickback":true};
-	</script>
-	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=pubid=ra-4f1d2cf53577540c"></script>
     
     <meta property="og:site_name" content="ReallyLateBooking"/>
     <meta property="og:merchant" content=" #{get 'merchant' /}"/>
@@ -73,8 +68,10 @@
 	   }(document));
 	</script>
   <div id="background">
-	  <img src="#{get 'background' /}">
+	  <!--  <img src="#{get 'background' /}">-->
   </div>
+  
+  
   <div class="container">
   
 	#{include 'components/navbar.html'/}			
@@ -89,10 +86,13 @@
 
 
     <!-- JavaScript al fondo para carga rápida de la página -->
+    <script type="text/javascript">
+	    var addthis_config = {"data_track_clickback":true};
+	</script>
+	<script type="text/javascript" src="https://s7.addthis.com/js/250/addthis_widget.js#pubid=pubid=ra-4f1d2cf53577540c"></script>
 	  <!-- Obtener jQuery del CDN de Google, con una URL relativa al protocolo; fallback a copia local si es necesario -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
     <script src="@{'/public/js/bootstrap-transition.js'}"></script>
     <script src="@{'/public/js/bootstrap-alert.js'}"></script>
     <script src="@{'/public/js/bootstrap-modal.js'}"></script>
@@ -105,12 +105,14 @@
     <script src="@{'/public/js/bootstrap-collapse.js'}"></script>
     <script src="@{'/public/js/bootstrap-carousel.js'}"></script>
     <script src="@{'/public/js/bootstrap-typeahead.js'}"></script>
-	
 	<script type="text/javascript">
-		$(function() {
-			$('.dropdown-toggle').dropdown();
-		});
-	</script>
+  var uvOptions = {};
+  (function() {
+    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/bMS2AkGj9uG9JppPPmxsQ.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  })();
+</script>
      #{get 'moreScripts' /}
   </body>
 </html>

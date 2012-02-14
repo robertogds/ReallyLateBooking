@@ -119,11 +119,11 @@ public class Users extends Controller {
 		}
 	}
 	
-	public static void create(JsonObject json) {
+/*	public static void create(JsonObject json) {
 		Logger.debug("Create user " + json);	
 		User user = new Gson().fromJson(json, User.class);
 		validateAndSave(user);
-	}
+	}*/
 	
 	public static void create(String json) {
 		String body = json != null ? json : params.get("body");

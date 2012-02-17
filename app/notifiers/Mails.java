@@ -223,7 +223,7 @@ public static void ownerUpdatedDeal(Deal deal) {
            bodyHtml = templateHtml.render(params);
            message.setHtmlBody(bodyHtml);
        } catch (TemplateNotFoundException e) {
-    	   Logger.debug("Template html email not found ", e);
+    	   Logger.error("Template html email not found ", e);
        }
 
        try {
@@ -231,7 +231,7 @@ public static void ownerUpdatedDeal(Deal deal) {
            bodyText = templateText.render(params);
            message.setTextBody(bodyText);
        } catch (TemplateNotFoundException e) {
-    	   Logger.debug("Template text email not found ", e);
+    	   Logger.error("Template text email not found ", e);
        }
        
        if (StringUtils.isNotEmpty(bodyHtml) || StringUtils.isNotEmpty(bodyText)){

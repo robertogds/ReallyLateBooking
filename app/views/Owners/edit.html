@@ -1,11 +1,13 @@
-#{extends 'Owners/layout.html' /}
-
-<div id="crudShow">
-
-        <h2 id="crudShowTitle">&{'crud.show.title', deal.hotelName}</h2>
-
-        <div class="objectForm" style="padding:10px;">
-        
+#{extends 'layout.html' /}
+<div class="extranet">
+		<div class="row">
+	        	<div class="span12 title-black">
+		           <h1>&{'crud.show.title', deal.hotelName}</h1>
+		        </div>
+	        </div>
+	    <div class="row">
+	        	<div class="span12 dashboard">
+	        	<div class=" edit-hotel">
         #{form @save(deal.id)}
  			
  			<h3>  &{'owners.oneday.title'} </h3>
@@ -34,9 +36,10 @@
 		    
 		    <p>
 		        #{field 'breakfastIncluded'}
-		        <label> &{'owners.breakfastIncluded'} </label>
+		        <label  class="checkbox">
 		        <input type="checkbox" name="${field.name}"
 		            class="${field.errorClass}" #{if deal.breakfastIncluded} checked="true" #{/if} />
+		             &{'owners.breakfastIncluded'} </label>
 		        #{/field}
 		    </p>
 		    
@@ -92,9 +95,11 @@
 		    <p>&{'owners.remember'}</p>
 		    
 		    <p>
-		        <input type="submit" value="&{'owners.save'}" />
+		        <input type="submit" class="btn btn-large btn-success"  value="&{'owners.save'}" />
 		    </p>
 		    
 		#{/form}
+			</div>
         </div>
+</div>
 </div>

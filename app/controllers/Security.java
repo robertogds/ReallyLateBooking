@@ -32,13 +32,13 @@ public class Security extends Secure.Security {
 	}
 	
     static void checkConnected() {
-        if(!session.contains("user") ||
+        if(!session.contains("username") ||
         		User.findById(Long.valueOf(session.get("userId"))) == null){
             Application.index();
         }else{
         	User user = new User();
         	user.id = Long.valueOf(session.get("userId"));
-        	user.email = session.get("user");
+        	user.email = session.get("username");
         	user.firstName = session.get("firstName");
         	user.lastName = session.get("lastName");
         	user.fbid  = session.get("uuid");

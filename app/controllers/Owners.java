@@ -13,6 +13,7 @@ import models.City;
 import models.Deal;
 import models.User;
 import play.Logger;
+import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -21,16 +22,21 @@ import play.mvc.With;
 public class Owners extends Controller{
 	
 	public static void index() { 
-		User owner = User.findByEmail(Security.connected());
-		List<Deal> deals = Deal.findActiveDealsByOwner(owner);
-		Logger.debug("Number of deals of this owner: " + deals.size());
-		render(deals); 
+		User user = User.findByEmail(Security.connected());
+		List<Deal> deals = Deal.findActiveDealsByOwner(user);
+		render(deals, user); 
 	} 
 	
 	public static void edit(Long id) {
 		Logger.debug("Update deal " + id);
+		User user = User.findByEmail(Security.connected());
 		Deal deal = Deal.findById(id);
-		render(deal);
+		if (deal != null && deal.owner != null && deal.owner.equals(user)){
+			render(deal, user);
+		}
+		else{
+			notFound();
+		}
 	}
 	
 	public static void save(Long id, Integer quantity, Integer salePriceCents, boolean breakfastIncluded,

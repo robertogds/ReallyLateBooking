@@ -1,36 +1,37 @@
-#{extends 'Secure/layout.html' /}
+#{extends 'layout.html' /}
 
-<div id="login">
-	
-	<h1>&{'secure.title'}</h1>
+<div class="row">
+	        	<div class="span9 title-black">
+		           <h1>ReallyLateBooking Extranet</h1>
+		        </div>
+	        </div>
+<div class="row">
+	      <div class="span9 extranet">
+<div class="white_buble_for_list login">
+	<div class="span5 offset2">
 		
-	#{form @authenticate()}
-		
-		#{if flash.error}
-			<p class="error">
-				&{flash.error}
-			</p>
-		#{/if}
-		#{if flash.success}
-			<p class="success">
-				&{flash.success}
-			</p>
-		#{/if}
-	
-		<p id="username-field">
-			<label for="username">&{'secure.username'}</label>
-			<input type="text" name="username" id="username" value="${flash.username}" />
-		</p>
-		<p id="password-field">
-			<label for="password">&{'secure.password'}</label>
-			<input type="password" name="password" id="password" value="" />
-		</p>
-		<p id="remember-field">
-			<input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />
-			<label for="remember">&{'secure.remember'}</label>
-		</p>
-		<p id="signin-field">
-			<input type="submit" id="signin" value="&{'secure.signin'}" />
-		</p>
-	#{/form}
+		#{form @authenticate()}
+  			<div class="control-group #{ifError 'username'} error #{/ifError}">
+              <div class="input-prepend controls">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                <input class="input-large" name="username" id="username" value="${flash.username}" type="text" placeholder="&{'secure.email'}">
+              </div>
+            </div>
+            <div class="control-group #{ifError 'password'} error #{/ifError}"> 
+              <div class="input-prepend controls">
+                <span class="add-on"><i class="icon-lock"></i></span>
+                <input class="input-large" type="password" name="password" id="password" value=""  size="16"  placeholder="&{'secure.password'}">
+              </div>
+             </div>  
+              <label class="checkbox">
+			    <input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />&{'secure.remember'}
+			  </label>
+             <div class="login-center">
+	       		 <button type="submit" class="btn btn-large btn-success" >&{'web.index.login.email.button'}</button>
+	        </div>
+		#{/form}
+
+	</div>
+</div>
+</div>
 </div>

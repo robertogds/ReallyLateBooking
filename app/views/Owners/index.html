@@ -1,90 +1,31 @@
-#{extends 'Owners/layout.html' /}
+#{extends 'layout.html' /}
+#{set title: user.firstName /}
 
-<div id="crudList" >
-	
-	<h2 id="crudListTitle">&{'extranet.list.title'}</h2>
-	
+			<div class="row">
+	        	<div class="span12 title-black">
+		           <h1>&{'extranet.list.title'}</h1>
+		        </div>
+	        </div>
+	        <div class="row">
+	        	<div class="span12 dashboard">
+	        		<div class="tabs-container">
+	        		<ul class="nav nav-tabs" >
+					  <li class="active" ><a href="#myhotels" data-toggle="tab"><i class="icon-shopping-cart"></i>
+					    &{'web.dashboard.mybookings.title'}</a>
+					  </li>
+					  <li><a href="#profile" data-toggle="tab"><i class="icon-user"></i>
+					  	&{'web.dashboard.profile.title'}</a>
+					  </li>
+					</ul>
+					<div id="my-tab-content" class="tab-content">
+			            <div class="tab-pane active" id="myhotels">
+			            	#{include 'Owners/myHotelsTab.html'/}
+			            </div> <!--  mybookings end -->
+			            <div class="tab-pane" id="profile">
+			            	#{include 'Owners/profileTab.html'/}
+						</div>
+			        </div>
+			        </div>
+				</div> <!-- deal-detail end -->
+	        </div>
 
-	<div id="crudListTable">
-		<table>
-        <thead>
-                <tr>
-                        <th width="100">
-                        	&{'hotelName'}
-                        </th>
-                         <th width="75">
-                        	&{'city'}
-                        </th>
-                         <th width="75">
-                        	&{'priceCents'}
-                        </th>
-                         <th width="75">
-                        	&{'salePriceCents'}
-                        </th>
-                        <th width="75">
-                        	&{'owners.moredays.priceDay2'}
-                        </th>
-                        <th width="75">
-                        	&{'owners.moredays.priceDay3'}
-                        </th>
-                        <th width="75">
-                        	&{'owners.moredays.priceDay4'}
-                        </th>
-                        <th width="75">
-                        	&{'owners.moredays.priceDay5'}
-                        </th>
-                         <th width="50">
-                        	&{'quantity'}
-                        </th>
-                         <th width="75">
-                        	&{'breakfastIncluded'}
-                        </th>
-                        <th width="100">
-                        	&{'updated'}
-                        </th>
-                </tr>
-        </thead>
-	    
-	       #{list items:deals, as:'deal' }
-	        <tr class="${deal_index % 2 ? 'even' : 'odd'}">
-	             <td>
-	                 #{a @Owners.edit(deal.id)} ${deal.hotelName}  #{/a}       
-	             </td>
-	              <td>
-	              	 ${models.City.findById(deal.city.id).name }
-	             </td>
-	              <td>
-	                  ${deal.priceCents}      
-	             </td>
-	             <td>
-	                  ${deal.salePriceCents}      
-	             </td>
-	             <td>
-	                  ${deal.priceDay2}      
-	             </td>
-	            <td>
-	                  ${deal.priceDay3}      
-	             </td>
-	             <td>
-	                  ${deal.priceDay4}      
-	             </td>
-	             <td>
-	                  ${deal.priceDay5}      
-	             </td>
-	             <td>
-	                  ${deal.quantity}      
-	             </td>
-	             <td>
-	                  ${deal.breakfastIncluded}      
-	             </td>
-	               <td>
-	                  ${deal.updated?.format('dd MMMM yyyy - hh:mm')}    
-	             </td>
-	              
-	        </tr>
-	       #{/list}
-	</table>
-	</div>
-	
-	
-</div>

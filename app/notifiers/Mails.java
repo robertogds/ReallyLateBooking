@@ -35,8 +35,8 @@ import play.templates.TemplateLoader;
 
 public class Mails extends MailServiceFactory {
    private static final String PRECIOS_MAIL = "precios@reallylatebooking.com";
-   private static final String ALTAS_MAIL = "altas@reallylatebooking";
-   private static final String RESERVAS_MAIL = "reservas@reallylatebooking";
+   private static final String ALTAS_MAIL = "altas@reallylatebooking.com";
+   private static final String RESERVAS_MAIL = "reservas@reallylatebooking.com";
    private static final String HOLA_MAIL = "RLB <hola@reallylatebooking.com>";
    
    public static void welcome(User user) {
@@ -223,7 +223,7 @@ public static void ownerUpdatedDeal(Deal deal) {
            bodyHtml = templateHtml.render(params);
            message.setHtmlBody(bodyHtml);
        } catch (TemplateNotFoundException e) {
-    	   Logger.error("Template html email not found ", e);
+    	   Logger.info("Template html email not found ", e);
        }
 
        try {
@@ -235,8 +235,8 @@ public static void ownerUpdatedDeal(Deal deal) {
        }
        
        if (StringUtils.isNotEmpty(bodyHtml) || StringUtils.isNotEmpty(bodyText)){
-    	Logger.debug("Sending email...");
     	try {
+    		Logger.debug("Sending email...", bodyHtml);
    			getMailService().send(message);
    		} catch (IOException e) {
    			Logger.error("Error Sending email", e);

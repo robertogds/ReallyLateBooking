@@ -1,0 +1,80 @@
+<div class="row">
+		<table class="table table-striped table-bordered span11">
+        <thead>
+                <tr>
+                        <th>
+                        	&{'hotelName'}
+                        </th>
+                         <th>
+                        	&{'city'}
+                        </th>
+                         <th>
+                        	&{'priceCents'}
+                        </th>
+                         <th>
+                        	&{'salePriceCents'}
+                        </th>
+                        <th>
+                        	&{'owners.moredays.priceDay2'}
+                        </th>
+                        <th>
+                        	&{'owners.moredays.priceDay3'}
+                        </th>
+                        <th>
+                        	&{'owners.moredays.priceDay4'}
+                        </th>
+                        <th>
+                        	&{'owners.moredays.priceDay5'}
+                        </th>
+                         <th>
+                        	&{'quantity'}
+                        </th>
+                         <th>
+                        	&{'breakfastIncluded'}
+                        </th>
+                        <th>
+                        	&{'updated'}
+                        </th>
+                </tr>
+        </thead>
+	    
+	       #{list items:deals, as:'deal' }
+	        <tr class="${deal_index % 2 ? 'even' : 'odd'}">
+	             <td>
+	                 #{a @Owners.edit(deal.id)} ${deal.hotelName}  #{/a}       
+	             </td>
+	              <td>
+	              	 ${models.City.findById(deal.city.id).name }
+	             </td>
+	              <td>
+	                  ${deal.priceCents}      
+	             </td>
+	             <td>
+	                  ${deal.salePriceCents}      
+	             </td>
+	             <td>
+	                  ${deal.priceDay2}      
+	             </td>
+	            <td>
+	                  ${deal.priceDay3}      
+	             </td>
+	             <td>
+	                  ${deal.priceDay4}      
+	             </td>
+	             <td>
+	                  ${deal.priceDay5}      
+	             </td>
+	             <td>
+	                  ${deal.quantity}      
+	             </td>
+	             <td>
+	                  ${deal.breakfastIncluded}      
+	             </td>
+	               <td>
+	                  ${deal.updated?.format('dd MMMM yyyy - hh:mm')}    
+	             </td>
+	              
+	        </tr>
+	       #{/list}
+	</table>
+</div>

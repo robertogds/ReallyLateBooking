@@ -61,7 +61,7 @@ public class Users extends Controller {
 		render(user, bookings, totalBookings, coupons);
 	}
 	
-	public static void updateAccount(User user) {
+	public static void updateAccount(User user, String returnUrl) {
 		validation.email("user.email",user.email);
 		validation.required("user.firstName",user.firstName);
 		validation.required("user.lastName",user.lastName);
@@ -81,8 +81,7 @@ public class Users extends Controller {
 	        validation.keep(); // keep the errors for the next request
 	        Logger.debug("Errors " + validation.errorsMap().toString());
 	    }
-	    //TODO better ways to do this redirect?
-	    redirect("/dashboard#profile");
+	    redirect(returnUrl);
 	}
 	
 	/** RLB API Methods **/

@@ -154,7 +154,7 @@ public class User extends Model{
     
     public void createUserSession(){
     	Logger.debug("User session: " + Session.current().toString());
-    	Session.current().put("user", this.email);
+    	Session.current().put("username", this.email);
     	Session.current().put("firstName", this.firstName);
     	Session.current().put("lastName", this.lastName);
     	Session.current().put("userId", this.id);

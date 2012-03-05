@@ -4,8 +4,6 @@ import helper.HotUsaApiHelper;
 
 import java.util.List;
 
-import controllers.Secure.Security;
-
 import jobs.Bootstrap;
 import models.Booking;
 import models.Deal;
@@ -24,16 +22,18 @@ public class Application extends Controller {
 	@Before(unless = {"confirmReservations"})
     static void verifySSL(){
         if (request.secure == false && Play.mode.isProd()){
-        	 Logger.debug("Redirect to secure url");
+        	Logger.debug("Redirect to secure url");
             redirect("https://" + request.host + request.url); 
         }
     }
 	
 	public static void index() {
-        if(session.contains("user") && User.findById(Long.valueOf(session.get("userId"))) != null) {
-            Cities.index();
-        }
-        render();
+		if(Security.isConnected()){
+			Cities.index();
+		}
+		else{
+			render();
+		}
     }
     
     public static void logout() {
@@ -50,6 +50,7 @@ public class Application extends Controller {
         // Check tokens
         Boolean allowed = (Boolean)Security.authenticate(username, password);
         if(validation.hasErrors() || !allowed) {
+        	Logger.debug("validation.hasErrors() : "+ validation.hasErrors() + " allowed: " + allowed);
             flash.keep("url");
             flash.error(Messages.get("web.login.incorrect"));
             params.flash();

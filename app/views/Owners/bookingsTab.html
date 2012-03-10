@@ -1,0 +1,53 @@
+<div class="row">
+  					<div class="span10">
+  						#{if totalBookings == 0 }
+  							<div class="row">
+   							<div class="span10 noBookings">
+   								<p>&{'web.extranet.bookings.nobookings.p'}</p>
+   								<p>&{'web.extranet.bookings.nobookings.p2'}</p>
+    						</div>
+   						</div>
+  						#{/if}
+  						#{else}
+           	<table class="table table-bordered" id="bookings">
+		        <thead>
+		          <tr>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.date'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.code'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.price'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.nights'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.customer'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.invoiced'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.canceled'}</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+		        	#{list items:bookings, as:'booking'}
+		        		<tr class=summary>
+				            <td>${booking.checkinDate.format('dd MMMM yyyy')}</td>
+				            <td>${booking.code}</td>
+				            #{if booking.finalPrice > 0}
+				            	<td>${booking.finalPrice}&euro;</td>
+				            #{/if}
+				            #{else}
+				            	<td>${booking.salePriceCents}&euro;</td>
+				            #{/else}
+				             <td>${booking.nights}</td>
+				             <td>#{if booking.bookingForEmail?.trim() != ''}
+				        				${booking.bookingForFirstName} ${booking.bookingForLastName}
+				        			#{/if}
+				        			#{else}
+				        				${booking.user.firstName} ${booking.user.lastName}
+				        			#{/else}
+				        	</td>
+				        	<td>${booking.invoiced}</td>
+				        	<td>${booking.canceled}</td>
+			        	</tr>
+		        	#{/list}
+		         </tbody>
+		     </table>
+		     
+		     <p>&{'web.extranet.bookings.contactus'}</p>
+	     #{/else}
+	</div>
+</div>

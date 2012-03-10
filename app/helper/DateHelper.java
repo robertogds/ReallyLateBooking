@@ -40,7 +40,6 @@ public final class DateHelper {
 	
 	public static Boolean isActiveTime(){
 	    int hour = DateHelper.getCurrentHour() ;
-	    Logger.info("Its time: " + hour);
 		if (hour > 12 || hour < 6){
 			return Boolean.TRUE;
 		}

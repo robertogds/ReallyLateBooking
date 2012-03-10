@@ -46,7 +46,6 @@ public final class ImageHelper {
 				String[] temp;
 			  	String delimiter = "\\.";
 			  	temp = image.split(delimiter);
-			  	Logger.debug("Imagen:" + image);
 			  	try {
 					image = temp[0] + size + "." + temp[1];
 				} catch (Exception e) {

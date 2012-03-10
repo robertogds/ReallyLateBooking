@@ -391,22 +391,18 @@ public final class HotUsaApiHelper {
 		if (xml != null){
 			String status = xml.getElementsByTagName("estado").item(0).getTextContent();
 			Logger.debug("Reservation status: " + status);
-			
 			if (status.equals("00")){
 				String localizador = xml.getElementsByTagName("n_localizador").item(0).getTextContent();
 				Logger.debug("Reservation is Ok, localizador: " + localizador);
-				
 				//PreReservation worked well, so we try confirmation
 				return localizador;
-				
 			}
 			else{
-				Logger.error("Reservation couldnt be completed");
+				Logger.error("Reservation couldnt be completed. Status received was not 00");
 			}
 		}
 		else{
-			//TODO
-			Logger.error("Didnt receive a correct answer from HotUsa Api");
+			Logger.error("Didnt receive a correct answer from HotUsa Api. Xml Response is null");
 		}
 		
 		return null;

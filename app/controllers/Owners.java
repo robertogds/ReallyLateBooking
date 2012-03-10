@@ -9,10 +9,13 @@ import java.util.List;
 import notifiers.Mails;
 
 import jobs.Bootstrap;
+import models.Booking;
 import models.City;
 import models.Deal;
 import models.User;
 import play.Logger;
+import play.data.validation.Required;
+import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -32,19 +35,25 @@ public class Owners extends Controller{
 		User user = User.findByEmail(Security.connected());
 		Deal deal = Deal.findById(id);
 		if (deal != null && deal.owner != null && deal.owner.equals(user)){
-			render(deal, user);
+			List<Booking> bookings = Booking.findByDeal(deal);
+			int totalBookings = bookings.size();
+			if(deal.company != null){
+				deal.company.get();
+			}
+			for(Booking booking: bookings){
+				booking.user.get();
+			}
+			render(deal, user, bookings, totalBookings);
 		}
 		else{
 			notFound();
 		}
 	}
 	
-	public static void save(Long id, Integer quantity, Integer salePriceCents, boolean breakfastIncluded,
+	public static void save(Long id, @Required Integer quantity, @Required Integer salePriceCents, boolean breakfastIncluded,
 			Integer priceDay2, Integer priceDay3, Integer priceDay4, Integer priceDay5) {
-		Logger.debug("breakfast: " + breakfastIncluded);
-	    Deal deal;
 	    // Retrieve post
-	    deal = Deal.findById(id);
+	     Deal deal = Deal.findById(id);
 	    // Edit
 	    deal.quantity = quantity;
 	    deal.salePriceCents = salePriceCents;
@@ -58,15 +67,17 @@ public class Owners extends Controller{
 	    // Validate
 	    validation.valid(deal);
 	    if(validation.hasErrors()) {
-	        render("@form", deal);
+	    	flash.error(Messages.get("web.extranet.updatedeal.incorrect"));
+            params.flash();
+	        edit(deal.id);
 	    }
-	    // Save
-	    deal.update();
-	    
-	    //Notify RLB of the updated prices
-	    Mails.ownerUpdatedDeal(deal);
-	    
-	    index();
+	    else{
+	    	flash.success(Messages.get("web.extranet.updatedeal.success"));
+		    deal.update();
+		    //Notify RLB of the updated prices
+		    Mails.ownerUpdatedDeal(deal);
+		    index();
+	    }
 	}
 
 	

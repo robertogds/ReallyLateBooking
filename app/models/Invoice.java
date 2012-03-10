@@ -3,6 +3,8 @@ package models;
 import helper.CreditCardHelper;
 import helper.DateHelper;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -74,7 +76,16 @@ public class Invoice extends Model {
 			booking.invoiced = Boolean.TRUE;
 			booking.update();
 		}
+    	this.subTotal = round(this.subTotal);
+    	this.totalTax = round(this.totalTax);
+    	this.totalAmount = round(this.totalAmount);
     	this.update();
+    }
+    
+    private Float round(Float number){
+    	BigDecimal big = new BigDecimal(number);
+   	 	big = big.setScale(2, RoundingMode.HALF_UP);
+   	 	return big.floatValue();
     }
     
     private Float calculateTax(Float fee) {

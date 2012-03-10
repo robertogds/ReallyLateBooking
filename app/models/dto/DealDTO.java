@@ -7,23 +7,27 @@ import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 
+import controllers.InfoTexts;
+
 import models.City;
 import models.Deal;
+import models.InfoText;
 import models.User;
 import play.Logger;
 import play.data.validation.Email;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.i18n.Lang;
+import play.i18n.Messages;
 import siena.Generator;
 import siena.Id;
 import siena.Index;
 
 public class DealDTO {
-
+	
     public Long id;
 	public String hotelName;	
-    public City city;
+    public CityDTO city;
 	public Integer salePriceCents;
 	public Integer priceCents;
 	public Integer priceDay2;
@@ -67,7 +71,8 @@ public class DealDTO {
 		validateDeal(deal);
 		this.id = deal.id;
 		this.hotelName = deal.hotelName;
-		this.city = deal.city;
+		deal.city.get();
+		this.city = new CityDTO(deal.city);
 		this.salePriceCents = deal.salePriceCents;
 		this.priceCents = deal.priceCents;
 		this.priceDay2 = deal.priceDay2;
@@ -104,9 +109,7 @@ public class DealDTO {
 		this.active = deal.active;
 		
 		String lang = Lang.get();
-		Logger.debug("Filling deal info with locale: " + lang);
 		if (lang.equals("es")){
-			Logger.debug("Filling deal info with Spanish ");
 			this.detailText = deal.detailText;
 			this.hotelText = deal.hotelText;
 			this.roomText = deal.roomText;
@@ -114,14 +117,30 @@ public class DealDTO {
 			this.foodDrinkText = deal.foodDrinkText;
 		}
 		else if (lang.equals(Lang.getLocale().FRENCH.getLanguage())){
-			Logger.debug("Filling deal info with French ");
 			this.detailText = deal.detailTextFR;
 			this.hotelText = deal.hotelTextFR;
 			this.roomText = deal.roomTextFR;
 			this.aroundText = deal.aroundTextFR;
 			this.foodDrinkText = deal.foodDrinkTextFR;
 		}
+		this.createDetailText(deal.customDetailText, lang);
+	}
 
+	private void createDetailText(boolean customText, String lang){
+		if (!customText){
+			InfoText text = InfoText.findByKey(InfoTexts.DEAL_DETAIL_TEXT);
+			this.detailText = text != null ? text.content : this.detailText;
+		}
+		this.setBreakfastMode();
+	}
+	
+	private void setBreakfastMode() {
+		if(this.breakfastIncluded != null && this.breakfastIncluded){
+			this.detailText = Messages.get("deal.detailText.breakast.yes") + this.detailText;
+		}
+		else{
+			this.detailText = Messages.get("deal.detailText.breakast.no") + this.detailText;
+		}
 	}
 
 	private String getNights(){
@@ -139,5 +158,40 @@ public class DealDTO {
 		}
 	}
 
+	/**
+	 * adapts the info text so we can display the text correctly at the web
+	 * Just a workaround to avoid rewrite all the info
+	 * */
+	public void textToHtml() {
+		this.detailText = parseToHtml(this.detailText);
+		this.aroundText = parseToHtml(this.aroundText);
+		this.foodDrinkText = parseToHtml(this.foodDrinkText);
+		this.roomText = parseToHtml(this.roomText);
+		this.hotelText = parseToHtml(this.hotelText);
+	}
 	
+	/*
+	 * Returns the html version of the text.
+	 * just changes * and - by <br>
+	 * */
+	private static String parseToHtml(String text){
+		text = removeFirstBr(text, "*");
+		text = removeFirstBr(text, "- ");
+		String html =  StringUtils.replace(text, "*", "<br>");
+		html =  StringUtils.replace(html, "- ", "<br>");
+		return html;
+	}
+	
+	/*
+	 * Removes the first BR  
+	 * @param text
+	 * @param remove
+	 * @return
+	 */
+	private static String removeFirstBr(String text, String remove){
+		if (StringUtils.startsWith(text, remove)){
+			text = StringUtils.removeStart(text, remove);
+		}
+		return text;
+	}
 }

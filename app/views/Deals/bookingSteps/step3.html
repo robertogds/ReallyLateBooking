@@ -1,0 +1,40 @@
+<h2>3. &{'web.bookingForm.3.title'}</h2>
+				            		<div id="step3">
+				            				<div class="alert alert-warning">
+										        <p><strong>${user?.firstName}</strong>, &{'web.bookingForm.3.hint'}</p>
+										    </div>
+										   
+										    <div class="padding-centered">
+				            			   <fieldset>
+				            			   	<div class="row-fluid">
+									          <div class="span4">
+									            <label for="firstName">&{'web.bookingForm.3.name'}</label>
+									            <div class="input-prepend">
+									            	<span class="add-on"><i class="icon-user"></i></span>
+									                <input class="large " id="firstName" name="booking.bookingForFirstName" 
+									                	  type="text" value="${flash['booking.bookingForFirstName']}">
+									            </div>
+									          </div><!-- /clearfix -->
+									          <div class="span4">
+									            <label for="lastName">&{'web.bookingForm.3.surname'}</label>
+									            <div class="input-prepend">
+									            	<span class="add-on"><i class="icon-user"></i></span>
+									                <input class="large " id="lastName" name="booking.bookingForLastName" 
+									                	  type="text" value="${flash['booking.bookingForLastName']}">
+									            </div>
+									          </div><!-- /clearfix -->
+									         
+									          <div class="span4">
+									            <label for="bookingForEmail">&{'web.bookingForm.3.email'}</label>
+									            <div class="input">
+									              <div class="input-prepend">
+									                <span class="add-on"><i class="icon-envelope"></i></span>
+									                <input class="large" id="bookingForEmail" name="booking.bookingForEmail" 
+									                	  type="text" value="${flash['booking.bookingForEmail']}">
+									              </div>
+									            </div>
+									          </div><!-- /clearfix -->
+									          </div>
+									        </fieldset>
+									         </div>
+						   			 </div>

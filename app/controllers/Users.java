@@ -36,7 +36,7 @@ public class Users extends Controller {
 		Security.checkConnected();
     }
 	
-	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","dashboard","updateAccount"})
+	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","dashboard","updateAccount","register","loginUser"})
 	public static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -48,14 +48,15 @@ public class Users extends Controller {
 	}
 	
 	/** RLB Web Methods **/
+
 	public static void dashboard(){
 		Logger.debug("SESION: " + session);
 		User user= User.findById(Long.valueOf(session.get("userId")));
 		List<Booking> bookings = Booking.findByUser(user);
 		Integer totalBookings = bookings.size();
 		for (Booking booking: bookings){
-			booking.city = City.findById(booking.city.id);
-			booking.deal = Deal.findById(booking.deal.id);
+			booking.city.get(); 
+			booking.deal.get();
 		}
 		List<MyCoupon> coupons = MyCoupon.findByUser(user);
 		render(user, bookings, totalBookings, coupons);
@@ -84,11 +85,11 @@ public class Users extends Controller {
 	    redirect(returnUrl);
 	}
 	
+    
 	/** RLB API Methods **/
 	public static void login(String json) { 
 		String body = json != null ? json : params.get("body");
 		Logger.debug("JSON received: " + body);
-		
 		if (body != null){
 			User user = new Gson().fromJson(body, User.class);
 			if (Security.authenticateJson(user.email, user.password) || 
@@ -117,42 +118,35 @@ public class Users extends Controller {
 			}
 		}
 	}
-	
-/*	public static void create(JsonObject json) {
-		Logger.debug("Create user " + json);	
-		User user = new Gson().fromJson(json, User.class);
-		validateAndSave(user);
-	}*/
-	
+
 	public static void create(String json) {
 		String body = json != null ? json : params.get("body");
 		Logger.debug("Create user " + body);	
 		if (body != null){
 			User user = new Gson().fromJson(body, User.class);
-			validateAndSave(user);
+			if (user.checkFacebookUserExists()){
+				login(json);
+			}
+			else{
+				validateAndSave(user);
+			}
 		}
 	}
 	
 	private static void validateAndSave(@Valid User user){
-		if (user.checkFacebookUserExists()){
-		    String json = new Gson().toJson(user,User.class);	
-			login(json);
+		user.validate();
+		if (!validation.hasErrors()){
+			user.insert();
+			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "CREATED", Messages.get("user.create.correct"), user);
+			Logger.debug("User correctly created " + new Gson().toJson(message));	
+			Mails.welcome(user);
+			//Mails.validate(user);
+			renderJSON(message);
 		}
 		else{
-			user.validate();
-			if (!validation.hasErrors()){
-				user.insert();
-				UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "CREATED", Messages.get("user.create.correct"), user);
-				Logger.debug("User correctly created " + new Gson().toJson(message));	
-				Mails.welcome(user);
-				//Mails.validate(user);
-				renderJSON(message);
-			}
-			else{
-				UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), user);
-				Logger.debug("User couldnt be created " + new Gson().toJson(message));	
-				renderJSON(message);
-			}
+			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), user);
+			Logger.debug("User couldnt be created " + new Gson().toJson(message));	
+			renderJSON(message);
 		}
 	}
 

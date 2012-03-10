@@ -1,9 +1,9 @@
-<div class="row">
-	        					<div class="span9 ">
-							  	<div id="login">
+<div class="row-fluid">
+	        					<div class="span12 ">
+							  	<div id="login" class="row-fluid">
 									#{form @Users.updateAccount()}
 										
-           								<div class="span4 control-group #{ifError 'user.firstName'} error #{/ifError}">
+           								<div class="span5 control-group #{ifError 'user.firstName'} error #{/ifError}">
 	          								<label for="firstName">&{'user.firstName'}</label>
 											<div class="controls">
 								              <div class="input-prepend">
@@ -13,7 +13,7 @@
 								              </div>
 								            </div>
 							            </div>
-							            <div class="span4 control-group #{ifError 'user.lastName'} error #{/ifError}">
+							            <div class="span5 control-group #{ifError 'user.lastName'} error #{/ifError}">
 							            	<label for="lastName">&{'user.lastName'}</label>
 								            <div class="controls">
 								              <div class="input-prepend">
@@ -23,7 +23,7 @@
 								              </div>
 								            </div>
 							             </div> 
-							            <div class="span4 control-group #{ifError 'user.email'} error #{/ifError}">
+							            <div class="span5 control-group #{ifError 'user.email'} error #{/ifError}">
 							            	<label for="email">&{'user.email'}</label>
 											<div class="controls">
 								              <div class="input-prepend">
@@ -33,7 +33,7 @@
 								              </div>
 								            </div>
 							             </div> 
-							            <div class="span4 control-group #{ifError 'user.password'} error #{/ifError}">
+							            <div class="span5 control-group #{ifError 'user.password'} error #{/ifError}">
 							            	<label for="password">&{'user.password'}</label>
 							            	<div class="controls"> 
 								              <div class="input-prepend">

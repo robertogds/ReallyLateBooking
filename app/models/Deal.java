@@ -87,6 +87,8 @@ public class Deal extends Model {
 	public String longitude;
 	@DateTime
 	public Date updated;
+	
+	public boolean customDetailText;
 	@MaxSize(10000)
 	public String detailText;
 	@MaxSize(10000)
@@ -138,7 +140,6 @@ public class Deal extends Model {
 	public String bookingLine3;
 	public String bookingLine4;
 	public String bookingLine5;
-
 	
 	public Deal(String hotelName, City city) {
 		this.hotelName = hotelName;
@@ -274,9 +275,6 @@ public class Deal extends Model {
 		return dealsMap;
 	}
 	
-	/*
-	 * needed?
-	 */
 	public void fecthCity(){
 		if (this.city != null){
 			this.city.get();
@@ -383,7 +381,7 @@ public class Deal extends Model {
 			default:
 				break;
 		}
-	    Logger.debug("Updatind price for: " + deal.hotelName + " day: " + day );
+	    Logger.debug("Updating price for: " + deal.hotelName + " day: " + day );
 	    deal.updated = Calendar.getInstance().getTime();
 	    deal.update();
 	}
@@ -461,18 +459,6 @@ public class Deal extends Model {
 		return deal != null ? deal.discount : 0;
 	}
 	
-	/**
-	 * adapts the info text so we can display the text correctly at the web
-	 * Just a workaround to avoid rewrite all the info
-	 * */
-	public void textToHtml() {
-		this.detailText = parseToHtml(this.detailText);
-		this.aroundText = parseToHtml(this.aroundText);
-		this.foodDrinkText = parseToHtml(this.foodDrinkText);
-		this.roomText = parseToHtml(this.roomText);
-		this.hotelText = parseToHtml(this.hotelText);
-	}
-	
 	
 	/**
 	 * Limits the deals number per city zone to the MAXDEALS
@@ -542,30 +528,6 @@ public class Deal extends Model {
 		return zoneDeals;
 	}
 
-	/*
-	 * Returns the html version of the text.
-	 * just changes * and - by <br>
-	 * */
-	private static String parseToHtml(String text){
-		text = removeFirstBr(text, "*");
-		text = removeFirstBr(text, "-");
-		String html =  StringUtils.replace(text, "*", "<br>");
-		html =  StringUtils.replace(html, " -", "<br>");
-		return html;
-	}
-	
-	/*
-	 * Removes the first BR  
-	 * @param text
-	 * @param remove
-	 * @return
-	 */
-	private static String removeFirstBr(String text, String remove){
-		if (StringUtils.startsWith(text, remove)){
-			text = StringUtils.removeStart(text, remove);
-		}
-		return text;
-	}
 }
 
 

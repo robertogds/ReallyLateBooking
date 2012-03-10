@@ -1,0 +1,82 @@
+	<h2>2. &{'web.bookingForm.2.title'}</h2>
+				            		<div  id="step2">
+							        		<div class="padding-centered">
+							        			<fieldset>
+										          <div class="clearfix">
+										            <label for="prependedInput">&{'web.bookingForm.2.checkin'}</label>
+										            <div class="input">
+										              <div class="input-prepend">
+										                <span class="add-on"><i class="icon-calendar"></i></span>
+										                <input class="large disabled" id="prependedInput" name="booking.checkinDate" 
+										                	disabled  type="text" value=" &{'web.bookingForm.2.today'}">
+										                <span class="help-block">&{'web.bookingForm.2.checkininfo'}</span>
+										              </div>
+										            </div>
+										          </div><!-- /clearfix -->
+										          <div class="clearfix">
+											            <label for="nightsSelect"> &{'web.bookingForm.2.nights'}</label>
+											            <div class="input">
+											            <div class="input-prepend">
+											              <span class="add-on"><i class="icon-time"></i></span>
+											              <select class="large" name="booking.nights" id="nightsSelect">
+											                		<option  value="1"> &{'web.bookingForm.select.1'} ${deal.salePriceCents}&euro;</option>
+												                #{if deal.priceDay2 != null }
+												                	<option value="2">2 &{'web.bookingForm.select.n'}  <span class="total-price">${deal.salePriceCents + deal.priceDay2}&euro;</span></option>
+												                #{/if}
+												                 #{if deal.priceDay3 != null }
+												                	<option  value="3">3 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3}&euro;</option>
+												                #{/if}
+												                #{if deal.priceDay4 != null }
+												                	<option  value="4">4 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay4}&euro;</option>
+												                #{/if}
+												                #{if deal.priceDay5 != null }
+												                	<option  value="5">5 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay5}&euro;</option>
+												                #{/if}
+											              </select>
+											              <span class="help-block">&{'web.bookingForm.2.nights.info'}</span>
+											            </div>
+											            </div>
+										          </div><!-- /clearfix -->
+										          <div class="clearfix">
+										            <label for="prependedInput">&{'web.bookingForm.2.people'}</label>
+										            <div class="input">
+										              <div class="input-prepend">
+										                <span class="add-on"><i class="icon-user"></i></span>
+										                <input class="large disabled" id="prependedInput" name="clients" 
+										                	disabled  type="text" value="&{'web.bookingForm.2.people.max'}">
+										                <span class="help-block">&{'web.bookingForm.2.people.hint'}
+										                	<a  href="#" class="tipsy" data-placement="right" data-original-title="&{'web.bookingForm.2.people.hint.info'}"><i class="icon-info-sign"></i></a></span>
+										              </div>
+										            </div>
+										          </div><!-- /clearfix -->
+										          #{if user?.credits > 0 && !deal.isHotUsa}
+										          <div class="clearfix">
+										            <label for="credits">&{'web.bookingForm.2.credits'}</label>
+										            <div class="input">
+										              <div class="input-prepend">
+										                <span class="add-on">&euro;</span>
+										                <input class="large disabled" id="credits" name="credits" 
+										                	disabled  type="text" value="&{'web.bookingForm.2.credits.value', user?.credits}">
+										                <span class="help-block">&{'web.bookingForm.2.credits.hint'}</span>
+										              </div>
+										            </div>
+										          </div><!-- /clearfix -->
+										          #{/if}
+										        </fieldset>
+							        		</div>
+							   			 <div class="row-fluid">
+								   			 <div class="total">
+										              <div class="span4">
+										               		<span><i class="icon-asterisk"></i></span> &{'web.bookingForm.2.total'}:
+										              </div>
+										              <div class="span7">
+										              		#{if user?.credits > 0 && !deal.isHotUsa}
+										              			<span id="total-booking-precredits">${deal.salePriceCents}</span>&euro; - ${user?.credits}&euro; = <span id="total-booking" class="total-booking">${deal.salePriceCents - user?.credits}</span>&euro; <small>&{'web.bookingForm.2.tax'}</small>
+										              		#{/if}
+										              		#{else}
+										               			<span id="total-booking" class="total-booking">${deal.salePriceCents}</span>&euro; <small>&{'web.bookingForm.2.tax'}</small>
+										              		#{/else}
+										              </div>
+											 </div>
+										 </div>
+						   			 </div>

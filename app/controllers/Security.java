@@ -4,6 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
+import play.mvc.Scope.Session;
 import models.*;
 
 public class Security extends Secure.Security {
@@ -32,8 +33,7 @@ public class Security extends Secure.Security {
 	}
 	
     static void checkConnected() {
-        if(!session.contains("username") ||
-        		User.findById(Long.valueOf(session.get("userId"))) == null){
+        if(!session.contains("username") || !connectedUserExists()){
             Application.index();
         }else{
         	User user = new User();
@@ -45,4 +45,14 @@ public class Security extends Secure.Security {
             renderArgs.put("user", user);
         }
     }
+    
+    static boolean connectedUserExists(){
+		try{
+			User user = User.findById(Long.valueOf(session.get("userId")));
+			return user != null;
+		}
+		catch(NumberFormatException e){
+			return false;
+		}
+	}
 }

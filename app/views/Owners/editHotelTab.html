@@ -1,0 +1,100 @@
+
+	  <div class="edit-hotel">
+        #{form @save(deal.id), class:'form-horizontal'}
+ 		<div class="row-fluid">
+ 			<div class="span5">
+ 				<fieldset>
+			    <legend>&{'owners.oneday.title'}</legend>
+			    <div class="control-group #{ifError 'quantity'} error #{/ifError}">
+			    	 #{field 'quantity'}
+		       		 <label  class="control-label" for="quantity">&{'owners.quantity'}</label>
+		       		 <div class="controls">
+				          <input type="text" name="${field.name}" id="quantity"
+		            			value="${deal.quantity}" class="input-small" />
+		            			<a href="#" class="tooltip-link" rel="tooltip" title="&{'owners.moredays.point1'}"><i class="icon-exclamation-sign"></i></a>
+				        <p class="help-block">&{'owners.quantity.hint'}</p>
+				     </div>
+		        	#{/field}
+			    </div>
+			    
+			    <div class="control-group #{ifError 'salePriceCents'} error #{/ifError}">
+			    	 #{field 'salePriceCents'}
+		       		 <label  class="control-label" for="salePriceCents">&{'owners.salePriceCents'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <input type="text" name="${field.name}" id="quantity"
+		            			value="${deal.salePriceCents}" class="input-small" />
+		            		<span class="add-on">&euro;</span>
+		            		</div>
+				        <p class="help-block">&{'owners.salePriceCents.hint'}</p>
+				     </div>
+		        	#{/field}
+			    </div>
+			    <div class="control-group">
+			    	 #{field 'breakfastIncluded'}
+		            <label class="control-label" for="breakfastIncluded"> &{'owners.breakfastIncluded'}</label>
+		            <div class="controls">
+		              <label class="checkbox">
+		               <input type="checkbox" name="${field.name}" id="breakfastIncluded"
+			             #{if deal.breakfastIncluded} checked="true" #{/if} />
+		              </label>
+		            </div>
+		            #{/field}
+		        </div>
+			  </fieldset>
+		    </div>
+		    <div class="span5">
+			    <fieldset>
+			    <legend> &{'owners.moredays.title'} <a href="#" class="popover-link" rel="popover" data-placement="left" data-content="&{'owners.moredays.description'} <br> <br> &{'owners.moredays.description.2'}" data-original-title="&{'owners.moredays.title'}"><i class="icon-question-sign"></i></a></legend>
+			    
+			    <div class="control-group #{ifError 'priceDay2'} error #{/ifError}">
+			    	 #{field 'priceDay2'}
+		       		 <label  class="control-label" for="priceDay2">&{'owners.moredays.priceDay2'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <input type="text" name="${field.name}" id="quantity"
+		            			value="${deal.priceDay2}" class="input-small" />
+		            		<span class="add-on">&euro;</span>
+		            		</div>
+				     </div>
+		        	#{/field}
+		        	 #{field 'priceDay3'}
+		       		 <label  class="control-label" for="priceDay2">&{'owners.moredays.priceDay2'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <input type="text" name="${field.name}" id="quantity"
+		            			value="${deal.priceDay2}" class="input-small" />
+		            		<span class="add-on">&euro;</span>
+		            		</div>
+				     </div>
+		        	#{/field}
+		        	 #{field 'priceDay4'}
+		       		 <label  class="control-label" for="priceDay2">&{'owners.moredays.priceDay2'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <input type="text" name="${field.name}" id="quantity"
+		            			value="${deal.priceDay2}" class="input-small" />
+		            		<span class="add-on">&euro;</span>
+		            		</div>
+				     </div>
+		        	#{/field}
+		        	 #{field 'priceDay5'}
+		       		 <label  class="control-label" for="priceDay2">&{'owners.moredays.priceDay2'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <input type="text" name="${field.name}" id="quantity"
+		            			value="${deal.priceDay2}" class="input-small" />
+		            		<span class="add-on">&euro;</span>
+		            		</div>
+				     </div>
+		        	#{/field}
+			    </div>
+
+			  </fieldset>
+			 	</div>
+		    </div>
+		    
+		    <input type="submit" class="btn btn-large btn-success"  value="&{'owners.save'}" />
+		    
+		#{/form}
+			</div>

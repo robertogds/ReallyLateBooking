@@ -1,0 +1,42 @@
+
+<h2>1. &{'web.bookingForm.1.title'}</h2>
+<div id="step1">
+    <div class="hotelInfo">
+    	<div class="row-fluid">
+     		<div class="hotelImage span4"> 
+     			<img alt="${deal.hotelName}" src="${deal.image10}">
+     		</div>
+     		<div class="span8">
+				<div class="row-fluid">
+					<div class="title span12">
+        				<h3>${deal.hotelName} <small>${deal.address}, ${deal.city.name}</small></h3>
+        			</div>
+        		</div>
+        		<div class="row-fluid price-more">
+	           			<div class="span12 price">
+	           				<small>&{'web.bookingForm.1.tonight'}</small> ${deal.salePriceCents}<span>&euro;</span>
+	           				 <small>&{'web.bookingForm.1.before'} ${deal.priceCents}&euro; </small>
+	           			</div>
+	        	</div>
+	        	<div class="row-fluid">
+	        		<div class="detail-text">
+	        			<p>#{verbatim} ${deal.detailText} #{/verbatim}</p>
+	        		</div>
+	        		<a  data-toggle="modal" href="#completeDetail" >&{'web.bookingForm.1.allInfo'}</a>
+	        	</div>
+        	</div>
+        </div>			
+        	<div class="modal" id="completeDetail">
+					  <div class="modal-header">
+					    <a class="close" data-dismiss="modal">×</a>
+					    <h3>&{'web.bookingForm.1.details.title', deal.hotelName}</h3>
+					  </div>
+					  <div class="modal-body">
+					    <p>#{verbatim} ${deal.detailText} #{/verbatim}</p>
+					  </div>
+					  <div class="modal-footer">
+					    <a href="#" class="btn"  data-dismiss="modal">Close</a>
+					  </div>
+			</div>
+      </div>
+</div>

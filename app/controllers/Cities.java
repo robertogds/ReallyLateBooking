@@ -23,6 +23,13 @@ public class Cities  extends Controller {
 		Security.checkConnected();
     }
 	
+	@Before(only = {"index"})
+    static void verifySSL(){
+        if (request.secure == true ){
+            redirect("http://" + request.host + request.url); 
+        }
+    }
+	
 	public static void index() {
 		Collection<City> cities = staticCities();
 		render(cities); 

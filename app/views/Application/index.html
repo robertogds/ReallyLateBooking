@@ -3,17 +3,17 @@
 	&{'web.index.title'}
 #{/set}
 #{set background: 'http://d2f5bmx5jz1oq8.cloudfront.net/web/backgrounds/general.jpg'/}
-
-      <div class="row">
-        <div class="span9">
+      <div class="row-fluid">
+        <div class="index span12">
         	<div class="hero-unit">
 	          <h1>&{'web.index.h1'}</h1>
 	          <p>&{'web.index.h1.small'}</p>
-				  <div class="register">
-				   		<div class= "well">
+	          	 <div class="row-fluid">
+				  <div class="register span6">
+				   		<div class="well">
 				   			<h2>&{'web.index.register.h2'}</h2>
 				   			<small>&{'web.index.register.club'}</small>
-				   			<div class= "btn-container">
+				   			<div class="btn-container">
 				   				<a data-toggle="modal" href="#askInvite" class="btn btn-large btn-danger">&{'web.index.register.btn'}</a>
 				   				<div class="modal fade" id="askInvite">
 								  <div class="modal-header">
@@ -38,18 +38,22 @@
 								</div>
 								#{/form}
 				   			</div>
-				   			<div class= "download">
-				   			<small>&{'web.index.register.download'}</small>
-				   			<div class= "btn-container">
-				   			<a class="iphone-btn" target="_self" href="http://itunes.apple.com/es/app/reallylatebooking-las-mejores/id448918487?mt" 
-				   				onclick="_gaq.push(['_trackEvent', 'iphone', 'Download', 'Spanish']);" ></a>
-				   			<a class="android-btn" target="_self" href="https://market.android.com/details?id=com.iipir.rlb" 
-				   				onclick="_gaq.push(['_trackEvent', 'android', 'Download', 'Spanish']);" ></a>
-				   			</div>
+				   			<div class="download">
+				   				<small>&{'web.index.register.download'}</small>
+					   			<div class="btn-container row-fluid">
+					   				<div class="span6 offset1">
+						   				<a class="iphone-btn" target="_self" href="http://itunes.apple.com/es/app/reallylatebooking-las-mejores/id448918487?mt" 
+						   					onclick="_gaq.push(['_trackEvent', 'iphone', 'Download', 'Spanish']);" ></a>
+						   			</div>
+						   			<div class="span6">
+						   				<a class="android-btn" target="_self" href="https://market.android.com/details?id=com.iipir.rlb" 
+						   					onclick="_gaq.push(['_trackEvent', 'android', 'Download', 'Spanish']);" ></a>
+					   				</div>
+					   			</div>
 				   			</div>
 				   		</div>
 				  </div>
-				  <div class="login">
+				  <div class="login span6">
 				  	<div id="login" class= "well">
 				  		<h2>&{'web.index.login.h2'}</h2>
 				  		<small>&{'web.index.login.fb'}</small>
@@ -59,27 +63,34 @@
 							<span class="fb-button-right"></span>', scope:'email' /}
 				  		</div>
 				  		<small>&{'web.index.login.email'}</small>
-							#{form @authenticate()}
-				  			<div class="control-group #{ifError 'username'} error #{/ifError}">
-				              <div class="input-prepend controls">
-				                <span class="add-on"><i class="icon-envelope"></i></span>
-				                <input class="input-large" name="username" id="username" value="${flash.username}" type="text" placeholder="&{'secure.email'}">
-				              </div>
-				            </div>
-				            <div class="control-group #{ifError 'password'} error #{/ifError}"> 
-				              <div class="input-prepend controls">
-				                <span class="add-on"><i class="icon-lock"></i></span>
-				                <input class="input-large" type="password" name="password" id="password" value=""  size="16"  placeholder="&{'secure.password'}">
-				              </div>
-				             </div>  
-				             <div class="login-center">
-					       		 <button type="submit" class="btn btn-large btn-success" >&{'web.index.login.email.button'}</button>
-					        </div>
-						#{/form}
+				  		<div class="row-fluid">
+				  			<div class="span2">
+									<br>
+							</div>
+							<div class="span10">
+								#{form @authenticate()}
+						  			<div class="control-group #{ifError 'username'} error #{/ifError}">
+						              <div class="input-prepend controls">
+						                <span class="add-on"><i class="icon-envelope"></i></span>
+						                <input class="input-large" name="username" id="username" value="${flash.username}" type="text" placeholder="&{'secure.email'}">
+						              </div>
+						            </div>
+						            <div class="control-group #{ifError 'password'} error #{/ifError}"> 
+						              <div class="input-prepend controls">
+						                <span class="add-on"><i class="icon-lock"></i></span>
+						                <input class="input-large" type="password" name="password" id="password" value=""  size="16"  placeholder="&{'secure.password'}">
+						              </div>
+						             </div>  
+						             <div class="login-center">
+							       		 <button type="submit" class="btn btn-large btn-success" >&{'web.index.login.email.button'}</button>
+							        </div>
+								#{/form}
+						 	</div>
+				         </div> 
 						
 					</div>
+				  </div>
 				  </div>
 			</div>
         </div>
       </div>
-

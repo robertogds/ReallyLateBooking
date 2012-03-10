@@ -159,7 +159,6 @@ public class User extends Model{
     	Session.current().put("lastName", this.lastName);
     	Session.current().put("userId", this.id);
     	Session.current().put("uuid", this.fbid);
-    	Logger.debug("User session: " + Session.current().toString());
     }
 
 	private void getUserDataFromFB(JsonObject data) {

@@ -30,18 +30,18 @@
 		});
 	</script>
 #{/set}
-<div class="row">
-	<div class="span9">
-		<div id="zonesNav" class="row">
-			        	<div class="span9 title-black">
-			        		<div class="row">
-				           			<div class="span5">
+	
+		<div id="zonesNav" class="row-fluid">
+			        <div class="span12 title-black">
+			        		<div class="row-fluid">
+				           			<div class="span7">
 			                			<h1>&{'web.deal.list.h1', city.name}</h1>
 			                		 </div>
-				           			<div class="span4 navbar zones">
+			                		 #{if city.isRootCity()}
+				           			<div class="span5 navbar zones" >
 						                <ul class="nav">
 						                	<li class="dropdown" id="zones-dropdown">
-								              <a href="#zones-dropdown" class="dropdown-toggle" data-toggle="dropdown">zonas de ${city.name}<b class="caret"></b></a>
+								              <a href="#zones-dropdown" class="dropdown-toggle" data-toggle="dropdown">&{'web.deal.list.zones'}<b class="caret"></b></a>
 								              <ul class="dropdown-menu" >
 								                #{list items:dealsDtos, as:'deal' }
 								                		#{if deal_isFirst }
@@ -50,7 +50,7 @@
 															}%
 															<li><a href="#${actualCity.url}">${actualCity.name}</a></li>
 														#{/if}
-														#{elseif actualCity != deal.city }
+														#{elseif actualCity.url != deal.city.url }
 															 %{
 														   		actualCity = deal.city;
 															}%
@@ -59,77 +59,105 @@
 													#{/list}
 								              </ul>
 								            </li>
-						                	
 						                </ul>
 								   </div>
+								    #{/if}
 					        </div>             
 				        </div>
-			        </div>
-			    
+		</div>
+	#{if open}	    
 		 #{list items:dealsDtos, as:'deal' }
-		 	<div id="${deal.city.url}"></div>	
         	#{if deal_isFirst }
         		%{
-			   		zone = deal.city.id;
+			   		zone = deal.city.url;
 				}%
-			     <div class="deal-list first-deal">
-			     	<h2>${deal.city.name}</h2>
+		<div class="deal-list first-deal row-fluid">
+				 <div class="span12">
+			     	<h2 class="span12">${deal.city.name}</h2>
+			     	<div id="${deal.city.url}"></div>	
+				</div>				     	
 			#{/if}
-			#{elseif zone != deal.city.id }
+			#{elseif zone != deal.city.url }
 				 </div>
 				 %{
-			   		zone = deal.city.id;
+			   		zone = deal.city.url;
 				}%
-				<div class="deal-list">
-					<h2>${deal.city.name}</h2>
-			#{/elseif}
-	        	<div class="deal"  style="background-image: url('${deal.image10}');">
-			        	<div class="hotelInfo">	
-			        		<div class="title">
-			        			<h2>${deal.hotelName} <br><small>${deal.address}</small></h2> 
-			        		</div>
-				           <div class="main-info">
-				           		<div class="row">
-				           			<div class="span3 price">
-				           				<span>&{'web.deal.tonight'}</span> ${deal.salePriceCents}&euro;
-				           			</div>
-				           			<div class="span2 more-info">
-				           				#{if deal.quantity > 0 }
-						           			<a class="btn btn-primary btn-large" href="@{Deals.show(city.url,deal.id)}">&{'web.deal.list.show'}</a>
-						           		#{/if}
-				           				#{else}
-				           					<a class="btn btn-primary btn-large disabled" href="@{Deals.show(city.url,deal.id)}">&{'web.deal.list.soldedout'}</a>
-				           				#{/else}
-				           				
-				           			</div>
-				           		</div>
-				           		<div class="row deal-info">
-				           			<div class="span5">
-				           				<div class="before">
-				           						 &{'web.deal.detail.before'} <br>
-				           						 <strong>${deal.priceCents}</strong><span>&euro;</span> 
-				           				</div>	 
-				           				<div class="nights">
-				           						 &{'web.deal.detail.book'} <br>
-				           						 <strong>${deal.nights}</strong> <span>&{'web.deal.detail.nights'}</span> 
-				           				</div>	 
-				           				<div class="rooms">
-				           						&{'web.deal.detail.left'} <strong>${deal.quantity}</strong>  <br>
-				           						&{'web.deal.detail.rooms'}
-				           				</div>
-				           			</div>
-				           		</div>
-				           </div>
-				        </div>
+		<div class="deal-list row-fluid">
+				 <div class="span12">
+					<h2 class="span12">${deal.city.name}</h2>
+					<div id="${deal.city.url}"></div>	
 				</div>
-	        #{if deal_isLast || zone != deal.city.id}
+			#{/elseif}
+	        	<div class="span12">
+	        		<div class="deal">
+			        	<div class="hotelInfo">
+			        		<div class="row-fluid">
+			        			<div class="hotelImage span4"> 
+			        				<img alt="${deal.hotelName}" src="${deal.image10}">
+			        			</div>
+				        		<div class="span8">
+				        			<div class="row-fluid">
+					        			<div class="title span12">
+					        				<h2>${deal.hotelName}<br><small>${deal.address}</small></h2> 
+					        			</div>
+					        		</div>
+					        		<div class="row-fluid">
+				        				<div class="main-info span12">
+							           		<div class="row-fluid">
+							           			<div class="span7 price">
+							           				<span>&{'web.deal.tonight'}</span> ${deal.salePriceCents}&euro;
+							           			</div>
+							           			<div class="span4 more-info">
+							           				#{if deal.quantity > 0 }
+									           			<a class="btn btn-primary btn-large" href="@{Deals.show(city.url,deal.id)} #{if fromEmail}?email#{/if}">&{'web.deal.list.show'}</a>
+									           		#{/if}
+							           				#{else}
+							           					<a class="btn btn-primary btn-large disabled" href="@{Deals.show(city.url,deal.id)}#{if fromEmail}?email#{/if}l">&{'web.deal.list.soldedout'}</a>
+							           				#{/else}
+							           				
+							           			</div>
+							           		</div>
+							           		<div class="row-fluid deal-info">
+							           				<div class="before span4">
+							           						 &{'web.deal.detail.before'} <br>
+							           						 <strong>${deal.priceCents}</strong><span>&euro;</span> 
+							           				</div>	 
+							           				<div class="nights span4">
+							           						 &{'web.deal.detail.book'} <br>
+							           						 <strong>${deal.nights}</strong> <span>&{'web.deal.detail.nights'}</span> 
+							           				</div>	 
+							           				<div class="rooms span4">
+							           						&{'web.deal.detail.left'} <strong>${deal.quantity}</strong>  <br>
+							           						&{'web.deal.detail.rooms'}
+							           				</div>
+							           		</div>
+							           </div>
+							        </div>
+				        		</div>
+			        		</div>	
+				        </div>
+				    </div>
+				</div>
+	        #{if deal_isLast || zone != deal.city.url}
 			     </div> <!--  close deal-list -->
 			#{/if}
         #{/list}
-    </div>
-    <div class="span3">
-	      		<div class="row">
-	     		</div>
-	</div>
-</div>
+       #{/if}
+       #{else}
+       		<div class="deal-list first-deal">
+			     	<h2>&{'deal.city.closed'}</h2>
+			     	<div class="closed">
+			        	<div class="row-fluid">	
+			        		<div class="info span3">
+			        			<h2>&{'deal.city.closed.title'}</h2> 
+			        			<p>&{'deal.city.closed.description'}</p>
+			        			<p>&{'deal.city.closed.video'}</p>
+			        		</div>
+				           <div class="video span5">
+				           			<iframe src="http://player.vimeo.com/video/37323730" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>	
+				           </div>
+				        </div>
+					</div>
+			</div>
+       #{/else}
 

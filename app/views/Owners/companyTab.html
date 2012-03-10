@@ -1,0 +1,56 @@
+
+
+  <div class="span5">
+  	<form class="form-horizontal">
+			    <fieldset>
+			    <legend> &{'owners.company.title'}</legend>
+			    
+			    <div class="control-group #{ifError 'name'} error #{/ifError}">
+		       		 <label  class="control-label" for="name">&{'owners.company.name'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <input type="text" name="name" id="quantity"
+		            			value="${deal.company?.name}" class="disabled" disabled>
+		            	</div>
+				     </div>
+		        </div>
+		        <div class="control-group #{ifError 'nif'} error #{/ifError}">
+		       		 <label  class="control-label" for="nif">&{'owners.company.nif'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <input type="text" name="nif" id="nif"
+		            			value="${deal.company?.nif}" class="disabled" disabled>
+		            	</div>
+				     </div>
+		        </div>
+		        <div class="control-group #{ifError 'phone'} error #{/ifError}">
+		       		 <label  class="control-label" for="phone">&{'owners.company.phone'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <input type="text" name="phone" id="phone"
+		            			value="${deal.company?.phone}" class="disabled" disabled>
+		            	</div>
+				     </div>
+		        </div>
+		        <div class="control-group #{ifError 'address'} error #{/ifError}">
+		       		 <label  class="control-label" for="address">&{'owners.company.address'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <textarea name="address" id="address"
+		            			value="${deal.company?.address}" class="disabled" rows="3" disabled></textarea>
+		            	</div>
+				     </div>
+		        </div>
+		         <div class="control-group #{ifError 'fee'} error #{/ifError}">
+		       		 <label  class="control-label" for="fee">&{'owners.company.fee'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <input type="text" name="fee" id="fee"
+		            			value="${deal.company?.fee}" class="input-small disabled" disabled>
+		            			<span class="add-on">%</span>
+		            	</div>
+				     </div>
+		        </div>
+		        </fieldset>
+	</form>
+</div>		        

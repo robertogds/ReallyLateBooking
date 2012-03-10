@@ -72,7 +72,14 @@
 				<tbody>
 				 #{list deals, as:'deal'}
 				 	#{form @updateDeal(deal.id)}
-					    <tr class="${deal_index % 2 ? 'even' : 'odd'}"  #{if !deal.image3?.trim()} style="border-color: red;border-style: solid;" #{/if} >
+					    <tr class="${deal_index % 2 ? 'even' : 'odd'}"  
+					    	#{if !deal.image3?.trim()}
+					    	 style="border-color: red;border-style: solid;" 
+					    	#{/if}
+					    	#{else}
+					    		#{if deal.company == null} style="border-color: orange;border-style: solid;" #{/if}
+					    	#{/else}	
+					    	>
 					    	 #{ifErrors}
 					        <p class="error">
 					            Please correct these errors.
@@ -191,9 +198,72 @@
 	<div>
 	<br/><br/>
 	 <h2 id="crudShowTitle">Hotels Preview</h2>
+	 				<table style="width: 500px;">
+				<thead>
+					<tr>
+						<th>
+							Position
+						</th>
+						<th >
+							Hotel
+						</th>
+						<th>
+							Sale Price
+						</th>
+						<th>
+							Discount
+						</th>
+						<th>
+							Room Type
+						</th>
+						<th>
+							Room Type Text
+						</th>
+						<th>
+							Original Price
+						</th>
+					</tr>
+				</thead>
+				<tbody>
 	  #{list models.Deal.findAllActiveDealsByCityId(city.id), as:'deal'}
-	  	<h3  #{if deal.quantity == 0} style="color:red"#{/if} >${deal.position}. ${deal.hotelName} - ${deal.salePriceCents} &euro; - ${deal.roomType} - Active until ${deal.limitHour} a.m.</h3>
+	  			<tr class="${deal_index % 2 ? 'even' : 'odd'}"  
+					    	#{if !deal.image3?.trim()}
+					    	 style="border-color: red;border-style: solid;" 
+					    	#{/if}
+					    	#{else}
+					    		#{if deal.company == null} style="border-color: orange;border-style: solid;" #{/if}
+					    	#{/else}	
+					    	>
+					    	<td>
+								 ${deal.position}
+							</td>
+							<td>
+								 <a href="@{admin.Deals.show(deal.id)}">
+				   					${deal.hotelName}
+				   				 </a>
+							</td>
+							<td>
+								${deal.salePriceCents}&euro;
+							</td>
+							<td>
+								${deal.discount}%
+							</td>
+							<td>
+								${deal.roomType}
+							</td>
+							<td>
+								${deal.roomTypeText} 
+							</td>
+							<td>
+								${deal.priceCents}&euro;
+							</td>
+				</tr>
 	  #{/list}
-	  
+	  			</tbody>
+	  			</table>
+	 
+	 <br/><br/>
+	  	<p> <span style="border-color: red;border-style: solid;" > Rojo:</span> faltan fotos del hotel</p>
+	  	<p> <span style="border-color: orange;border-style: solid;" > Naranja:</span> falta la company, si recibe reservas se crean sin company y no se pueden facturar.</p>
 	</div>
 </div>

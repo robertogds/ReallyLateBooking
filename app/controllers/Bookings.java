@@ -35,7 +35,6 @@ public class Bookings extends Controller{
 	
 	@Before(only = {"doBooking"})
     static void checkConnected() {
-		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
 		Security.checkConnected();
     }
 	
@@ -61,26 +60,7 @@ public class Bookings extends Controller{
 			booking.validate(); //Custom validation
 		}
 		if (!validation.hasErrors()){ 
-			Logger.debug("Valid booking");
-			//we need to fetch all the info form user and deal 
-			booking.city = City.findById(booking.deal.city.id);
-			//if is an old object from datastore without the boolean set
-			booking.deal.isHotUsa = booking.deal.isHotUsa != null ? booking.deal.isHotUsa : Boolean.FALSE;
-			booking.deal.isFake = booking.deal.isFake != null ? booking.deal.isFake : Boolean.FALSE;
-			booking.insert();
-			if (booking.deal.isHotUsa && !booking.deal.isFake ){
-				doHotUsaReservation(booking);
-			}
-			else{
-				updateDealRooms(booking.deal.id, booking.rooms);
-				updateUserCredits(booking, user);
-				activateCouponToReferal(user);
-				Mails.hotelBookingConfirmation(booking);
-			}
-			Mails.userBookingConfirmation(booking);
-			
-			flash.success("Tu reserva se ha realizado correctamente.");
-			Users.dashboard();
+			tryBooking(booking, user);
 		}
 		else{
 			params.flash(); // add http parameters to the flash scope
@@ -90,11 +70,48 @@ public class Bookings extends Controller{
 		}
 	}
 	
+	private static void tryBooking(Booking booking, User user){
+		Logger.debug("Valid booking from web");
+		//we need to fetch all the info form user and deal 
+		booking.city = City.findById(booking.deal.city.id);
+		//if is an old object from datastore without the boolean set
+		booking.deal.isHotUsa = booking.deal.isHotUsa != null ? booking.deal.isHotUsa : Boolean.FALSE;
+		booking.deal.isFake = booking.deal.isFake != null ? booking.deal.isFake : Boolean.FALSE;
+		booking.insert();
+		if (booking.deal.isHotUsa && !booking.deal.isFake ){
+			Logger.debug("##### Va por hotusa!!");
+			String localizador = HotUsaApiHelper.reservation(booking);
+			if (localizador != null){
+				saveUnconfirmedBooking(booking, localizador);
+			}
+			else{
+				Logger.error("It's not an error, Hotusa didnt give us the booking identifier. Why?");
+		        flash.error(Messages.get("booking.validation.over"));
+		        String cityUrl = booking.city.isRootCity() ? booking.city.url : booking.city.root;
+		        //If booking is not complete, delete booking
+				booking.delete();
+				Deals.list(cityUrl);
+			}
+		}
+		else{
+			Logger.debug("##### Va por booking normal");
+			updateDealRooms(booking.deal.id, booking.rooms);
+			updateUserCredits(booking, user);
+			activateCouponToReferal(user);
+			Mails.hotelBookingConfirmation(booking);
+		}
+		//inform user by mail 
+		Mails.userBookingConfirmation(booking);
+		//inform user at the web
+		flash.success(Messages.get("web.bookingForm.success"));
+		//send user to his bookings list
+		Users.dashboard();
+	}
+	
 	private static void updateUserCredits(Booking booking, User user) {
 		user.credits = user.credits - booking.credits;
 		user.update();
 	}
-
 	private static void activateCouponToReferal(User user) {
 		if (StringUtils.isNotBlank(user.referer)){
 			User referer = User.findByRefererId(user.referer);
@@ -155,7 +172,6 @@ public class Bookings extends Controller{
 			}
 			else{
 				updateDealRooms(booking.deal.id, booking.rooms);
-				
 				Mails.hotelBookingConfirmation(booking);
 			}
 
@@ -174,16 +190,21 @@ public class Bookings extends Controller{
 	private static void doHotUsaReservation(Booking booking){
 		String localizador = HotUsaApiHelper.reservation(booking);
 		if (localizador != null){
-			Logger.debug("Correct booking: " + localizador);
-			booking.code = localizador;
-			booking.needConfirmation = Boolean.TRUE;
-			booking.update();
+			saveUnconfirmedBooking(booking, localizador);
 		}
 		else{
-			//TODO, show the correct error
+			Logger.error("It's not an error, Hotusa didnt give us the booking identifier. Why?");
 			validation.addError("rooms", Messages.get("booking.validation.over"));
+			booking.delete();
 			renderBookingError(booking);
 		}
+	}
+	
+	private static void saveUnconfirmedBooking(Booking booking, String localizador){
+		Logger.debug("Correct booking: " + localizador);
+		booking.code = localizador;
+		booking.needConfirmation = Boolean.TRUE;
+		booking.update();
 	}
 	
 	private static void renderBookingError(Booking booking){

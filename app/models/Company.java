@@ -48,6 +48,7 @@ public class Company extends Model{
 	@DateTime
     public Date updated;
 	public Integer fee;
+	
 
     public Company(String name, String nif, String phone, String lastName, Integer fee) {
         this.name = name;
@@ -69,6 +70,11 @@ public class Company extends Model{
         return all().filter("id", id).get();
     }
  
+    public int countUninvoicedBookings() {
+		return Booking.all().filter("company", this).filter("invoiced", Boolean.FALSE)
+			.filter("canceled", Boolean.FALSE).count();
+	}
+    
     public String toString() {
         return name;
     }

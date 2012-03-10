@@ -1,105 +1,69 @@
 #{extends 'layout.html' /}
+
+#{set 'moreScripts'}
+	<script type="text/javascript">
+		$(function() {
+			$('.popover-link').popover();
+			$('.tooltip-link').tooltip()
+		});
+	</script>
+#{/set}	 
+
 <div class="extranet">
-		<div class="row">
+		<div class="row-fluid">
+				<ul class="breadcrumb span4">
+				  <li>
+				    <a href="@{Owners.index()}"> &{'web.extranet.myhotels.title'}</a> <span class="divider">/</span>
+				  </li>
+				  <li class="active">
+				    <a href="#">${deal.hotelName}</a>
+				  </li>
+				</ul>
+			</div>
+			
+		<div class="row-fluid">
 	        	<div class="span12 title-black">
-		           <h1>&{'crud.show.title', deal.hotelName}</h1>
+		           <h1>${deal.hotelName}</h1>
 		        </div>
 	        </div>
-	    <div class="row">
+	    <div class="row-fluid">
 	        	<div class="span12 dashboard">
-	        	<div class=" edit-hotel">
-        #{form @save(deal.id)}
- 			
- 			<h3>  &{'owners.oneday.title'} </h3>
- 			
-		    #{ifErrors}
-		        <p class="error">
-		        	&{'error.correct'}
-		        </p>
-		    #{/ifErrors}
-		     
-		    <p>
-		        #{field 'quantity'}
-		        <label>&{'owners.quantity'}</label>
-		        <input type="text" name="${field.name}" 
-		            value="${deal.quantity}" class="${field.errorClass}" />
-		        #{/field}
-		    </p>
-		    
-		    <p>
-		        #{field 'salePriceCents'}
-		        <label>&{'owners.salePriceCents'}</label>
-		        <input type="text" name="${field.name}" 
-		            value="${deal.salePriceCents}" class="${field.errorClass}" />
-		        #{/field}
-		    </p>
-		    
-		    <p>
-		        #{field 'breakfastIncluded'}
-		        <label  class="checkbox">
-		        <input type="checkbox" name="${field.name}"
-		            class="${field.errorClass}" #{if deal.breakfastIncluded} checked="true" #{/if} />
-		             &{'owners.breakfastIncluded'} </label>
-		        #{/field}
-		    </p>
-		    
-		    <br/>
-		    <h3>  &{'owners.moredays.title'} </h3>
-		    <div style="float: right; width: 800px;">
-		 	<p> &{'owners.moredays.description'}
-		 	</p>
-		 	<h4>&{'owners.moredays.important'}</h4>
-		 	<ul>
-		 		<li> &{'owners.moredays.point1'}  </li>
-				<li> &{'owners.moredays.point2'} </li>
-				<li> &{'owners.moredays.point3'}  </li>
-				<li> &{'owners.moredays.point4'} </li>
-		 	</ul>
-		 	</div>
-		 	<br/>
-		 	<div>
-		 	<p>
-		        #{field 'priceDay2'}
-		        <label>&{'owners.moredays.priceDay2'}</label>
-		        <input type="text" name="${field.name}" 
-		            value="${deal.priceDay2}" class="${field.errorClass}" />
-		        #{/field}
-		    </p>
-		    
-		    <p>
-		        #{field 'priceDay3'}
-		        <label>&{'owners.moredays.priceDay3'}</label>
-		        <input type="text" name="${field.name}" 
-		            value="${deal.priceDay3}" class="${field.errorClass}" />
-		        #{/field}
-		    </p>
-		    
-		      <p>
-		        #{field 'priceDay4'}
-		        <label>&{'owners.moredays.priceDay4'}</label>
-		        <input type="text" name="${field.name}" 
-		            value="${deal.priceDay4}" class="${field.errorClass}" />
-		        #{/field}
-		    </p>
-		    
-		      <p>
-		        #{field 'priceDay5'}
-		        <label>&{'owners.moredays.priceDay5'}</label>
-		        <input type="text" name="${field.name}" 
-		            value="${deal.priceDay5}" class="${field.errorClass}" />
-		        #{/field}
-		    </p>
-		    </div>
-		   <br/>
-		    <p>&{'owners.moredays.point5'}</p>
-		    <p>&{'owners.remember'}</p>
-		    
-		    <p>
-		        <input type="submit" class="btn btn-large btn-success"  value="&{'owners.save'}" />
-		    </p>
-		    
-		#{/form}
-			</div>
+	        	<div class="tabs-container">
+	        		<ul class="nav nav-tabs" >
+	        		  <li class="active" ><a href="#edit" data-toggle="tab"><i class="icon-pencil"></i>
+					    &{'web.extranet.edit.title'}</a>
+					  </li>
+					  <li><a href="#bookings" data-toggle="tab"><i class="icon-shopping-cart"></i>
+					    &{'web.extranet.mybookings.title'}</a>
+					  </li>
+					  <li><a href="#company" data-toggle="tab"><i class="icon-user"></i>
+					  	&{'web.extranet.company.title'}</a>
+					  </li>
+					  <li><a href="#help" data-toggle="tab"><i class="icon-question-sign"></i>
+					  	&{'web.extranet.help.title'}</a>
+					  </li>
+					</ul>
+					<div id="my-tab-content" class="tab-content">
+			            <div class="tab-pane active" id="edit">
+			            	#{include 'Owners/editHotelTab.html'/}
+			            </div>
+			            <div class="tab-pane" id="bookings">
+			            	#{include 'Owners/bookingsTab.html'/}
+			            </div> <!--  mybookings end -->
+			            <div class="tab-pane" id="company">
+			            	#{include 'Owners/companyTab.html'/}
+						</div>
+						 <div class="tab-pane" id="help">
+						 	<ul>
+								<li> &{'owners.moredays.point2'} </li>
+								<li> &{'owners.moredays.point3'} </li>
+								<li> &{'owners.moredays.point4'} </li>
+								<li>&{'owners.moredays.point5'} </li>
+						 	</ul>
+						</div>
+			        </div>
+			        </div>
+	 
         </div>
 </div>
 </div>

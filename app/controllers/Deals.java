@@ -24,7 +24,18 @@ public class Deals extends Controller {
 	@Before(only = {"show","list","bookingForm"})
     static void checkConnected() {
 		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
-		Security.checkConnected();
+		if (params._contains("email")){
+			//If user is already logged in we dont care about coming from an email
+			if (Security.connectedUserExists()){
+				Security.checkConnected();
+			}
+			else{
+				renderArgs.put("fromEmail", true);
+			}
+		}
+		else{
+			Security.checkConnected();
+		}
     }
 	
 	/**
@@ -33,30 +44,37 @@ public class Deals extends Controller {
 	public static void bookingForm(Long id) {
 		Deal deal = Deal.findById(id);
 		if (deal != null){
-			deal.prepareImages();//just for iphone now, make configurable in the future
-			deal.textToHtml();
-			User user= User.findById(Long.valueOf(session.get("userId")));
-			render(deal,user);
+			prepareDeal(deal);
+			render();
 		}
 		else{
 			notFound();
 		}
 	}
 	
+	/**
+	 * Renders the deal detail page
+	 **/
 	public static void show(String cityUrl, Long id) {
 		Deal deal = Deal.findById(id);
 		if (deal != null){
-			deal.city = City.findById(deal.city.id);
-			deal.prepareImages();//just for iphone now, make configurable in the future
-			deal.textToHtml();
-			User user= User.findById(Long.valueOf(session.get("userId")));
-			DealDTO dealDto = new DealDTO(deal);
-			renderArgs.put("deal", dealDto);
-			render(user);
+			prepareDeal(deal);
+			render();
 		}
 		else{
 			notFound();
 		}
+	}
+	
+	/**
+	 * Prepare image deals, i18n text and add the dto to the render params
+	 * @param deal
+	 */
+	private static void prepareDeal(Deal deal){
+		deal.prepareImages();//just for iphone now, make configurable in the future
+		DealDTO dealDto = new DealDTO(deal);
+		dealDto.textToHtml();
+		renderArgs.put("deal", dealDto);
 	}
 	
 	/**
@@ -69,14 +87,13 @@ public class Deals extends Controller {
 		City city = City.findByName(cityUrl);
 		if (city != null){
 			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
-			
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
 				deal.prepareImages();//just for iphone now, make configurable in the future
-				deal.fecthCity(); //retrieves city object to not to send just the city id
 				dealsDtos.add(new DealDTO(deal));
 			}
-	        render(city, dealsDtos);
+			boolean open = DateHelper.isActiveTime();
+	        render(city, dealsDtos, open);
 		}
 		else{
 			notFound();
@@ -97,7 +114,6 @@ public class Deals extends Controller {
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
 				deal.prepareImages();//just for iphone now, make configurable in the future
-				deal.fecthCity(); //retrieves city object to not to send just the city id
 				dealsDtos.add(new DealDTO(deal));
 			}
 	        renderJSON(dealsDtos);

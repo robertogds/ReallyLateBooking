@@ -19,21 +19,36 @@ import play.mvc.Controller;
 
 public class Application extends Controller {
 	
-	@Before(unless = {"confirmReservations"})
+	@Before(only = {"login", "authenticate","register"})
     static void verifySSL(){
-        if (request.secure == false && Play.mode.isProd()){
-        	Logger.debug("Redirect to secure url");
-            redirect("https://" + request.host + request.url); 
-        }
+  //      if (request.secure == false && Play.mode.isProd()){
+  //          redirect("https://" + request.host + request.url); 
+   //     }
     }
 	
 	public static void index() {
-		if(Security.isConnected()){
+		if(Security.isConnected() && Security.connectedUserExists()){
 			Cities.index();
 		}
 		else{
 			render();
 		}
+    }
+    
+    public static void register(@Required @Email String username, @Required String password, String firstName, String lastName, String returnUrl) throws Throwable{
+    	register(username, password, firstName, lastName);
+        redirect(returnUrl);
+	}
+    
+    public static void login(@Required @Email String username, @Required String password, String returnUrl) throws Throwable{
+    	login(username, password);
+        redirect(returnUrl);
+	}
+    
+    public static void authenticate(@Required String username, String password) throws Throwable {
+    	login(username, password);
+        // Redirect to the original URL (or /)
+        Secure.redirectToOriginalURL();
     }
     
     public static void logout() {
@@ -44,27 +59,6 @@ public class Application extends Controller {
         session.remove("uuid");
         session.remove("userId");
         redirect("Application.index");
-    }
-    
-    public static void authenticate(@Required String username, String password) throws Throwable {
-        // Check tokens
-        Boolean allowed = (Boolean)Security.authenticate(username, password);
-        if(validation.hasErrors() || !allowed) {
-        	Logger.debug("validation.hasErrors() : "+ validation.hasErrors() + " allowed: " + allowed);
-            flash.keep("url");
-            flash.error(Messages.get("web.login.incorrect"));
-            params.flash();
-        }
-        else{
-        	// Mark user as connected
-            User user = User.findByEmail(username);
-            Logger.debug("User founded by email : "+ username + " user: " + user.email);
-        	if (user!= null){
-        		user.createUserSession();
-        	}
-        }
-        // Redirect to the original URL (or /)
-        Secure.redirectToOriginalURL();
     }
     
     public static void contactForm(@Required @Email String email, String name, @Required String message, String returnUrl){
@@ -133,4 +127,46 @@ public class Application extends Controller {
 			}
 		}
 	}
+	
+	private static void register(String email, String password, String firstName, String lastName) {
+		boolean isAdmin = false;
+		boolean validated = true;
+		User user = new User(email, password, firstName, lastName,  isAdmin,  validated);
+		user.validate();
+		if (!validation.hasErrors()){
+			user.insert();
+			Mails.welcome(user);
+			flash.success("Ya eres un latebooker, enhorabuena");
+		}
+		else{
+			flash.error("No hemos podido crear tu usuario");
+		}
+	}
+	
+	private static void login(String username, String password){
+        // Check tokens
+        Boolean allowed = (Boolean)Security.authenticate(username, password);
+        if(validation.hasErrors() || !allowed) {
+            flash.keep("url");
+            flash.error(Messages.get("web.login.incorrect"));
+            params.flash();
+        }
+        else{
+        	connectUser(username);
+        }
+    }
+	
+    /**
+     * Find user by username and creates the user session
+     * Username was previously checked and is allowed to enter
+     * @param username
+     */
+    private static void connectUser(String username){
+    	// Mark user as connected
+        User user = User.findByEmail(username);
+        Logger.debug("User founded by email : "+ username + " user: " + user.email);
+    	if (user!= null){
+    		user.createUserSession();
+    	}
+    }
 }

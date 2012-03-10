@@ -1,24 +1,29 @@
-@import "bootstrap.less";
-@import "responsive.less";
+@import "bootstrap.less"; 
+@import "responsive.less";  
 
 /************** VARIABLES *****************/
+  
 @horizontalPadding: 20px;
 @navbarPadding: 	@horizontalPadding;
 @cityImageSize: 	158px;
 @secondaryColor:	#5093B0;
 @orange:			#F99431;
 @verticalMarging:   20px;
-@dealListWidth:		850px;
+//@dealListWidth:		850px;
 @grayBackground:	#E9E9E9;
 @zonesNavHeight:	42px;
 @grayBorder:		#D9D9D9;
 
 
-/************** GENERAL ELEMENTS  *****************/
+/************** GENERAL ELEMENTS  *****************/  
 body {
   	padding-top: @navbarHeight + @navbarPadding; 
 }
 
+#main-content{
+	padding-top: 30px;
+	min-height: 570px;
+}
 
 footer{
 	.center-block();
@@ -55,27 +60,32 @@ input{
 
 
 #background {
-	position: fixed;
-	top: 0;
-	left: -185px;
-	width: 200%;
+	background: transparent url("http://a1.ak.lscdn.net/deals/images/refresh/background-fade.png") repeat-x scroll left bottom;
 	min-height: 950px;
+	-moz-user-select: none;
+	overflow: hidden;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
 	z-index: -1;
-	background-color: #49A8D7;
-	background: transparent url('http://behance.vo.llnwd.net/profiles/88164/prosite/2-108587-b5be9f1ae871a396036da177a5d428ae.jpg') repeat top center;
+	//background: transparent url('http://d2f5bmx5jz1oq8.cloudfront.net/web/backgrounds/rlb_fondo web.jpg') repeat top center;
+	//background: transparent url('http://behance.vo.llnwd.net/profiles/88164/prosite/2-108587-b5be9f1ae871a396036da177a5d428ae.jpg') repeat top center;
 	//background: transparent url('/public/img/backgrounds/paper-flower.gif') repeat top center;
 	//background: transparent url('/public/img/backgrounds/karachi.gif') repeat top center;
 	//background: transparent url('/public/img/backgrounds/dark-tile.gif') repeat top center;
 	//background: transparent url('/public/img/backgrounds/bit-tile-blue.gif') repeat top center;
+	#background .fader {
+		position: absolute;
+		height: 100%;
+	}
 	img {
-	    position:absolute;
-	    top:0;
-	    left:0;
-	    right:0;
-	    bottom:0;
-	    margin:auto;
-	    min-width:50%;
-	    min-height:100%;
+		left: 0;
+		min-width: 1200px;
+		position: absolute;
+		top: 0;
+		width: 100%;
+		z-index: -2;
 	}
 }
 
@@ -108,10 +118,13 @@ input{
     width: 150px;
 }
 
+.dropdown-menu{
+	max-width: none; 
+}
 /* Main navigation Bar */
 
 .navbar{
-	z-index: 2000;
+	z-index: 900;
 	.center-block();
 	.navbar-inner{
 		.border-radius(0 0 6px 6px);
@@ -137,7 +150,7 @@ input{
 .white_buble_for_list{
 	.box-shadow();
 	.border-radius(6px);
-	.background-size(@dealListWidth * 0.35);
+	//.background-size(@dealListWidth * 0.35);
 	background-repeat: no-repeat;
 	background-color: @white;
 	color: @gray;
@@ -150,7 +163,7 @@ input{
 /************** EXTRANET Login page **************/
 .extranet{
 	.login{
-		padding: 30px;
+		padding: 30px; 
 	}
 	.edit-hotel{
 		padding: 30px;
@@ -158,123 +171,108 @@ input{
 }
 
 /************** INIT Login PAGE  *****************/
-.hero-unit{
-	@divHeight: 475px;
-	@divWidth:	345px;
-	@verticalMargin: 16px;
-	.box-shadow(2px 3px 6px rgba(0,0,0,.8));
-	height: @divHeight;
-	padding: 30px 60px;
-	.register, .login {
-		.pull-left();
-		height: @divHeight;
-	    width: @divWidth;
-		.input-prepend{
-			width: @divWidth;
+.index{
+	.hero-unit{
+		@verticalMargin: 16px;
+		.box-shadow(2px 3px 6px rgba(0,0,0,.8));
+		padding: 20px 40px;
+		.register, .login {
+			.well{
+				background-color: @white;
+				.box-shadow();
+				strong{
+					color: @linkColor;
+				}
+				small{
+					font-size: 17px;
+				    font-weight: 200;
+				}
+				h2{
+				    padding-bottom: 16px;
+				}
+			}		
 		}
-		.well{
-			background-color: @white;
-			.box-shadow();
-			strong{
-				color: @linkColor;
-			}
-			small{
-				font-size: 17px;
-			    font-weight: 200;
-			}
-			h2{
-			    padding-bottom: 16px;
-			}
-		}		
-	}
 	
-	.register{
-		padding-right:30px;
-		.btn-container{
-			margin: @verticalMargin 0;
-			text-align: center;
-			padding-top: 5px;
-		}
-		.download{
-			height: 142px; 
-			.android-btn, .iphone-btn{
-				.pull-left();
-			}
-		}
-		.input-prepend{
-		    width: 238px;
-			.center-block();
-			margin-top: 10px;
-		}
-		#askInvite{
-			small.help-block{
-				font-size: 12px;
-			}
-		}
-	}
-	.login{
-		padding-left:30px;
-		text-align: center;
-		form{
-			margin: @verticalMargin 0;
-			width: 240px;
-			.center-block();
-			text-align: left;
-			.login-center{
-				.center-block();
+		.register{
+			.btn-container{
+				margin: @verticalMargin 0;
 				text-align: center;
+				padding-top: 5px;
 			}
-		}
-		.fb-button-container-centered {
-			margin:  14px 0 4px;
-			padding: 0px 0;
-			text-align: center;
-			.play-fbconnect-button {
-				left: auto;
-				margin-bottom: 13px;
-				float: none;
-				display: inline-block;
-				position: relative;
-				text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.6);
-				border-radius: 4px;
-				moz-border-radius: 4px;
-				-webkit-border-radius: 4px;
-				text-align: center;
-				&:hover{
-					box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
-					-o-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
-					-moz-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
-					-webkit-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
-					text-decoration:none!important;
+			.download{
+				height: 142px; 
+				.android-btn, .iphone-btn{
+					.pull-left();
 				}
 			}
-			.fb-button-left {
-				width: 40px;
+			.input-prepend{
+				.center-block();
+				margin-top: 10px;
 			}
-			.fb-button-right, .fb-button-center, .fb-button-left {
-				float: left;
-				height: 40px;
-				background: url(https://a2.muscache.com/s/1326620451/images/uiwidgets/fb-button-sprite.png?1307134456) left top no-repeat;
-			}
-
-			.fb-button, .fb-button-right, .fb-button-center, .fb-button-left {
-				display: block;
-			}
-			.fb-button-center {
-				padding: 0 5px 0 8px;
-				line-height: 40px;
-				font-size: 16px;
-				color: white;
-				background-color: #6385BA;
-				background-position: left -40px;
-				background-repeat: repeat-x;
-			}
-
-			.fb-button-right {
-				width: 6px;
-				background-position: 100% -80px;
+			#askInvite{
+				small.help-block{
+					font-size: 12px;
+				}
 			}
 		}
+		.login{
+			text-align: center;
+			form{
+				margin: @verticalMargin/2 0;
+				.center-block();
+				text-align: left;
+			}
+		}
+	}
+}
+.fb-button-container-centered {
+	margin:  14px 0 4px;
+	padding: 0px 0;
+	text-align: center;
+	.play-fbconnect-button {
+		left: auto;
+		margin-bottom: 13px;
+		float: none;
+		display: inline-block;
+		position: relative;
+		text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.6);
+		border-radius: 4px;
+		moz-border-radius: 4px;
+		-webkit-border-radius: 4px;
+		text-align: center;
+		&:hover{
+			box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+			-o-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+			-moz-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+			-webkit-box-shadow:inset 0 0 .2em rgba(255,255,255,0.3),inset 0 0 .2em rgba(255,255,255,0.3),0 1px 5px rgba(0,0,0,0.6);
+			text-decoration:none!important;
+		}
+	}
+	.fb-button-left {
+		width: 40px;
+	}
+	.fb-button-right, .fb-button-center, .fb-button-left {
+		float: left;
+		height: 40px;
+		background: url(https://a2.muscache.com/s/1326620451/images/uiwidgets/fb-button-sprite.png?1307134456) left top no-repeat;
+	}
+
+	.fb-button, .fb-button-right, .fb-button-center, .fb-button-left {
+		display: block;
+	}
+	.fb-button-center {
+		padding: 0 5px 0 8px;
+		line-height: 40px;
+		font-size: 16px;
+		color: white;
+		background-color: #6385BA;
+		background-position: left -40px;
+		background-repeat: repeat-x;
+	}
+
+	.fb-button-right {
+		width: 6px;
+		background-position: 100% -80px;
 	}
 }
 
@@ -291,6 +289,9 @@ input{
 		font-weight: normal;
 		line-height:  @baseLineHeight * 1.35;
 	}
+}
+.modal .title-black{
+	.border-radius(1.6px 1.6px 0 0);
 }
 
 #cities{
@@ -335,20 +336,28 @@ input{
 		text-align: center;
 	}
 }
-	
+
+
+
 .deal-list{
-	padding: 0 10px 1px;	
+	//padding: 0 10px 1px;	
 	.border-radius(6px);
 	margin-bottom: @verticalMarging;
 	background-color: @grayBackground;
+	.closed{
+		height: 280px;
+		margin-bottom: @verticalMarging;
+		.white_buble_for_list();
+		font-size: @baseFontSize * 1.5;
+		.info{
+			padding-left: 25px;
+		}
+	}
 	.deal{
 		height: 200px;
 		margin-bottom: @verticalMarging;
-		width:	@dealListWidth;
+		margin-right: 46px;
 		.hotelInfo {
-			width: @dealListWidth * 0.65;
-			margin-left: @dealListWidth * 0.35;
-		    padding-left: @dealListWidth * 0.05;
 			.title{
 				h2{
 					line-height: 25px;
@@ -370,13 +379,11 @@ input{
 						color: @gray;
 					}
 				}
+				.more-info{
+					text-align: right;
+				}
 				.deal-info{
 					text-align: center;
-					padding: 8px 0;
-					.before, .nights, .rooms{
-						.pull-left();
-						width: 440px /3;
-					}
 					.before, .nights {
 						border-right: 1px solid @gray;
 					}
@@ -417,7 +424,7 @@ input{
 }
 .zonesNav-fixed{
 	position: fixed;
-    z-index: 2500;
+    z-index: 1000;
 	top:0px;
 }
 
@@ -442,7 +449,6 @@ input{
 	.hotelImage {	
 		img{
 			height: 260px;
-			width: 870px;
 		}
 
 	}	
@@ -453,7 +459,6 @@ input{
 			.border-radius(7px);
 			height: 400px;
 			padding: 10px;
-		    width: 170px;
 			text-align: center;
 			font-size: 22px;
 			color: #666;
@@ -497,16 +502,16 @@ input{
 			}			
 		}
 		.image-gallery .thumbnails{
-			margin-left: -16px;
+			//margin-left: -16px;
 			li {
-				margin-left: 16px;
+				//margin-left: 16px;
 				a img {
 					width: 90px;
 				}
 			}	
 		}
 		#map_canvas{
-			width: 840px; 
+			//width: 840px; 
 			height: 300px;
 		}
 	}
@@ -530,7 +535,6 @@ input{
 	}
 	[id*="step"] {
 		margin-bottom: @verticalMarging;
-		width:	@dealListWidth;
 		.white_buble_for_list();
 		.padding-centered{
 			padding: 40px;
@@ -541,9 +545,6 @@ input{
 	}	
 	#step1{
 		.hotelInfo{
-			width: @dealListWidth * 0.65;
-			margin-left: @dealListWidth * 0.35;
-		    padding-left: @dealListWidth * 0.05;
 			.price {
 			    font-size: 40px;
 			    line-height: 40px;
@@ -556,7 +557,6 @@ input{
 				}
 			}
 			.detail-text{
-				width: 500px;
 				height: 108px;
 				overflow: hidden;
 			}
@@ -650,183 +650,18 @@ input{
 	}
 }
 
-
-/* Responsive Docs
--------------------------------------------------- */
-
-/* LARGE DESKTOP SCREENS */
-@media (max-width: 1210px) {
-	.hero-unit {
-	    padding: 30px;
-		.well{
-			height: 330px;
-		}
-		.register {
-		    padding-right: 15px;
-			width: 305px;
-			height: auto;
-			.well small {
-			    font-size: 16px;
-			}
-			.btn-container {
-			    margin: 15px 0;
-			}
-		}
-		.login {
-		    padding-left: 15px;
-			width: 305px;
-			height: auto;
-			.well small {
-			    font-size: 16px;
-			}
-			.fb-button-container-centered {
-			    margin: 14px 0 16px;
-			}
-		}
-		h2 {
-		    font-size: 22px;
-		    line-height: 30px;
-		}
-		.iphone-btn {
-		    background-size: 130px auto;
-		    width: 130px;
-		}
-		.android-btn {
-		    background-size: 130px auto;
-		    width: 130px;
-		}
+/** REGISTER AND LOGIN FROM NEWSLETTER**/
+#registerForm, #loginForm{
+	.fields{
+		padding-top: 20px;
 	}
-	.footer{
-		.addthis_toolbox{
-			margin-left: 6px;
-			width: 144px;
-		} 
-	}
-
-}
-
-@media (max-width: 980px) {
-	#nav-row{
-		width: 100%;
-		.navbar-fixed-top{
-			position: fixed;
-			.span9 {
-			    width: 100%;
-			}
-		  }
-	  }
-	.navbar-fixed-top .navbar-inner {
-	    padding: 0;
-   }
-}
-
-@media (min-width: 768px) and (max-width: 980px) {
-	  .footer{
-		min-width: 745px;
-		#navigation{
-			width: 538px;
-		}
-	  }
-	.hero-unit {
-	    min-width: 642px;
-	    padding: 30px 50px;
-	  }
-	#cities{
-		width: 744px;
+	.facebook{
+		padding-top: 40px;
+		text-align: center;
 	}
 }
-
-@media (max-width: 768px) {
-   /* remove border radius for nav*/
-	.navbar-fixed-top .navbar-inner {
-  		.border-radius(0);
-	}
-	
-	.container {
-	    padding: 0px;
-		.hero-unit {
-			.border-radius(0);
-			width: 100%;
-		    padding: 10px 20px;
-			h1 {
-			    font-size: 50px;
-			}
-		}
-	}
-	.span12, .span9{
-			width:100%;
-	}
-	.footer{
-		min-width: 0px;
-		width:100%;
-		.border-radius(0);
-		#navigation {
-		    float: left;
-		    min-width: 505px;
-		}
-		.addthis_toolbox{
-			margin-left: 6px;
-			width: 144px;
-			float:left;
-		}
-	}
-  /* Popovers */
-  .large-bird {
-    display: none;
-  }
-  .popover-well .popover-wrapper {
-    margin-left: 0;
-  }
-
-
-}
-
-
-@media (min-width: 480px) and (max-width: 768px) {
-
-}
-
-@media(max-width: 670px) {
-	.container {
-		.hero-unit {
-			text-align: center;
-			height: 850px;
-			h1 {
-				font-size: 36px;
-			}
-			p {
-			    font-size: 17px;
-			    line-height: 20px;
-			}
-			.login {
-				.center-block();
-				padding-left: 15px;
-			}
-			.register{
-				.center-block();
-				padding-left: 15px;
-			}
-			.register .well small, .login .well small {
-			    font-size: 15px;
-			}
-		}
+#loginForm{
+	.facebook{
+		padding-top: 20px;
 	}
 }
-
-@media (max-width: 480px) {
-	.container {
-		.hero-unit {
-			text-align: left;
-			h1 {
-				font-size: 30px;
-			}
-			p {
-			    font-size: 15px;
-			    line-height: 18px;
-			}
-		}
-	}
-	#cities{
-		min-width: 400px;
-	}
- }

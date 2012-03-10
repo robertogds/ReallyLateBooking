@@ -103,7 +103,7 @@ public class Bootstrap extends Job {
 		prueba.address = "moldavia 43";
 		prueba.mainImageBig = "mainImage.jpg";
 		prueba.mainImageSmall = "mainImageSmall.jpg";
-		prueba.hotelCode = "601022";
+		prueba.hotelCode = "752552";
 		prueba.isHotUsa = Boolean.TRUE;
 		prueba.contactEmail = "pablo@iipir.com";
 		prueba.priceCents = 100;

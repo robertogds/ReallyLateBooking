@@ -4,14 +4,75 @@
 	
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
 
+	
 	<div id="crudListTable">
-		#{crud.table fields:['name', 'phone', 'fee', 'updated'] }
-		 #{crud.custom 'updated'}
-		 		 <a href="@{admin.Companies.showCompanyBookings(object.id)}">
-   					${object.updated?.format('dd MMMM yyyy - hh:mm')}
-   				 </a>
-		   #{/crud.custom}
-		#{/crud.table}
+	
+		<table>
+				<thead>
+					<tr>
+						<th>
+							Company
+						</th>
+						<th >
+							Phone
+						</th>
+						<th>
+							NIF
+						</th>
+						<th>
+							Comission
+						</th>
+						<th>
+							Comments
+						</th>
+						<th>
+							Uninvoiced Bookings
+						</th>
+						<th>
+							Updated
+						</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+	  #{list objects, as:'object'}
+	  			<tr class="${object_index % 2 ? 'even' : 'odd'}"  
+					    	#{if !object.nif?.trim()}
+					    	 style="border-color: red;border-style: solid;" 
+					    	#{/if}	
+					    	>
+					    	<td>
+					    		 <a href="@{admin.Companies.show(object.id)}">
+								 	${object.name}
+								  </a>
+							</td>
+							<td>
+								 ${object.phone}
+							</td>
+							<td>
+								${object.nif}
+							</td>
+							<td>
+								 ${object.fee}%
+							</td>
+							<td>
+								${object.comment}
+							</td>
+							<td>
+								${object.countUninvoicedBookings()}
+							</td>
+							<td>
+								<a href="@{admin.Companies.showCompanyBookings(object.id)}">
+				   					${object.updated?.format('dd MMMM yyyy - hh:mm')}
+				   				 </a>
+							</td>
+				</tr>
+	  #{/list}
+	  			</tbody>
+	  			</table>
+	  			
+	  	 <br/><br/>
+	  	<p> <span style="border-color: red;border-style: solid;" > Rojo:</span> faltan datos de necesarios para la factura</p>
 	</div>
 	
 	<div id="crudListPagination">

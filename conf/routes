@@ -63,8 +63,12 @@ GET	   	/extranet/edit							Owners.edit
 
 
 
-# Ignore favicon requests
-GET     /favicon.ico                            404
+
+GET     /favicon.ico                  staticFile:/public/images/favicon.ico
+GET     /humans.txt                   staticFile:/public/humans.txt
+GET     /robots.txt                   staticFile:/public/robots.txt
+GET     /crossdomain.xml              staticFile:/public/crossdomain.xml
+
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public

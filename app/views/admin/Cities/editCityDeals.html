@@ -227,7 +227,7 @@
 				<tbody>
 	  #{list models.Deal.findAllActiveDealsByCityId(city.id), as:'deal'}
 	  			<tr class="${deal_index % 2 ? 'even' : 'odd'}"  
-					    	#{if !deal.image3?.trim()}
+					    	#{if !deal.image3?.trim() || deal.quantity == 0}
 					    	 style="border-color: red;border-style: solid;" 
 					    	#{/if}
 					    	#{else}

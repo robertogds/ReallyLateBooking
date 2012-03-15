@@ -1,5 +1,5 @@
 @import "bootstrap.less"; 
-@import "responsive.less";  
+@import "responsive.less"; 
 
 /************** VARIABLES *****************/
   
@@ -9,20 +9,32 @@
 @secondaryColor:	#5093B0;
 @orange:			#F99431;
 @verticalMarging:   20px;
-//@dealListWidth:		850px;
 @grayBackground:	#E9E9E9;
 @zonesNavHeight:	42px;
 @grayBorder:		#D9D9D9;
+
+@fontSizeBig: 24px;
+@fontSizeMedium: 16px;
+@fontSizeSmall: @baseFontSize;
+
+@media (max-width: 850px) {
+	@cityImageSize: 140px;
+}
 
 
 /************** GENERAL ELEMENTS  *****************/  
 body {
   	padding-top: @navbarHeight + @navbarPadding; 
+	background-color: #F5F5F5;
+}
+
+h1 {
+	line-height: 100%;
 }
 
 #main-content{
 	padding-top: 30px;
-	min-height: 570px;
+	min-height: 500px;
 }
 
 footer{
@@ -50,14 +62,17 @@ footer{
 		text-align: center;
 		small{
 			color: @gray;
-		}
+		} 
+	} 
+	.addthis_toolbox {
+	    float: right;
+	    margin-right: 12px;
 	}
 }
 
 input{
 	height: 28px;
 }
-
 
 #background {
 	background: transparent url("http://a1.ak.lscdn.net/deals/images/refresh/background-fade.png") repeat-x scroll left bottom;
@@ -101,21 +116,21 @@ input{
 }
 .android-btn{
 	background-image: url("http://reallylatebooking.com/public/images/Android_Store_Badge_ES_400-TR.original.png");
-	.background-size(150px);
+	.background-size(100%);
     background-repeat: no-repeat;
     border-style: none;
 	display: block;
-	height: 60px;
-    width: 150px;
+	min-height: 65px;
+    width: 100%;
 }
 .iphone-btn{
 	background-image: url("http://reallylatebooking.com/public/images/App_Store_Badge_ES_400-TR.original.png");
-	.background-size(150px);
+	.background-size(100%);
     background-repeat: no-repeat;
     border-style: none;
 	display: block;
-	height: 60px;
-    width: 150px;
+	min-height: 65px;
+    width: 100%;
 }
 
 .dropdown-menu{
@@ -168,7 +183,7 @@ input{
 	.edit-hotel{
 		padding: 30px;
 	}
-}
+} 
 
 /************** INIT Login PAGE  *****************/
 .index{
@@ -176,16 +191,15 @@ input{
 		@verticalMargin: 16px;
 		.box-shadow(2px 3px 6px rgba(0,0,0,.8));
 		padding: 20px 40px;
+		p{
+			line-height: 20px;
+		}
 		.register, .login {
 			.well{
 				background-color: @white;
 				.box-shadow();
 				strong{
 					color: @linkColor;
-				}
-				small{
-					font-size: 17px;
-				    font-weight: 200;
 				}
 				h2{
 				    padding-bottom: 16px;
@@ -200,7 +214,6 @@ input{
 				padding-top: 5px;
 			}
 			.download{
-				height: 142px; 
 				.android-btn, .iphone-btn{
 					.pull-left();
 				}
@@ -211,7 +224,7 @@ input{
 			}
 			#askInvite{
 				small.help-block{
-					font-size: 12px;
+					font-size: @fontSizeSmall;
 				}
 			}
 		}
@@ -263,7 +276,7 @@ input{
 	.fb-button-center {
 		padding: 0 5px 0 8px;
 		line-height: 40px;
-		font-size: 16px;
+		font-size: @fontSizeMedium;
 		color: white;
 		background-color: #6385BA;
 		background-position: left -40px;
@@ -276,7 +289,9 @@ input{
 	}
 }
 
-/************** DEALS LIST PAGE  *****************/
+
+
+/************** City LIST PAGE  *****************/
 .title-black {
 	#gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
 	.border-radius(6px 6px 0 0);
@@ -285,37 +300,40 @@ input{
 		color: @grayLighter;
 		text-transform: lowercase;
 		padding: 9px 20px;
-		font-size: @baseFontSize * 1.35;
+		font-size: @fontSizeMedium;
 		font-weight: normal;
-		line-height:  @baseLineHeight * 1.35;
+		line-height:  @fontSizeMedium + 4;
 	}
 }
 .modal .title-black{
 	.border-radius(1.6px 1.6px 0 0);
 }
 
+
 #cities{
 	.border-radius(6px);
 	background-color: transparent;
 	.city{
-		margin:8px;
+		@lineHeight: @fontSizeBig + 8;
+		margin: 2% 2% 0 0;
 		overflow: hidden;
 		.square(@cityImageSize);
 		.pull-left();
 		.box-shadow(2px 3px 6px rgba(0,0,0,.8));
 		.border-radius(6px);	
 		a {
-		    background-size: @cityImageSize auto;
+		    background-size: 100% auto;
+			background-repeat: none;
 		    display: block;
-		    padding-top: @cityImageSize - (@baseLineHeight * 1.9);
+		    padding-top: @cityImageSize - @lineHeight;
 		    text-decoration: none;
-		    width: @cityImageSize;
+		    width: 100%;
 			h2 {
 				#translucent > .background(@black,0.6);
 			    color: @grayLighter;
 			    font-weight: lighter;
 			    text-align: center;
-				font-size:20px;
+				font-size: @fontSizeBig;
 				// Hover states
 				&:hover {
 					background-color:transparent;
@@ -337,26 +355,41 @@ input{
 	}
 }
 
+/************** DEALS LIST PAGE  *****************/
 
-
-.deal-list{
-	//padding: 0 10px 1px;	
+.deal-list{ 
 	.border-radius(6px);
 	margin-bottom: @verticalMarging;
 	background-color: @grayBackground;
 	.closed{
-		height: 280px;
 		margin-bottom: @verticalMarging;
+		margin: 0 2% 2%;
 		.white_buble_for_list();
-		font-size: @baseFontSize * 1.5;
+		font-size: @fontSizeMedium;
 		.info{
-			padding-left: 25px;
+			h2, p{
+				padding-left: 6%;
+			}
+			#counter{
+				width: 350px;
+				margin-left:25%;
+				.cntSeparator {
+				        font-size: @fontSizeMedium * 2;
+				        margin: 6% 1%;
+				        color: #000;
+				 }
+			}
+		}
+		.video{
+			margin-top: 2%;
+			h2, p{
+				padding-left: 6%;
+			}
 		}
 	}
 	.deal{
 		height: 200px;
-		margin-bottom: @verticalMarging;
-		margin-right: 46px;
+		margin: 0 2% 2%;
 		.hotelInfo {
 			.title{
 				h2{
@@ -375,7 +408,7 @@ input{
 					font-weight: bold;
 					span{
 						font-weight: normal;
-						font-size: @baseFontSize * 1.5;
+						font-size: @fontSizeMedium;
 						color: @gray;
 					}
 				}
@@ -390,13 +423,13 @@ input{
 				}
 				.btn{
 					margin-top: 5px;
-					font-size: @baseFontSize * 2;
+					font-size: @fontSizeBig;
 				}
 			}
 		}
 	} 
 	h2{
-		line-height: 50px;
+		line-height: 40px;
 	}
 }
 
@@ -406,49 +439,53 @@ input{
 
 .deal{
 	.white_buble_for_list();
-	font-size: @baseFontSize * 1.5;
+	font-size: @fontSizeMedium;
 }
 
 #zonesNav {
-	font-size: @baseFontSize * 1.35;
+	font-size: @fontSizeSmall;
 	height: @zonesNavHeight;
-	.zones{
-		.nav {
-			.pull-right();
-		    margin-bottom: 0;
-			padding-top: 2px;
-		}
+	.navbar{
 		margin-bottom: 0px;
 		z-index:0;
+		.zones{
+			.nav {
+				.pull-right();
+			    margin-bottom: 0;
+				padding-top: 2px;
+			}
+
+		}
 	}
+	
 }
 .zonesNav-fixed{
 	position: fixed;
     z-index: 1000;
 	top:0px;
+	left:0px
 }
 
 /***********  Deal Detail Page  ************/
 
 #deal_detail {
 	.title{
-		height: 48px;
 		margin-bottom: 0;
 		padding: 15px 0px;
 		background-color: #373738;
 		h1{
 			padding: 0 15px;
 			font-weight: normal;
-			font-size: 30px;
+			font-size: @fontSizeBig;
 			color:white;
 			small {
-				font-size: 16px;
+				font-size: @fontSizeSmall;
 			}
 		}
 	}
 	.hotelImage {	
 		img{
-			height: 260px;
+			width:100%
 		}
 
 	}	
@@ -457,10 +494,9 @@ input{
 		.main-content .buy-column{
 			border: 1px solid @grayBorder;
 			.border-radius(7px);
-			height: 400px;
-			padding: 10px;
+			padding: 3%;
 			text-align: center;
-			font-size: 22px;
+			font-size: @fontSizeBig;
 			color: #666;
 			.info-list li {
 			    line-height: 30px;
@@ -472,19 +508,14 @@ input{
 				font-weight: bold;
 				color: @orange;
 				overflow: hidden;
-				span{
-					font-size: 35px;
-				}
 			}
 			.before{
 				padding: 0 0 6px 0;
-				height: 20px !important;
 			}
 			.buy-now{
-				padding: 18px 0;
-				height: 58px;
+				padding: 10% 0;
 				.btn{
-					font-size: 30px !important;
+					font-size: @fontSizeBig;
 				}
 			}
 			.social {
@@ -492,7 +523,7 @@ input{
 					color: @orange;
 				}
 				.social-buttons{
-					padding:13px;
+					padding:5%;
 				}
 				#notyet{
 					.modal-body{
@@ -552,7 +583,7 @@ input{
 			    text-indent: 0;
 				color: @orange;
 				small{
-					font-size: 14px;
+					font-size: @fontSizeSmall;
 					color: #404040;
 				}
 			}
@@ -561,28 +592,30 @@ input{
 				overflow: hidden;
 			}
 		}
-		height: 227px;
 		img{
 			.border-radius(6px 0 0 6px);
 		}
 		
 	}
-	#step2{
+	#step2{ 
 		.total{
+			text-align: center;
 			background: #FFFDBC;
 			border: 1px solid #D1D1C9;
 			border-width: 1px 0 0 0;
-			height: 20px;
-			line-height: 15px;
 			color: #5F5F57;
-			padding: 18px;
-			font-size: 18px;
+			padding: 1.5% 0;
+			font-size: @fontSizeMedium;
+			.span9{
+				text-align: left;
+			}
+			#total-booking{
+				font-size:40px;
+			}
 		}
-		#total-booking{
-			font-size:40px;
-		}
+		
 		option span.total-price{
-			float: right;
+			//float: right;
 		}
 		
 	} 
@@ -598,7 +631,7 @@ input{
 		.border-radius(6px);
 	    .box-shadow();
 		#confirm-booking{
-			font-size: @baseFontSize * 1.5;
+			font-size: @fontSizeMedium;
 			margin-top: 6px;
 		}
 	}
@@ -635,8 +668,8 @@ input{
 	.noBookings{
 		text-indent: 10px;
 		.btn{
-			font-size: 18px;
-			margin: 80px 200px;
+			font-size: @fontSizeMedium;
+			margin: 10% 0;
 		}
 	}
 	.actions{
@@ -644,9 +677,6 @@ input{
 	}
 	table th, table td {
 	    text-align: center;
-	}
-	#bookings{
-		margin:10px;
 	}
 }
 
@@ -665,3 +695,5 @@ input{
 		padding-top: 20px;
 	}
 }
+
+@import "rlb_responsive.less";  

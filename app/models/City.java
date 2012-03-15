@@ -46,6 +46,8 @@ public class City extends Model {
 	
 	@Index("zone_index")
 	public City mainZone;
+	@Required
+	public int utcOffset;
 	
 	public City(String name, String url){
 		this.name = name;

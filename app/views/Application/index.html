@@ -2,46 +2,42 @@
 #{set 'title'}
 	&{'web.index.title'}
 #{/set}
-#{set background: 'http://d2f5bmx5jz1oq8.cloudfront.net/web/backgrounds/general.jpg'/}
+
+#{set background: 'http://d2f5bmx5jz1oq8.cloudfront.net/web/backgrounds/fondo3_medium.jpg'/}
+
+#{set 'moreScripts'}
+
+	<script type="text/javascript">
+		$(function() {
+			$("#iammember").click(function() {
+				  $("#register").hide();
+				  $("#login").show();
+			});
+			$("#iamnotmember").click(function() {
+				  $("#register").show();
+				  $("#login").hide();
+			});
+		});
+	</script>
+#{/set}
       <div class="row-fluid">
         <div class="index span12">
         	<div class="hero-unit">
 	          <h1>&{'web.index.h1'}</h1>
 	          <p>&{'web.index.h1.small'}</p>
 	          	 <div class="row-fluid">
-				  <div class="register span6">
+				  <div class="register span6" id="register">
 				   		<div class="well">
 				   			<h2>&{'web.index.register.h2'}</h2>
-				   			<small>&{'web.index.register.club'}</small>
+				   			<p>&{'web.index.register.club'}</p>
 				   			<div class="btn-container">
 				   				<a data-toggle="modal" href="#askInvite" class="btn btn-large btn-danger">&{'web.index.register.btn'}</a>
-				   				<div class="modal fade" id="askInvite">
-								  <div class="modal-header">
-								    <a class="close" data-dismiss="modal">&times;</a>
-								    <h3>&{'web.index.invite.h3'}</h3>
-								  </div>
-								  #{form @Invitations.getInvite()}
-								  <div class="modal-body">
-								    <small>&{'web.index.invite.entry'}</small>
-								    	 <div class="input-prepend">
-							              <div class="input-prepend">
-							                <span class="add-on"><i class="icon-envelope"></i></span>
-							                <input class="input-large" name="email" id="email" value="${flash.email}" type="text" placeholder="&{'secure.email'}">
-							              </div>
-							             </div>
-							             <small class="help-block">&{'web.index.invite.accept_terms'} <a data-toggle="modal" href="#terms">&{'web.terms'}</a></small>
-								  </div>
-								  <div class="modal-footer">
-								    <button type="submit" class="btn btn-primary" >&{'web.index.invite.btn'}</button>
-								    <a  data-dismiss="modal" class="btn close">&{'web.btn.cancel'}</a>
-								  </div>
-								</div>
-								#{/form}
+				   				<br><a href="#" class="hide" id="iammember">&{'web.invite.modal.iammember'}</a>
 				   			</div>
 				   			<div class="download">
-				   				<small>&{'web.index.register.download'}</small>
-					   			<div class="btn-container row-fluid">
-					   				<div class="span6 offset1">
+				   				<p>&{'web.index.register.download'}</p>
+					   			<div class="row-fluid">
+					   				<div class="span6">
 						   				<a class="iphone-btn" target="_self" href="http://itunes.apple.com/es/app/reallylatebooking-las-mejores/id448918487?mt" 
 						   					onclick="_gaq.push(['_trackEvent', 'iphone', 'Download', 'Spanish']);" ></a>
 						   			</div>
@@ -53,16 +49,16 @@
 				   			</div>
 				   		</div>
 				  </div>
-				  <div class="login span6">
-				  	<div id="login" class= "well">
+				  <div class="login span6" id="login">
+				  	<div  class= "well">
 				  		<h2>&{'web.index.login.h2'}</h2>
-				  		<small>&{'web.index.login.fb'}</small>
+				  		<p>&{'web.index.login.fb'}</p>
 				  		<div class="fb-button-container-centered">
 				   		#{fbconnect.button label:'<span class="fb-button-left"></span>
 							<span class="fb-button-center"> Facebook  </span>
 							<span class="fb-button-right"></span>', scope:'email' /}
 				  		</div>
-				  		<small>&{'web.index.login.email'}</small>
+				  		<p>&{'web.index.login.email'}</p>
 				  		<div class="row-fluid">
 				  			<div class="span2">
 									<br>
@@ -70,19 +66,24 @@
 							<div class="span10">
 								#{form @authenticate()}
 						  			<div class="control-group #{ifError 'username'} error #{/ifError}">
-						              <div class="input-prepend controls">
-						                <span class="add-on"><i class="icon-envelope"></i></span>
-						                <input class="input-large" name="username" id="username" value="${flash.username}" type="text" placeholder="&{'secure.email'}">
-						              </div>
+						  				<div class="controls">
+							              <div class="input-prepend">
+							                <span class="add-on"><i class="icon-envelope"></i></span>
+							                <input class="span8" name="username" id="username" value="${flash.username}" type="text" placeholder="&{'secure.email'}">
+							              </div>
+						              	</div>
 						            </div>
 						            <div class="control-group #{ifError 'password'} error #{/ifError}"> 
-						              <div class="input-prepend controls">
-						                <span class="add-on"><i class="icon-lock"></i></span>
-						                <input class="input-large" type="password" name="password" id="password" value=""  size="16"  placeholder="&{'secure.password'}">
-						              </div>
+						            	<div class="controls">
+							              <div class="input-prepend">
+							                <span class="add-on"><i class="icon-lock"></i></span>
+							                <input class="span8" type="password" name="password" id="password" value=""  placeholder="&{'secure.password'}">
+							              </div>
+							             </div> 
 						             </div>  
 						             <div class="login-center">
 							       		 <button type="submit" class="btn btn-large btn-success" >&{'web.index.login.email.button'}</button>
+							       		<br><a href="#" class="hide" id="iamnotmember">&{'web.invite.modal.iamnotmember'}</a>
 							        </div>
 								#{/form}
 						 	</div>
@@ -94,3 +95,26 @@
 			</div>
         </div>
       </div>
+      
+				   				<div class="modal fade" id="askInvite">
+								  <div class="modal-header">
+								    <a class="close" data-dismiss="modal">&times;</a>
+								    <h3>&{'web.index.invite.h3'}</h3>
+								  </div>
+								  #{form @Invitations.getInvite()}
+								  <div class="modal-body">
+								    <p>&{'web.index.invite.entry'}</p>
+								    	 <div class="input-prepend">
+							              <div class="input-prepend">
+							                <span class="add-on"><i class="icon-envelope"></i></span>
+							                <input class="input-large" name="email" id="email" value="${flash.email}" type="text" placeholder="&{'secure.email'}">
+							              </div>
+							             </div>
+							             <p class="help-block">&{'web.index.invite.accept_terms'} <a data-toggle="modal" href="#terms">&{'web.terms'}</a></p>
+								  </div>
+								  <div class="modal-footer">
+								    <button type="submit" class="btn btn-primary" >&{'web.index.invite.btn'}</button>
+								    <a  data-dismiss="modal" class="btn close">&{'web.btn.cancel'}</a>
+								  </div>
+								  #{/form}
+								</div>

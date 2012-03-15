@@ -7,88 +7,94 @@
 										    <div class="padding-centered">
 				            			   <fieldset>
 				            			   	<div id="cc_details" class="row-fluid">
-				            			   		 <div class="span4 control-group ">
-										            <label  for="booking.creditCardType">&{'web.bookingForm.4.cardType'}</label>
-										            <div class="controls">
-										                <select class="large" id="credit_card_cc_type" name="booking.creditCardType">
-					                                		<option value="visa">Visa</option>
-															<option value="master">MasterCard</option>
-															<option value="american_express">American Express</option>
-															<option value="discover">Discover</option>
-													</select>
+				            			   		<div class="span4">
+					            			   		 <div class="control-group">
+											            <label  for="booking.creditCardType">&{'web.bookingForm.4.cardType'}</label>
+											            <div class="controls">
+											                <select class="span10" id="credit_card_cc_type" name="booking.creditCardType">
+						                                		<option value="visa">Visa</option>
+																<option value="master">MasterCard</option>
+																<option value="american_express">American Express</option>
+																<option value="discover">Discover</option>
+														</select>
+											            </div>
 										            </div>
-									            </div><!-- /clearfix -->
-									            <div class="span4 control-group #{ifError 'booking.creditCard'} error #{/ifError}">
-									            	<label  for="credit_card_cc_number">&{'web.bookingForm.4.cardNumber'}</label>
-												 	 <div class="controls">
-					                                	<input class="large" id="credit_card_cc_number" 
-					                                		name="booking.creditCard" type="text" value="${flash['booking.creditCard']}">
-					                                	<span class="help-inline">#{error 'booking.creditCard' /}</span>
-					                                 </div>
-												</div><!-- /clearfix -->
-												<div class="span4 control-group #{ifError 'booking.creditCardCVC'} error #{/ifError}"> 
-					                               	<label id="credit_card_cc_security_code_label" for="credit_card_cc_security_code">&{'web.bookingForm.4.cvc'}</label>
-					                               <div class="controls">
-					                                <input id="credit_card_cc_security_code" name="booking.creditCardCVC" type="text" value="${flash['booking.creditCardCVC']}"
-					                                	class="input-small #{ifError 'booking.creditCardCVC'} error #{/ifError}">
-					                                	<a  href="#" class="tipsy" data-placement="right" data-original-title="&{'web.bookingForm.4.cvc.hint'}">
-					                                		<i class="icon-question-sign"></i>
-					                                	</a>
-					                                <span class="help-inline">#{error 'booking.creditCardCVC' /}</span>
-					                                	
-					                                </div>
-					                                </div><!-- /clearfix -->
+									             </div>
+									             <div class="span4">
+										            <div class="control-group #{ifError 'booking.creditCard'} error #{/ifError}">
+										            	<label  for="credit_card_cc_number">&{'web.bookingForm.4.cardNumber'}</label>
+													 	 <div class="controls">
+						                                	<input class="span12" id="credit_card_cc_number" 
+						                                		name="booking.creditCard" type="text" value="${flash['booking.creditCard']}">
+						                                	<span class="help-inline">#{error 'booking.creditCard' /}</span>
+						                                 </div>
+													</div>
+												</div>
+												<div class="span4">
+													<div class="control-group #{ifError 'booking.creditCardCVC'} error #{/ifError}"> 
+						                               	<label id="credit_card_cc_security_code_label" for="credit_card_cc_security_code">&{'web.bookingForm.4.cvc'}</label>
+						                               <div class="controls">
+						                                <input id="credit_card_cc_security_code" name="booking.creditCardCVC" type="text" value="${flash['booking.creditCardCVC']}"
+						                                	class="span4 #{ifError 'booking.creditCardCVC'} error #{/ifError}">
+						                                	<a  href="#" class="tipsy" data-placement="right" data-original-title="&{'web.bookingForm.4.cvc.hint'}">
+						                                		<i class="icon-question-sign"></i>
+						                                	</a>
+						                                <span class="help-inline">#{error 'booking.creditCardCVC' /}</span>
+						                                	
+						                                </div>
+						                             </div>
+						                          </div>
 					                             </div>
 					                             <div  class="row-fluid">
-												 <div class="span4 control-group #{ifError 'booking.creditCardExpiry'} error #{/ifError}">
-					                                <label id="cc_expires_on_label" for="credit_card_cc_expire_month">&{'web.bookingForm.4.expiration'}</label>
-					                                <div class="controls">
-						                                <select id="credit_card_cc_expire_month" class="input-small" name="credit_card[cc_expire_month]" >
-						                                	<option value="1">1</option>
-															<option value="2">2</option>
-															<option value="3">3</option>
-															<option value="4">4</option>
-															<option value="5">5</option>
-															<option value="6">6</option>
-															<option value="7">7</option>
-															<option value="8">8</option>
-															<option value="9">9</option>
-															<option value="10">10</option>
-															<option value="11">11</option>
-															<option value="12">12</option>
-														</select>
-														<select id="credit_card_cc_expire_year" class="input-small" name="credit_card[cc_expire_year]" >
-															<option value="2012">2012</option>
-															<option value="2013">2013</option>
-															<option value="2014">2014</option>
-															<option value="2015">2015</option>
-															<option value="2016">2016</option>
-															<option value="2017">2017</option>
-															<option value="2018">2018</option>
-															<option value="2019">2019</option>
-															<option value="2020">2020</option>
-															<option value="2021">2021</option>
-															<option value="2022">2022</option>
-														</select>
-														<input type="hidden" id="creditCardExpiry" name="booking.creditCardExpiry" value="${flash['booking.creditCardExpiry']}">
-														<span class="help-inline">#{error 'booking.creditCardExpiry' /}</span>
-													 </div>
-												</div><!-- /clearfix -->
+					                             <div class="span4">
+													 <div class="control-group #{ifError 'booking.creditCardExpiry'} error #{/ifError}">
+						                                <label id="cc_expires_on_label" for="credit_card_cc_expire_month">&{'web.bookingForm.4.expiration'}</label>
+						                                <div class="controls">
+							                                <select id="credit_card_cc_expire_month" class="span6" name="credit_card[cc_expire_month]" >
+							                                	<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+																<option value="6">6</option>
+																<option value="7">7</option>
+																<option value="8">8</option>
+																<option value="9">9</option>
+																<option value="10">10</option>
+																<option value="11">11</option>
+																<option value="12">12</option>
+															</select>
+															<select id="credit_card_cc_expire_year" class="span6" name="credit_card[cc_expire_year]" >
+																<option value="2012">2012</option>
+																<option value="2013">2013</option>
+																<option value="2014">2014</option>
+																<option value="2015">2015</option>
+																<option value="2016">2016</option>
+																<option value="2017">2017</option>
+																<option value="2018">2018</option>
+																<option value="2019">2019</option>
+																<option value="2020">2020</option>
+																<option value="2021">2021</option>
+																<option value="2022">2022</option>
+															</select>
+															<input type="hidden" id="creditCardExpiry" name="booking.creditCardExpiry" value="${flash['booking.creditCardExpiry']}">
+															<span class="help-inline">#{error 'booking.creditCardExpiry' /}</span>
+														 </div>
+													</div><!-- /clearfix -->
+												</div>
 					                               
-					                            
-									          <div class="span8 control-group #{ifError 'booking.creditCardName'} error #{/ifError}">
+					                          <div class="span8">
+									          <div class="control-group #{ifError 'booking.creditCardName'} error #{/ifError}">
 									            <label for="firstName">&{'web.bookingForm.4.cardname'}</label>
 									            <div class="controls">
-									                <input class="large" id="firstName" name="booking.creditCardName" type="text" value="${flash['booking.creditCardName']}">
+									                <input class="span9" id="firstName" name="booking.creditCardName" type="text" value="${flash['booking.creditCardName']}">
 									              	#{ifError 'booking.creditCardName'} 
 									              		<span class="help-inline error">#{error 'booking.creditCardName' /}</span>
 									                #{/ifError} 
-									                #{else}
-									                	<span class="help-block">&{'web.bookingForm.4.cardname.hint'}</span>
-									                #{/else}
 									            </div>
 									            
-									          </div><!-- /clearfix -->
+									          </div>
+									          </div>
 									          </div>
 									        </fieldset>
 									        </div>

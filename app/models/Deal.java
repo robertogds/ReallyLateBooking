@@ -200,25 +200,23 @@ public class Deal extends Model {
 	 * @return all the active deals by city base on current time
 	 */
 	public static Collection<Deal> findActiveDealsByCityV2(City city) {
-		Integer hour = DateHelper.getCurrentHour();
-		Logger.debug("V2. Hour time right now is: " + hour);
-		//If hour is between 6am and 12pm we return an empty list
-		if (hour >= 6 && hour < 12){
-			Logger.info("V2. We are closed ");
-			return new ArrayList<Deal>();
-		}
-		else{
-			HashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
-			// between 12 and 23 all deals are open
-			if (hour >= 12 && hour < 24){
+		switch (DateHelper.getCurrentStateByCityHour(city.utcOffset)) {
+			case (DateHelper.CITY_CLOSED):
+				Logger.info("V2. We are closed");
+				return new ArrayList<Deal>();
+			case (DateHelper.CITY_OPEN_DAY):
+				HashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
 				Logger.info("V2. We are all opened");
 				return dealsMapToListWithMax(dealsMap);
-			}
-			else{
+			case (DateHelper.CITY_OPEN_NIGHT):
+				HashMap<City, List<Deal>> dealsMapAll = findAllActiveDealsByCityV2(city);
+				Integer hour = DateHelper.getCurrentHour(city.utcOffset);
 				Logger.debug("V2. Is between 0am and 6am. Hour:  " + hour);
-				return findActiveDealsByNight(dealsMap, hour);
-			}
-		}
+				return findActiveDealsByNight(dealsMapAll, hour);
+			default:
+				Logger.error("This never should happen. What hour is it?");
+				return new ArrayList<Deal>();
+		 }
 	}
 
 	/**
@@ -228,24 +226,26 @@ public class Deal extends Model {
 	 */
 	@Deprecated
 	public static List<Deal> findActiveDealsByCity(City city){
-		Integer hour = DateHelper.getCurrentHour();
-		Logger.debug("Hour time right now is: " + hour);
-		//If hour is between 6am and 12pm we return an empty list
-		if (hour >= 6 && hour < 12){
-			Logger.info("We are closed ");
-			return new ArrayList<Deal>();
-		}
-		// between 12 and 23 all deals are open
-		else if (hour >= 12 && hour < 24){
-			Logger.info("We are all opened ");
-			return findAllActiveDealsByCity(city).fetch(MAXDEALS);
-		}
-		//Is between 0am and 6am. Fetch all active deals and select the first MAXDEALS active
-		else{
-			Logger.debug("Is between 0am and 6am. Hour:  " + hour);
-			List<Deal> activeDeals = findAllActiveDealsByCity(city).fetch();
-			return selectMaxDealsByHour(activeDeals, hour);
-		}
+	
+		switch (DateHelper.getCurrentStateByCityHour(city.utcOffset)) {
+			case (DateHelper.CITY_CLOSED):
+				//If hour is between 6am and 12pm we return an empty list
+				Logger.info("We are closed ");
+				return new ArrayList<Deal>();
+			case (DateHelper.CITY_OPEN_DAY):
+				// between 12 and 23 all deals are open
+				Logger.info("We are all opened ");
+				return findAllActiveDealsByCity(city).fetch(MAXDEALS);
+			case (DateHelper.CITY_OPEN_NIGHT):
+				//Is between 0am and 6am. Fetch all active deals and select the first MAXDEALS active
+				Integer hour = DateHelper.getCurrentHour(city.utcOffset);
+				Logger.debug("Is between 0am and 6am. Hour:  " + hour);
+				List<Deal> activeDeals = findAllActiveDealsByCity(city).fetch();
+				return selectMaxDealsByHour(activeDeals, hour);
+			default:
+				Logger.error("This never should happen. What hour is it?");
+				return new ArrayList<Deal>();
+		 }
 	}	
 
 	/**

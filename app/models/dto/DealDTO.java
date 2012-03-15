@@ -45,6 +45,7 @@ public class DealDTO {
 	public String longitude;
     public String mainImageBig;
     public String mainImageSmall;
+    public String listImage;
 	public String image1;
 	public String image2;
 	public String image3;
@@ -88,6 +89,7 @@ public class DealDTO {
 		this.longitude = deal.longitude;
 		this.mainImageBig = deal.mainImageBig;
 		this.mainImageSmall = deal.mainImageSmall;
+		this.listImage = deal.listImage;
 		this.image1 = deal.image1;
 		this.image2 = deal.image2;
 		this.image3 = deal.image3;

@@ -377,8 +377,8 @@ owners.company.fee = Comisión
 
 deal.city.closed = Esta ciudad esta cerrada
 deal.city.closed.title = Abrimos a las 12pm
-deal.city.closed.description= Vuelve a visitarnos a partir de las 12pm para ver las ofertas que tenemos preparadas para ti.
-deal.city.closed.video=Y mientras esperas puedes ver un video de nuestra aplicación de iPhone :)
+deal.city.closed.description= Vuelve más tarde para ver las ofertas que tenemos preparadas para ti.
+deal.city.closed.video= ¿Quieres ver un video mientras?
 
 
 web.invite.modal.login= Entra con tu cuenta de RLB o de Facebook

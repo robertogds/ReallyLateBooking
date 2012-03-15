@@ -92,7 +92,13 @@ public class Deals extends Controller {
 				deal.prepareImages();//just for iphone now, make configurable in the future
 				dealsDtos.add(new DealDTO(deal));
 			}
-			boolean open = DateHelper.isActiveTime();
+			
+			int hour = DateHelper.getCurrentHour(city.utcOffset);
+			boolean open = DateHelper.isActiveTime(hour);
+			if (!open){
+				Date countdown = DateHelper.getTimeToOpen(hour);
+				renderArgs.put("countdown", countdown);
+			}
 	        render(city, dealsDtos, open);
 		}
 		else{

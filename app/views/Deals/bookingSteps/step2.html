@@ -64,12 +64,13 @@
 										          #{/if}
 										        </fieldset>
 							        		</div>
-							   			 <div class="row-fluid">
-								   			 <div class="total">
-										              <div class="span4">
+							        	<div class="total-price">
+							   			 <div class="row-fluid total">
+					
+										              <div class="span3">
 										               		<span><i class="icon-asterisk"></i></span> &{'web.bookingForm.2.total'}:
 										              </div>
-										              <div class="span7">
+										              <div class="span9">
 										              		#{if user?.credits > 0 && !deal.isHotUsa}
 										              			<span id="total-booking-precredits">${deal.salePriceCents}</span>&euro; - ${user?.credits}&euro; = <span id="total-booking" class="total-booking">${deal.salePriceCents - user?.credits}</span>&euro; <small>&{'web.bookingForm.2.tax'}</small>
 										              		#{/if}
@@ -77,6 +78,7 @@
 										               			<span id="total-booking" class="total-booking">${deal.salePriceCents}</span>&euro; <small>&{'web.bookingForm.2.tax'}</small>
 										              		#{/else}
 										              </div>
-											 </div>
+											
+										 </div>
 										 </div>
 						   			 </div>

@@ -12,15 +12,58 @@ import play.Play;
 
 public final class DateHelper {
 
+	public static final int CITY_CLOSED = 0;
+	public static final int CITY_OPEN_DAY = 1;
+	public static final int CITY_OPEN_NIGHT = 2;
+	
+	public static final int OPEN_HOUR = 12;
+	public static final int CLOSE_HOUR = 6;
+	public static final int DAY_END_HOUR = 24;
+	public static final int DAY_START_HOUR = 0;
+	public static final int CRON_START_HOUR = 9;
+	public static final int CRON_STOP_HOUR = 3;
+
+	public static int getCurrentStateByCityHour(int utcOffset) {
+		int hour = DateHelper.getCurrentHour(utcOffset);
+		if (isActiveTime(hour)){
+			if (isActiveBeforeMidnight(hour)){
+				return CITY_OPEN_DAY;
+			}
+			else{
+				return CITY_OPEN_NIGHT;
+			}
+		}
+		else{
+			return CITY_CLOSED;
+		}
+	}
+	
+	//TODO no debería tener en cuenta la hora de la ciudad?
 	public static Date getTodayDate(){
 		Calendar today = Calendar.getInstance();
 		Integer hour = today.get(Calendar.HOUR_OF_DAY);
 		//Between 0am and 6am we need to book for the past day
-		if (hour >= 0 && hour < 6){
+		if (hour >= DAY_START_HOUR && hour < CLOSE_HOUR){
 			today.add(Calendar.DAY_OF_YEAR, -1 );
 			Logger.info("Its between 0am and 6am, day of month: " + today.get(Calendar.DAY_OF_MONTH));
 		}
 		return today.getTime();
+	}
+	
+	public static Date getTimeToOpen(int hour){
+		Calendar now = Calendar.getInstance();
+		now.set(Calendar.HOUR_OF_DAY, hour);
+		//Set opening time to 12:00:00
+		Calendar opening =  Calendar.getInstance();
+		opening.set(Calendar.HOUR_OF_DAY, OPEN_HOUR);
+		opening.set(Calendar.MINUTE, 0);
+		opening.set(Calendar.SECOND, 0);
+		//Substract current time
+		opening.add(Calendar.HOUR_OF_DAY, -now.get(Calendar.HOUR_OF_DAY));
+		opening.add(Calendar.MINUTE, -now.get(Calendar.MINUTE));
+		opening.add(Calendar.SECOND, -now.get(Calendar.SECOND));
+		Date timeToOpen = opening.getTime();
+		return timeToOpen;
 	}
 	
 	public static Boolean isTodayDate(Date date){
@@ -38,14 +81,22 @@ public final class DateHelper {
 		return date.getTime();
 	}
 	
-	public static Boolean isActiveTime(){
-	    int hour = DateHelper.getCurrentHour() ;
-		if (hour > 12 || hour < 6){
-			return Boolean.TRUE;
-		}
-		else{
-			return Boolean.FALSE;
-		}
+	/**
+	 * Time when we show the city deals
+	 * @param hour city time
+	 * @return
+	 */
+	public static Boolean isActiveBeforeMidnight(Integer hour){
+		return (hour >= OPEN_HOUR && hour < DAY_END_HOUR);
+	}
+	
+	/**
+	 * Time when we show the city deals
+	 * @param hour city time
+	 * @return
+	 */
+	public static Boolean isActiveTime(Integer hour){
+		return (hour >= OPEN_HOUR || hour < CLOSE_HOUR);
 	}
 	 
 	/**
@@ -54,31 +105,30 @@ public final class DateHelper {
 	 * @return
 	 */
 	public static Boolean isWorkingTime(){
-	    int hour = DateHelper.getCurrentHour() ;
+		int offset = 0;
+	    int hour = DateHelper.getCurrentHour(offset);
 	    Logger.info("Its time: " + hour);
-		if (hour > 9 || hour < 3){
-			return Boolean.TRUE;
-		}
-		else{
-			return Boolean.FALSE;
-		}
+		return (hour > CRON_START_HOUR || hour < CRON_STOP_HOUR);
 	}
 	
-	public static Integer getCurrentHour(){
+	/**
+	 * @param utcOffset city time hour over UTC hour
+	 * @return the current hour for a city
+	 */
+	public static Integer getCurrentHour(Integer utcOffset){
+		Calendar now = Calendar.getInstance();
+		Integer hour = now.get(Calendar.HOUR_OF_DAY);
+		Logger.info("Server hour is: " + hour);
+		hour = hour + utcOffset; //we are utc+1 and gae is UTC
+		// 24 = 0
+		hour = hour == 24 ? 0 : hour;
+		// 25 = 1
+		hour = hour == 25 ? 1 : hour;
+		
 		if (Play.mode.isDev()){
-			Integer hour = 16;
-			return hour;
+			hour = 10;
 		}
-		else{
-			Calendar now = Calendar.getInstance();
-			Integer hour = now.get(Calendar.HOUR_OF_DAY);
-			hour = hour + 1; //we are utc+1 and gae is UTC
-			// 24 = 0
-			hour = hour == 24 ? 0 : hour;
-			// 25 = 1
-			hour = hour == 25 ? 1 : hour;
-			return hour;
-		}
+		return hour;
 		
 	}
 
@@ -94,5 +144,7 @@ public final class DateHelper {
 		calEnd.set(Calendar.MINUTE, 59);
 		calEnd.set(Calendar.SECOND, 59);
 	}
+
+
 	
 }

@@ -3,7 +3,6 @@
  	&{'web.cities'}
  #{/set}
  
-#{set background: 'http://d2f5bmx5jz1oq8.cloudfront.net/web/backgrounds/general.jpg'/}
 
     <div class="row-fluid">
 	      <div class="span12" id="cities">
@@ -15,11 +14,11 @@
 	     			</div> 
 	     			-->
 					 	#{list items:cities, as:'city' }
-					 		<div id="${city.url}" class="city">
-							    <a href="@{Deals.list(city.url)}" style="background-image: url('http://rlbmedia.s3.amazonaws.com/web/cities/rlb_icono_${city.url}_174px.png');">
-							    	<h2> ${city.name}</h2>										
-							    </a>
-							</div>
+						 		<div id="${city.url}" class="city">
+								    <a href="@{Deals.list(city.url)}" style="background-image: url('http://rlbmedia.s3.amazonaws.com/web/cities/rlb_icono_${city.url}_174px.png');">
+								    	<h2> ${city.name}</h2>										
+								    </a>
+								</div>
 					    #{/list}
 	      </div>
     </div>

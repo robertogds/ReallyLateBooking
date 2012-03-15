@@ -18,8 +18,7 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     
-    <!-- Le styles 
-    <link href="@{'/public/stylesheets/bootstrap.css'}" rel="stylesheet"> -->
+
     <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/rlb.css'}">
 
     
@@ -69,14 +68,15 @@
 	</script>
   <div id="background">
   		<div class="fader"></div>
-	 	<img src="http://a5.ak.lscdn.net/imgs/c7991397-8a8f-4429-8a67-78199342a038/original_q60.jpg">
+  		#{set background: 'http://d2f5bmx5jz1oq8.cloudfront.net/web/backgrounds/fondo2_medium.jpg'/}
+	 	<img src="#{get 'background' /}">
   </div>
   
   
   <div class="container-fluid">
     		
     <div id="main-content"  class="row-fluid">
-    	<div class="span2">
+    	<div class="span2" id="forced-offset">
 			<br>
 		</div>
 		<div class="span8">
@@ -100,26 +100,8 @@
 	  <!-- Obtener jQuery del CDN de Google, con una URL relativa al protocolo; fallback a copia local si es necesario -->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-    <script src="@{'/public/js/bootstrap-transition.js'}"></script>
-    <script src="@{'/public/js/bootstrap-alert.js'}"></script>
-    <script src="@{'/public/js/bootstrap-modal.js'}"></script>
-    <script src="@{'/public/js/bootstrap-dropdown.js'}"></script>
-    <script src="@{'/public/js/bootstrap-scrollspy.js'}"></script>
-    <script src="@{'/public/js/bootstrap-tab.js'}"></script>
-    <script src="@{'/public/js/bootstrap-tooltip.js'}"></script>
-    <script src="@{'/public/js/bootstrap-popover.js'}"></script>
-    <script src="@{'/public/js/bootstrap-button.js'}"></script>
-    <script src="@{'/public/js/bootstrap-collapse.js'}"></script>
-    <script src="@{'/public/js/bootstrap-carousel.js'}"></script>
-    <script src="@{'/public/js/bootstrap-typeahead.js'}"></script>
-	<script type="text/javascript">
-  var uvOptions = {};
-  (function() {
-    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
-    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/bMS2AkGj9uG9JppPPmxsQ.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
-  })();
-</script>
+    <script src="@{'/public/js/bootstrap.min.js'}"></script>
+
      #{get 'moreScripts' /}
   </body>
 </html>

@@ -36,7 +36,16 @@
 	</script>
 
 #{/set}
-	
+		<div class="row-fluid">
+				<ul class="breadcrumb">
+				  <li>
+				    <a href="@{Cities.index()}">&{'web.cities'}</a> <span class="divider">/</span>
+				  </li>
+				  <li class="active">
+				    <a href="#">${city.name}</a>
+				  </li>
+				</ul>
+		</div>
 		<div id="zonesNav" class="row-fluid">
 			        <div class="span12 title-black">
 			        		<div class="row-fluid">
@@ -128,7 +137,7 @@
 									           			<a class="btn btn-primary btn-large" href="@{Deals.show(city.url,deal.id)} #{if fromEmail}?email#{/if}">&{'web.deal.list.show'}</a>
 									           		#{/if}
 							           				#{else}
-							           					<a class="btn btn-primary btn-large disabled" href="@{Deals.show(city.url,deal.id)}#{if fromEmail}?email#{/if}l">&{'web.deal.list.soldedout'}</a>
+							           					<a class="btn btn-danger btn-large disabled" href="@{Deals.show(city.url,deal.id)} #{if fromEmail}?email#{/if}">&{'web.deal.list.soldedout'}</a>
 							           				#{/else}
 							           				
 							           			</div>

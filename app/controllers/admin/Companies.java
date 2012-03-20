@@ -2,8 +2,10 @@ package controllers.admin;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
 import models.Booking;
+import models.City;
 import models.Company;
 import models.Invoice;
 import play.Logger;
@@ -11,6 +13,7 @@ import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
+import controllers.CRUD.ObjectType;
 
 @Check("admin")
 @With(Secure.class)
@@ -45,7 +48,13 @@ public class Companies extends controllers.CRUD {
 		showCompanyBookings(companyId);
 	}
 	
-	
+	public static void exportAll() {
+		ObjectType type = ObjectType.get(getControllerClass());
+        notFoundIfNull(type);
+        List<Company> companies = Company.all().fetch();
+        List objects = companies;
+        render("admin/export.csv", objects, type);
+    }
 	
 }
 

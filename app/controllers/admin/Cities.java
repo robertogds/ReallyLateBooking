@@ -2,13 +2,16 @@ package controllers.admin;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
+import models.Booking;
 import models.City;
 import models.Deal;
 import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
+import controllers.CRUD.ObjectType;
 
 @Check("admin")
 @With(Secure.class)
@@ -19,6 +22,19 @@ public class Cities extends controllers.CRUD {
 		City city = City.findById(cityId);
         Collection<Deal> deals = Deal.findByCity(city);
         render(city, deals);
+	}
+	
+	
+	public static void autoOrderDeals(Long cityId) {
+		City city = City.findById(cityId);
+        Collection<Deal> deals = Deal.findActiveByCityOrderDiscountAndPrice(city);
+        int position = 1;
+        for (Deal deal: deals){
+        	deal.position = position;
+        	deal.update();
+        	position++;
+        }
+        editCityDeals(city.id);
 	}
 	
 	public static void updateDeal(Long id, Integer quantity, Integer priceCents, Integer bestPrice, Integer salePriceCents, 
@@ -64,6 +80,20 @@ public class Cities extends controllers.CRUD {
 	    editCityDeals(cityId);
 		
 	}
+	
+	public static void exportAll() {
+		ObjectType type = ObjectType.get(getControllerClass());
+        notFoundIfNull(type);
+        List<City> cities = City.all().fetch();
+		for (City city: cities){
+			if(city.country != null){
+				city.country.get();
+			}
+		}
+        List objects = cities;
+
+        render("admin/export.csv", objects, type);
+    }
 	
 }
 

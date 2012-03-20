@@ -8,7 +8,13 @@ ${user.firstName} &{'mails.booking.hotel.justbooked'}:
 		&{'mails.booking.room'}: Doble
 		&{'mails.booking.checkin'}: ${booking.checkinDate.format('dd MMMM yyyy') }
 		&{'mails.booking.nights'}: ${booking.nights}
-		&{'mails.booking.price'}: ${booking.salePriceCents}&euro;
+		&{'mails.booking.price'}: ${booking.salePriceCents}&euro;  &{'mails.booking.tax'}
+	    &{'mails.booking.regime'}: #{if booking.breakfastIncluded}
+									&{'mails.booking.regime.breakfast.yes'}
+								#{/if}
+								#{else}
+									&{'mails.booking.regime.breakfast.no'}
+								#{/else}
 		
 	&{'mails.booking.hotel.client.data'}:
 		&{'mails.booking.client.name'}: ${user.lastName}, ${user.firstName} 
@@ -25,7 +31,6 @@ ${user.firstName} &{'mails.booking.hotel.justbooked'}:
 	&{'mails.rlb.booking.department'}
 		616 975 363
 		www.reallylatebooking.com
-		
 		
 		
 &{'mails.rlb.footer'}

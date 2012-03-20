@@ -8,7 +8,13 @@
 			&{'mails.booking.room'}: Doble
 			&{'mails.booking.checkin'}: ${booking.checkinDate.format('dd MMMM yyyy') }
 			&{'mails.booking.nights'}: ${booking.nights}
-			&{'mails.booking.price'}: ${booking.salePriceCents}&euro;
+	    	&{'mails.booking.regime'}: #{if booking.breakfastIncluded}
+									&{'mails.booking.regime.breakfast.yes'}
+								#{/if}
+								#{else}
+									&{'mails.booking.regime.breakfast.no'}
+								#{/else}
+			&{'mails.booking.price'}: ${booking.salePriceCents}&euro; &{'mails.booking.tax'}
 			
 		&{'mails.booking.hotel.client.data'}:
 			&{'mails.booking.client.name'}: ${booking.bookingForLastName}, ${booking.bookingForFirstName}

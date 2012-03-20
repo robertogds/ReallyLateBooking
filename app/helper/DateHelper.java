@@ -23,6 +23,11 @@ public final class DateHelper {
 	public static final int CRON_START_HOUR = 9;
 	public static final int CRON_STOP_HOUR = 3;
 
+	/**
+	 * Returns the current state of a city base on his UTC time
+	 * @param utcOffset hours offset over the UTC time
+	 * @return one of three options: CITY_OPEN_DAY, CITY_OPEN_NIGHT, CITY_CLOSED
+	 */
 	public static int getCurrentStateByCityHour(int utcOffset) {
 		int hour = DateHelper.getCurrentHour(utcOffset);
 		if (isActiveTime(hour)){
@@ -38,18 +43,10 @@ public final class DateHelper {
 		}
 	}
 	
-	//TODO no debería tener en cuenta la hora de la ciudad?
-	public static Date getTodayDate(){
-		Calendar today = Calendar.getInstance();
-		Integer hour = today.get(Calendar.HOUR_OF_DAY);
-		//Between 0am and 6am we need to book for the past day
-		if (hour >= DAY_START_HOUR && hour < CLOSE_HOUR){
-			today.add(Calendar.DAY_OF_YEAR, -1 );
-			Logger.info("Its between 0am and 6am, day of month: " + today.get(Calendar.DAY_OF_MONTH));
-		}
-		return today.getTime();
-	}
-	
+	/**
+	 * @param hour between 0 and 23
+	 * @return Date object containing remaining time to open RLB
+	 */
 	public static Date getTimeToOpen(int hour){
 		Calendar now = Calendar.getInstance();
 		now.set(Calendar.HOUR_OF_DAY, hour);
@@ -66,6 +63,24 @@ public final class DateHelper {
 		return timeToOpen;
 	}
 	
+	//FIXME no debería tener en cuenta la hora de la ciudad?
+	public static Date getTodayDate(){
+		Calendar today = Calendar.getInstance();
+		Integer hour = today.get(Calendar.HOUR_OF_DAY);
+		//Between 0am and 6am we need to book for the past day
+		if (hour >= DAY_START_HOUR && hour < CLOSE_HOUR){
+			today.add(Calendar.DAY_OF_YEAR, -1 );
+			Logger.info("Its between 0am and 6am, day of month: " + today.get(Calendar.DAY_OF_MONTH));
+		}
+		return today.getTime();
+	}
+	
+	
+	//FIXME no debería tener en cuenta la hora de la ciudad?
+	/**
+	 * @param date
+	 * @return true if the given date is between the opening and the closing hour of RLB
+	 */
 	public static Boolean isTodayDate(Date date){
 		Calendar cal = Calendar.getInstance();
 		Calendar now = Calendar.getInstance();
@@ -74,6 +89,10 @@ public final class DateHelper {
 		                  cal.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR);
 	}
 	
+	/**
+	 * @param days
+	 * @return adds the given days to the current date
+	 */
 	public static Date getFutureDay(Integer days){
 		Calendar date = Calendar.getInstance(); 
 		date.setTime(getTodayDate());
@@ -104,11 +123,10 @@ public final class DateHelper {
 	 * Hotusa price for example
 	 * @return
 	 */
-	public static Boolean isWorkingTime(){
-		int offset = 0;
+	public static Boolean isWorkingTime(int offset){
 	    int hour = DateHelper.getCurrentHour(offset);
 	    Logger.info("Its time: " + hour);
-		return (hour > CRON_START_HOUR || hour < CRON_STOP_HOUR);
+		return (hour >= CRON_START_HOUR || hour <= CRON_STOP_HOUR);
 	}
 	
 	/**
@@ -126,19 +144,27 @@ public final class DateHelper {
 		hour = hour == 25 ? 1 : hour;
 		
 		if (Play.mode.isDev()){
-			hour = 10;
+			hour = 13;
 		}
 		return hour;
 		
 	}
 
+	/**
+	 * Given a Calendar object, sets it to the first minute of the day 00:00:00
+	 * @param calStart
+	 */
 	public static void setFirstDayHour(Calendar calStart) {
 		calStart.add(Calendar.DAY_OF_YEAR, -1);
 		calStart.set(Calendar.HOUR_OF_DAY, 24);
 		calStart.set(Calendar.MINUTE, 0);
 		calStart.set(Calendar.SECOND, 0);
 	}
-
+	
+	/**
+	 * Given a Calendar object, sets it to the last minute of the day 23:59:59
+	 * @param calEnd
+	 */
 	public static void setLastDayHour(Calendar calEnd) {
 		calEnd.set(Calendar.HOUR_OF_DAY, 23);
 		calEnd.set(Calendar.MINUTE, 59);

@@ -22,15 +22,15 @@
 											                		<option  value="1"> &{'web.bookingForm.select.1'} ${deal.salePriceCents}&euro;</option>
 												                #{if deal.priceDay2 != null }
 												                	<option value="2">2 &{'web.bookingForm.select.n'}  <span class="total-price">${deal.salePriceCents + deal.priceDay2}&euro;</span></option>
-												                #{/if}
-												                 #{if deal.priceDay3 != null }
-												                	<option  value="3">3 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3}&euro;</option>
-												                #{/if}
-												                #{if deal.priceDay4 != null }
-												                	<option  value="4">4 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay4}&euro;</option>
-												                #{/if}
-												                #{if deal.priceDay5 != null }
-												                	<option  value="5">5 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay5}&euro;</option>
+												                	#{if deal.priceDay3 != null }
+													                	<option  value="3">3 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3}&euro;</option>
+													                	#{if deal.priceDay4 != null }
+														                	<option  value="4">4 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay4}&euro;</option>
+														                	 #{if deal.priceDay5 != null }
+															                	<option  value="5">5 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay5}&euro;</option>
+															                #{/if}
+														                #{/if}
+													                #{/if}
 												                #{/if}
 											              </select>
 											              <span class="help-block">&{'web.bookingForm.2.nights.info'}</span>

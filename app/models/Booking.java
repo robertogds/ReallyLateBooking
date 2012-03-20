@@ -93,6 +93,8 @@ public class Booking extends Model {
 	public Float fee;
 	@MaxSize(10000)
 	public String comment;
+	public boolean breakfastIncluded;
+	public boolean fromWeb;
 
     public Booking(Deal deal, User user) {
         this.deal = deal;
@@ -101,7 +103,6 @@ public class Booking extends Model {
     
 	@Override
 	public void insert() {
-		Logger.debug("get nights: " + this.nights);
 		this.nights = this.getTotalNights();
     	this.checkinDate = DateHelper.getTodayDate();
     	this.code = RandomStringUtils.randomAlphanumeric(8);
@@ -118,6 +119,7 @@ public class Booking extends Model {
     	this.finalPrice = this.totalSalePrice - this.credits;
     	this.invoiced = Boolean.FALSE;
     	this.canceled = Boolean.FALSE;
+    	this.breakfastIncluded = this.deal.breakfastIncluded == null ? false : this.deal.breakfastIncluded;
     	super.insert();
 	}
 	

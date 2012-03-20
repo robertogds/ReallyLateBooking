@@ -71,7 +71,6 @@ public class Deals extends Controller {
 	 * @param deal
 	 */
 	private static void prepareDeal(Deal deal){
-		deal.prepareImages();//just for iphone now, make configurable in the future
 		DealDTO dealDto = new DealDTO(deal);
 		dealDto.textToHtml();
 		renderArgs.put("deal", dealDto);
@@ -89,7 +88,6 @@ public class Deals extends Controller {
 			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
-				deal.prepareImages();//just for iphone now, make configurable in the future
 				dealsDtos.add(new DealDTO(deal));
 			}
 			
@@ -119,7 +117,6 @@ public class Deals extends Controller {
 			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
-				deal.prepareImages();//just for iphone now, make configurable in the future
 				dealsDtos.add(new DealDTO(deal));
 			}
 	        renderJSON(dealsDtos);
@@ -147,7 +144,6 @@ public class Deals extends Controller {
 			Collection<Deal> deals = Deal.findActiveDealsByCity(city);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
-				deal.prepareImages();//just for iphone now, make configurable in the future
 				deal.fecthCity(); //retrieves city object to not to send just the city id
 				dealsDtos.add(new DealDTO(deal));
 			}
@@ -163,19 +159,8 @@ public class Deals extends Controller {
 	 * Used by cron GAE
 	 */
 	public static void refreshHotUsaPrices(){
-		if (DateHelper.isWorkingTime()){
-			Logger.debug("### CRON TASK REFRESHING HOTELS AVAILABILITY START ###");
-			List<Deal> deals = Deal.findDealsFromHotUsa();
-			if (deals.size() > 0){
-				HotUsaApiHelper.getHotelPrices(deals);
-			}
-			else{
-				Logger.debug("We have no any hotusa hotel");
-			}
-			
-			Logger.debug("### CRON TASK REFRESHING HOTELS AVAILABILITY END ###");
-		}
-		
+		List<City> cities = City.findActiveCities();
+		HotUsaApiHelper.getHotelPricesByCityList(cities);
 	}
 
 }

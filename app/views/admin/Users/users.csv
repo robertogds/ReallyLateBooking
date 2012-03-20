@@ -1,4 +1,0 @@
-id, email, firstName, lastName, isFacebook, created, token, secret
-#{list items:users, as:'user' }
-${user.id}, ${user.email}, ${user.firstName}, ${user.lastName},${user.isFacebook},${user.created},${user.token},${user.secret}
-#{/list}

@@ -49,8 +49,19 @@
 								<td><strong>${booking.nights}</strong></td>
 							</tr>
 							<tr>
+								<td style="color:#858C92;">&{'mails.booking.regime'}:</td>
+								#{if booking.breakfastIncluded}
+									<td><strong>&{'mails.booking.regime.breakfast.yes'}</strong></td>
+								#{/if}
+								#{else}
+									<td><strong>&{'mails.booking.regime.breakfast.no'}</strong></td>
+								
+								#{/else}
+								
+							</tr>
+							<tr>
 								<td style="color:#858C92;">&{'mails.booking.price'}:</td>
-								<td><strong>${booking.salePriceCents}&euro;</strong></td>
+								<td><strong>${booking.salePriceCents}&euro;  &{'mails.booking.tax'}</strong></td>
 							</tr>
 						</table>
 					</td>

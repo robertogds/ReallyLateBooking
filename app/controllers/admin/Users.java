@@ -18,6 +18,7 @@ import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
+import controllers.CRUD.ObjectType;
 
 @Check("admin")
 @With(Secure.class)
@@ -94,14 +95,20 @@ public class Users extends controllers.CRUD  {
 	}
 	
 	public static void exportClientsCSV(){
-		List<User> users = User.all().filter("isOwner", Boolean.FALSE).fetch();
-		renderTemplate("admin/Users/users.csv",users);
+		ObjectType type = ObjectType.get(getControllerClass());
+        notFoundIfNull(type);
+		List<User> objects = User.all().filter("isOwner", Boolean.FALSE).fetch();
+		render("admin/export.csv", objects, type);
 	}
 	
-	public static void exportAllCSV(){
-		List<User> users = User.all().fetch();
-		renderTemplate("admin/Users/users.csv",users);
-	}
+	public static void exportAll() {
+		ObjectType type = ObjectType.get(getControllerClass());
+        notFoundIfNull(type);
+        List<User> objects = User.all().fetch();
+        render("admin/export.csv", objects, type);
+    }
+	
+	
 	
 	
 }

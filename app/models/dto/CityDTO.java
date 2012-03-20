@@ -24,6 +24,7 @@ public class CityDTO {
 	public String url;
 	public String latitude;
 	public String longitude;
+	public String root;
 	
 	public CityDTO(City city){
 		this.id = city.id;
@@ -31,6 +32,7 @@ public class CityDTO {
 		this.url = city.url;
 		this.latitude = city.latitude;
 		this.longitude = city.longitude;
+		this.root = city.root;
 		
 		String lang = Lang.get();
 		if (lang != null){

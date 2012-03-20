@@ -42,7 +42,19 @@
 		});
 	</script>
 #{/set}
-
+			<div class="row-fluid">
+				<ul class="breadcrumb">
+				  <li>
+				    <a href="@{Cities.index()}">&{'web.cities'}</a> <span class="divider">/</span>
+				  </li>
+				  <li>
+				    <a href="@{Deals.list(deal.city.root)}#${deal.city.url}">${deal.city.name}</a><span class="divider">/</span>
+				  </li>
+				  <li class="active">
+				    <a href="#">${deal.hotelName}</a>
+				  </li>
+				</ul>
+			</div>
     		#{ifnot deal.active}
     		 	<div class="row-fluid">
 				 	<div class="span12">
@@ -68,7 +80,7 @@
 		            <div class="row-fluid" >
 		            	<div class="span12 hotelImage">
 		            		<div class="imageContainer row-fluid">
-		            			<img alt="${deal.hotelName}" src="${deal.listImage}" class="span12">
+		            				<img alt="${deal.hotelName}" src="${deal.listImage}" class="span12">
 		            		</div>
 		            	</div>
 		            </div>
@@ -124,7 +136,7 @@
 								           					<a class="btn btn-primary btn-large" href="@{Deals.bookingForm(deal.id)}#{if fromEmail}?email#{/if}">&{'web.deal.detail.buy.btn'}</a>
 								           				#{/if}
 								           				#{else}
-								           					<a class="btn btn-primary btn-large disabled" href="#">&{'web.deal.detail.soldedout.btn'}</a>
+								           					<a class="btn btn-danger btn-large disabled" href="#">&{'web.deal.detail.soldedout.btn'}</a>
 								           				#{/else}
 								           		</div>
 								           	</div>
@@ -158,11 +170,17 @@
 													    </p>
 													  </div>
 													</div>
-													<div class="social-buttons addthis_toolbox addthis_default_style addthis_32x32_style">
-							           						<a class="addthis_button_facebook"></a>
-							           					    <a class="addthis_button_twitter"></a>
-	    													<a class="addthis_button_email"></a>
-													    	<a class="addthis_button_preferred_1"></a>
+													<div class="fb-twitter">
+														<div class="row-fluid">
+															<div class="span12 fb">
+								           						<fb:like send="true" layout="button_count" width="auto" show_faces="false"></fb:like>
+		    												</div>
+		    											</div>
+		    											<div class="row-fluid">
+		    												<div class="span12 twitter">
+		    													<a href="https://twitter.com/share" class="twitter-share-button" data-text="&{'web.deal.detail.twitter', deal.city.name, deal.salePriceCents}" data-via="rlatebooking" data-lang="es" data-hashtags="reallylatebooking">Twittear</a>
+		    												</div>
+														</div>
 													</div>
 							           		</div>
 							           		</div>

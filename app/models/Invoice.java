@@ -113,14 +113,10 @@ public class Invoice extends Model {
 		return Invoice.all().filter("company", company).fetch();
 	}
 
-
 	@Override
-	public String toString() {
-		return "Invoice [id=" + id + ", company=" + company + ", created="
-				+ created + ", subTotal=" + subTotal + ", totalAmount="
-				+ totalAmount + ", payed=" + payed + ", totalTax=" + totalTax
-				+ "]";
-	}
+	 public String toString() {
+	        return id.toString();
+	    }
 	
 	
 }

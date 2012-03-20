@@ -10,6 +10,7 @@ import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
+import controllers.CRUD.ObjectType;
 
 @Check("admin")
 @With(Secure.class)
@@ -21,6 +22,26 @@ public class Deals extends controllers.CRUD {
 		HotUsaApiHelper.getHotelPricesByCityList(cities);
 		redirect("/admin/deals");
 	}
+	
+	public static void exportAll() {
+		ObjectType type = ObjectType.get(getControllerClass());
+        notFoundIfNull(type);
+        List<Deal> deals = Deal.all().fetch();
+		for (Deal deal: deals){
+			if (deal.company != null){
+				deal.company.get();
+			}
+			if (deal.owner != null){
+				deal.owner.get();
+			}
+			if (deal.city != null){
+				deal.city.get();
+			}
+		}
+        List objects = deals;
+
+        render("admin/export.csv", objects, type);
+    }
 	
 }
 

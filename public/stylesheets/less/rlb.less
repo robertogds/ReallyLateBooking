@@ -33,7 +33,6 @@ h1 {
 }
 
 #main-content{
-	padding-top: 30px;
 	min-height: 500px;
 }
 
@@ -53,6 +52,10 @@ footer{
 	.nav{
 		margin-bottom: 0;
 		padding-left: 6px;
+		.facebook-like, .twitter-follow{
+			margin-top: 0.5%;
+			margin-left: 3%;
+		}
 	}
 	.nav > li > a:hover {
 	  text-decoration: none;
@@ -64,14 +67,10 @@ footer{
 			color: @gray;
 		} 
 	} 
-	.addthis_toolbox {
-	    float: right;
-	    margin-right: 12px;
-	}
 }
 
-input{
-	height: 28px;
+input {
+	height: auto; 
 }
 
 #background {
@@ -120,7 +119,7 @@ input{
     background-repeat: no-repeat;
     border-style: none;
 	display: block;
-	min-height: 65px;
+	min-height: 75px;
     width: 100%;
 }
 .iphone-btn{
@@ -129,7 +128,7 @@ input{
     background-repeat: no-repeat;
     border-style: none;
 	display: block;
-	min-height: 65px;
+	min-height: 75px;
     width: 100%;
 }
 
@@ -522,8 +521,11 @@ input{
 				p strong {
 					color: @orange;
 				}
-				.social-buttons{
-					padding:5%;
+				.fb-twitter{
+					text-align:center;
+					.twitter{
+						margin-top: 2%;
+					}
 				}
 				#notyet{
 					.modal-body{

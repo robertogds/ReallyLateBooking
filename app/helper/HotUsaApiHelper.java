@@ -237,8 +237,10 @@ public final class HotUsaApiHelper {
 	
 	public static void getHotelPricesByCityList(List<City> cities){
 		for (City city : cities){
-			String wsReq = getAllHotelsByCityRequest(city, DAYS);
-			parseHotelPricesResponse110(wsReq, DAYS);
+			if (DateHelper.isWorkingTime(city.utcOffset)){
+				String wsReq = getAllHotelsByCityRequest(city, DAYS);
+				parseHotelPricesResponse110(wsReq, DAYS);
+			}
 		}
 	}
 	

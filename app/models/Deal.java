@@ -156,7 +156,7 @@ public class Deal extends Model {
 		this.id = id;
 	}
 
-	public static List<Deal> findActiveDealsByOwner(User owner){
+	public static List<Deal> findDealsByOwner(User owner){
 		return all().filter("owner", owner).order("position").fetch();
 	}
 	
@@ -171,6 +171,10 @@ public class Deal extends Model {
 	
 	public static List<Deal> findByCity(City city) {
         return all().filter("city", city).order("-updated").order("position").fetch();
+    }
+	
+	public static List<Deal> findActiveByCityOrderDiscountAndPrice(City city) {
+        return all().filter("city", city).filter("active", Boolean.TRUE).order("-salePriceCents").order("-discount").fetch();
     }
 	
 	public static List<Deal> findAllActiveDealsByCityId(Long cityId){
@@ -281,14 +285,6 @@ public class Deal extends Model {
 		}	
 	}
 		
-	/**
-	 * Prepares the deal to be published setting the routes 
-	 * to hotel images at Amazon S3
-	 */
-	public void prepareImages(){
-		ImageHelper.prepareImagesRoutes(this);
-	}
-	
 	/**
 	 * Updates the deal hotel price, quantity and breakfast for a given day based on the hotusa API 
 	 * @param hotelCode
@@ -460,6 +456,16 @@ public class Deal extends Model {
 	}
 	
 	
+	public Boolean dealIsPublished(){
+		City city = City.findByName(this.city.root);
+		Collection<Deal> deals = findActiveDealsByCityV2(city);
+		for (Deal deal: deals){
+			if (deal.id.equals(this.id)) return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+	
+	
 	/**
 	 * Limits the deals number per city zone to the MAXDEALS
 	 * @param dealsMap
@@ -527,6 +533,13 @@ public class Deal extends Model {
 		}
 		return zoneDeals;
 	}
+
+	@Override
+	public boolean equals(Object deal) {
+		return true;
+	}
+	
+	
 
 }
 

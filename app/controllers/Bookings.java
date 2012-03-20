@@ -77,9 +77,9 @@ public class Bookings extends Controller{
 		//if is an old object from datastore without the boolean set
 		booking.deal.isHotUsa = booking.deal.isHotUsa != null ? booking.deal.isHotUsa : Boolean.FALSE;
 		booking.deal.isFake = booking.deal.isFake != null ? booking.deal.isFake : Boolean.FALSE;
+		booking.fromWeb = true;
 		booking.insert();
 		if (booking.deal.isHotUsa && !booking.deal.isFake ){
-			Logger.debug("##### Va por hotusa!!");
 			String localizador = HotUsaApiHelper.reservation(booking);
 			if (localizador != null){
 				saveUnconfirmedBooking(booking, localizador);
@@ -94,7 +94,6 @@ public class Bookings extends Controller{
 			}
 		}
 		else{
-			Logger.debug("##### Va por booking normal");
 			updateDealRooms(booking.deal.id, booking.rooms);
 			updateUserCredits(booking, user);
 			activateCouponToReferal(user);

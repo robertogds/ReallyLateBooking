@@ -81,7 +81,22 @@
 		});
 	</script>
 #{/set}
-		
+			<div class="row-fluid">
+				<ul class="breadcrumb">
+				  <li>
+				    <a href="@{Cities.index()}">&{'web.cities'}</a> <span class="divider">/</span>
+				  </li>
+				  <li>
+				    <a href="@{Deals.list(deal.city.root)}#${deal.city.url}">${deal.city.name}</a><span class="divider">/</span>
+				  </li>
+				  <li>
+				    <a href="@{Deals.show(deal.city.root, deal.id)}">${deal.hotelName}</a><span class="divider">/</span>
+				  </li>
+				  <li class="active">
+				    <a href="#">&{'web.bookingForm.title', deal.hotelName}</a>
+				  </li>
+				</ul>
+			</div>
 		    	#{ifErrors}
 		    	<div class="row-fluid">
 		    		<div class="span12">

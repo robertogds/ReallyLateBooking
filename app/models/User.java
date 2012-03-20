@@ -168,7 +168,7 @@ public class User extends Model{
 		this.isFacebook = Boolean.TRUE;
 		this.fbid = data.get("id").getAsString();
 		this.fbLink = data.get("link").getAsString();
-		this.fbUsername = data.get("username").getAsString();
+		this.fbUsername = data.get("username") != null ? data.get("username").getAsString() : null;
 		this.gender = data.get("gender").getAsString();
 		this.timezone = data.get("timezone").getAsInt();
 		this.locale = data.get("locale").getAsString();

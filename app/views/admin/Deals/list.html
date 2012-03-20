@@ -20,8 +20,10 @@
 		<a href="@{blank()}">&{'crud.add', type.modelName}</a>
 	</p>
 	
-	<p class="crudListExport">
-		<a href="@{admin.Deals.refreshHotUsaPrices}">Refresh HotUsa prices</a>
+	<a href="@{admin.Deals.refreshHotUsaPrices}">Refresh HotUsa prices</a>
+	
+	<p class="crudListExport"  id="exportAll">
+		<a href="@{admin.Deals.exportAll}">Export all Deals as CSV </a>
 	</p>
 
 </div>

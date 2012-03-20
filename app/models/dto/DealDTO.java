@@ -1,6 +1,7 @@
 package models.dto;
 
 import helper.DateHelper;
+import helper.ImageHelper;
 
 import java.security.InvalidParameterException;
 import java.util.Date;
@@ -126,6 +127,7 @@ public class DealDTO {
 			this.foodDrinkText = deal.foodDrinkTextFR;
 		}
 		this.createDetailText(deal.customDetailText, lang);
+		ImageHelper.prepareImagesRoutes(this);
 	}
 
 	private void createDetailText(boolean customText, String lang){

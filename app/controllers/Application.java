@@ -85,14 +85,14 @@ public class Application extends Controller {
     	redirect(returnUrl);
     }
     
-	public static void mobile(){
+	public static void bootstrap(){
 		if (Play.mode.isDev()){
 			//Workaround needed because jobs dont work on gae
 			Bootstrap job = new Bootstrap();
 			job.doJob();
 			//End of workaround
 		}
-		render(); 
+		index(); 
 	}
 	
 	

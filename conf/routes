@@ -12,7 +12,7 @@ GET     /                                       Application.index
 GET     /cron/refreshHotUsaPrices               Deals.refreshHotUsaPrices
 GET     /cron/confirmReservations               Application.confirmReservations
 
-GET     /mobile                                 Mobile.main
+GET     /bootstrap                              Application.bootstrap
 
 
 GET 	/admin									module:crudsiena

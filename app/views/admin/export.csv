@@ -1,0 +1,15 @@
+%{
+	currentType = type;
+    allFields = currentType.rawFields;
+}%
+
+${ allFields?.join(',') }
+			
+%{ objects.eachWithIndex() { object, k -> 
+	values = []
+	allFields.eachWithIndex() { field, i -> 
+		values.add(object[field])
+	} 
+}%
+${ values?.join(',') }
+%{ } }%

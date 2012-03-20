@@ -8,6 +8,16 @@
 				</div>
 		</div>
         #{/if}
+        #{if flash.warning}
+    	<div class="row-fluid">
+				 	<div class="span12">
+				 		<div class="alert alert-warning">
+					  <a class="close" data-dismiss="alert" href="#">&times;</a>
+					  <strong>${flash.warning}</strong>
+					</div>
+				</div>
+		</div>
+        #{/if}
         #{if flash.success}
     	<div class="row-fluid">
     			<div class="span12">

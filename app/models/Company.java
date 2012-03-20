@@ -76,6 +76,6 @@ public class Company extends Model{
 	}
     
     public String toString() {
-        return name;
+        return name + "#" + id;
     }
 }

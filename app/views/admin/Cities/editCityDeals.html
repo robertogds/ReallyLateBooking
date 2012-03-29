@@ -1,13 +1,19 @@
 #{extends 'CRUD/layout.html' /}
-
+<style>
+	#info {
+		display: block;
+		padding: 10px;
+		margin-bottom: 20px;
+		border: 1px solid 
+		#333;
+		background-color: 
+		#EFEFEF;
+	}
+</style>
 <div id="crudShow">
 
         <h2 id="crudShowTitle">&{'crud.show.title', city.name}</h2>
         
-        <p class="crudListExport"  id="exportAll">
-			<a href="@{admin.Cities.autoOrderDeals(city.id)}">Auto order Deals</a>
-		</p>
-
         <div class="objectForm">
         
         <div id="crudListTable">
@@ -74,7 +80,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				 #{list deals, as:'deal'}
+				 #{list deals, as:'deal'} 
 				 	#{form @updateDeal(deal.id)}
 					    <tr class="${deal_index % 2 ? 'even' : 'odd'}"  
 					    	#{if (!deal.image3?.trim() || deal.priceCents <= deal.salePriceCents)}
@@ -200,11 +206,19 @@
 	</div>
 </div>
 	<div>
-	<br/><br/>
-	 <h2 id="crudShowTitle">Hotels Preview</h2>
-	 				<table style="width: 500px;">
+
+ <p class="crudListExport"  id="exportAll">
+	<a href="@{admin.Cities.autoOrderDeals(city.id)}">Auto order Deals</a>
+ </p>
+ <h2 id="crudShowTitle">Hotels Preview</h2>	
+    <div id="info">Ordena los hoteles arrastrando y soltando en la posicion que quieras</div> 
+    #{form @updateAll(city.id)}
+	 		<table style="width: 800px;">
 				<thead>
 					<tr>
+						<th>
+							Ordenar
+						</th>
 						<th>
 							Position
 						</th>
@@ -228,9 +242,9 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="test-list">
 	  #{list models.Deal.findAllActiveDealsByCityId(city.id), as:'deal'}
-	  			<tr class="${deal_index % 2 ? 'even' : 'odd'}"  
+	  			<tr id="list_${deal.id}" class="${deal_index % 2 ? 'even' : 'odd'}"  
 					    	#{if !deal.image3?.trim() || deal.quantity == 0}
 					    	 style="border-color: red;border-style: solid;" 
 					    	#{/if}
@@ -239,7 +253,11 @@
 					    	#{/else}	
 					    	>
 					    	<td>
-								 ${deal.position}
+					    		<img src="@{'/public/img/arrow.png'}" alt="move" width="16" height="16" class="handle" /> 
+					    	</td>
+					    	<td>
+					    		<span id="position_label">${deal.position}</span>
+								<input class="position" type="hidden" name="dealIds" value="${deal.id}" size="3"/>
 							</td>
 							<td>
 								 <a href="@{admin.Deals.show(deal.id)}">
@@ -265,10 +283,28 @@
 	  #{/list}
 	  			</tbody>
 	  			</table>
-	 
-	 <br/><br/>
+	  			<br/>
+	  			<input type="submit" value="Guardar cambios" />
+	#{/form} 
+	 <br/>
 	  	<p> <span style="border-color: red;border-style: solid;" > Rojo:</span> NO ACTIVAR -> faltan fotos del hotel, no hay dispo o el precio anterior es mayor al actual</p>
 	  	<p> <span style="border-color: orange;border-style: solid;" > Naranja:</span> falta la company, si recibe reservas se crean sin company y no se pueden facturar.</p>
 		<p>Auto order Deals: ordena todos los deals ACTIVOS de mayor a menor precio y de mayor a menor descuento en caso de precios iguales </p>
 	</div>
 </div>
+
+
+<script>
+
+	   	$(function() {
+	   		$("#test-list").sortable({ 
+	   		    handle : '.handle', 
+	   		    update : function () { 
+	   		    	$('#test-list').children('tr').each(function(idx, elm) {
+	   		    		var input = $('#'+elm.id).find("#position_label").first();
+	   		    		input.text(idx);
+	   		    	});  
+	   			}
+			});
+	   	});
+	</script>

@@ -58,8 +58,8 @@ public class City extends Model {
     	return Model.all(City.class);
     }
 	
-    public static City findByName(String name){
-    	return City.all().filter("url", name).get();
+    public static City findByUrl(String url){
+    	return City.all().filter("url", url).get();
     }
     
     public static City findById(Long id) {
@@ -84,7 +84,7 @@ public class City extends Model {
 	}
 	
 	public static void addTestCity(Collection<City> cities) {
-		City city = findByName("test");
+		City city = findByUrl("test");
 		if (city != null){
 			cities.add(city);
 		}

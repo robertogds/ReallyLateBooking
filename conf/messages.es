@@ -421,3 +421,13 @@ web.faq.8.question = ¿Puedo modificar mis datos de usuario y de tarjeta?
 web.faq.8.answer = Por supuesto, vete a "perfil", luego a "editar perfil" y podrás modificar los datos de usuario. En cuanto a los datos de tarjeta, por defecto siempre verás los datos de la que utilizaste en tu última reserva, si quieres modificarlos puedes hacerlo en el propio proceso de reserva, justo en el paso previo a la confirmación final.
 web.faq.9.question = ¿Puedo reservar una noche de hotel a nombre de un amigo?
 web.faq.9.answer = En el paso previo a la confirmación de reserva encontrarás el campo "A nombre de". Introduce el nombre de tu amigo y el mail donde recibirá la confirmación de la reserva y el localizador que deberá presentar en el hotel.
+
+mailchimp.campaign.lists.title = Campañas 
+mailchimp.campaign.new.title = Crear nueva
+mailchimp.campaign.title = Título
+mailchimp.campaign.type= Tipo 
+mailchimp.campaign.created= Creada	 
+mailchimp.campaign.sent= Enviada	 
+mailchimp.campaign.emails_sent= Emails	 
+mailchimp.campaign.status=Estado
+

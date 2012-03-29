@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <!-- Siempre forzar el último motor de rendering de IE (incluso en intranet) & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Pruebas</title>
+    <meta name="description" content="#{get 'description' /}">
+    <meta name="author" content="">
+	<!-- Optimización para dispositivos moviles: j.mp/bplateviewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+
+
+<style>
+	#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+	#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+	#sortable li span { position: absolute; margin-left: -1.3em; }
+	</style>
+    
+
+    
+  </head>
+
+
+<pre> 
+    <div id="info">Waiting for update</div> 
+</pre> 
+<ul id="test-list"> 
+  <li id="listItem_1"> 
+    <img src="arrow.png" alt="move" width="16" height="16" class="handle" /> 
+    <strong>Item 1 </strong>with a link to <a href="http://www.google.co.uk/" rel="nofollow">Google</a> 
+  </li> 
+  <li id="listItem_2"> 
+    <img src="arrow.png" alt="move" width="16" height="16" class="handle" /> 
+    <strong>Item 2</strong> 
+  </li> 
+  <li id="listItem_3"> 
+    <img src="arrow.png" alt="move" width="16" height="16" class="handle" /> 
+    <strong>Item 3</strong> 
+  </li> 
+  <li id="listItem_4"> 
+    <img src="arrow.png" alt="move" width="16" height="16" class="handle" /> 
+    <strong>Item 4</strong> 
+  </li> 
+</ul> 
+			
+	<!-- Obtener jQuery del CDN de Google, con una URL relativa al protocolo; fallback a copia local si es necesario -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script>
+	   	$(function() {
+	   		$("#test-list").sortable({ 
+	   		    handle : '.handle', 
+	   		    update : function () { 
+	   		      var order = $('#test-list').sortable('serialize'); 
+	   		      
+	   		   		alert(order);
+	   		   	 var listAction = #{jsAction @admin.Cities.order(':orderList') /}
+	   		  	 $.post(listAction, function(order) {
+	   			   	$('#info').html(order);
+	   			  });
+	   		   	 //$("#info").load( listAction(order));
+	   		    } 
+	   		  }); 
+		});
+	</script>
+
+  </body>
+</html>
+

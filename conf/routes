@@ -7,6 +7,7 @@
 
 # Home page
 GET     /                                       Application.index
+GET 	/pruebas								Application.pruebas
 
 # Cron tasks
 GET     /cron/refreshHotUsaPrices               Deals.refreshHotUsaPrices
@@ -19,8 +20,7 @@ GET 	/admin									module:crudsiena
 GET     /admin/statistics						admin.Statistics.index
 GET     /admin/statistics/stats					admin.Statistics.stats(format:'json')
 GET     /admin/statistics/repare				admin.Statistics.repare
-
-
+GET		/admin/cities/order/{list}				admin.Cities.order(format:'json')
 
 # Deals
 GET 	/deals/{cityUrl}						Deals.iPhoneList(format:'json')
@@ -30,7 +30,9 @@ GET 	/web/deals/{cityUrl}					Deals.list
 GET 	/web/deals/{cityUrl}/{id}				Deals.show
 
 
+
 # Cities
+GET 	/cities/dealsbycityid/{cityId}			Cities.dealsByCityId(format:'json')
 GET 	/cities/{countryUrl}					Cities.cityListByCountry(format:'json')
 GET 	/cities							    	Cities.cityList(format:'json')
 GET 	/v2/cities							    Cities.cityListAll(format:'json')

@@ -54,6 +54,12 @@ public class Cities  extends Controller {
 		cities.add(new City("Valladolid", "valladolid"));
 		return cities;
 	}
+	
+	public static void dealsByCityId(Long cityId) {
+		City city = City.findById(cityId);
+		Logger.debug("La ciudad es $s", city.name);
+		Deals.listV2(city.url);
+	}
 
 	/** Json API Methods **/
 	public static void cityListAll() {

@@ -204,6 +204,9 @@ public class Deal extends Model {
 	 * @return all the active deals by city base on current time
 	 */
 	public static Collection<Deal> findActiveDealsByCityV2(City city) {
+		if (!city.isRootCity()){
+			city = City.findByUrl(city.root);
+		}
 		switch (DateHelper.getCurrentStateByCityHour(city.utcOffset)) {
 			case (DateHelper.CITY_CLOSED):
 				Logger.info("V2. We are closed");
@@ -457,7 +460,7 @@ public class Deal extends Model {
 	
 	
 	public Boolean dealIsPublished(){
-		City city = City.findByName(this.city.root);
+		City city = City.findByUrl(this.city.root);
 		Collection<Deal> deals = findActiveDealsByCityV2(city);
 		for (Deal deal: deals){
 			if (deal.id.equals(this.id)) return Boolean.TRUE;

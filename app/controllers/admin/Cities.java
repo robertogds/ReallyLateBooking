@@ -2,16 +2,19 @@ package controllers.admin;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import models.Booking;
 import models.City;
 import models.Deal;
+import play.Logger;
+import play.data.binding.As;
+import play.mvc.Before;
 import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
-import controllers.CRUD.ObjectType;
 
 @Check("admin")
 @With(Secure.class)
@@ -35,6 +38,12 @@ public class Cities extends controllers.CRUD {
         	position++;
         }
         editCityDeals(city.id);
+	}
+	
+	public static String order(String list) {
+		Logger.debug("Longitud del array %s", list);
+		
+		return "Lista de deals actualizada correctamente";
 	}
 	
 	public static void updateDeal(Long id, Integer quantity, Integer priceCents, Integer bestPrice, Integer salePriceCents, 
@@ -79,6 +88,19 @@ public class Cities extends controllers.CRUD {
 
 	    editCityDeals(cityId);
 		
+	}
+	
+	
+	public static void updateAll(Long cityId){
+		//Workaround due to a Play binding problem
+		String[] items = params.getAll("dealIds");
+	    for (int position = 0; position < items.length; position++) {
+	    	Long dealId = Long.parseLong(items[position]);
+	    	Deal deal = Deal.findById(dealId);
+	    	deal.position= position;
+	    	deal.update();
+	    }
+		editCityDeals(cityId);
 	}
 	
 	public static void exportAll() {

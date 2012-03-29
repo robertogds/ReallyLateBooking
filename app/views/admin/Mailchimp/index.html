@@ -1,0 +1,38 @@
+#{extends 'layout.html' /}
+#{set title: 'Mailchimp' /}
+
+#{set 'moreScripts'}
+	#{remote.select observed:'#citiesSelect', target:'.dealSelect', url:@Cities.dealsByCityId(), value:'id', label:'hotelName'/}
+#{/set}
+
+       		<div class="row-fluid">
+	        	<div class="span12 title-black">
+		           <h1>Mailchimp</h1>
+		        </div>
+	        </div>
+	        <div class="row-fluid">
+	        	<div class="span12 dashboard tabbable">
+	        		<div class="tabs-container">
+	        		<ul class="nav nav-tabs" >
+					  <li><a href="#campaigns" data-toggle="tab"><i class="icon-th-list"></i>
+					    &{'mailchimp.campaign.lists.title'}</a>
+					  </li>
+					  <li><a href="#new" data-toggle="tab"><i class="icon-plus"></i>
+					  	&{'mailchimp.campaign.new.title'}</a>
+					  </li>
+					</ul>
+					<div id="my-tab-content" class="tab-content">
+			            <div class="tab-pane active" id="campaigns">
+			            	#{include 'admin/Mailchimp/campaignsTab.html'/}
+			            </div>
+			            <div class="tab-pane" id="new">
+			            	#{include 'admin/Mailchimp/newTab.html'/}
+			            </div> <!--  mybookings end -->
+			        </div>
+			      </div>
+	        			
+				</div> <!-- dashboard end -->
+	        </div>
+
+
+

@@ -83,7 +83,7 @@ public class Deals extends Controller {
 	 * @param cityUrl
 	 */
 	public static void list(String cityUrl) {
-		City city = City.findByName(cityUrl);
+		City city = City.findByUrl(cityUrl);
 		if (city != null){
 			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
@@ -104,6 +104,7 @@ public class Deals extends Controller {
 		}
 	}
 	
+	
 	/**
 	 * Retrieves all the active deals from all the active locations
 	 * in the required city.
@@ -111,7 +112,7 @@ public class Deals extends Controller {
 	 * @param cityUrl
 	 */
 	public static void listV2(String cityUrl) {
-		City city = City.findByName(cityUrl);
+		City city = City.findByUrl(cityUrl);
 		
 		if (city != null){
 			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
@@ -134,7 +135,7 @@ public class Deals extends Controller {
 	 */
 	@Deprecated
 	public static void iPhoneList(String cityUrl) {
-		City city = City.findByName(cityUrl);
+		City city = City.findByUrl(cityUrl);
 		if (city != null){
 			//odd workaround to maintain backwards compatibility with the city zones
 			if (city.isRootCity()){

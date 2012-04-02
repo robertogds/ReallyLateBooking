@@ -48,6 +48,7 @@ public class City extends Model {
 	public City mainZone;
 	@Required
 	public int utcOffset;
+	public String mailchimpCode;
 	
 	public City(String name, String url){
 		this.name = name;

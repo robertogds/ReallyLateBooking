@@ -421,6 +421,11 @@ web.faq.8.question = ¿Puedo modificar mis datos de usuario y de tarjeta?
 web.faq.8.answer = Por supuesto, vete a "perfil", luego a "editar perfil" y podrás modificar los datos de usuario. En cuanto a los datos de tarjeta, por defecto siempre verás los datos de la que utilizaste en tu última reserva, si quieres modificarlos puedes hacerlo en el propio proceso de reserva, justo en el paso previo a la confirmación final.
 web.faq.9.question = ¿Puedo reservar una noche de hotel a nombre de un amigo?
 web.faq.9.answer = En el paso previo a la confirmación de reserva encontrarás el campo "A nombre de". Introduce el nombre de tu amigo y el mail donde recibirá la confirmación de la reserva y el localizador que deberá presentar en el hotel.
+web.langs = Idioma
+web.langs.spanish = Español
+web.langs.english = English
+web.langs.french = Français
+
 
 mailchimp.campaign.lists.title = Campañas 
 mailchimp.campaign.new.title = Crear nueva
@@ -430,4 +435,27 @@ mailchimp.campaign.created= Creada
 mailchimp.campaign.sent= Enviada	 
 mailchimp.campaign.emails_sent= Emails	 
 mailchimp.campaign.status=Estado
+mailchimp.campaign.subject=¿Necesitas un hotel para esta noche en %s?
+mails.seemore.link = Ver más ofertas
+mails.seedeal.link = Ver Oferta 
+mailchimp.template.preheader.city = eDreams te ofrece las mejores ofertas de hotel para esta noche en <strong>%s</strong> con ReallyLateBooking.
+mailchimp.template.preheader.see_correctly=No ves el email correctamente?
+mailchimp.template.preheader.see_browser=Verlo en el navegador
+mailchimp.template.h1_header = ¿De viaje y sin Hotel?
+mailchimp.template.header = Encuentra tu hotel para esta noche en <strong >%s</strong> con hasta un 70&#37; de descuento
+mailchimp.template.now = Ahora
+mailchimp.template.testimonials=Lo que dicen nuestros usuarios:
+mailchimp.template.testimonials.testimonial_title_1 = Me salvó en Londres
+mailchimp.template.testimonials.testimonial_text_1 = Perdí el avión en Londres y encontre un hotel con RLB por el precio de un hostal.
+mailchimp.template.testimonials.testimonial_name_1 = Andrés Sardá, &nbsp;45 años, ejecutivo
+mailchimp.template.testimonials.testimonial_title_2 = Un finde inolvidable
+mailchimp.template.testimonials.testimonial_text_2 = Tuve una semana muy dura de trabajo y el viernes decidí darme un capricho.
+mailchimp.template.testimonials.testimonial_name_2 = Laura Estaba, 31 años, diseñadora
+mailchimp.template.download = Descárgate la aplicación móvil gratis:
+mailchimp.template.social.twitter=Síguenos en Twitter
+mailchimp.template.social.send_friend=Enviar a un amigo
+mailchimp.template.social.facebook = Síguenos en Facebook
+mailchimp.template.unsubscribe=Darse de baja de las comunicaciones de eDreams
+mailchimp.campaign.settings.title= Ajustes
+
 

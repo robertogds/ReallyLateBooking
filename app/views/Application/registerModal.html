@@ -1,0 +1,101 @@
+<div class="modal fade" id="registerModal">
+  <div class="modal-header title-black">
+    <h1>&{'web.invite.modal.h1'}</h1>
+  </div>
+  	#{if flash.error}
+				<div class="alert alert-error">
+					  <a class="close" data-dismiss="alert" href="#">&times;</a>
+					  <strong>${flash.error}</strong>
+				</div>
+        #{/if}
+
+   #{form @Application.login(), id:'loginForm', class:'hide'}
+  <div class="modal-body">
+  		<fieldset>
+			<legend>&{'web.invite.modal.login'}</legend>
+			<div class="row-fluid">
+			<div class="span6 fields">
+  			<div class="control-group #{ifError 'username'} error #{/ifError}">
+              <div class="input-prepend controls">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                <input class="input-large" name="username" id="username" value="${flash.username}" type="text" placeholder="&{'secure.email'}">
+              </div>
+            </div>
+            <div class="control-group #{ifError 'password'} error #{/ifError}"> 
+              <div class="input-prepend controls">
+                <span class="add-on"><i class="icon-lock"></i></span>
+                <input class="input-large" type="password" name="password" id="password" value=""  size="16"  placeholder="&{'secure.password'}">
+              </div>
+             </div> 
+             <input type="hidden" name="returnUrl" value="@{Cities.index()}" />
+            </div>
+             <div class="span6 facebook">
+				  		<label>&{'web.invite.modal.register.fb'}</label>
+				  		<div class="fb-button-container-centered">
+				   		#{fbconnect.button label:'<span class="fb-button-left"></span>
+							<span class="fb-button-center"> Facebook  </span>
+							<span class="fb-button-right"></span>', scope:'email' /}
+				  		</div>
+			
+			</div>
+		</div>
+		<a href="#" id="iamnotmemberModal">&{'web.invite.modal.iamnotmember'}</a>
+        </fieldset>
+  </div>
+  <div class="modal-footer">
+     <div class="login-center">
+	       		 <button type="submit" class="btn btn-large btn-success" >&{'web.invite.modal.login.button'}</button>
+	        </div>
+  </div>
+  #{/form}
+     #{form @Application.register(), id:'registerForm'}
+  <div class="modal-body">
+  		<fieldset>
+			    <legend>&{'web.invite.modal.register'}</legend>
+		<div class="row-fluid">
+			<div class="span6 fields">
+  			<div class="control-group #{ifError 'firstName'} error #{/ifError}">
+              <div class="input-prepend controls">
+                <span class="add-on"><i class="icon-user"></i></span>
+                <input class="input-large" name="firstName" id="firstName" value="${flash.firstName}" type="text" placeholder="&{'firstName'}">
+              </div>
+            </div>
+            <div class="control-group #{ifError 'lastName'} error #{/ifError}">
+              <div class="input-prepend controls">
+                <span class="add-on"><i class="icon-user"></i></span>
+                <input class="input-large" name="lastName" id="lastName" value="${flash.lastName}" type="text" placeholder="&{'lastName'}">
+              </div>
+            </div>
+  			<div class="control-group #{ifError 'username'} error #{/ifError}">
+              <div class="input-prepend controls">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                <input class="input-large" name="username" id="username" value="${flash.username}" type="text" placeholder="&{'secure.email'}">
+              </div>
+            </div>
+            <div class="control-group #{ifError 'password'} error #{/ifError}"> 
+              <div class="input-prepend controls">
+                <span class="add-on"><i class="icon-lock"></i></span>
+                <input class="input-large" type="password" name="password" id="password" value=""  size="16"  placeholder="&{'secure.password'}">
+              </div>
+             </div>  
+             <input type="hidden" name="returnUrl" value="@{Cities.index()}" />
+            </div>
+            <div class="span6 facebook">
+				  		<label>&{'web.invite.modal.register.fb'}</label>
+				  		<div class="fb-button-container-centered">
+				   		#{fbconnect.button label:'<span class="fb-button-left"></span>
+							<span class="fb-button-center"> Facebook  </span>
+							<span class="fb-button-right"></span>', scope:'email' /}
+				  		</div>
+			</div>
+		</div>
+		<a href="#" id="iammemberModal">&{'web.invite.modal.iammember'}</a>
+      </fieldset>
+  </div>
+  <div class="modal-footer">
+     <div class="login-center">
+	       		 <button type="submit" class="btn btn-large btn-success" >&{'web.invite.modal.register.button'}</button>
+	        </div>
+  </div>
+  #{/form}
+</div>

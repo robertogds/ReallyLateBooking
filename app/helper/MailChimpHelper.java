@@ -5,6 +5,7 @@ import helper.mailchimp.models.CreateCampaignRequest;
 import helper.mailchimp.models.MailchimpCampaign;
 import helper.mailchimp.models.MailchimpList;
 import helper.mailchimp.models.MailchimpTemplate;
+import helper.mailchimp.models.SegmentOptions;
 
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -13,6 +14,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,8 +38,8 @@ public final class MailChimpHelper {
 	private static final String DELETE_CAMPAIGN = "campaignDelete";
 	private static final String CREATE_CAMPAIGN = "campaignCreate";
 	private static final String CAMPAIGN_SEND_TEST = "campaignSendTest";
-	private static final String CAMPAIGN_SEND = "campaignSend";
-	
+	private static final String CAMPAIGN_SEND = "campaignSendNow";
+	private static final String CAMPAIGN_SEGMENT_TEST = "campaignSegmentTest";
 	
 	/**
 	 * Checks service availability, returns {@code true} if successful.
@@ -141,6 +143,16 @@ public final class MailChimpHelper {
 		String params = new Gson().toJson(paramsMap);
 		Logger.debug("############# ENVIO DEL TEST DE LA CAMPAÑA ##########");
 		return prepareRequest(CAMPAIGN_SEND_TEST, params) ;
+	}
+	
+	public static String sendSegmentTest(String listId, SegmentOptions segments){
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("apikey", APIKEY);
+		paramsMap.put("list_id", listId);
+		paramsMap.put("options", segments);
+		String params = new Gson().toJson(paramsMap);
+		Logger.debug("############# ENVIO DEL TEST DE LOS SEGMENTS ##########");
+		return prepareRequest(CAMPAIGN_SEGMENT_TEST, params) ;
 	}
 	
 	private static String prepareRequest(String method, String params){

@@ -25,12 +25,14 @@ import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;
+import play.mvc.With;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
 import controllers.oauth.ApiSecurer;
 
+@With(I18n.class)
 public class Bookings extends Controller{
 	
 	@Before(only = {"doBooking"})

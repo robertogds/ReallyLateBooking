@@ -10,7 +10,9 @@ import play.data.validation.Required;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(I18n.class)
 public class Invitations extends Controller {
 	
 	 public static void getInvite(@Required @Email String email, String returnUrl) throws Throwable {

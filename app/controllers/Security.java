@@ -4,9 +4,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
+import play.mvc.With;
 import play.mvc.Scope.Session;
 import models.*;
 
+@With(I18n.class)
 public class Security extends Secure.Security {
 	
 	static boolean authenticate(String username, String password) {

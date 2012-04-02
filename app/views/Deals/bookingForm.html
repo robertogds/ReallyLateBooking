@@ -177,8 +177,8 @@
   <div class="modal-body">
   		<fieldset>
 			<legend>&{'web.invite.modal.login'}</legend>
-			<div class="row">
-			<div class="span3 fields">
+			<div class="row-fluid">
+			<div class="span6 fields">
   			<div class="control-group #{ifError 'username'} error #{/ifError}">
               <div class="input-prepend controls">
                 <span class="add-on"><i class="icon-envelope"></i></span>
@@ -193,7 +193,7 @@
              </div> 
              <input type="hidden" name="returnUrl" value="@{Deals.bookingForm(deal.id)}?email" />
             </div>
-             <div class="span2 facebook">
+             <div class="span6 facebook">
 				  		<label>&{'web.invite.modal.register.fb'}</label>
 				  		<div class="fb-button-container-centered">
 				   		#{fbconnect.button label:'<span class="fb-button-left"></span>
@@ -216,8 +216,8 @@
   <div class="modal-body">
   		<fieldset>
 			    <legend>&{'web.invite.modal.register'}</legend>
-		<div class="row">
-			<div class="span3 fields">
+		<div class="row-fluid">
+			<div class="span6 fields">
   			<div class="control-group #{ifError 'firstName'} error #{/ifError}">
               <div class="input-prepend controls">
                 <span class="add-on"><i class="icon-user"></i></span>
@@ -244,7 +244,7 @@
              </div>  
              <input type="hidden" name="returnUrl" value="@{Deals.bookingForm(deal.id)}?email" />
             </div>
-            <div class="span2 facebook">
+            <div class="span6 facebook">
 				  		<label>&{'web.invite.modal.register.fb'}</label>
 				  		<div class="fb-button-container-centered">
 				   		#{fbconnect.button label:'<span class="fb-button-left"></span>

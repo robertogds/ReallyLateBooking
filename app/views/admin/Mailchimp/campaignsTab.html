@@ -47,11 +47,31 @@
 	             <td>
 	                 #{a @admin.Mailchimp.sendTest(campaign.id)} Send Test #{/a}        
 	             </td>
-	             <!--   <td>
-	                 #{a @admin.Mailchimp.sendCampaign(campaign.id)} Send #{/a}        
-	             </td>-->
+	              <td>
+	              	 <a  data-toggle="modal" href="#${campaign.id}" >Enviar</a>
+	             </td>
+	                
+	               <div id="${campaign.id}" class="modal fade" >
+				            <div class="modal-header">
+				              <a href="#" class="close" data-dismiss="modal">x</a>
+				              <h3>Esto no es cancelable. Asegura que todo es correcto antes.</h3>
+				            </div>
+				            <div class="modal-body">
+					              <p> Comprueba en Mailchimp la lista, que este segmentada a quien corresponde, el idioma, etc.
+					        	 </p>
+					        	 <p>
+					        	 	Si estas seguro pulsa #{a @admin.Mailchimp.sendCampaign(campaign.id)} ENVIAR #{/a}   
+					        	 </p>
+				            </div>
+				       
+				            <div class="modal-footer">
+				              <a href="#" class="btn primary close" data-dismiss="modal"> &{'web.modal.close'}</a>
+				                 
+				            </div>
+				          </div>
 	   
 	        </tr>
+	        
 	       #{/list}
 	</table>
 </div>

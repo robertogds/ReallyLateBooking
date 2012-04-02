@@ -1,0 +1,22 @@
+<div class="modal fade" id="askInvite">
+								  <div class="modal-header">
+								    <a class="close" data-dismiss="modal">&times;</a>
+								    <h3>&{'web.index.invite.h3'}</h3>
+								  </div>
+								  #{form @Invitations.getInvite()}
+								  <div class="modal-body">
+								    <p>&{'web.index.invite.entry'}</p>
+								    	 <div class="input-prepend">
+							              <div class="input-prepend">
+							                <span class="add-on"><i class="icon-envelope"></i></span>
+							                <input class="input-large" name="email" id="email" value="${flash.email}" type="text" placeholder="&{'secure.email'}">
+							              </div>
+							             </div>
+							             <p class="help-block">&{'web.index.invite.accept_terms'} <a data-toggle="modal" href="#terms">&{'web.terms'}</a></p>
+								  </div>
+								  <div class="modal-footer">
+								    <button type="submit" class="btn btn-primary" >&{'web.index.invite.btn'}</button>
+								    <a  data-dismiss="modal" class="btn close">&{'web.btn.cancel'}</a>
+								  </div>
+								  #{/form}
+								</div>

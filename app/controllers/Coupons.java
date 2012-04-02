@@ -10,7 +10,9 @@ import play.data.validation.Required;
 import play.i18n.Lang;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(I18n.class)
 public class Coupons extends Controller {
 	
 	@Before

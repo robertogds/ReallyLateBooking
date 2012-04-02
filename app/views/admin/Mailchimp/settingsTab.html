@@ -1,0 +1,59 @@
+
+<div class="edit-hotel">
+#{form @settings()}
+  				<div class="row-fluid">
+  					<div class="span4">
+		<fieldset>
+    								
+            <div class="control-group #{ifError 'listId'} error #{/ifError}">
+    			<label for="firstName">Mailing list </label>
+				<div class="controls">
+	              <select id="lists" name="listId">
+	              	#{list items:mailLists, as:'mailList' }
+	                	<option value="${mailList.id}">${mailList.name}</option>
+	                #{/list}
+	              </select>
+	            </div>
+            </div>
+             <div class="control-group #{ifError 'templateId'} error #{/ifError}">
+    			<label for="firstName">Template</label>
+				<div class="controls">
+	              <select id="templates" name="templateId">
+					#{list items:templates, as:'template' }
+	                	<option value="${template.id}">${template.name}</option>
+	                #{/list}
+	              </select>
+	            </div>
+            </div>
+        </fieldset>
+        </div>
+        
+        <div class="span4">
+		<fieldset>
+    								
+            <div class="control-group #{ifError 'fromEmail'} error #{/ifError}">
+    								<label for="fromEmail">From Email</label>
+				<div class="controls">
+	              <div class="input">
+			                <input class="large" name="fromEmail"  type="text" value="">
+			         </div>
+	            </div>
+            </div>
+             <div class="control-group #{ifError 'fromName'} error #{/ifError}">
+    								<label for="fromName">From Name</label>
+				<div class="controls">
+	              <div class="input">
+			                <input class="large" name="fromName"  type="text" value="">
+			         </div>
+	            </div>
+            </div>
+        </fieldset>
+         </div>  
+     </div>  
+        <div class="row-fluid"> 
+			<div class="actions span8">
+				<input class="btn btn-primary btn-large" type="submit" id="signin" value="Guardar" />
+			</div>
+		</div>
+#{/form}
+</div>

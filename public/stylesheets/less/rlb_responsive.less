@@ -32,6 +32,7 @@
 			}		
 		}
 	}
+	
 }
 
 	/** Deal List **/	
@@ -111,6 +112,7 @@
 	.zones{
 		.hide();
 	}
+
 }
 
 @media (min-width: 768px) and (max-width: 980px) {
@@ -127,9 +129,11 @@
 	/**** Login Page *****/
 	.index{
 		.iphone-btn, .android-btn{
-			min-height: 44px;
+			min-height: 60px;
 		}
-		
+		.android-btn{
+			background-position-y: 7px;
+		}
 		.hero-unit {
 			padding: @padding 16px;
 			h1{
@@ -243,8 +247,11 @@
 	/**** Login Page *****/
 	.index{
 		.iphone-btn, .android-btn{
-			min-height: 106px;
+			min-height: 140px;
 			width: 50%;
+		}
+		.android-btn{
+				background-position-y: 16px;
 		}
 		h1{
 			font-size: 50px;
@@ -260,6 +267,7 @@
 				.show();
 			}
 		}
+
 	}
 	
 	.deal-list .deal .hotelInfo, #step1, #step2 .total-price, .title-black, .deal-list .closed, .footer{
@@ -658,9 +666,11 @@
 	/**** Login Page *****/
 	.container-fluid #main-content{
 		.iphone-btn, .android-btn{
-			min-height: 34px;
+			min-height: 60px;
 		}
-		
+		.android-btn{
+			background-position-y: 8px;
+		}
 		.hero-unit {
 			padding: 6px 8px;
 			h1{

@@ -2,9 +2,7 @@ package controllers;
 
 import helper.HotUsaApiHelper;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import jobs.Bootstrap;
 import models.Booking;
@@ -18,8 +16,9 @@ import play.data.validation.Required;
 import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
-import play.mvc.Router;
+import play.mvc.With;
 
+@With(I18n.class)
 public class Application extends Controller {
 	
 	@Before(only = {"login", "authenticate","register"})

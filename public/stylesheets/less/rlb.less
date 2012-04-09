@@ -113,24 +113,7 @@ input {
 	font-weight: normal;
 	line-height: @baseLineHeight;
 }
-.android-btn{
-	background-image: url("http://d2f5bmx5jz1oq8.cloudfront.net/emails/android_app_on_play_large.png");
-	.background-size(89%);
-    background-repeat: no-repeat;
-    border-style: none;
-	display: block;
-	min-height: 80px;
-    width: 100%;
-	background-position-y: 10px;
-}
-.iphone-btn{
-	background-image: url("http://reallylatebooking.com/public/images/App_Store_Badge_ES_400-TR.original.png");
-	.background-size(100%);
-    background-repeat: no-repeat;
-    border-style: none;
-	display: block;
-	min-height: 80px;
-    width: 100%;
+.download-buttons{
 	
 }
 
@@ -196,6 +179,7 @@ input {
 			line-height: 20px;
 		}
 		.register, .login {
+			text-align: center;
 			.well{
 				background-color: @white;
 				.box-shadow();
@@ -230,7 +214,6 @@ input {
 			}
 		}
 		.login{
-			text-align: center;
 			form{
 				margin: @verticalMargin/2 0;
 				.center-block();

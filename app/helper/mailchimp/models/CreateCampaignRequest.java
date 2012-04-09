@@ -5,10 +5,12 @@ import helper.MailChimpHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import play.Logger;
+import play.i18n.Lang;
 import play.i18n.Messages;
 
 import models.City;
@@ -82,8 +84,8 @@ public class CreateCampaignRequest {
 	
 	public String apikey;
 	public String type;
-	public Map<String, String> options;
-	public Map<String, String> content;
+	public Map<String, Object> options;
+	public Map<String, Object> content;
 	public SegmentOptions segment_opts;
 
 
@@ -91,7 +93,7 @@ public class CreateCampaignRequest {
 		super();
         this.apikey = MailChimpHelper.APIKEY;
         this.type = CAMPAIGN_TYPE_REGULAR;
-        this.options = new HashMap<String, String>();
+        this.options = new HashMap<String, Object>();
         this.options.put(CAMPAIGN_OPTION_LIST_ID, listId);
         this.options.put(CAMPAIGN_OPTION_SUBJECT, URLEncoder.encode(subject, "UTF8"));
         this.options.put(CAMPAIGN_OPTION_FROM_EMAIL, fromEmail);
@@ -99,7 +101,8 @@ public class CreateCampaignRequest {
         this.options.put(CAMPAIGN_OPTION_TO_NAME, "*|FNAME|*");
         this.options.put(CAMPAIGN_OPTION_TEMPLATE_ID, templateId);
         this.options.put(CAMPAIGN_OPTION_GENERATE_TEXT, "true");
-        this.content = new HashMap<String, String>();
+        
+        this.content = new HashMap<String, Object>();
         this.content.put(CAMPAIGN_CONTENT_SEE_CORRECTLY, URLEncoder.encode(Messages.get("mailchimp.template.preheader.see_correctly"), "UTF8"));
         this.content.put(CAMPAIGN_CONTENT_SEE_BROWSER, URLEncoder.encode(Messages.get("mailchimp.template.preheader.see_browser"), "UTF8") );
         this.content.put(CAMPAIGN_CONTENT_H1_HEADER,URLEncoder.encode(Messages.get("mailchimp.template.h1_header"), "UTF8") );
@@ -132,9 +135,9 @@ public class CreateCampaignRequest {
 	}
 	
 	public Integer testSegmentOptions(){
-		String repsonse = MailChimpHelper.sendSegmentTest(this.options.get(CAMPAIGN_OPTION_LIST_ID), this.segment_opts);
-		Logger.debug("Resultado del test del segmento: %s", repsonse);
-		Integer number = Integer.valueOf(repsonse);
+		String response = MailChimpHelper.sendSegmentTest((String)this.options.get(CAMPAIGN_OPTION_LIST_ID), this.segment_opts);
+		Logger.debug("## Segment test respose: %s", response);
+		Integer number = Integer.valueOf(response);
 		return number;
 	}
 	
@@ -151,7 +154,16 @@ public class CreateCampaignRequest {
 	}
 	public void setCity(String city) throws UnsupportedEncodingException{
         this.content.put(CAMPAIGN_CONTENT_HTML_CITY, URLEncoder.encode(Messages.get("mailchimp.template.preheader.city", city), "UTF8"));
+        this.setAnalyticsTracking(city);
 	}
+	public void setAnalyticsTracking(String city) {
+		Map<String, Object> analytics = new HashMap<String, Object>();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd_MM_yyyy");
+		String today = sdf.format(DateHelper.getTodayDate());
+        analytics.put(CAMPAIGN_OPTION_ANALYTICS_GOOGLE, city + "_" + Lang.get() + "_" + today);
+        this.options.put(CAMPAIGN_OPTION_ANALYTICS, analytics);
+	}
+	
 	public void setSideColumn(String sideColumn) throws UnsupportedEncodingException{
         this.content.put(CAMPAIGN_CONTENT_HTML_SIDECOLUMN, URLEncoder.encode(sideColumn, "UTF8"));
 	}

@@ -57,13 +57,7 @@ public class Cities extends controllers.CRUD {
 	    deal.quantity = quantity;
 	    deal.bestPrice = bestPrice;
 	    deal.priceCents = priceCents;
-	    if (deal.bestPrice != null ){
-	    	int dif = (deal.bestPrice - deal.salePriceCents) * 100;
-	    	deal.discount = dif != 0 ? dif / deal.bestPrice : 0;
-	    }
-	    else{
-	    	deal.discount = 0;
-	    }
+	    deal.calculateDiscount();
 	    deal.salePriceCents = salePriceCents;
 	    deal.priceDay2 = priceDay2;
 	    deal.priceDay3 = priceDay3;

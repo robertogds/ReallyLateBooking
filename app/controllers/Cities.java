@@ -6,8 +6,10 @@ import java.util.Collection;
 
 import models.City;
 import models.Country;
+import models.Deal;
 import models.User;
 import models.dto.CityDTO;
+import models.dto.DealDTO;
 import play.Logger;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -57,8 +59,12 @@ public class Cities  extends Controller {
 	
 	public static void dealsByCityId(Long cityId) {
 		City city = City.findById(cityId);
-		Logger.debug("La ciudad es $s", city.name);
-		Deals.listV2(city.url);
+		Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
+        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
+		for (Deal deal: deals){
+			dealsDtos.add(new DealDTO(deal));
+		}
+        renderJSON(dealsDtos);
 	}
 
 	/** Json API Methods **/

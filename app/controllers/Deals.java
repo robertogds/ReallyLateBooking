@@ -113,7 +113,6 @@ public class Deals extends Controller {
 	 */
 	public static void listV2(String cityUrl) {
 		City city = City.findByUrl(cityUrl);
-		
 		if (city != null){
 			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();

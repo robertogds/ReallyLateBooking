@@ -1,5 +1,11 @@
 package controllers.admin;
 
+import helper.MailChimpHelper;
+import helper.mailchimp.models.CreateCampaignRequest;
+import helper.mailchimp.models.MailchimpCampaign;
+import helper.mailchimp.models.MailchimpList;
+import helper.mailchimp.models.MailchimpTemplate;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,19 +13,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.tools.javac.code.Attribute.Array;
-
 import models.City;
 import models.Deal;
+import models.InfoText;
 import models.Setting;
 import models.dto.DealDTO;
 
+import org.apache.commons.lang.StringUtils;
 
-import helper.MailChimpHelper;
-import helper.mailchimp.models.CreateCampaignRequest;
-import helper.mailchimp.models.MailchimpCampaign;
-import helper.mailchimp.models.MailchimpList;
-import helper.mailchimp.models.MailchimpTemplate;
 import play.Logger;
 import play.data.validation.Email;
 import play.data.validation.Required;
@@ -86,7 +87,8 @@ public class Mailchimp extends Controller{
 			String fromEmail = Setting.findByKey(Setting.MC_FROM_EMAIL).value;
 			String fromName = Setting.findByKey(Setting.MC_FROM_NAME).value;
 			String templateId = Setting.findByKey(Setting.MC_TEMPLATE_ID).value;
-			String subject = Messages.get("mailchimp.campaign.subject", city.name);
+			String subject =   InfoText.findByKey(controllers.InfoTexts.MAILCHIMP_SUBJECT).content;
+			subject = StringUtils.replace(subject, "##", city.name);
 			CreateCampaignRequest campaign = new CreateCampaignRequest(listId, subject, fromEmail, fromName, templateId);
 			campaign.setHeader(header);
 			Map<String, Object> params = new HashMap<String, Object>();

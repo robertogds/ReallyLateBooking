@@ -9,6 +9,8 @@ import play.mvc.Controller;
 public class InfoTexts extends Controller {
 	
 	public static final String DEAL_DETAIL_TEXT = "deal_detail_text";
+	public static final String MAILCHIMP_SUBJECT = "mc_subject";
+
 	
 	@Before
 	public static void checkLanguage(){

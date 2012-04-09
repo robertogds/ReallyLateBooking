@@ -25,7 +25,6 @@ public class Security extends Secure.Security {
 		User user = User.findByEmail(connected());
 	    if("admin".equals(profile)) {
 	        return user != null && user.isAdmin;
-	    
 	    }
 	    else if("owner".equals(profile)) {
 		    return user != null && user.isOwner;

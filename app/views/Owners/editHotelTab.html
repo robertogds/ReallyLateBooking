@@ -1,10 +1,28 @@
 
 	  <div class="edit-hotel">
-        #{form @save(deal.id), class:'form-horizontal'}
+        #{form @save(deal.id), class:'form-verticall'}
  		<div class="row-fluid">
- 			<div class="span5">
+ 			<div class="span6">
  				<fieldset>
 			    <legend>&{'owners.oneday.title'}</legend>
+			    <br />
+			    <div class="row-fluid">
+			        <div class="span6">
+			    <div class="control-group #{ifError 'salePriceCents'} error #{/ifError}">
+			    	 #{field 'salePriceCents'}
+		       		 <label  class="control-label" for="salePriceCents">&{'owners.salePriceCents'}</label>
+		       		 <div class="controls">
+		       		 	<div class="input-append">
+				          <input type="text" name="${field.name}" id="salePriceCents"
+		            			value="${deal.salePriceCents}" class="input-small" />
+		            		<span class="add-on">&euro;</span>
+		            	</div>
+				        <p class="help-block">&{'owners.salePriceCents.hint'}</p>
+				     </div>
+		        	#{/field}
+			    </div>
+			    </div>
+ 					<div class="span6">
 			    <div class="control-group #{ifError 'quantity'} error #{/ifError}">
 			    	 #{field 'quantity'}
 		       		 <label  class="control-label" for="quantity">&{'owners.quantity'}</label>
@@ -16,39 +34,50 @@
 				     </div>
 		        	#{/field}
 			    </div>
-			    
-			    <div class="control-group #{ifError 'salePriceCents'} error #{/ifError}">
-			    	 #{field 'salePriceCents'}
-		       		 <label  class="control-label" for="salePriceCents">&{'owners.salePriceCents'}</label>
-		       		 <div class="controls">
-		       		 	<div class="input-append">
-				          <input type="text" name="${field.name}" id="quantity"
-		            			value="${deal.salePriceCents}" class="input-small" />
-		            		<span class="add-on">&euro;</span>
-		            		</div>
-				        <p class="help-block">&{'owners.salePriceCents.hint'}</p>
-				     </div>
-		        	#{/field}
 			    </div>
-			    <div class="control-group">
-			    	 #{field 'breakfastIncluded'}
-		            <label class="control-label" for="breakfastIncluded"> &{'owners.breakfastIncluded'}</label>
-		            <div class="controls">
-		              <label class="checkbox">
-		               <input type="checkbox" name="${field.name}" id="breakfastIncluded"
-			             #{if deal.breakfastIncluded} checked="true" #{/if} />
-		              </label>
-		            </div>
-		            #{/field}
-		        </div>
+			     </div>
+				<br />
+				<div class="row-fluid">
+			        <div class="span6">
+					    <div class="control-group #{ifError 'bestPrice'} error #{/ifError}">
+					    	 #{field 'bestPrice'}
+				       		 <label  class="control-label" for="bestPrice">&{'owners.barprice'}</label>
+				       		 <div class="controls">
+				       		 	<div class="input-append">
+						          <input type="text" name="${field.name}" id="bestPrice"
+				            			value="${deal.bestPrice}" class="input-small" />
+				            		<span class="add-on">&euro;</span>
+				            		<a href="#" class="tooltip-link" rel="tooltip" title="&{'owners.barprice.hint'}"><i class="icon-exclamation-sign"></i></a>
+				            		</div>
+						        <p class="help-block">&{'owners.salePriceCents.hint'}</p>
+						     </div>
+				        	#{/field}
+					    </div>
+			    	</div>
+			    	<div class="span6">
+					    <div class="control-group">
+					    	 #{field 'breakfastIncluded'}
+				            <label class="control-label" for="breakfastIncluded"> &{'owners.breakfastIncluded'}</label>
+				            <div class="controls">
+				              <label class="checkbox">
+				               <input type="checkbox" name="${field.name}" id="breakfastIncluded"
+					             #{if deal.breakfastIncluded} checked="true" #{/if} />
+				              </label>
+				            </div>
+				            #{/field}
+				        </div>
+				    </div>
+				 </div>
 			  </fieldset>
 		    </div>
-		    <div class="span5">
+		    <div class="span6">
 			    <fieldset>
 			    <legend> &{'owners.moredays.title'} <a href="#" class="popover-link" rel="popover" data-placement="left" data-content="&{'owners.moredays.description'} <br> <br> &{'owners.moredays.description.2'}" data-original-title="&{'owners.moredays.title'}"><i class="icon-question-sign"></i></a></legend>
-			    
-			    <div class="control-group #{ifError 'priceDay2'} error #{/ifError}">
+			    <br />
+			    <div class="row-fluid">
+ 					<div class="span6">
 			    	 #{field 'priceDay2'}
+			    	 <div class="control-group #{ifError 'priceDay2'} error #{/ifError}">
 		       		 <label  class="control-label" for="priceDay2">&{'owners.moredays.priceDay2'}</label>
 		       		 <div class="controls">
 		       		 	<div class="input-append">
@@ -56,9 +85,26 @@
 		            			value="${deal.priceDay2}" class="input-small" />
 		            		<span class="add-on">&euro;</span>
 		            		</div>
+				     	</div>
 				     </div>
 		        	#{/field}
+		       		</div>
+		       		<div class="span6">
+			    	 #{field 'quantityDay2'}
+			    	<div class="control-group #{ifError 'quantityDay2'} error #{/ifError}">
+			       		 <label  class="control-label" for="quantity2">&{'owners.quantity'}</label>
+			       		 <div class="controls">
+					          <input type="text" name="${field.name}" id="quantity2"
+			            			value="${deal.quantityDay2}" class="input-small" />
+					     </div>
+				     </div>
+		        	#{/field}
+		        	</div>
+			    </div>
+		        <div class="row-fluid">
+ 					<div class="span6">
 		        	 #{field 'priceDay3'}
+		        	 <div class="control-group #{ifError 'priceDay3'} error #{/ifError}">
 		       		 <label  class="control-label" for="priceDay3">&{'owners.moredays.priceDay3'}</label>
 		       		 <div class="controls">
 		       		 	<div class="input-append">
@@ -67,8 +113,25 @@
 		            		<span class="add-on">&euro;</span>
 		            		</div>
 				     </div>
+				      </div>
 		        	#{/field}
+		        	</div>
+		        	<div class="span6">
+			    	 #{field 'quantityDay3'}
+			    	<div class="control-group #{ifError 'quantityDay3'} error #{/ifError}">
+			       		 <label  class="control-label" for="quantity3">&{'owners.quantity'}</label>
+			       		 <div class="controls">
+					          <input type="text" name="${field.name}" id="quantity3"
+			            			value="${deal.quantityDay3}" class="input-small" />
+					     </div>
+				     </div>
+		        	#{/field}
+		        	</div>
+				 </div>
+		         <div class="row-fluid">
+ 					<div class="span6">
 		        	 #{field 'priceDay4'}
+		        	 <div class="control-group #{ifError 'priceDay4'} error #{/ifError}">
 		       		 <label  class="control-label" for="priceDay4">&{'owners.moredays.priceDay4'}</label>
 		       		 <div class="controls">
 		       		 	<div class="input-append">
@@ -77,8 +140,25 @@
 		            		<span class="add-on">&euro;</span>
 		            		</div>
 				     </div>
+				      </div>
 		        	#{/field}
+		        	</div>
+		        	<div class="span6">
+			    	 #{field 'quantityDay4'}
+			    	<div class="control-group #{ifError 'quantityDay4'} error #{/ifError}">
+			       		 <label  class="control-label" for="quantity4">&{'owners.quantity'}</label>
+			       		 <div class="controls">
+					          <input type="text" name="${field.name}" id="quantity4"
+			            			value="${deal.quantityDay4}" class="input-small" />
+					     </div>
+				     </div>
+		        	#{/field}
+		        	</div>
+				 </div>
+		         <div class="row-fluid">
+ 					<div class="span6">
 		        	 #{field 'priceDay5'}
+		        	 <div class="control-group #{ifError 'priceDay5'} error #{/ifError}">
 		       		 <label  class="control-label" for="priceDay5">&{'owners.moredays.priceDay5'}</label>
 		       		 <div class="controls">
 		       		 	<div class="input-append">
@@ -87,8 +167,21 @@
 		            		<span class="add-on">&euro;</span>
 		            		</div>
 				     </div>
+				      </div>
 		        	#{/field}
-			    </div>
+			   		</div>
+			   		<div class="span6">
+			    	 #{field 'quantityDay5'}
+			    	<div class="control-group #{ifError 'quantityDay5'} error #{/ifError}">
+			       		 <label  class="control-label" for="quantity5">&{'owners.quantity'}</label>
+			       		 <div class="controls">
+					          <input type="text" name="${field.name}" id="quantity5"
+			            			value="${deal.quantityDay5}" class="input-small" />
+					     </div>
+				     </div>
+		        	#{/field}
+		        	</div>
+				 </div>
 
 			  </fieldset>
 			 	</div>

@@ -145,7 +145,14 @@
 							           				<ul class="unstyled">
 													  <li class="rooms">
 													  	<span>&{'web.deal.detail.left'}</span>
-													    <span class="value">${deal.quantity}</span>
+													    <span class="value">
+							           								#{if deal.quantity > 5 || deal.isHotUsa}
+							           									+5
+							           								#{/if}
+							           								#{else}
+							           									${deal.quantity}
+							           								#{/else}
+							           							</span>
 													  </li>
 													  <li class="nights">
 													    <span class="value">${deal.nights}</span>

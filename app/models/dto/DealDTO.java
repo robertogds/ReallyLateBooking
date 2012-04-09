@@ -25,7 +25,6 @@ import siena.Id;
 import siena.Index;
 
 public class DealDTO {
-	
     public Long id;
 	public String hotelName;	
     public CityDTO city;
@@ -66,9 +65,8 @@ public class DealDTO {
 	public Boolean breakfastIncluded;
 	public String nights;
 	public Boolean active;
+	public Boolean isHotUsa;
 
-	
-	
 	public DealDTO(Deal deal) {
 		validateDeal(deal);
 		this.id = deal.id;
@@ -110,7 +108,7 @@ public class DealDTO {
 		this.breakfastIncluded = deal.breakfastIncluded;
 		this.nights = getNights();
 		this.active = deal.active;
-		
+		this.isHotUsa = deal.isHotUsa;
 		String lang = Lang.get();
 		if (lang.equals("es")){
 			this.detailText = deal.detailText;

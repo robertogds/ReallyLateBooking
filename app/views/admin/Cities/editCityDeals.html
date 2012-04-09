@@ -83,7 +83,7 @@
 				 #{list deals, as:'deal'} 
 				 	#{form @updateDeal(deal.id)}
 					    <tr class="${deal_index % 2 ? 'even' : 'odd'}"  
-					    	#{if (!deal.image3?.trim() || deal.priceCents <= deal.salePriceCents)}
+					    	#{if (!deal.image3?.trim())}
 					    	 style="border-color: red;border-style: solid;" 
 					    	#{/if}
 					    	#{else}
@@ -102,19 +102,30 @@
 							</td>
 							<td>
 								#{field 'quantity'}
-							        <input type="text" name="${field.name}" size="2"
+							        <input  #{if (deal.quantity == 0)}
+								    	 		style="color:red;border-color: red;border-style: solid;" 
+								    		#{/if} 
+							        
+							        	type="text" name="${field.name}" size="2"
 							            value="${deal.quantity}" class="${field.errorClass}" />
 						        #{/field}
 							</td>
-							<td>
+							<td >
 								#{field 'priceCents'}
-							        <input type="text" name="${field.name}" size="3"
+							        <input #{if (deal.priceCents <= deal.salePriceCents)}
+								    	 		style="color:red;border-color: red;border-style: solid;" 
+								    		#{/if}
+					    		 
+							        	type="text" name="${field.name}" size="3"
 			           					 value="${deal.priceCents}" class="${field.errorClass}" />
 						        #{/field}
 							</td>
 							<td>
 								#{field 'bestPrice'}
-							        <input type="text" name="${field.name}" size="3"
+							        <input  #{if (deal.bestPrice <= deal.salePriceCents)}
+								    	 		style="color:red;border-color: red;border-style: solid;" 
+								    		#{/if}
+							        	type="text" name="${field.name}" size="3"
 			           					 value="${deal.bestPrice}" class="${field.errorClass}" />
 						        #{/field}
 							</td>

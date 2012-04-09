@@ -6,16 +6,20 @@ import java.util.Calendar;
 import java.util.Collection;
 
 import models.City;
+import models.Statistic;
+import models.User;
 import models.dto.StatisticDTO;
 import models.dto.StatsGraphDTO;
 import play.mvc.Controller;
 import play.mvc.With;
+import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
 
 @Check("admin")
 @With(Secure.class)
-public class Statistics extends Controller{
+@CRUD.For(Statistic.class)
+public class Statistics extends controllers.CRUD {
 	
 	public static void index() {
 		Calendar calStart = Calendar.getInstance();

@@ -70,8 +70,8 @@ public class Owners extends Controller{
 		}
 	}
 	
-	public static void save(Long id, @Required Integer quantity, @Required Integer salePriceCents, boolean breakfastIncluded,
-			Integer priceDay2, Integer priceDay3, Integer priceDay4, Integer priceDay5) {
+	public static void save(Long id, @Required Integer quantity, @Required Integer salePriceCents, @Required Integer bestPrice, boolean breakfastIncluded,
+			Integer priceDay2, Integer priceDay3, Integer priceDay4, Integer priceDay5, Integer quantityDay2, Integer quantityDay3, Integer quantityDay4, Integer quantityDay5) {
 	    if(validation.hasErrors()) {
 	    	flash.error(Messages.get("web.extranet.updatedeal.incorrect"));
             params.flash();
@@ -87,6 +87,21 @@ public class Owners extends Controller{
 		    deal.priceDay3 = priceDay3 == null || priceDay3 == 0 ? null : priceDay3;
 		    deal.priceDay4 = priceDay4 == null || priceDay4 == 0 ? null : priceDay4;
 		    deal.priceDay5 = priceDay5 == null || priceDay5 == 0 ? null : priceDay5;
+		    
+		    if (checkQuantityDay(deal.priceDay2, deal.quantity, quantityDay2) &&
+		    		checkQuantityDay(deal.priceDay3, deal.quantity, quantityDay3) &&
+		    		checkQuantityDay(deal.priceDay4, deal.quantity, quantityDay4) &&
+		    		checkQuantityDay(deal.priceDay5, deal.quantity, quantityDay5)){
+		    	deal.quantityDay2 = quantityDay2;
+		    	deal.quantityDay3 = quantityDay3;
+			    deal.quantityDay4 = quantityDay4;
+			    deal.quantityDay5 = quantityDay5;
+		    }
+		    else{
+		    	flash.error(Messages.get("web.extranet.updatedeal.incorrect.quantity"));
+	    		edit(id);
+		    }
+		    
 		    deal.updated = Calendar.getInstance().getTime();
 		    deal.breakfastIncluded = breakfastIncluded;
 		    deal.city.get();
@@ -98,6 +113,8 @@ public class Owners extends Controller{
 		    	}
 		    	else{
 		    		deal.salePriceCents = salePriceCents;
+		    		deal.bestPrice = bestPrice;
+		    		deal.calculateDiscount();
 		    		deal.update();
 				    //Notify RLB of the updated prices
 				    Mails.ownerUpdatedDeal(deal);
@@ -105,6 +122,9 @@ public class Owners extends Controller{
 		    	}
 		    }
 		    else{
+		    	deal.salePriceCents = salePriceCents;
+	    		deal.bestPrice = bestPrice;
+	    		deal.calculateDiscount();
 		    	deal.active = Boolean.FALSE;
 		    	flash.success(Messages.get("web.extranet.updatedeal.success.solded"));
 		    	deal.update();
@@ -113,6 +133,24 @@ public class Owners extends Controller{
 		    }
 	    }
 	    edit(id);
+	}
+
+	/**
+	 * Checks if quantity is correct for the given day
+	 * It must be greater than quantity for tonight
+	 * @param priceDay
+	 * @param quantity
+	 * @param quantityDay
+	 * @return
+	 */
+	private static boolean checkQuantityDay(Integer priceDay,
+			Integer quantity, Integer quantityDay) {
+		if (priceDay != null){
+	    	if (quantity > 0 && quantityDay < quantity){
+	    		return false;
+	    	}
+	    }
+		return true;
 	}
 
 	

@@ -153,7 +153,15 @@
 							           						 <strong>${deal.nights}</strong> <span>&{'web.deal.detail.nights'}</span> 
 							           				</div>	 
 							           				<div class="rooms span3">
-							           						&{'web.deal.detail.left'} <strong>${deal.quantity}</strong>  <br>
+							           						&{'web.deal.detail.left'} 
+							           							<strong>
+							           								#{if deal.quantity > 5 || deal.isHotUsa}
+							           									+5
+							           								#{/if}
+							           								#{else}
+							           									${deal.quantity}
+							           								#{/else}
+							           							</strong>  <br>
 							           						&{'web.deal.detail.rooms'}
 							           				</div>
 							           		</div>

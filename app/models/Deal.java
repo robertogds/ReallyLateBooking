@@ -74,6 +74,14 @@ public class Deal extends Model {
 	@Required
 	@Min(0)
 	public Integer quantity;
+	@Min(0)
+	public Integer quantityDay2;
+	@Min(0)
+	public Integer quantityDay3;
+	@Min(0)
+	public Integer quantityDay4;
+	@Min(0)
+	public Integer quantityDay5;
 	public Integer position;
 	@Min(0)
 	@Max(23)
@@ -205,7 +213,9 @@ public class Deal extends Model {
 	 */
 	public static Collection<Deal> findActiveDealsByCityV2(City city) {
 		if (!city.isRootCity()){
-			city = City.findByUrl(city.root);
+			String root = city.root;
+			city = City.findByUrl(root);
+			Logger.info("City is not root, we search the root: %s and found $s",root, city.name);
 		}
 		switch (DateHelper.getCurrentStateByCityHour(city.utcOffset)) {
 			case (DateHelper.CITY_CLOSED):
@@ -541,8 +551,16 @@ public class Deal extends Model {
 	public boolean equals(Object deal) {
 		return true;
 	}
-	
-	
+
+	public void calculateDiscount() {
+		if (this.bestPrice != null ){
+	    	int dif = (this.bestPrice - this.salePriceCents) * 100;
+	    	this.discount = dif != 0 ? dif / this.bestPrice : 0;
+	    }
+	    else{
+	    	this.discount = 0;
+	    }
+	}
 
 }
 

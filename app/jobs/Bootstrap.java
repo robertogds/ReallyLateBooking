@@ -1,8 +1,11 @@
 package jobs;
 
+import controllers.InfoTexts;
 import models.City;
 import models.Country;
 import models.Deal;
+import models.InfoText;
+import models.Setting;
 import models.User;
 import play.Logger;
 import play.jobs.Job;
@@ -21,7 +24,36 @@ public class Bootstrap extends Job {
         	this.initializeDeals();
         	Logger.info("The are no deals. Some examples have been created.");
         }
+        if(InfoText.all().count() == 0){
+        	this.initializeInfoTexts();
+        	Logger.info("The are no infotexts. Some examples have been created.");
+        }
+        if(Setting.all().count() == 0){
+        	this.initializeSettings();
+        	Logger.info("The are no settings. Some examples have been created.");
+        }
     }
+
+	private void initializeSettings() {
+	}
+
+	private void initializeInfoTexts() {
+		InfoText mcSubject = new InfoText();
+		mcSubject.key = InfoTexts.MAILCHIMP_SUBJECT;
+		mcSubject.content = "Hotel en ## esta noche";
+		mcSubject.locale = "es";
+		mcSubject.insert();
+		InfoText mcSubjectEN = new InfoText();
+		mcSubjectEN.key = InfoTexts.MAILCHIMP_SUBJECT;
+		mcSubjectEN.content = "Hotel in ## tonight";
+		mcSubjectEN.locale = "en";
+		mcSubjectEN.insert();
+		InfoText mcSubjectFR = new InfoText();
+		mcSubjectFR.key = InfoTexts.MAILCHIMP_SUBJECT;
+		mcSubjectFR.content = "Hotel á ## ce soir";
+		mcSubjectFR.locale = "fr";
+		mcSubjectFR.insert();
+	}
 
 	private void initializeUsers() {
 		 User pablo = new User("pablo@iipir.com", "iipir11", "Pablo", "Pazos",true, true);
@@ -86,6 +118,9 @@ public class Bootstrap extends Job {
 		madrid.active = Boolean.TRUE;
 		madrid.country = spain;
 		madrid.root = "madrid";
+		madrid.mailchimpCode ="MAD";
+		madrid.nameEN ="Madrid";
+		madrid.nameFR ="Madrid";
 		madrid.insert();
 		City madridNorth = new City("Madrid Norte", "madrid_north");
 		madridNorth.active = Boolean.TRUE;

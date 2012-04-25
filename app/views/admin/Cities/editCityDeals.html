@@ -77,6 +77,8 @@
 						</th>
 						<th width="5%">
 						</th>
+						<th width="5%">
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -203,7 +205,13 @@
 								<a target="_blank" href="http://es.hotusa.com/interfaz/getGeneralComs.jsp?opc=4&tipus_desti=H&codhot=${deal.hotelCode}&secacc=49046&atrasbut=1&verdispo=1" >HotUsa</a>
 							</td>
 							<td>
-								<a href="http://www.trivago.es/search.php?q=${deal.hotelName}+${city.root}" target="_blank">Trivago</a>
+								<a href="http://www.trivago.es/${city.root}-12345/hotel/${city.root}-${deal.trivagoCode}/precios" target="_blank">Trivago</a>
+							</td>
+							<td>
+								#{field 'trivagoCode'}
+							        <input type="text" name="${field.name}"  size="6"
+			           					 value="${deal.trivagoCode}" class="${field.errorClass}" />
+						        #{/field}
 							</td>
 							<td>
 								<input type="hidden" value="${city.id}" name="cityId" />

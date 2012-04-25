@@ -15,6 +15,7 @@ import play.data.validation.Email;
 import play.data.validation.Password;
 import play.data.validation.Required;
 import play.data.validation.Validation;
+import play.i18n.Lang;
 import play.i18n.Messages;
 import play.modules.crudsiena.CrudUnique;
 import play.mvc.Scope.Session;
@@ -43,6 +44,8 @@ public class User extends Model{
 	public String validationCode;
 	public boolean validated;
 	public boolean vip;
+	public boolean fromWeb;
+	
 	@Required
     @Password
     public String password;
@@ -53,6 +56,7 @@ public class User extends Model{
     public Boolean isAdmin;
     public Boolean isOwner;
     public Boolean isFacebook;
+    
 	@DateTime
     public Date created;
     public String token;
@@ -105,6 +109,7 @@ public class User extends Model{
 		this.isOwner = this.isOwner!=null ? this.isOwner : Boolean.FALSE;
 		this.isFacebook = this.isFacebook!=null ? this.isFacebook : Boolean.FALSE;
 		this.refererId = this.createRefererId();
+		this.locale = Lang.get();
     	super.insert();
     	this.createUserCoupons();
 	}
@@ -139,6 +144,7 @@ public class User extends Model{
     	if (user != null){
     		Logger.debug("User exists: " + user.email);
     		user.getUserDataFromFB(data);
+    		user.fromWeb = true;
     		user.update();
     		user.createUserSession();
     	}
@@ -146,6 +152,7 @@ public class User extends Model{
     		Logger.debug("User new: " + email);
     		user = new User();
     		user.getUserDataFromFB(data);
+    		user.fromWeb = true;
     		user.insert();
     		Mails.welcome(user);
     		user.createUserSession();
@@ -162,18 +169,18 @@ public class User extends Model{
     }
 
 	private void getUserDataFromFB(JsonObject data) {
-		this.firstName = data.get("first_name").getAsString();
-		this.lastName = data.get("last_name").getAsString();
-		this.email = data.get("email").getAsString();
+		this.firstName = data.get("first_name") != null ?  data.get("first_name").getAsString() : "no_name";
+		this.lastName = data.get("last_name") != null ?  data.get("last_name").getAsString() : "no_name";
+		this.email = data.get("email") != null ? data.get("email").getAsString() : "no_email";
 		this.isFacebook = Boolean.TRUE;
-		this.fbid = data.get("id").getAsString();
-		this.fbLink = data.get("link").getAsString();
+		this.fbid = data.get("id") != null ? data.get("id").getAsString() : "no_id";
+		this.fbLink = data.get("link") != null ? data.get("link").getAsString() : "no_fb_link";
 		this.fbUsername = data.get("username") != null ? data.get("username").getAsString() : null;
-		this.gender = data.get("gender").getAsString();
-		this.timezone = data.get("timezone").getAsInt();
-		this.locale = data.get("locale").getAsString();
-		this.fbAccessToken = data.get("accessToken").getAsString();
-		this.fbExpires = data.get("expires").getAsString();
+		this.gender = data.get("gender") != null ? data.get("gender").getAsString() : null;
+		this.timezone = data.get("timezone") != null ? data.get("timezone").getAsInt() : null;
+		this.locale = data.get("locale") != null ? data.get("locale").getAsString() : null;
+		this.fbAccessToken = data.get("accessToken") != null ? data.get("accessToken").getAsString() : null;
+		this.fbExpires = data.get("expires") != null ? data.get("expires").getAsString() : null;
 	}
 	
 

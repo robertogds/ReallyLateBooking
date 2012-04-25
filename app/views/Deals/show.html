@@ -42,6 +42,10 @@
 		});
 	</script>
 #{/set}
+
+#{set 'rightColumn'}
+	#{include 'components/customerSupport.html' /}
+#{/set}
 			<div class="row-fluid">
 				<ul class="breadcrumb">
 				  <li>
@@ -144,7 +148,7 @@
 							           			<div class="info-list span12">
 							           				<ul class="unstyled">
 													  <li class="rooms">
-													  	<span>&{'web.deal.detail.left'}</span>
+													  	
 													    <span class="value">
 							           								#{if deal.quantity > 5 || deal.isHotUsa}
 							           									+5
@@ -153,6 +157,7 @@
 							           									${deal.quantity}
 							           								#{/else}
 							           							</span>
+							           							<span>&{'web.deal.detail.left'}</span>
 													  </li>
 													  <li class="nights">
 													    <span class="value">${deal.nights}</span>

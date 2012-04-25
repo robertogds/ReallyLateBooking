@@ -11,6 +11,7 @@ import models.User;
 import models.dto.CityDTO;
 import models.dto.DealDTO;
 import play.Logger;
+import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -39,24 +40,36 @@ public class Cities  extends Controller {
 	
 	private static Collection<City> staticCities() {
 		Collection<City> cities = new ArrayList<City>();
-		cities.add(new City("A Coruña", "a_coruna"));
-		cities.add(new City("Barcelona", "barcelona"));
-		cities.add(new City("Berlin", "berlin"));
-		cities.add(new City("Bilbao", "bilbao"));
-		cities.add(new City("Lisboa", "lisbon"));
-		cities.add(new City("Londres", "london"));
-		cities.add(new City("Madrid", "madrid"));
-		cities.add(new City("Málaga", "malaga"));
-		cities.add(new City("Mallorca", "mallorca"));
-		cities.add(new City("Milan", "milan"));
-		cities.add(new City("Paris", "paris"));
-		cities.add(new City("Santiago", "santiago_de_compostela"));
-		cities.add(new City("Sevilla", "sevilla"));
-		cities.add(new City("Valencia", "valencia"));
-		cities.add(new City("Valladolid", "valladolid"));
+		cities.add(new City(Messages.get("web.cities.barcelona"), "barcelona"));
+		cities.add(new City(Messages.get("web.cities.berlin"), "berlin"));
+		cities.add(new City(Messages.get("web.cities.bruselas"), "bruselas"));
+		cities.add(new City(Messages.get("web.cities.budapest"), "budapest"));
+		cities.add(new City(Messages.get("web.cities.florencia"), "florencia"));
+		cities.add(new City(Messages.get("web.cities.lisboa"), "lisbon"));
+		cities.add(new City(Messages.get("web.cities.londres"), "london"));
+		cities.add(new City(Messages.get("web.cities.madrid"), "madrid"));
+		cities.add(new City(Messages.get("web.cities.milan"), "milan"));
+		cities.add(new City(Messages.get("web.cities.paris"), "paris"));
+		cities.add(new City(Messages.get("web.cities.praga"), "praga"));
+		cities.add(new City(Messages.get("web.cities.roma"), "roma"));
+		cities.add(new City(Messages.get("web.cities.valencia"), "valencia"));
+		cities.add(new City(Messages.get("web.cities.venecia"), "venecia"));
+		cities.add(new City(Messages.get("web.cities.viena"), "viena"));
+		
+		cities.add(new City(Messages.get("web.cities.coruna"), "a_coruna"));
+		cities.add(new City(Messages.get("web.cities.bilbao"), "bilbao"));
+		cities.add(new City(Messages.get("web.cities.granada"), "granada"));
+		cities.add(new City(Messages.get("web.cities.malaga"), "malaga"));
+		cities.add(new City(Messages.get("web.cities.mallorca"), "mallorca"));
+		cities.add(new City(Messages.get("web.cities.salamanca"), "salamanca"));
+		cities.add(new City(Messages.get("web.cities.compostela"), "santiago_de_compostela"));
+		cities.add(new City(Messages.get("web.cities.sevilla"), "sevilla"));
+		cities.add(new City(Messages.get("web.cities.vigo"), "vigo"));
+		cities.add(new City(Messages.get("web.cities.valladolid"), "valladolid"));
+		cities.add(new City(Messages.get("web.cities.zaragoza"), "zaragoza"));
 		return cities;
 	}
-	
+
 	public static void dealsByCityId(Long cityId) {
 		City city = City.findById(cityId);
 		Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);

@@ -38,8 +38,22 @@ public class Application extends Controller {
     }
     
     public static void register(@Required @Email String username, @Required String password, String firstName, String lastName, String returnUrl) throws Throwable{
-    	register(username, password, firstName, lastName);
-        redirect(returnUrl);
+		boolean isAdmin = false;
+		boolean validated = true;
+		User user = new User(username, password, firstName, lastName,  isAdmin,  validated);
+		user.fromWeb = true;
+		user.validate();
+		if (!validation.hasErrors()){
+			user.insert();
+			Mails.welcome(user);
+			flash.success(Messages.get("web.register.correct"));
+			login(username, password, returnUrl);
+		}
+		else{
+			flash.error(Messages.get("web.register.incorrect"));
+			Logger.error("RETURN URL: " +returnUrl);
+			redirect(returnUrl);
+		}
 	}
     
     public static void login(@Required @Email String username, @Required String password, String returnUrl) throws Throwable{
@@ -70,7 +84,7 @@ public class Application extends Controller {
         }
         else{
         	Mails.contactForm(email, name, message);
-        	flash.success("Gracias por escribirnos, leeremos tu mensaje lo antes posible.");
+        	flash.success(Messages.get("web.contact.correct"));
         }
     	redirect(returnUrl);
     }
@@ -82,7 +96,7 @@ public class Application extends Controller {
         }
         else{
         	Mails.hotelForm(email, name, hotelName,  phone ,message);
-        	flash.success("Gracias por escribirnos, leeremos tu mensaje lo antes posible.");
+        	flash.success(Messages.get("web.contact.correct"));
         }
     	redirect(returnUrl);
     }
@@ -135,20 +149,7 @@ public class Application extends Controller {
 	}
 	
 	
-	private static void register(String email, String password, String firstName, String lastName) {
-		boolean isAdmin = false;
-		boolean validated = true;
-		User user = new User(email, password, firstName, lastName,  isAdmin,  validated);
-		user.validate();
-		if (!validation.hasErrors()){
-			user.insert();
-			Mails.welcome(user);
-			flash.success("Ya eres un latebooker, enhorabuena");
-		}
-		else{
-			flash.error("No hemos podido crear tu usuario");
-		}
-	}
+	
 	
 	private static void login(String username, String password){
         // Check tokens

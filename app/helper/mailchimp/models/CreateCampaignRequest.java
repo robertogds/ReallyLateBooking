@@ -179,63 +179,63 @@ public class CreateCampaignRequest {
 		this.content.put(CAMPAIGN_CONTENT_HTML, URLEncoder.encode(htmlContent, "UTF8"));	
 	}
 	
-	public void setHotel1( String hotel) throws UnsupportedEncodingException{
-		this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL1, URLEncoder.encode(getHotelHtml(hotel), "UTF8"));	
+	public void setHotel1( String hotel, String link) throws UnsupportedEncodingException{
+		this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL1, URLEncoder.encode(getHotelHtml(hotel, link), "UTF8"));	
 	}
 	
-	public void setImage1( String image){
-		this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE1, getImageHtml(image));	
+	public void setImage1( String image, String link){
+		this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE1, getImageHtml(image, link));	
 	}
 	
 	public void setPrice1( String price){
 		this.content.put(CAMPAIGN_CONTENT_HTML_PRICE1, price);	
 	}
 	
-	public void setHotel2( String hotel) throws UnsupportedEncodingException{
-		this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL2, URLEncoder.encode(getHotelHtml(hotel), "UTF8"));	
+	public void setHotel2( String hotel, String link) throws UnsupportedEncodingException{
+		this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL2, URLEncoder.encode(getHotelHtml(hotel, link), "UTF8"));	
 	}
 	
-	public void setImage2( String image){
-		this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE2, getImageHtml(image));	
+	public void setImage2( String image, String link){
+		this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE2, getImageHtml(image, link));	
 	}
 	
 	public void setPrice2( String price){
 		this.content.put(CAMPAIGN_CONTENT_HTML_PRICE2, price);	
 	}
 	
-	public void setHotel3( String hotel) throws UnsupportedEncodingException{
-		this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL3, URLEncoder.encode(getHotelHtml(hotel), "UTF8"));	
+	public void setHotel3( String hotel, String link) throws UnsupportedEncodingException{
+		this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL3, URLEncoder.encode(getHotelHtml(hotel, link), "UTF8"));	
 	}
 	
-	public void setImage3( String image){
-		this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE3, getImageHtml(image));	
+	public void setImage3( String image, String link){
+		this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE3, getImageHtml(image, link));	
 	}
 	
 	public void setPrice3( String price){
 		this.content.put(CAMPAIGN_CONTENT_HTML_PRICE3, price);	
 	}
 
-	public void addHotel(String hotelName) throws UnsupportedEncodingException {
+	public void addHotel(String hotelName, String link) throws UnsupportedEncodingException {
 		if (!this.content.containsKey(CAMPAIGN_CONTENT_HTML_HOTEL1)){
-			this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL1, URLEncoder.encode(getHotelHtml(hotelName), "UTF8"));	
+			this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL1, URLEncoder.encode(getHotelHtml(hotelName, link), "UTF8"));	
 		}
 		else if (!this.content.containsKey(CAMPAIGN_CONTENT_HTML_HOTEL2)){
-			this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL2, URLEncoder.encode(getHotelHtml(hotelName), "UTF8"));	
+			this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL2, URLEncoder.encode(getHotelHtml(hotelName, link), "UTF8"));	
 		}
 		else if (!this.content.containsKey(CAMPAIGN_CONTENT_HTML_HOTEL3)){
-			this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL3, URLEncoder.encode(getHotelHtml(hotelName), "UTF8"));	
+			this.content.put(CAMPAIGN_CONTENT_HTML_HOTEL3, URLEncoder.encode(getHotelHtml(hotelName, link), "UTF8"));	
 		}
 	}
 	
-	public void addImage(String image) {
+	public void addImage(String image, String link) {
 		if (!this.content.containsKey(CAMPAIGN_CONTENT_HTML_IMAGE1)){
-			this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE1, getImageHtml(image));	
+			this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE1, getImageHtml(image, link));	
 		}
 		else if (!this.content.containsKey(CAMPAIGN_CONTENT_HTML_IMAGE2)){
-			this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE2, getImageHtml(image));	
+			this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE2, getImageHtml(image, link));	
 		}
 		else if (!this.content.containsKey(CAMPAIGN_CONTENT_HTML_IMAGE3)){
-			this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE3, getImageHtml(image));	
+			this.content.put(CAMPAIGN_CONTENT_HTML_IMAGE3, getImageHtml(image, link));	
 		}
 	}
 	
@@ -264,11 +264,11 @@ public class CreateCampaignRequest {
 	}
 	
 	
-	private String getImageHtml(String hotelName){
-		return "<img src='"+ hotelName +"'  style='height:auto; max-width:240px;' class='productImage'/>";
+	private String getImageHtml(String hotelName, String link){
+		return "<a href='"+link+"?email=edreams' target='_blank'><img src='"+ hotelName +"'  style='height:auto; max-width:240px;' class='productImage'/></a>";
 	}
-	private String getHotelHtml(String hotelName){
-		return "<h2>"+ hotelName +"</h2>";
+	private String getHotelHtml(String hotelName, String link){
+		return "<a href='"+link+"?email=edreams' target='_blank'><h2>"+ hotelName +"</h2></a>";
 	}
 	private String getButtonHtml(String link){
 		return "<a href='"+link+"?email=edreams' target='_blank'><em>"+ Messages.get("mails.seedeal.link") +"</em></a>";

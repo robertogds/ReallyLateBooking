@@ -45,7 +45,9 @@ public class Owners extends Controller{
 				deal.city.get();
 			}
 			for(Booking booking: bookings){
-				booking.user.get();
+				if (booking.user != null){
+					booking.user.get();
+				}
 			}
 			int hour = DateHelper.getCurrentHour(deal.city.utcOffset);
 			boolean open = DateHelper.isActiveTime(hour);
@@ -108,7 +110,7 @@ public class Owners extends Controller{
 		    
 		    //If quantity is 0 the deal cant be active
 		    if (quantity > 0 ){
-		    	if (deal.dealIsPublished() && deal.salePriceCents < salePriceCents){
+		    	if (deal.dealIsPublished() && deal.salePriceCents!=null && deal.salePriceCents < salePriceCents){
 		    		flash.error(Messages.get("web.extranet.updatedeal.incorrect.price"));
 		    	}
 		    	else{
@@ -146,7 +148,7 @@ public class Owners extends Controller{
 	private static boolean checkQuantityDay(Integer priceDay,
 			Integer quantity, Integer quantityDay) {
 		if (priceDay != null){
-	    	if (quantity > 0 && quantityDay < quantity){
+	    	if (quantityDay== null || (quantity > 0 && quantityDay < quantity)){
 	    		return false;
 	    	}
 	    }

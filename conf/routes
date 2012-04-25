@@ -11,7 +11,11 @@ GET 	/pruebas								Application.pruebas
 
 # Cron tasks
 GET     /cron/refreshHotUsaPrices               Deals.refreshHotUsaPrices
+GET     /cron/movePrices               			Deals.movePrices
 GET     /cron/confirmReservations               Application.confirmReservations
+
+GET 	/admin/showmoveprices					Deals.showMovePrices
+
 
 GET     /bootstrap                              Application.bootstrap
 

@@ -18,8 +18,7 @@ import controllers.Secure;
 
 @Check("admin")
 @With(Secure.class)
-@CRUD.For(Statistic.class)
-public class Statistics extends controllers.CRUD {
+public class Statistics extends Controller {
 	
 	public static void index() {
 		Calendar calStart = Calendar.getInstance();

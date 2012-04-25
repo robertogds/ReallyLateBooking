@@ -49,7 +49,7 @@ public class Cities extends controllers.CRUD {
 	public static void updateDeal(Long id, Integer quantity, Integer priceCents, Integer bestPrice, Integer salePriceCents, 
 			Integer priceDay2, Integer priceDay3, Integer priceDay4, Integer priceDay5, 
 			Integer position, Boolean active, Boolean isHotUsa, Boolean isFake, Integer limitHour,
-			Long cityId) {
+			Long cityId, String trivagoCode) {
 	    Deal deal;
 	    // Retrieve post
 	    deal = Deal.findById(id);
@@ -68,7 +68,7 @@ public class Cities extends controllers.CRUD {
 	    deal.isHotUsa = isHotUsa != null ? isHotUsa : Boolean.FALSE;
 	    deal.isFake = isFake != null ? isFake : Boolean.FALSE;
 	    deal.limitHour = limitHour;
-	    
+	    deal.trivagoCode = trivagoCode;
 	    //Actualize city updated date
 	    City city = City.findById(cityId);
 	    city.updated = Calendar.getInstance().getTime();

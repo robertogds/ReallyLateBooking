@@ -3,22 +3,38 @@
  	&{'web.cities'}
  #{/set}
  
+ #{set 'rightColumn'}
+	#{include 'components/customerSupport.html' /}
+#{/set}
 
     <div class="row-fluid">
 	      <div class="span12" id="cities">
-	      			<!-- 
 	      			<div class="row">
-	     				 <div class="span9 title-black">
-	     				 	<h1>&{'web.cities.h1'}</h1>
-	     				 </div>
-	     			</div> 
-	     			-->
+							 			<div class="span11 title-black-alone">
+					     				 	<h1>&{'web.index.cities.h2'}</h1>
+					     				 </div>
+				     </div>	
+				      <div class="row-fluid">
+	      					<div class="span12">
 					 	#{list items:cities, as:'city' }
+					 			#{if city.url == 'a_coruna'}
+					 			 </div>
+					  </div>
+					 			<div class="row-fluid">
+	      							<div class="span12">
+						 			<div class="row">
+							 			<div class="span11 title-black-alone" style="margin-top:2%;">
+					     				 	<h1>&{'web.index.cities.spain.h3'}</h1>
+					     				 </div>
+				     				 </div>	
+					 			#{/if}
 						 		<div id="${city.url}" class="city">
-								    <a href="@{Deals.list(city.url)}" style="background-image: url('http://rlbmedia.s3.amazonaws.com/web/cities/rlb_icono_${city.url}_174px.png');">
+								    <a href="@{Deals.list(city.url)}" style="background-image: url('http://rlbmedia.s3.amazonaws.com/web/cities/${city.url}.jpg');">
 								    	<h2> ${city.name}</h2>										
 								    </a>
 								</div>
 					    #{/list}
+					     </div>
+					  </div>
 	      </div>
     </div>

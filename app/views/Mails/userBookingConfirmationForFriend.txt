@@ -14,7 +14,7 @@
 								#{else}
 									&{'mails.booking.regime.breakfast.no'}
 								#{/else}
-			&{'mails.booking.price'}: ${booking.salePriceCents}&euro; &{'mails.booking.tax'}
+			&{'mails.booking.price'}: ${booking.totalSalePrice}&euro; &{'mails.booking.tax'}
 			
 		&{'mails.booking.hotel.client.data'}:
 			&{'mails.booking.client.name'}: ${booking.bookingForLastName}, ${booking.bookingForFirstName}

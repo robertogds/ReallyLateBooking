@@ -85,6 +85,9 @@
 			#{doLayout /}
 			
 		</div>
+		<div class="span2">
+			#{get 'rightColumn' /}
+		</div>
 	</div> 
 	
 	#{include 'components/footer.html'/}
@@ -108,7 +111,12 @@
 	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
-	
+	</script>
+
+	<script type="text/javascript">
+		document.write(unescape("%3Cscript src='" + ((document.location.protocol=="https:")?"https://snapabug.appspot.com":"http://www.snapengage.com") + "/snapabug.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">
+		SnapABug.setLocale("${lang}");
+		SnapABug.addButton("f6738f07-042f-4779-af47-22ac9c56461c","1","55%", true);
 	</script>
   </body>
 </html>

@@ -8,6 +8,7 @@ import java.util.*;
 import com.google.appengine.api.urlfetch.HTTPHeader;
 
 import models.*;
+import models.dto.CityDTO;
 import models.dto.DealDTO;
 import models.dto.StatusMessage;
 import play.*;
@@ -83,19 +84,24 @@ public class Deals extends Controller {
 	 * @param cityUrl
 	 */
 	public static void list(String cityUrl) {
-		City city = City.findByUrl(cityUrl);
-		if (city != null){
-			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
+		City cityOrig = City.findByUrl(cityUrl);
+		if (cityOrig != null){
+			Collection<Deal> deals = Deal.findActiveDealsByCityV2(cityOrig);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
 				dealsDtos.add(new DealDTO(deal));
 			}
 			
-			int hour = DateHelper.getCurrentHour(city.utcOffset);
+			int hour = DateHelper.getCurrentHour(cityOrig.utcOffset);
 			boolean open = DateHelper.isActiveTime(hour);
 			if (!open){
 				Date countdown = DateHelper.getTimeToOpen(hour);
 				renderArgs.put("countdown", countdown);
+			}
+			CityDTO city = new CityDTO(cityOrig);
+			
+			if (city.showHint){
+				flash.error(city.hint);
 			}
 	        render(city, dealsDtos, open);
 		}
@@ -161,6 +167,50 @@ public class Deals extends Controller {
 	public static void refreshHotUsaPrices(){
 		List<City> cities = City.findActiveCities();
 		HotUsaApiHelper.getHotelPricesByCityList(cities);
+	}
+	
+	public static void showMovePrices(){
+		render();
+	}
+	
+	public static void movePrices(){
+		List<Deal> deals =  Deal.all().fetch();
+		for (Deal deal : deals){
+			movePriceByDeal(deal);
+		}
+		showMovePrices();
+	}
+
+	private static void movePriceByDeal(Deal deal) {
+		if (deal.priceDay2 != null){
+			deal.updated = Calendar.getInstance().getTime();
+			deal.salePriceCents = deal.priceDay2;
+			deal.priceDay2 = null;
+			deal.quantity = deal.quantityDay2;
+			deal.quantityDay2 = 0;
+			if (deal.priceDay3 != null){
+				deal.priceDay2 = deal.priceDay3;
+				deal.priceDay3 = null;
+				deal.quantityDay2 = deal.quantityDay3;
+				deal.quantityDay3 = 0;
+				if (deal.priceDay4 != null){
+					deal.priceDay3 = deal.priceDay4;
+					deal.priceDay4 = null;
+					deal.quantityDay3 = deal.quantityDay4;
+					deal.quantityDay4 = 0;
+					if (deal.priceDay5 != null){
+						deal.priceDay4 = deal.priceDay5;
+						deal.priceDay5 = null;
+						deal.quantityDay4 = deal.quantityDay5;
+						deal.quantityDay5 = 0;
+					}
+				}
+			}
+		}
+		else{
+			deal.quantity = 0;
+		}
+		deal.update();
 	}
 
 }

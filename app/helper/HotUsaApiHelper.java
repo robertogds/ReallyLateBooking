@@ -256,8 +256,6 @@ public final class HotUsaApiHelper {
 			if (xml.getElementsByTagName("hot") != null){
 				int hotels = xml.getElementsByTagName("hot").getLength();
 				Element hotelNode;
-				Logger.debug("Hotels number: " + hotels);
-				
 				for (int hotel=0; hotel < hotels; hotel++){
 					hotelNode = (Element)xml.getElementsByTagName("hot").item(hotel);
 					String hotelCode = hotelNode.getElementsByTagName("cod").item(0).getTextContent();
@@ -277,7 +275,7 @@ public final class HotUsaApiHelper {
 							Logger.debug("PDR: " + pdr + " status: " + status + " priceString: " +  priceString + " regime:" + regime);	
 							//We have dispo so we set price and dispo and continue with next day
 							if (status.equals("OK") && (regime.equals("OB") || regime.equals("RO") || regime.equals("BB")) && pdr.equals("S")){
-								Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString + " breakfast included: " +  regime.equals("BB"));
+								//Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString + " breakfast included: " +  regime.equals("BB"));
 								Float price = Float.parseFloat(priceString);
 								BigDecimal priceRounded = new BigDecimal(price);
 								priceRounded = priceRounded.setScale(0, RoundingMode.DOWN);

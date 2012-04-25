@@ -10,5 +10,11 @@
     <description>Confirm partial reservations every 5 minutes</description>
     <schedule>every 5 minutes</schedule>
   </cron>
+  <cron>
+    <url>/cron/movePrices</url>
+    <description>Move prices and rooms to the current day</description>
+    <schedule>every day 06:05</schedule>
+    <timezone>Europe/Madrid</timezone>
+  </cron>
 </cronentries>
 

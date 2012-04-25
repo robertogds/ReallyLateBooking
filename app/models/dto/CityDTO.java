@@ -25,6 +25,9 @@ public class CityDTO {
 	public String latitude;
 	public String longitude;
 	public String root;
+	public boolean showHint;
+	public String hint;
+	public boolean isRoot;
 	
 	public CityDTO(City city){
 		this.id = city.id;
@@ -33,17 +36,22 @@ public class CityDTO {
 		this.latitude = city.latitude;
 		this.longitude = city.longitude;
 		this.root = city.root;
+		this.showHint = city.showHint;
+		this.hint = city.hintEN;
+		this.isRoot = city.isRootCity();
 		
 		String lang = Lang.get();
 		if (lang != null){
 			Logger.debug("Filling city info with locale: " + lang);
 			if (lang.equals("es") || lang.equals("es_ES")){
 				this.name = city.name;
+				this.hint = city.hintES;
 				Logger.debug("Filling city info with Spanish : " + this.name);
 			}
 			else if (lang.equals("fr")){
 				Logger.debug("Filling city info with French ");
 				this.name = city.nameFR;
+				this.hint = city.hintFR;
 			}
 			else{
 				Logger.debug("Lang is not spanish nor french: " + lang);

@@ -129,9 +129,6 @@ input {
 		.border-radius(0 0 6px 6px);
 		.brand {
 		    padding: 0 5px;
-			img{
-				width: 290px;
-			}
 		}
 		.nav{
 			.pull-right();
@@ -178,6 +175,9 @@ input {
 		p{
 			line-height: 20px;
 		}
+		h1{
+			font-size: 55px; 
+		}
 		.register, .login {
 			text-align: center;
 			.well{
@@ -223,7 +223,6 @@ input {
 	}
 }
 .fb-button-container-centered {
-	margin:  14px 0 4px;
 	padding: 0px 0;
 	text-align: center;
 	.play-fbconnect-button {
@@ -276,7 +275,7 @@ input {
 
 
 /************** City LIST PAGE  *****************/
-.title-black {
+.title-black, .title-black-alone {
 	#gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
 	.border-radius(6px 6px 0 0);
 	border-bottom: 5px solid @secondaryColor;
@@ -289,6 +288,11 @@ input {
 		line-height:  @fontSizeMedium + 4;
 	}
 }
+
+.title-black-alone {
+	.border-radius(6px);
+}
+
 .modal .title-black{
 	.border-radius(1.6px 1.6px 0 0);
 }
@@ -299,7 +303,7 @@ input {
 	background-color: transparent;
 	.city{
 		@lineHeight: @fontSizeBig + 8;
-		margin: 2% 2% 0 0;
+		margin: 2.1% 2.1% 0 0;
 		overflow: hidden;
 		.square(@cityImageSize);
 		.pull-left();

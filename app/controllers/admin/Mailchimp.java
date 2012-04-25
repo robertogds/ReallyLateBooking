@@ -50,18 +50,14 @@ public class Mailchimp extends Controller{
 	}
 	
 	public static void create( @Required Long deal1Id, @Required Long deal2Id, @Required Long deal3Id, @Required Long cityId) throws UnsupportedEncodingException{
-		
 		 if (!validation.hasErrors()){
 			 City city = City.findById(cityId);
 				if (city != null){
-					String originalLang = Lang.get();
-					Lang.change("es");
-					createI18nCampaignByCity(city, deal1Id, deal2Id, deal3Id, CreateCampaignRequest.CAMPAIGN_OPTION_SEGMENT_LANG_ES);
-					Lang.change("en");
-					createI18nCampaignByCity(city, deal1Id, deal2Id, deal3Id, CreateCampaignRequest.CAMPAIGN_OPTION_SEGMENT_LANG_EN);
-					Lang.change("fr");
-					createI18nCampaignByCity(city, deal1Id, deal2Id, deal3Id, CreateCampaignRequest.CAMPAIGN_OPTION_SEGMENT_LANG_FR);
-					Lang.change(originalLang);
+					Collection<Deal> deals = new ArrayList<Deal>();
+					deals.add(Deal.findById(deal1Id));
+					deals.add(Deal.findById(deal2Id));
+					deals.add(Deal.findById(deal3Id));
+					createI18nCampaignByCity(city, deals);
 				}
 		    }
 		    else{
@@ -72,11 +68,54 @@ public class Mailchimp extends Controller{
 		index();
 	}
 	
-	private static void createI18nCampaignByCity(City city, Long deal1Id, Long deal2Id, Long deal3Id, String lang) throws UnsupportedEncodingException{
-			Collection<Deal> deals = new ArrayList<Deal>();
-			deals.add(Deal.findById(deal1Id));
-			deals.add(Deal.findById(deal2Id));
-			deals.add(Deal.findById(deal3Id));
+	public static void createAllSimpleCityCampaings() throws UnsupportedEncodingException{
+		List<City> cities = City.findActiveCities(0,25);
+		createCampaingsByCityList(cities);
+	}
+	
+	public static void createAllSimpleCityCampaings2() throws UnsupportedEncodingException{
+		List<City> cities = City.findActiveCities(25,50);
+		createCampaingsByCityList(cities);
+	}
+	
+	private static void createCampaingsByCityList(List<City> cities) throws UnsupportedEncodingException{
+		List<String> citiesErrors = new ArrayList<String>();
+ 		
+		for (City city: cities){
+			if (city.isSimpleCity()){
+				Logger.debug("Creating campaing for city %s", city.name);
+				List<Deal> deals = Deal.findActiveDealsByCity(city);
+				if (deals.size() < 3){
+					citiesErrors.add(city.name);
+				}
+				else{
+					createI18nCampaignByCity(city, deals);
+				}
+			}
+		}
+		if (!citiesErrors.isEmpty()){
+			String errors = "Can´t create campaigns because coudn´t find 3 active deals in: ";
+			for (String city: citiesErrors){
+				errors = errors + "#" + city ;
+			}
+			flash.error(errors);
+		}
+		
+		index();
+	}
+	
+	private static void createI18nCampaignByCity(City city, Collection<Deal> deals) throws UnsupportedEncodingException{
+		String originalLang = Lang.get();
+		Lang.change("es");
+		createI18nCampaignByCityAndLang(city, deals, CreateCampaignRequest.CAMPAIGN_OPTION_SEGMENT_LANG_ES);
+		Lang.change("en");
+		createI18nCampaignByCityAndLang(city, deals, CreateCampaignRequest.CAMPAIGN_OPTION_SEGMENT_LANG_EN);
+		Lang.change("fr");
+		createI18nCampaignByCityAndLang(city, deals, CreateCampaignRequest.CAMPAIGN_OPTION_SEGMENT_LANG_FR);
+		Lang.change(originalLang);
+	}
+	
+	private static void createI18nCampaignByCityAndLang(City city, Collection<Deal> deals, String lang) throws UnsupportedEncodingException{
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
 				dealsDtos.add(new DealDTO(deal));
@@ -98,19 +137,21 @@ public class Mailchimp extends Controller{
 			campaign.setLangSegment(lang);
 			campaign.setCity(city.name);
 			for (DealDTO deal: dealsDtos){
-				campaign.addHotel(deal.hotelName);
-				campaign.addImage(deal.mainImageBig);
-				campaign.addPrice(deal.salePriceCents.toString());
 				Map<String, Object> paramsDeal = new HashMap<String, Object>();
 				paramsDeal.put("id", deal.id);
 				paramsDeal.put("cityUrl", city.url);
-				campaign.addButton(Router.getFullUrl("Deals.show", paramsDeal));
+				String link = Router.getFullUrl("Deals.show", paramsDeal);
+				campaign.addHotel(deal.hotelName, link);
+				campaign.addImage(deal.mainImageBig, link);
+				campaign.addPrice(deal.salePriceCents.toString());
+				campaign.addButton(link);
 			}
 			
 			Integer emailsNumber = campaign.testSegmentOptions();
 			if (emailsNumber > 0){
 				String id = MailChimpHelper.campaignCreate(campaign);
-				Logger.debug("Repuesta de Mailchimp, el id es: %s", id);
+				Logger.error("## SENDING TEST WITH ID %s ###", id);
+				sendTestEmail(id);
 			}
 			else{
 				flash.error("No se ha creado la campaña porque o bien algún dato es erróneo o ningún email cumple las condiciones.");
@@ -131,10 +172,14 @@ public class Mailchimp extends Controller{
 		index();
 	}
 	public static void sendTest(@Required String campaignId){
+		sendTestEmail(campaignId);
+		index();
+	}
+	
+	private static void sendTestEmail(String campaignId){
 		Collection<String> emails = new ArrayList<String>();
 		emails.add("hola@reallylatebooking.com");
 		MailChimpHelper.sendCampaignTest(campaignId, emails);
-		index();
 	}
 	
 	public static void sendCampaign(@Required String campaignId){

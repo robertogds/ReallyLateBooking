@@ -223,19 +223,17 @@ public class Bookings extends Controller{
 			deal.active = Boolean.FALSE;
 		}
 		if (nights > 1){
-			deal.quantityDay2 = deal.quantityDay2 - rooms;
+			deal.quantityDay2 = deal.quantityDay2 == null ? deal.quantity :deal.quantityDay2 - rooms;
 			if (nights > 2){
-				deal.quantityDay3 = deal.quantityDay3 - rooms;
+				deal.quantityDay3 =  deal.quantityDay3 == null ? deal.quantity : deal.quantityDay3 - rooms;
 				if (nights > 3){
-					deal.quantityDay4 = deal.quantityDay4 - rooms;
+					deal.quantityDay4 =  deal.quantityDay4 == null ? deal.quantity : deal.quantityDay4 - rooms;
 					if (nights > 4){
-						deal.quantityDay5 = deal.quantityDay5 - rooms;
+						deal.quantityDay5 =  deal.quantityDay5 == null ? deal.quantity : deal.quantityDay5 - rooms;
 					}
 				}
 			}
 		}
 		deal.update();
 	}
-	
-	
 }

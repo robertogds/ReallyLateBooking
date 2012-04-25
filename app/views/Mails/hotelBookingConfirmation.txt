@@ -8,7 +8,7 @@ ${user.firstName} &{'mails.booking.hotel.justbooked'}:
 		&{'mails.booking.room'}: Doble
 		&{'mails.booking.checkin'}: ${booking.checkinDate.format('dd MMMM yyyy') }
 		&{'mails.booking.nights'}: ${booking.nights}
-		&{'mails.booking.price'}: ${booking.salePriceCents}&euro;  &{'mails.booking.tax'}
+		&{'mails.booking.price'}: ${booking.totalSalePrice}&euro;  &{'mails.booking.tax'}
 	    &{'mails.booking.regime'}: #{if booking.breakfastIncluded}
 									&{'mails.booking.regime.breakfast.yes'}
 								#{/if}

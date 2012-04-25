@@ -15,6 +15,10 @@ import siena.Model;
 import siena.Query;
 import siena.Table;
 
+/**
+ * @author pablopr
+ *
+ */
 @Table("cities")
 public class City extends Model {
 
@@ -50,6 +54,11 @@ public class City extends Model {
 	public int utcOffset;
 	public String mailchimpCode;
 	
+	public boolean showHint;
+	public String hintES;
+	public String hintEN;
+	public String hintFR;	
+	
 	public City(String name, String url){
 		this.name = name;
 		this.url = url;
@@ -71,6 +80,11 @@ public class City extends Model {
 		return name;
 	}
 
+	public static List<City> findActiveCities(int offset, int limit) {
+		List<City> cities = all().filter("active", Boolean.TRUE).order("name").offset(offset).fetch(limit);
+		return cities;
+	}
+	
 	public static List<City> findActiveCities() {
 		List<City> cities = all().filter("active", Boolean.TRUE).order("name").fetch();
 		return cities;
@@ -96,6 +110,13 @@ public class City extends Model {
 	}
 
 	
+	/**
+	 * Check if city has no zones
+	 * @return
+	 */
+	public boolean isSimpleCity(){
+		return this.root != null && root.equalsIgnoreCase(this.url);
+	}
 	
 	
 }

@@ -57,14 +57,13 @@ public final class MailChimpHelper {
 	 * @return {@code Collection<MailchimpList>}
 	 */
 	public static Collection<MailchimpList> lists() {
-		Map<String, String> apiKey = new HashMap<String, String>();
-		apiKey.put("apikey", APIKEY);
-		String params = new Gson().toJson(apiKey);
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("apikey", APIKEY);
+		String params = new Gson().toJson(paramsMap);
 		String lists = prepareRequest(LISTS, params);
 		if (lists != null){
 			JsonObject listsJson = new JsonParser().parse(lists).getAsJsonObject();
 			JsonArray arrayLists = listsJson.get("data").getAsJsonArray();
-			Logger.debug("sacamos json: %s", arrayLists);
 			Collection<MailchimpList> mailchimpLists = new ArrayList<MailchimpList>();
 			for (JsonElement list: arrayLists){
 				mailchimpLists.add(new Gson().fromJson(list, MailchimpList.class));
@@ -73,7 +72,6 @@ public final class MailChimpHelper {
 		}
 		 return null;
 	}
-
 
 	
 	/**
@@ -89,7 +87,6 @@ public final class MailChimpHelper {
 		if (templates != null){
 			JsonObject listsJson = new JsonParser().parse(templates).getAsJsonObject();
 			JsonArray arrayTemplates = listsJson.get("user").getAsJsonArray();
-			Logger.debug("### JSON: %s", arrayTemplates);
 			Collection<MailchimpTemplate> mailchimpTemplates= new ArrayList<MailchimpTemplate>();
 			for (JsonElement list: arrayTemplates){
 				mailchimpTemplates.add(new Gson().fromJson(list, MailchimpTemplate.class));
@@ -100,14 +97,14 @@ public final class MailChimpHelper {
 	}
 	
 	public static Collection<MailchimpCampaign> campaigns() {
-		Map<String, String> apiKey = new HashMap<String, String>();
-		apiKey.put("apikey", APIKEY);
-		String params = new Gson().toJson(apiKey);
+		Map<String, String> paramsMap = new HashMap<String, String>();
+		paramsMap.put("apikey", APIKEY);
+		paramsMap.put("limit", "100");
+		String params = new Gson().toJson(paramsMap);
 		String campaigns = prepareRequest(CAMPAIGNS, params);
 		if (campaigns != null){
 			JsonObject listsJson = new JsonParser().parse(campaigns).getAsJsonObject();
 			JsonArray arrayTemplates = listsJson.get("data").getAsJsonArray();
-			Logger.debug("### JSON: %s", arrayTemplates);
 			Collection<MailchimpCampaign> mailchimpCampaigns= new ArrayList<MailchimpCampaign>();
 			for (JsonElement list: arrayTemplates){
 				mailchimpCampaigns.add(new Gson().fromJson(list, MailchimpCampaign.class));
@@ -120,7 +117,8 @@ public final class MailChimpHelper {
 	public static String campaignCreate(CreateCampaignRequest campaign) {
         String params = new Gson().toJson(campaign);
         String response = prepareRequest(CREATE_CAMPAIGN, params);
-		return response;
+        String campaignId = response.trim().replaceAll("\"", "");
+		return campaignId;
 	}
 	
 	

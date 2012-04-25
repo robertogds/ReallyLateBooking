@@ -36,6 +36,10 @@
 	</script>
 
 #{/set}
+
+#{set 'rightColumn'}
+	#{include 'components/customerSupport.html' /}
+#{/set}
 		<div class="row-fluid">
 				<ul class="breadcrumb">
 				  <li>
@@ -52,7 +56,7 @@
 				           			<div class="span8">
 			                			<h1>&{'web.deal.list.h1', city.name}</h1>
 			                		 </div>
-			                		 #{if city.isRootCity() && open}
+			                		 #{if city.isRoot && open}
 				           			<div class="span4 navbar" >
 				           				<div class="zones">
 						                <ul class="nav">
@@ -145,15 +149,14 @@
 							           		<div class="row-fluid deal-info">
 							           				<div class="span1"><label></label></div>
 							           				<div class="before span3">
-							           						 &{'web.deal.detail.before'} <br>
+							           						 &{'web.deal.detail.before'} <br />
 							           						 <strong>${deal.priceCents}</strong><span>&euro;</span> 
 							           				</div>	 
 							           				<div class="nights span3">
-							           						 &{'web.deal.detail.book'} <br>
+							           						 &{'web.deal.detail.book'} <br />
 							           						 <strong>${deal.nights}</strong> <span>&{'web.deal.detail.nights'}</span> 
 							           				</div>	 
 							           				<div class="rooms span3">
-							           						&{'web.deal.detail.left'} 
 							           							<strong>
 							           								#{if deal.quantity > 5 || deal.isHotUsa}
 							           									+5
@@ -161,8 +164,10 @@
 							           								#{else}
 							           									${deal.quantity}
 							           								#{/else}
-							           							</strong>  <br>
-							           						&{'web.deal.detail.rooms'}
+							           							</strong> &{'web.deal.detail.rooms'}  
+							           							<br /> 
+							           						&{'web.deal.detail.left'} 
+							           						
 							           				</div>
 							           		</div>
 							           </div>

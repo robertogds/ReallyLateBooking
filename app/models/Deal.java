@@ -43,6 +43,7 @@ public class Deal extends Model {
 	@Required
 	public String hotelName;	
 	public String hotelCode;
+	public String trivagoCode;
 	public Boolean isHotUsa;
 	public Boolean isFake;
 	public Boolean active;
@@ -553,7 +554,7 @@ public class Deal extends Model {
 	}
 
 	public void calculateDiscount() {
-		if (this.bestPrice != null ){
+		if (this.bestPrice != null && this.bestPrice > 0){
 	    	int dif = (this.bestPrice - this.salePriceCents) * 100;
 	    	this.discount = dif != 0 ? dif / this.bestPrice : 0;
 	    }

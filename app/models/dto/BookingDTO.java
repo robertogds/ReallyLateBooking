@@ -78,7 +78,7 @@ public class BookingDTO {
 		this.creditCardCVC = booking.creditCardCVC;
 		this.creditCardType = booking.creditCardType;
 		this.code = booking.code;
-		this.salePriceCents = booking.salePriceCents;
+		this.salePriceCents = booking.totalSalePrice;
 		this.priceCents = booking.priceCents;
 		this.priceDay2 = booking.priceDay2;
 		this.priceDay3 = booking.priceDay3;

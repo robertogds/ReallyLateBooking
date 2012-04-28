@@ -66,6 +66,10 @@ public class Company extends Model{
     	return Model.all(Company.class);
     }
     
+    public static Collection<Company> getAllCompanies(){
+    	return all().order("name").fetch();
+    }
+    
     public static Company findById(Long id) {
         return all().filter("id", id).get();
     }

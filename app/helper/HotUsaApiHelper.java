@@ -249,6 +249,71 @@ public final class HotUsaApiHelper {
 		parseHotelPricesResponse(wsReq, DAYS);
 	}
 	
+	public static Deal getHotelInfo(String hotelCode){
+		String wsReq = getHotelInfoRequest(hotelCode);
+		return parseHotelInfoResponse(wsReq);
+	}
+	
+	private static Deal parseHotelInfoResponse(String wsReq) {
+		Logger.debug("WS Request: " + wsReq);
+		Document xml = prepareRequest(wsReq);
+		Logger.debug("WS Response: " + xml.getTextContent());
+		if (xml != null){
+			if (xml.getElementsByTagName("hotel") != null){
+				String hotelCode = xml.getElementsByTagName("codigo_hotel").item(0).getTextContent();
+				String hotelName = xml.getElementsByTagName("nombre_h").item(0).getTextContent();
+				String address = xml.getElementsByTagName("direccion").item(0).getTextContent();
+				String city = xml.getElementsByTagName("poblacion").item(0).getTextContent();
+				String cp = xml.getElementsByTagName("cp").item(0).getTextContent();
+				Logger.debug("hotelName : %s ", hotelName);
+				Logger.debug("addres : %s , %s, %s ", address, city, cp);
+				int photos = xml.getElementsByTagName("foto").getLength();
+				List<String> imageList = new ArrayList<String>();
+				for (int photo=0; photo < photos; photo++){
+					String photo1 = xml.getElementsByTagName("foto").item(0).getTextContent();
+					imageList.add(photo1);
+					Logger.debug("photo : %s ", photo1);
+				}
+				String text = xml.getElementsByTagName("desc_hotel").item(0).getTextContent();
+				Logger.debug("Text hotel : %s ", text);
+				String category = xml.getElementsByTagName("categoria").item(0).getTextContent(); 
+				Logger.debug("Category : %s ", category);
+				
+				Deal deal = new Deal();
+				deal.hotelName = hotelName;
+				deal.address = address + ", " + cp + ", " + city;
+				deal.hotelCategory = new Integer(category);
+				deal.hotelCode = hotelCode;
+				deal.isHotUsa = true;
+				deal.detailText = text;
+				deal.mainImageBig =  imageList.get(0);
+				deal.mainImageSmall =  imageList.get(1);
+				deal.listImage =  imageList.get(2);
+				deal.image2 =  imageList.get(3);
+				deal.image3 =  imageList.get(4);
+				deal.image4 =  imageList.get(5);
+				deal.image5 =  imageList.get(6);
+				deal.image6 =  imageList.get(7);
+				deal.image7 =  imageList.get(8);
+				deal.image8 =  imageList.get(9);
+				
+				deal.insert();
+				return deal;
+			}
+		}
+		else{
+			Logger.error("Didnt receive a correct answer from HotUsa Api");
+		}
+		return null;
+	}
+
+	private static String getHotelInfoRequest(String hotelCode) {
+		String request = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?> <!DOCTYPE peticion SYSTEM \" http://xml.hotelresb2b.com/xml/dtd/pet_reserva.dtd\">" +
+			" <peticion><tipo>15</tipo><nombre>Hotel Info</nombre><agencia>RLB</agencia><parametros>" +
+			"<codigo>"+ hotelCode +"</codigo><idioma>1</idioma></parametros></peticion>" ;
+		return request;
+	}
+
 	private static void parseHotelPricesResponse110(String wsReq, int bookingDays){
 		Logger.debug("WSRequest: " + wsReq);
 		Document xml = prepareRequest(wsReq);

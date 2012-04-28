@@ -89,6 +89,12 @@ public class City extends Model {
 		List<City> cities = all().filter("active", Boolean.TRUE).order("name").fetch();
 		return cities;
 	}
+	
+	public static List<City> findAllCities() {
+		List<City> cities = all().order("name").fetch();
+		return cities;
+	}
+
 
 	public static List<City> findActiveCitiesByCountry(Country country){
 		return all().filter("country", country).filter("active", Boolean.TRUE).order("name").fetch();

@@ -493,3 +493,14 @@ web.register.incorrect = Oops, nous ne pouvions pas créer votre compte. Il ya d
 
 web.support.title = Service client
 web.support.hours = M-F from 10:00 to 20:00
+
+web.index.remember.modal = J'ai oublié mon mot de passe
+web.index.remember.h3 = J'ai oublié mon mot de passe
+web.index.remember.entry = Écrivez votre email pour récupérer votre mot de passe
+web.index.remember.btn = Envoyer
+web.resetPassword.newpass = Écrivez votre nouveau mot de passe
+web.resetPassword.title = Réinitialiser votre mot de passe
+user.remember.password.incorrect =  Vous devez introduire un mot de passe
+user.remember.password.success = Vous avez changé votre mot de passe avec succès. Entrez dans le club maintenant.
+user.remember.account.notfound = Nous ne pouvions pas trouver votre compte, s'il vous plaît contactez soporte@reallylatebooking.com
+

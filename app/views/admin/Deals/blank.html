@@ -1,0 +1,57 @@
+#{extends 'CRUD/layout.html' /}
+
+<div id="crudBlank" class="${type.name}">
+	
+	<h2 id="crudBlankTitle">&{'crud.blank.title', type.modelName}</h2>
+	
+	<div class="objectForm">
+	#{form action:@create(), enctype:'multipart/form-data'}
+		#{crud.form} 
+				#{crud.custom 'city'} 
+					<label for="object_city">
+		        		City
+		    		</label>
+					%{
+					    cities = models.City.findAllCities();
+					}%
+					
+		   	 		#{select 'object.city.id', items:cities, valueProperty:'id', labelProperty:'name', value:object?.city?.id }
+		   	 		 	#{option}please select something...#{/option}
+					#{/select}
+				#{/crud.custom} 
+			#{crud.custom 'owner'} 
+	   	 	<label for="object_city">
+	        	Owner Extranet
+	    	</label>
+	    			%{
+					    owners = models.User.getAllOwners();
+					}%
+					
+		   	 		#{select 'object.owner.id', items:owners, valueProperty:'id', labelProperty:'firstName', value:object?.owner?.id }
+		   	 			#{option}please select something...#{/option}
+					#{/select}
+		   	 		
+			#{/crud.custom} 
+			#{crud.custom 'company'} 
+	   	 	<label for="object_company">
+	        	Company
+	    	</label>
+	    			%{
+					    companies = models.Company.getAllCompanies();
+					}%
+					
+		   	 		#{select 'object.company.id', items:companies, valueProperty:'id', labelProperty:'name', value:object?.company?.id }
+		   	 			#{option}please select something...#{/option}
+					#{/select}
+			#{/crud.custom} 
+		#{/crud.form} 
+
+		<p class="crudButtons">
+			<input type="submit" name="_save" value="&{'crud.save', type.modelName}" />
+			<input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />
+			<input type="submit" name="_saveAndAddAnother" value="&{'crud.saveAndAddAnother', type.modelName}" />
+		</p>
+	#{/form}
+	</div>
+
+</div>

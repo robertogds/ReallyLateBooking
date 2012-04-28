@@ -487,3 +487,13 @@ web.register.incorrect = Oops, we couldn't create your account. Theres already a
 
 web.support.title = Customer support
 web.support.hours = M-F from 10:00 to 20:00
+
+web.index.remember.modal = I forgot my password
+web.index.remember.h3 = I forgot my password
+web.index.remember.entry = Write your email to recover your password
+web.index.remember.btn = Send
+web.resetPassword.newpass = Write your new password
+web.resetPassword.title = Reset your password
+user.remember.password.incorrect = You must introduce a password
+user.remember.password.success = You've succesfully changed your password. Enter the club now.
+user.remember.account.notfound = We couldnt find your account, please contact soporte@reallylatebooking.com

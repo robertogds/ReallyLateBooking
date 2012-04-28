@@ -7,7 +7,7 @@
 	<div id="crudListTable">
 		#{crud.table fields:['hotelName', 'city'] }
 		  #{crud.custom 'city'}
-		  	 ${models.City.findById(object.city.id) }
+		  	 ${models.City.findById(object.city?.id) }
 		   #{/crud.custom}
    		#{/crud.table}
 	</div>
@@ -26,6 +26,11 @@
 	<p class="crudListExport"  id="exportAll">
 		<a href="@{admin.Deals.exportAll}">Export all Deals as CSV </a>
 	</p>
-
-
+	<br/>
 </div>
+<h2>Crear hotel Hotusa</h2>	
+     #{form @admin.Deals.createHotusaHotel()}
+		<input type="text" name="hotelCode"  size="10" />
+		<br/>
+	  	<input type="submit" value="Crear hotel" />
+	 #{/form} 

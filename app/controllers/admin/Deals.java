@@ -43,6 +43,12 @@ public class Deals extends controllers.CRUD {
         render("admin/export.csv", objects, type);
     }
 	
+	public static void createHotusaHotel(String hotelCode){
+		Deal deal = HotUsaApiHelper.getHotelInfo(hotelCode);
+		redirect("/admin/deals/%s", deal.id);
+	}
+	
+	
 }
 
 

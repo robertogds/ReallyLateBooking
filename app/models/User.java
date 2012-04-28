@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 import notifiers.Mails;
@@ -183,7 +184,10 @@ public class User extends Model{
 		this.fbExpires = data.get("expires") != null ? data.get("expires").getAsString() : null;
 	}
 	
-
+	public static Collection<User> getAllOwners(){
+    	return User.all().filter("isOwner", true).order("firstName").fetch();
+    }
+	
 	public static User findByEmail(String email){
     	return User.all().filter("email", email.trim().toLowerCase()).get();
     }

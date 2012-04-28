@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import notifiers.Mails;
+
 import org.apache.commons.lang.StringUtils;
 
 import controllers.CRUD.Hidden;
@@ -22,6 +24,7 @@ import play.data.validation.Max;
 import play.data.validation.MaxSize;
 import play.data.validation.Min;
 import play.data.validation.Required;
+import play.libs.Mail;
 import siena.DateTime;
 import siena.Generator;
 import siena.Id;
@@ -163,6 +166,10 @@ public class Deal extends Model {
 	
 	public Deal(Long id) {
 		this.id = id;
+	}
+
+	public Deal() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public static List<Deal> findDealsByOwner(User owner){
@@ -315,11 +322,20 @@ public class Deal extends Model {
 	    deal.quantity = deal.quantity != null ? deal.quantity : 0;
 	    deal.active = deal.active != null ? deal.active : Boolean.FALSE;
 	    
-	    
 	    // If isFake but active and dispo 0 we dont want to update dispo
 	    if (!(deal.isFake && deal.quantity == 0 && deal.active)){
 	    	deal.quantity = quantity;
 	    }
+	    
+	  //If is active time and price is bigger than before we want to desactivate the deal
+	    City city = City.findById(deal.city.id);
+	    if (city != null && DateHelper.isActiveTime(DateHelper.getCurrentHour(city.utcOffset))
+	    		&& deal.active && deal.salePriceCents != null 
+	    		&& price != null && deal.salePriceCents < price){
+	    	deal.active = false;
+	    	Mails.hotusaRisePrices(deal);
+	    }
+	    
 	    switch (day) {
 			case 0:
 				 //If isFake we dont want to change the price automatically by the cron task
@@ -351,6 +367,7 @@ public class Deal extends Model {
 		}
 	    Logger.debug("Updatind deal: " + deal.hotelName + " price: " + deal.salePriceCents + " quantity: " + quantity);
 	    deal.updated = Calendar.getInstance().getTime();
+	    
 	    deal.update();
 	}
 	

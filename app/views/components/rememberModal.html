@@ -1,0 +1,22 @@
+<div class="modal fade" id="rememberPass">
+								  <div class="modal-header">
+								    <a class="close" data-dismiss="modal">&times;</a>
+								    <h3>&{'web.index.remember.h3'}</h3>
+								  </div>
+								  #{form @Users.rememberPasswordEmail()}
+								  <div class="modal-body">
+								    <p>&{'web.index.remember.entry'}</p>
+								    	 <div class="input-prepend">
+							              <div class="input-prepend">
+							                <span class="add-on"><i class="icon-envelope"></i></span>
+							                <input class="input-large" name="email" id="email" value="${flash.email}" type="text" placeholder="&{'secure.email'}">
+							                <input type="hidden" name="returnUrl" value="${request.url}" />
+							              </div>
+							             </div>
+								  </div>
+								  <div class="modal-footer">
+								    <button type="submit" class="btn btn-primary" >&{'web.index.remember.btn'}</button>
+								    <a  data-dismiss="modal" class="btn close">&{'web.btn.cancel'}</a>
+								  </div>
+								  #{/form}
+								</div>

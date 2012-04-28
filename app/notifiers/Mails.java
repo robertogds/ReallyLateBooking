@@ -159,7 +159,7 @@ public class Mails extends MailServiceFactory {
    }
 
 
-public static void ownerUpdatedDeal(Deal deal) {
+   public static void ownerUpdatedDeal(Deal deal) {
 	      String lang = Lang.get(); 
 	   	  //We want hotels email to be rendered in Spanish
 	   	  Lang.set("es");
@@ -177,7 +177,26 @@ public static void ownerUpdatedDeal(Deal deal) {
 	   	  send(message, template, params);
 	   	  //set language to client original language
 	   	  Lang.set(lang);
-   }
+    }
+   
+   	public static void hotusaRisePrices(Deal deal) {
+	      String lang = Lang.get(); 
+	   	  //We want hotels email to be rendered in Spanish
+	   	  Lang.set("es");
+	   	  City city = City.findById(deal.city.id);
+	   	  Message message = new Message();
+	   	  message.setSubject("Hotusa ha subido el precio del "  + deal.hotelName + " de "+ city.name);
+	   	  message.setSender(HOLA_MAIL);
+	   	  message.setTo(PRECIOS_MAIL);
+	   	  String template = "Mails/ownerUpdatedDeal";
+	   	  Map<String, Object> params = new HashMap<String, Object>();
+	   	  params.put("deal", deal);
+	      params.put("city", city);
+	   	  
+	   	  send(message, template, params);
+	   	  //set language to client original language
+	   	  Lang.set(lang);
+    }
 
 	public static void contactForm(String email, String name, String text) {
 		Message message = new Message();

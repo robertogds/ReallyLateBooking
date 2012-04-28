@@ -87,6 +87,7 @@
 							                <input class="span8" type="password" name="password" id="password" value=""  placeholder="&{'secure.password'}">
 							              </div>
 							             </div> 
+							             <a data-toggle="modal" href="#rememberPass">&{'web.index.remember.modal'}</a>
 						             </div>  
 						             <div class="login-center">
 							       		 <button type="submit" class="btn btn-large btn-success" >&{'web.index.login.email.button'}</button>
@@ -102,7 +103,7 @@
 			</div>
         </div>
       </div>
-     
+     #{include 'components/rememberModal.html'/} 
      #{include 'Application/registerModal.html'/} 
      
 				   				

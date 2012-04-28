@@ -17,6 +17,7 @@ import notifiers.Mails;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import play.Logger;
+import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.i18n.Messages;
 import play.mvc.Before;
@@ -38,7 +39,7 @@ public class Users extends Controller {
 		Security.checkConnected();
     }
 	
-	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","dashboard","updateAccount","register","loginUser"})
+	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","dashboard","updateAccount","register","loginUser","rememberPasswordEmail"})
 	public static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -87,6 +88,50 @@ public class Users extends Controller {
 	    redirect(returnUrl);
 	}
 	
+	public static void rememberPasswordEmail(@Required String email, String returnUrl){
+		Logger.debug("Remember password " + email);	
+		 if (!validation.hasErrors()){
+			 	User user = User.findByEmail(email);
+				if (user != null){
+					user.setPasswordResetCode();
+					Mails.lostPassword(user);
+					flash.success(Messages.get("user.remember.correct"));
+				}
+				else{
+					flash.error(Messages.get("user.remember.incorrect"));
+				}
+	    }
+	    else{
+	    	flash.error(Messages.get("user.remember.incorrect"));
+	    	params.flash(); // add http parameters to the flash scope
+	        validation.keep(); // keep the errors for the next request
+	    }
+		redirect(returnUrl);
+	}
+	
+	public static void resetPasswordForm(String code){
+		User user = User.findByResetCode(code);
+		render(user, code);
+	}
+	
+	public static void saveNewPassword(@Required String code, @Required String password){
+		Logger.debug("User recovery password code " + code);	
+		if( validation.hasErrors()){
+			flash.error(Messages.get("user.remember.password.incorrect"));
+		}
+		else{
+			User user = User.findByResetCode(code);
+			if (user != null){
+				user.password = DigestUtils.md5Hex(password);
+				user.update();
+				flash.success(Messages.get("user.remember.password.success"));
+			}
+			else{
+		         flash.error(Messages.get("user.remember.account.notfound"));
+			}
+		}
+		resetPasswordForm(code);
+	}
     
 	/** RLB API Methods **/
 	public static void login(String json) { 
@@ -178,26 +223,4 @@ public class Users extends Controller {
 	    renderJSON(new UserDTO(user));
 	}
 	
-	public static void resetPasswordForm(String code){
-		User user = User.findByResetCode(code);
-		render(user, code);
-	}
-	
-	public static void saveNewPassword(String code, String password){
-		Logger.debug("User recovery password code " + code);	
-		if( password == null || code==null){
-			flash.error("password cannot be empty");
-		}
-		else{
-			User user = User.findByResetCode(code);
-			if (user != null){
-				user.password = DigestUtils.md5Hex(password);
-				user.update();
-			}
-			else{
-		         flash.error("Account not found");
-			}
-		}
-		render();
-	}
 }

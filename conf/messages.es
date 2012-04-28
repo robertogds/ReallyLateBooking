@@ -497,3 +497,13 @@ web.register.incorrect = No hemos podido crear tu usuario. Ya existe una cuenta 
 
 web.support.title = Atención al cliente
 web.support.hours = L-V de 10:00 a 20:00
+
+web.index.remember.modal = He olvidado mi contraseña
+web.index.remember.h3 = He olvidado mi contraseña
+web.index.remember.entry = Introduce tu email para recuperar la contraseña
+web.index.remember.btn = Enviar
+web.resetPassword.newpass = Escribe tu nueva contraseña
+web.resetPassword.title = Cambia tu contraseña
+user.remember.password.incorrect = Debes introducir una contraseña
+user.remember.password.success = Has cambiado tu contraseña correctamente. Ya puedes entrar en el club.
+user.remember.account.notfound = No hemos encontrado tu cuenta. Contacta con soporte@reallylatebooking.com

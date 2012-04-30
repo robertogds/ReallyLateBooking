@@ -1,6 +1,6 @@
 package controllers.admin;
 
-import helper.MailChimpHelper;
+import helper.mailchimp.MailChimpHelper;
 import helper.mailchimp.models.CreateCampaignRequest;
 import helper.mailchimp.models.MailchimpCampaign;
 import helper.mailchimp.models.MailchimpList;

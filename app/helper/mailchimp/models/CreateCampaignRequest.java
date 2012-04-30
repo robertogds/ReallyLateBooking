@@ -1,7 +1,7 @@
 package helper.mailchimp.models;
 
 import helper.DateHelper;
-import helper.MailChimpHelper;
+import helper.mailchimp.MailChimpHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

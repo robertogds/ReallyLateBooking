@@ -69,6 +69,7 @@ mails.booking.regime = Regime
 mails.booking.regime.breakfast.yes= Breakfast Included
 mails.booking.regime.breakfast.no= Breakfast NOT Included
 mails.rlb.booking.department = Booking department
+mails.rlb.booking.department.phone = +34 911 86 30 81
 mails.rlb.footer = ReallyLateBooking is a registered brand propriety of IIPIR Software Development S.L. 
 
 mails.booking.client.title = Booking confirmation

@@ -1,7 +1,7 @@
 package controllers;
 
-import helper.HotUsaApiHelper;
 import helper.JsonHelper;
+import helper.hotusa.HotUsaApiHelper;
 
 import java.util.ArrayList;
 import java.util.List;

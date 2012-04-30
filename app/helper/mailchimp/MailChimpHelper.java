@@ -1,6 +1,7 @@
-package helper;
+package helper.mailchimp;
 
 
+import helper.hotusa.HotUsaApiHelper;
 import helper.mailchimp.models.CreateCampaignRequest;
 import helper.mailchimp.models.MailchimpCampaign;
 import helper.mailchimp.models.MailchimpList;

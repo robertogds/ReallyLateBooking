@@ -72,6 +72,7 @@ mails.booking.regime = Régimen
 mails.booking.regime.breakfast.yes= Alojamiento y desayuno
 mails.booking.regime.breakfast.no= Solo alojamiento
 mails.rlb.booking.department = Departamento de Reservas
+mails.rlb.booking.department.phone = 911 86 30 81
 mails.rlb.footer = ReallyLateBooking es una marca registrada propiedad de IIPIR Software Development S.L.
 
 mails.booking.client.title = Confirmaci&oacute;n de reserva

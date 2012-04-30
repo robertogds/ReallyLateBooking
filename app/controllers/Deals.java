@@ -1,7 +1,7 @@
 package controllers;
 
 import helper.DateHelper;
-import helper.HotUsaApiHelper;
+import helper.hotusa.HotUsaApiHelper;
 
 import java.util.*;
 

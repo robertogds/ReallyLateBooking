@@ -1,6 +1,6 @@
 package controllers;
 
-import helper.HotUsaApiHelper;
+import helper.hotusa.HotUsaApiHelper;
 
 import java.util.List;
 

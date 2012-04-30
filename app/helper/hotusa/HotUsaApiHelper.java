@@ -1,4 +1,6 @@
-package helper;
+package helper.hotusa;
+
+import helper.DateHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,16 +47,7 @@ import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 
 public final class HotUsaApiHelper {
 	
-	private static final String APIURL = "http://xml.hotelresb2b.com/xml/listen_xml.jsp"; 
-	private static final String sCodigousu = "RENG"; 
-	private static final String sClausu = "xml269009"; 
-	private static final String sAfiliacio = "VE"; 
-	private static final String sSecacc = "54269"; 
-	public static final String SPAIN = "ES";
-	public static final String MADRID_PROV = "ESMAD";
-	public static final String MADRID = "MADRID";
-	public static final String ENCODING =  "ISO-8859-1";
-	
+	private static final String ENCODING =  "ISO-8859-1";
 	private static final String VISA = "Visa";
 	private static final String MASTERCARD = "Mastercard";
 	private static final String	AMEX = "American Express";
@@ -62,13 +55,21 @@ public final class HotUsaApiHelper {
 	private static final String HU_VISA = "VisaCard";
 	private static final String HU_MASTERCARD = "MasterCard";
 	private static final String	HU_AMEX = "AmExCard";
+	private static final String CREDIT_PAY_TYPE = "25";
+	private static final String DIRECT_PAY_TYPE = "12";
+	private static final String STATUS_OK = "OK";
+	private static final String REGIME_OB = "OB";
+	private static final String REGIME_RO = "RO";
+	private static final String REGIME_BB = "BB";
+	private static final String ACCEPT_DIRECT_PAY= "S";
 	
-	private static final int DAYS = 1;
-
+	
+	private static HotusaConfig config = HotusaConfig.instance;
+	
 	private static Document prepareRequest(String wsReq){
 		try {
 			wsReq = URLEncoder.encode(wsReq, "UTF-8");
-			String url = APIURL + "?codigousu="+ sCodigousu +"&clausu="+ sClausu +"&afiliacio="+ sAfiliacio +"&secacc="+ sSecacc+"&xml="+wsReq;
+			String url = config.getRequestUrl(wsReq);
 			URL parsedUrl = new URL(url);
 			URLConnection urlConnection = parsedUrl.openConnection(); 
 			urlConnection.setConnectTimeout(15000); 
@@ -103,7 +104,7 @@ public final class HotUsaApiHelper {
 		    char[] buffer = new char[1024];
 		    try {
 		        Reader reader = new BufferedReader(
-		                new InputStreamReader(is, "ISO-8859-1"));
+		                new InputStreamReader(is, ENCODING));
 		        int n;
 		        while ((n = reader.read(buffer)) != -1) {
 		            writer.write(buffer, 0, n);
@@ -134,13 +135,16 @@ public final class HotUsaApiHelper {
 			Calendar checkoutDate = Calendar.getInstance(); 
 			checkoutDate.setTime(DateHelper.getFutureDay(days));
 			
-			String request =  "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_disponibilidad_110.dtd\"> <peticion>" +
-			"<tipo>110</tipo> <nombre>Disponibilidad Varias Habitaciones Regímenes</nombre> <agencia>ReallyLateBooking.com</agencia> <parametros>" +
-			"<hotel>"+ hotelCodeList +"</hotel> <pais>"+ country.hotusaCode +"</pais> <provincia>"+city.hotusaProvCode+"</provincia> <poblacion>"+city.hotusaCode+"</poblacion> <categoria>0</categoria> <radio>9</radio> " +
-			"<fechaentrada>"+sdf.format(today)+"</fechaentrada> <fechasalida>"+ sdf.format(checkoutDate.getTime()) +"</fechasalida> <marca></marca> <afiliacion>VE</afiliacion> " +
-			"<usuario>939201</usuario> <numhab1>1</numhab1> <paxes1>2-0</paxes1> <numhab2>0</numhab2>" +
-			"<paxes2>0</paxes2> <numhab3>0</numhab3> <paxes3>0</paxes3> <restricciones>0</restricciones>" +
-			" <idioma>1</idioma> <duplicidad>1</duplicidad> <comprimido>0</comprimido> <informacion_hotel>0</informacion_hotel></parametros> </peticion>";
+			String request =  "<?xml version=\"1.0\" encoding=\""+ENCODING+"\" ?> " +
+					"<!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_disponibilidad_110.dtd\"> <peticion>" +
+					"<tipo>110</tipo> <nombre>Disponibilidad Varias Habitaciones Regímenes</nombre> <agencia>ReallyLateBooking.com</agencia> <parametros>" +
+					"<hotel>"+ hotelCodeList +"</hotel> <pais>"+ country.hotusaCode +"</pais> <provincia>"+city.hotusaProvCode+"</provincia> " +
+					"<poblacion>"+city.hotusaCode+"</poblacion> <categoria>0</categoria> <radio>9</radio> " +
+					"<fechaentrada>"+sdf.format(today)+"</fechaentrada> <fechasalida>"+ sdf.format(checkoutDate.getTime()) +
+					"</fechasalida> <marca></marca> <afiliacion>"+config.sAfiliacio+"</afiliacion> " +
+					"<usuario>"+config.usuario+"</usuario> <numhab1>1</numhab1> <paxes1>2-0</paxes1> <numhab2>0</numhab2>" +
+					"<paxes2>0</paxes2> <numhab3>0</numhab3> <paxes3>0</paxes3> <restricciones>0</restricciones>" +
+					" <idioma>1</idioma> <duplicidad>1</duplicidad> <comprimido>0</comprimido> <informacion_hotel>0</informacion_hotel></parametros> </peticion>";
 			
 			return request;
 		}
@@ -158,10 +162,10 @@ public final class HotUsaApiHelper {
 		Calendar checkoutDate = Calendar.getInstance(); 
 		checkoutDate.setTime(DateHelper.getFutureDay(days));
 		
- 		String request = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_disponibilidad_5.dtd\">" +
+ 		String request = "<?xml version=\"1.0\" encoding=\""+ENCODING+"\" ?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_disponibilidad_5.dtd\">" +
  		"<peticion> <tipo>105</tipo> <nombre>Petición de Disponibilidad</nombre> <agencia>ReallyLateBooking.com</agencia> <parametros>" +
  		"<codishotel>"+ hotelCodeList +"</codishotel> <regimen>OB</regimen> <numhab1>1</numhab1> <paxes1>2-0</paxes1> <numhab2>0</numhab2> " +
- 		"<paxes2>0-0</paxes2> <numhab3>0</numhab3> <paxes3>0-0</paxes3> <usuario>939201</usuario> <afiliacion>VE</afiliacion> " +
+ 		"<paxes2>0-0</paxes2> <numhab3>0</numhab3> <paxes3>0-0</paxes3> <usuario>"+config.usuario+"</usuario> <afiliacion>"+config.sAfiliacio+"</afiliacion> " +
  		"<fechaentrada>"+sdf.format(today)+"</fechaentrada> <fechasalida>"+ sdf.format(checkoutDate.getTime()) +"</fechasalida> <idioma>1</idioma> <duplicidad>0</duplicidad>" +
  		"<marca/> </parametros></peticion>";
  		
@@ -177,10 +181,10 @@ public final class HotUsaApiHelper {
 		String month = splitArr[0];
 		String card = convertCardToHotUsa(booking.creditCardType);
 		
- 		String request = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_reserva_3.dtd\">" +
+ 		String request = "<?xml version=\"1.0\" encoding=\""+ENCODING+"\"?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_reserva_3.dtd\">" +
  				"<peticion> <nombre>Peticion de Reserva</nombre> <agencia>ReallyLateBooking.com</agencia> <tipo>202</tipo> <parametros>" +
  				"<codigo_hotel>"+ booking.deal.hotelCode +"</codigo_hotel> <nombre_cliente>"+ booking.creditCardName +"</nombre_cliente> <observaciones></observaciones>" +
- 				" <num_mensaje /><forma_pago>12</forma_pago> <tipo_targeta>"+card+"</tipo_targeta>" +
+ 				" <num_mensaje /><forma_pago>"+ config.payType +"</forma_pago> <tipo_targeta>"+card+"</tipo_targeta>" +
  				" <num_targeta>"+ booking.creditCard +"</num_targeta> <mes_expiracion_targeta>"+ month +"</mes_expiracion_targeta> <ano_expiracion_targeta>"+ year +"</ano_expiracion_targeta>" +
  				" <titular_targeta>"+ booking.creditCardName +"</titular_targeta> <res>";
 		request = request + "<lin>"+ booking.deal.bookingLine +"</lin> ";
@@ -203,7 +207,7 @@ public final class HotUsaApiHelper {
 	}
 	
 	private static String confirmationRequest(String localizador){
- 		String request = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?> <!DOCTYPE peticion SYSTEM \" http://xml.hotelresb2b.com/xml/dtd/pet_reserva.dtd\">" +
+ 		String request = "<?xml version=\"1.0\" encoding=\""+ENCODING+"\" ?> <!DOCTYPE peticion SYSTEM \" http://xml.hotelresb2b.com/xml/dtd/pet_reserva.dtd\">" +
  				" <peticion><nombre>Anulación/Confirmación de Reserva</nombre> <agencia>ReallyLateBooking.com</agencia> <tipo>3</tipo> <parametros>" +
  				"<localizador>"+ localizador +"</localizador><accion>AE</accion> </parametros></peticion>";
  		
@@ -238,15 +242,15 @@ public final class HotUsaApiHelper {
 	public static void getHotelPricesByCityList(List<City> cities){
 		for (City city : cities){
 			if (DateHelper.isWorkingTime(city.utcOffset)){
-				String wsReq = getAllHotelsByCityRequest(city, DAYS);
-				parseHotelPricesResponse110(wsReq, DAYS);
+				String wsReq = getAllHotelsByCityRequest(city, config.bookingDays);
+				parseHotelPricesResponse110(wsReq, config.bookingDays);
 			}
 		}
 	}
 	
 	public static void getHotelPrices(List<Deal> deals){
-		String wsReq = getPriceByHotelRequest(deals, DAYS);
-		parseHotelPricesResponse(wsReq, DAYS);
+		String wsReq = getPriceByHotelRequest(deals, config.bookingDays);
+		parseHotelPricesResponse(wsReq, config.bookingDays);
 	}
 	
 	public static Deal getHotelInfo(String hotelCode){
@@ -308,7 +312,7 @@ public final class HotUsaApiHelper {
 	}
 
 	private static String getHotelInfoRequest(String hotelCode) {
-		String request = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?> <!DOCTYPE peticion SYSTEM \" http://xml.hotelresb2b.com/xml/dtd/pet_reserva.dtd\">" +
+		String request = "<?xml version=\"1.0\" encoding=\""+ENCODING+"\" ?> <!DOCTYPE peticion SYSTEM \" http://xml.hotelresb2b.com/xml/dtd/pet_reserva.dtd\">" +
 			" <peticion><tipo>15</tipo><nombre>Hotel Info</nombre><agencia>RLB</agencia><parametros>" +
 			"<codigo>"+ hotelCode +"</codigo><idioma>1</idioma></parametros></peticion>" ;
 		return request;
@@ -339,13 +343,14 @@ public final class HotUsaApiHelper {
 							String priceString = linArray[3];
 							Logger.debug("PDR: " + pdr + " status: " + status + " priceString: " +  priceString + " regime:" + regime);	
 							//We have dispo so we set price and dispo and continue with next day
-							if (status.equals("OK") && (regime.equals("OB") || regime.equals("RO") || regime.equals("BB")) && pdr.equals("S")){
-								//Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString + " breakfast included: " +  regime.equals("BB"));
+							if (status.equals(STATUS_OK) && (regime.equals(REGIME_OB) || regime.equals(REGIME_RO) || regime.equals(REGIME_BB)) &&
+									(config.payType.equals(CREDIT_PAY_TYPE) ||  pdr.equals(ACCEPT_DIRECT_PAY))){
+								//Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString + " breakfast included: " +  regime.equals(REGIME_BB));
 								Float price = Float.parseFloat(priceString);
 								BigDecimal priceRounded = new BigDecimal(price);
 								priceRounded = priceRounded.setScale(0, RoundingMode.DOWN);
 								int quantity = 1; //always 1 by now
-								Boolean breakfastIncluded = regime.equals("BB") ;
+								Boolean breakfastIncluded = regime.equals(REGIME_BB) ;
 								Deal.updateDealByCode(hotelCode, quantity, price.intValue(), breakfastIncluded, lin, day);
 							}
 							// we dont have dispo for current day

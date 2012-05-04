@@ -24,31 +24,31 @@
 							Hotel
 						</th>
 						<th width="3%">
-							Quantity
+							Rooms
 						</th>
 						<th width="4%">
-							Original Price
+							Oficial Price
 						</th>
 						<th width="4%">
-							Best Price
+							BAR Price
 						</th>
 						<th width="4%">
 							Discount
 						</th>
 						<th width="5%">
-							Sale Price
+							Day1: Price / NetPrice
 						</th>
 						<th width="5%">
-							Price Day 2
+							Day2: Price / NetPrice
 						</th>
 						<th width="5%">
-							Price Day 3
+							Day3: Price / NetPrice
 						</th>
 						<th width="5%">
-							Price Day 4
+							Day4: Price / NetPrice
 						</th>
 						<th width="5%">
-							Price Day 5
+							Day5: Price / NetPrice
 						</th>
 						<th width="5%">
 							Position
@@ -60,9 +60,6 @@
 							Is HotUsa
 						</th>
 						<th width="5%">
-							Is Fake
-						</th>
-						<th width="5%">
 							Breakfast Included
 						</th>
 						<th width="5%">
@@ -70,8 +67,6 @@
 						</th>
 						<th width="8%">
 							Updated
-						</th>
-						<th width="5%">
 						</th>
 						<th width="5%">
 						</th>
@@ -139,17 +134,32 @@
 							        <input type="text" name="${field.name}"  size="5"
 			           					 value="${deal.salePriceCents}" class="${field.errorClass}" />
 						        #{/field}
+						        <br />
+						        #{field 'netSalePriceCents'}
+							        <input type="text" name="${field.name}" disabled="disabled" size="5"
+			           					 value="${deal.netSalePriceCents}" class="${field.errorClass}" />
+						        #{/field}
 							</td>
 							<td>
 								#{field 'priceDay2'}
-							        <input type="text" name="${field.name}"  size="5"
+							        <input type="text" name="${field.name}"  size="5" 
 			           					 value="${deal.priceDay2}" class="${field.errorClass}" />
+						        #{/field}
+						        <br />
+						        #{field 'netPriceDay2'}
+							        <input type="text" name="${field.name}"  size="5"  disabled="disabled"
+			           					 value="${deal.netPriceDay2}" class="${field.errorClass}" />
 						        #{/field}
 							</td>
 							<td>
 								#{field 'priceDay3'}
-							        <input type="text" name="${field.name}"  size="5"
+							        <input type="text" name="${field.name}"  size="5" 
 			           					 value="${deal.priceDay3}" class="${field.errorClass}" />
+						        #{/field}
+						        <br />
+						        #{field 'netPriceDay3'}
+							        <input type="text" name="${field.name}"  size="5"  disabled="disabled"
+			           					 value="${deal.netPriceDay3}" class="${field.errorClass}" />
 						        #{/field}
 							</td>
 							<td>
@@ -157,11 +167,21 @@
 							        <input type="text" name="${field.name}"  size="5"
 			           					 value="${deal.priceDay4}" class="${field.errorClass}" />
 						        #{/field}
+						        <br />
+						        #{field 'netPriceDay4'}
+							        <input type="text" name="${field.name}"  size="5"  disabled="disabled"
+			           					 value="${deal.netPriceDay4}" class="${field.errorClass}" />
+						        #{/field}
 							</td>
 							<td>
 								#{field 'priceDay5'}
 							        <input type="text" name="${field.name}"  size="5"
 			           					 value="${deal.priceDay5}" class="${field.errorClass}" />
+						        #{/field}
+						        <br />
+						        #{field 'netPriceDay5'}
+							        <input type="text" name="${field.name}"  size="5"  disabled="disabled"
+			           					 value="${deal.netPriceDay5}" class="${field.errorClass}" />
 						        #{/field}
 							</td>
 							
@@ -184,12 +204,6 @@
 						        #{/field}
 							</td>
 							<td>
-								#{field 'isFake'}
-			           				<input type="checkbox" name="${field.name}"
-		            					class="${field.errorClass}" #{if deal.isFake} checked="true" #{/if}/>
-						        #{/field}
-							</td>
-							<td>
 			           				<label>${deal.breakfastIncluded}</label>
 							</td>
 							<td>
@@ -200,9 +214,6 @@
 							</td>
 							<td>
 								${deal.updated?.format('dd MMMM yyyy - hh:mm')}
-							</td>
-							<td>
-								<a target="_blank" href="http://es.hotusa.com/interfaz/getGeneralComs.jsp?opc=4&tipus_desti=H&codhot=${deal.hotelCode}&secacc=49046&atrasbut=1&verdispo=1" >HotUsa</a>
 							</td>
 							<td>
 								<a href="http://www.trivago.es/${city.root}-12345/hotel/${city.root}-${deal.trivagoCode}/precios" target="_blank">Trivago</a>

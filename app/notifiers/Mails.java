@@ -38,6 +38,7 @@ public class Mails extends MailServiceFactory {
    private static final String ALTAS_MAIL = "altas@reallylatebooking.com";
    private static final String RESERVAS_MAIL = "reservas@reallylatebooking.com";
    private static final String HOLA_MAIL = "RLB <hola@reallylatebooking.com>";
+   private static final String SOPORTE_MAIL = "RLB <soporte@reallylatebooking.com>";
    
    public static void welcome(User user) {
 	   	  Message message = new Message();
@@ -179,13 +180,13 @@ public class Mails extends MailServiceFactory {
 	   	  Lang.set(lang);
     }
    
-   	public static void hotusaRisePrices(Deal deal) {
+   	public static void hotusaRisePrices(Deal deal, Float netPrice) {
 	      String lang = Lang.get(); 
 	   	  //We want hotels email to be rendered in Spanish
 	   	  Lang.set("es");
 	   	  City city = City.findById(deal.city.id);
 	   	  Message message = new Message();
-	   	  message.setSubject("Hotusa ha subido el precio del "  + deal.hotelName + " de "+ city.name);
+	   	  message.setSubject("Hotusa sube a "+ netPrice + " el " + deal.hotelName + " de "+ city.name);
 	   	  message.setSender(HOLA_MAIL);
 	   	  message.setTo(PRECIOS_MAIL);
 	   	  String template = "Mails/ownerUpdatedDeal";
@@ -202,7 +203,7 @@ public class Mails extends MailServiceFactory {
 		Message message = new Message();
 	 	message.setSubject("Email de contacto desde la web de " + email);
 	 	message.setSender(HOLA_MAIL);
-	 	message.setTo(HOLA_MAIL);
+	 	message.setTo(SOPORTE_MAIL);
 	 	String template = "Mails/contactForm";
 	 	Map<String, Object> params = new HashMap<String, Object>();
 	 	params.put("text", text);
@@ -216,7 +217,7 @@ public class Mails extends MailServiceFactory {
 		Message message = new Message();
 	 	message.setSubject("Uno hotel interesado desde la web: " + hotelName);
 	 	message.setSender(HOLA_MAIL);
-	 	message.setTo(HOLA_MAIL);
+	 	message.setTo(SOPORTE_MAIL);
 	 	String template = "Mails/hotelForm";
 	 	Map<String, Object> params = new HashMap<String, Object>();
 	 	params.put("text", text);

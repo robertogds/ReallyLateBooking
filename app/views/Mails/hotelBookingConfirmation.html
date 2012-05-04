@@ -61,7 +61,7 @@
 							</tr>
 							<tr>
 								<td style="color:#858C92;">&{'mails.booking.price'}:</td>
-								<td><strong>${booking.totalSalePrice}&euro; &{'mails.booking.tax'}</strong></td>
+								<td><strong>${booking.netTotalSalePrice}&euro; &{'mails.booking.tax'}</strong></td>
 							</tr>
 						</table>
 					</td>
@@ -76,21 +76,32 @@
 								<td style="color:#858C92;">&{'mails.booking.client.email'}:</td>
 								<td><strong>${user.email}</strong></td>
 							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top">
+						<strong style="font-size:14px; margin-bottom:5px; float:left;color:#0098CB;">&{'mails.booking.hotel.rlb.data'}:</strong>
+						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
 							<tr>
-								<td style="color:#858C92;">&{'mails.booking.client.creditcard'}:</td>
-								<td><strong>${booking.creditCardType},  ${booking.creditCard}</strong></td>
-							</tr>
-							<tr>
-								<td style="color:#858C92;">&{'mails.booking.client.cvc'}:</td>
-								<td><strong>${booking.creditCardCVC}</strong></td>
+								<td style="color:#858C92;">&{'mails.booking.hotel.rlb.payment'}:</td>
+								<td><strong>${booking.netTotalSalePrice}&euro;</strong></td>
 							</tr>
 							<tr>
 								<td style="color:#858C92;">&{'mails.booking.client.creditcardname'}:</td>
-								<td><strong>${booking.creditCardName}</strong></td>
+								<td><strong>Pablo Pazos Rey</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.creditcard'}:</td>
+								<td><strong>Mastercard,  5489018174520818</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.cvc'}:</td>
+								<td><strong>301</strong></td>
 							</tr>
 							<tr>
 								<td style="color:#858C92;">&{'mails.booking.client.creditCardExpiry'}:</td>
-								<td><strong>${booking.creditCardExpiry}</strong></td>
+								<td><strong>06/15</strong></td>
 							</tr>
 						</table>
 					</td>

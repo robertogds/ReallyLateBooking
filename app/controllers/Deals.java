@@ -174,7 +174,7 @@ public class Deals extends Controller {
 	}
 	
 	public static void movePrices(){
-		List<Deal> deals =  Deal.all().fetch();
+		List<Deal> deals =  Deal.findDealsNotFromHotUsa();
 		for (Deal deal : deals){
 			movePriceByDeal(deal);
 		}
@@ -185,30 +185,38 @@ public class Deals extends Controller {
 		if (deal.priceDay2 != null){
 			deal.updated = Calendar.getInstance().getTime();
 			deal.salePriceCents = deal.priceDay2;
+			deal.netSalePriceCents = deal.netPriceDay2;
 			deal.priceDay2 = null;
+			deal.netPriceDay2 = null;
 			deal.quantity = deal.quantityDay2;
 			deal.quantityDay2 = 0;
-			if (deal.priceDay3 != null){
-				deal.priceDay2 = deal.priceDay3;
-				deal.priceDay3 = null;
-				deal.quantityDay2 = deal.quantityDay3;
-				deal.quantityDay3 = 0;
-				if (deal.priceDay4 != null){
-					deal.priceDay3 = deal.priceDay4;
-					deal.priceDay4 = null;
-					deal.quantityDay3 = deal.quantityDay4;
-					deal.quantityDay4 = 0;
-					if (deal.priceDay5 != null){
-						deal.priceDay4 = deal.priceDay5;
-						deal.priceDay5 = null;
-						deal.quantityDay4 = deal.quantityDay5;
-						deal.quantityDay5 = 0;
-					}
-				}
-			}
 		}
 		else{
 			deal.quantity = 0;
+		}
+		if (deal.priceDay3 != null){
+			deal.priceDay2 = deal.priceDay3;
+			deal.netPriceDay2 = deal.netPriceDay3;
+			deal.netPriceDay3 = null;
+			deal.priceDay3 = null;
+			deal.quantityDay2 = deal.quantityDay3;
+			deal.quantityDay3 = 0;
+		}
+		if (deal.priceDay4 != null){
+			deal.priceDay3 = deal.priceDay4;
+			deal.netPriceDay3 = deal.netPriceDay4;
+			deal.netPriceDay4 = null;
+			deal.priceDay4 = null;
+			deal.quantityDay3 = deal.quantityDay4;
+			deal.quantityDay4 = 0;
+		}
+		if (deal.priceDay5 != null){
+			deal.priceDay4 = deal.priceDay5;
+			deal.netPriceDay4 = deal.netPriceDay5;
+			deal.netPriceDay5 = null;
+			deal.priceDay5 = null;
+			deal.quantityDay4 = deal.quantityDay5;
+			deal.quantityDay5 = 0;
 		}
 		deal.update();
 	}

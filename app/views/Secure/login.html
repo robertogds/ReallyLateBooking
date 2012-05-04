@@ -31,6 +31,7 @@
 				              <label class="checkbox">
 							    <input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />&{'secure.remember'}
 							  </label>
+							  <a data-toggle="modal" href="#rememberPass">&{'web.index.remember.modal'}</a>
 				             <div class="login-center">
 					       		 <button type="submit" class="btn btn-large btn-success" >&{'web.index.login.email.button'}</button>
 					        </div>
@@ -41,3 +42,5 @@
 			</div>
 </div>
 </div>
+
+#{include 'components/rememberModal.html'/} 

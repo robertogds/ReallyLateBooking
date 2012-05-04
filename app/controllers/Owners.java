@@ -12,6 +12,7 @@ import notifiers.Mails;
 import jobs.Bootstrap;
 import models.Booking;
 import models.City;
+import models.Company;
 import models.Deal;
 import models.User;
 import play.Logger;
@@ -90,6 +91,7 @@ public class Owners extends Controller{
 		    deal.priceDay4 = priceDay4 == null || priceDay4 == 0 ? null : priceDay4;
 		    deal.priceDay5 = priceDay5 == null || priceDay5 == 0 ? null : priceDay5;
 		    
+		    
 		    if (checkQuantityDay(deal.priceDay2, deal.quantity, quantityDay2) &&
 		    		checkQuantityDay(deal.priceDay3, deal.quantity, quantityDay3) &&
 		    		checkQuantityDay(deal.priceDay4, deal.quantity, quantityDay4) &&
@@ -116,6 +118,7 @@ public class Owners extends Controller{
 		    	else{
 		    		deal.salePriceCents = salePriceCents;
 		    		deal.bestPrice = bestPrice;
+		    		deal.calculateNetPrices();
 		    		deal.calculateDiscount();
 		    		deal.update();
 				    //Notify RLB of the updated prices

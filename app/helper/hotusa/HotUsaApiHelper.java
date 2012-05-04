@@ -347,11 +347,9 @@ public final class HotUsaApiHelper {
 									(config.payType.equals(CREDIT_PAY_TYPE) ||  pdr.equals(ACCEPT_DIRECT_PAY))){
 								//Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString + " breakfast included: " +  regime.equals(REGIME_BB));
 								Float price = Float.parseFloat(priceString);
-								BigDecimal priceRounded = new BigDecimal(price);
-								priceRounded = priceRounded.setScale(0, RoundingMode.DOWN);
 								int quantity = 1; //always 1 by now
 								Boolean breakfastIncluded = regime.equals(REGIME_BB) ;
-								Deal.updateDealByCode(hotelCode, quantity, price.intValue(), breakfastIncluded, lin, day);
+								Deal.updateDealByCode(hotelCode, quantity, price, breakfastIncluded, lin, day);
 							}
 							// we dont have dispo for current day
 							else {
@@ -414,11 +412,9 @@ public final class HotUsaApiHelper {
 							if (status.equals("OK") && (regime.equals("OB") || regime.equals("RO") || regime.equals("BB")) && pdr.equals("S")){
 								Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString + " breakfast included: " +  regime.equals("BB"));
 								Float price = Float.parseFloat(priceString);
-								BigDecimal priceRounded = new BigDecimal(price);
-								priceRounded = priceRounded.setScale(0, RoundingMode.DOWN);
 								int quantity = 1; //always 1 by now
 								Boolean breakfastIncluded = regime.equals("BB") ;
-								Deal.updateDealByCode(hotelCode, quantity, price.intValue(), breakfastIncluded, lin, day);
+								Deal.updateDealByCode(hotelCode, quantity, price, breakfastIncluded, lin, day);
 							}
 							// we dont have dispo for current day
 							else {

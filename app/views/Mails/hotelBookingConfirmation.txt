@@ -19,14 +19,17 @@ ${user.firstName} &{'mails.booking.hotel.justbooked'}:
 	&{'mails.booking.hotel.client.data'}:
 		&{'mails.booking.client.name'}: ${user.lastName}, ${user.firstName} 
 		&{'mails.booking.client.email'}: ${user.email}
-		&{'mails.booking.client.creditcard'}: ${booking.creditCardType},  ${booking.creditCard}
-		&{'mails.booking.client.cvc'}: ${booking.creditCardCVC}
-		&{'mails.booking.client.creditcardname'}: ${booking.creditCardName}
-		&{'mails.booking.client.creditCardExpiry'}: ${booking.creditCardExpiry}
+	
+	&{'mails.booking.hotel.rlb.data'}:
+		&{'mails.booking.hotel.rlb.payment'}: ${booking.netTotalSalePrice}&euro;
+		&{'mails.booking.client.creditcardname'}: Pablo Pazos Rey
+		&{'mails.booking.client.creditcard'}: Mastercard,  5489 0181 7452 0818
+		&{'mails.booking.client.cvc'}: 301
+		&{'mails.booking.client.creditCardExpiry'} 06/15
 		
 	&{'mails.booking.hotel.remember'}:
 		&{'mails.booking.hotel.remember.li1'}
-		&{'mails.booking.hotel.remember.li2'}<
+		&{'mails.booking.hotel.remember.li2'}
 			
 	&{'mails.rlb.booking.department'}
 		616 975 363

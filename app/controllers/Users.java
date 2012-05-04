@@ -39,7 +39,7 @@ public class Users extends Controller {
 		Security.checkConnected();
     }
 	
-	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","dashboard","updateAccount","register","loginUser","rememberPasswordEmail"})
+	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","loginJson","dashboard","updateAccount","register","loginUser","rememberPasswordEmail"})
 	public static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -134,68 +134,60 @@ public class Users extends Controller {
 	}
     
 	/** RLB API Methods **/
-	public static void login(String json) { 
-		String body = json != null ? json : params.get("body");
-		Logger.debug("JSON received: " + body);
-		if (body != null){
-			User user = new Gson().fromJson(body, User.class);
-			if (Security.authenticateJson(user.email, user.password) || 
-					(user.isFacebook != null && user.isFacebook)){
-				User dbUser = User.findByEmail(user.email);
-				Logger.debug("User found: " + user.email);
-				renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.login.correct"), dbUser));
-			}
+	
+	
+	/**
+	 * Login a user from a Json received in the body
+	 */
+	public static void login() { 
+		User user = User.loginJson( params.get("body"));
+		if (user != null){
+			renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.login.correct"), user));
 		}
-		renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("user.login.incorrect")));
+		else{
+			renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("user.login.incorrect")));
+		}
 	}
 	
-	public static void rememberPassword(String json){
-		String body = json != null ? json : params.get("body");
-		Logger.debug("Remember password " + body);	
-		if (body != null){
-			User user = new Gson().fromJson(body, User.class);
-			user = User.findByEmail(user.email);
-			if (user != null){
-				user.setPasswordResetCode();
-				Mails.lostPassword(user);
-				renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.remember.correct")));
-			}
-			else{
-				renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("user.remember.incorrect")));
-			}
-		}
-	}
-
-	public static void create(String json) {
-		String body = json != null ? json : params.get("body");
+	
+	/**
+	 * Create a new user based on the json received. 
+	 * Check if users already exists and returns the existent user
+	 * @param json
+	 */
+	public static void create() {
+		String body = params.get("body");
 		Logger.debug("Create user " + body);	
 		if (body != null){
 			User user = new Gson().fromJson(body, User.class);
 			if (user.checkFacebookUserExists()){
-				login(json);
+				user = User.login(user);
+				if (user != null){
+					renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.login.correct"), user));
+				}
+				else{
+					renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("user.login.incorrect")));
+				}
 			}
 			else{
-				validateAndSave(user);
+				user.validate();
+				if (!validation.hasErrors()){
+					user.insert();
+					UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "CREATED", Messages.get("user.create.correct"), user);
+					Logger.debug("User correctly created " + new Gson().toJson(message));	
+					Mails.welcome(user);
+					//Mails.validate(user);
+					renderJSON(message);
+				}
+				else{
+					UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), user);
+					Logger.debug("User couldnt be created " + new Gson().toJson(message));	
+					renderJSON(message);
+				}
 			}
 		}
 	}
 	
-	private static void validateAndSave(@Valid User user){
-		user.validate();
-		if (!validation.hasErrors()){
-			user.insert();
-			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "CREATED", Messages.get("user.create.correct"), user);
-			Logger.debug("User correctly created " + new Gson().toJson(message));	
-			Mails.welcome(user);
-			//Mails.validate(user);
-			renderJSON(message);
-		}
-		else{
-			UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), user);
-			Logger.debug("User couldnt be created " + new Gson().toJson(message));	
-			renderJSON(message);
-		}
-	}
 
 	public static void update(Long id) {
 		String body = params.get("body");
@@ -223,4 +215,20 @@ public class Users extends Controller {
 	    renderJSON(new UserDTO(user));
 	}
 	
+	public static void rememberPassword(){
+		String body = params.get("body");
+		Logger.debug("Remember password " + body);	
+		if (body != null){
+			User user = new Gson().fromJson(body, User.class);
+			user = User.findByEmail(user.email);
+			if (user != null){
+				user.setPasswordResetCode();
+				Mails.lostPassword(user);
+				renderJSON(new StatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.remember.correct")));
+			}
+			else{
+				renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("user.remember.incorrect")));
+			}
+		}
+	}
 }

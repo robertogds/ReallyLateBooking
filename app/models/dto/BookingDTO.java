@@ -63,6 +63,8 @@ public class BookingDTO {
 	public String bookingForLastName;
     @Expose
 	public String bookingForEmail;
+    @Expose
+    public Boolean canceled;
     
     
 	public BookingDTO(Booking booking) {
@@ -88,6 +90,7 @@ public class BookingDTO {
 		this.bookingForEmail = booking.bookingForEmail;
 		this.bookingForFirstName = booking.bookingForFirstName;
 		this.bookingForLastName = booking.bookingForLastName;
+		this.canceled = booking.canceled;
 		Logger.debug("Formating booking date with locale: " + Lang.getLocale());
 		this.checkinDate = booking.checkinDate!= null ? 
 					DateFormat.getDateInstance(DateFormat.MEDIUM, Lang.getLocale()).format(booking.checkinDate):

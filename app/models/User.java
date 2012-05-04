@@ -1,9 +1,12 @@
 package models;
 
+import java.security.InvalidParameterException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
+import models.dto.StatusMessage;
+import models.dto.UserStatusMessage;
 import notifiers.Mails;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -15,10 +18,12 @@ import play.Logger;
 import play.data.validation.Email;
 import play.data.validation.Password;
 import play.data.validation.Required;
+import play.data.validation.Valid;
 import play.data.validation.Validation;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.modules.crudsiena.CrudUnique;
+import play.mvc.Http;
 import play.mvc.Scope.Session;
 import siena.DateTime;
 import siena.Generator;
@@ -27,7 +32,10 @@ import siena.Model;
 import siena.Query;
 import siena.Table;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import controllers.Security;
 
 
 @Table("users")
@@ -60,6 +68,10 @@ public class User extends Model{
     
 	@DateTime
     public Date created;
+	@DateTime
+    public Date lastAppLogin;
+	@DateTime
+    public Date lastWebLogin;
     public String token;
     public String secret;  
     public String fbLink;
@@ -131,7 +143,7 @@ public class User extends Model{
 	
 	public static void facebookOAuthCallback(JsonObject data){
 		Logger.debug("User Json from FB: " + data);
-		registerOrLogin(data);
+		registerOrLoginFromFaceBook(data);
     }
 	
 	/**
@@ -139,35 +151,28 @@ public class User extends Model{
 	 * if can't found user by email.
 	 * @param data
 	 */
-    private static void registerOrLogin(JsonObject data) {
+    private static void registerOrLoginFromFaceBook(JsonObject data) {
     	String email = data.get("email").getAsString();
     	User user = User.findByEmail(email);
+    	user.getUserDataFromFB(data);
+    	registerOrLoginFromFacebook(user);
+    	user.createUserSession();
+	}
+    
+    private static void registerOrLoginFromFacebook(User user) {
     	if (user != null){
     		Logger.debug("User exists: " + user.email);
-    		user.getUserDataFromFB(data);
     		user.fromWeb = true;
     		user.update();
-    		user.createUserSession();
     	}
     	else{
-    		Logger.debug("User new: " + email);
+    		Logger.debug("User new from Facebook" );
     		user = new User();
-    		user.getUserDataFromFB(data);
     		user.fromWeb = true;
     		user.insert();
     		Mails.welcome(user);
-    		user.createUserSession();
     	}
 	}
-    
-    public void createUserSession(){
-    	Logger.debug("User session: " + Session.current().toString());
-    	Session.current().put("username", this.email);
-    	Session.current().put("firstName", this.firstName);
-    	Session.current().put("lastName", this.lastName);
-    	Session.current().put("userId", this.id);
-    	Session.current().put("uuid", this.fbid);
-    }
 
 	private void getUserDataFromFB(JsonObject data) {
 		this.firstName = data.get("first_name") != null ?  data.get("first_name").getAsString() : "no_name";
@@ -183,6 +188,37 @@ public class User extends Model{
 		this.fbAccessToken = data.get("accessToken") != null ? data.get("accessToken").getAsString() : null;
 		this.fbExpires = data.get("expires") != null ? data.get("expires").getAsString() : null;
 	}
+	
+	public static User loginJson(String json) { 
+		User user = new Gson().fromJson(json, User.class);
+		return login(user);
+	 }	
+	
+	public static User login(User user) {
+		if (user != null){
+			Boolean isFacebook = user.isFacebook != null && user.isFacebook;
+			if (connect(user.email, user.password) != null || isFacebook){
+				user = User.findByEmail(user.email);
+				user.lastAppLogin = Calendar.getInstance().getTime();
+		    	user.update();
+			}
+			else{
+				user = null;
+			}
+		}
+		return user;
+	}
+	
+	public void createUserSession(){
+    	Logger.debug("User session: " + Session.current().toString());
+    	Session.current().put("username", this.email);
+    	Session.current().put("firstName", this.firstName);
+    	Session.current().put("lastName", this.lastName);
+    	Session.current().put("userId", this.id);
+    	Session.current().put("uuid", this.fbid);
+    	this.lastWebLogin = Calendar.getInstance().getTime();
+    	this.update();
+    }
 	
 	public static Collection<User> getAllOwners(){
     	return User.all().filter("isOwner", true).order("firstName").fetch();
@@ -262,5 +298,4 @@ public class User extends Model{
 							filter("created<", calEnd.getTime()).count();
 		return users;
 	}
-
 }

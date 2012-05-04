@@ -6,7 +6,7 @@
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
 
 	<div id="crudListTable">
-		#{crud.table fields:['email', 'firstName' , 'lastName','isAdmin','isOwner','isFacebook','fromWeb','locale','created'] }
+		#{crud.table fields:['email', 'firstName' , 'lastName','isAdmin','isOwner','isFacebook','fromWeb','locale','created','lastAppLogin','lastWebLogin'] }
 		
 		#{crud.custom 'created'}
 		  	 ${object.created?.format('dd MMMM yyyy - hh:mm')}

@@ -75,12 +75,18 @@ public class Booking extends Model {
     public String creditCardCVC;
     public String code;
 	public Integer salePriceCents;
+	public Float netSalePriceCents;
 	public Integer priceCents;
 	public Integer priceDay2;
 	public Integer priceDay3;
 	public Integer priceDay4;
 	public Integer priceDay5;
+	public Float netPriceDay2;
+	public Float netPriceDay3;
+	public Float netPriceDay4;
+	public Float netPriceDay5;
 	public Integer totalSalePrice;
+	public Float netTotalSalePrice;
 	public Integer finalPrice;
 	public Integer credits;
 	public String hotelName;
@@ -107,16 +113,23 @@ public class Booking extends Model {
     	this.checkinDate = DateHelper.getTodayDate();
     	this.code = RandomStringUtils.randomAlphanumeric(8);
     	this.deal = Deal.findById(this.deal.id); //fetch deal from datastore
+    	this.hotelName = this.deal.hotelName;
     	this.priceDay2 = this.deal.priceDay2;
     	this.priceDay3 = this.deal.priceDay3;
     	this.priceDay4 = this.deal.priceDay4;
     	this.priceDay5 = this.deal.priceDay5;
-    	this.hotelName = this.deal.hotelName;
-    	this.priceCents = this.getTotalPrice(); //save actual deal price
+    	this.netPriceDay2 = this.deal.netPriceDay2;
+    	this.netPriceDay3 = this.deal.netPriceDay3;
+    	this.netPriceDay4 = this.deal.netPriceDay4;
+    	this.netPriceDay5 = this.deal.netPriceDay5;
+    	this.priceCents = this.calculateTotalPrice(); //save actual deal price
     	this.salePriceCents = this.deal.salePriceCents;
-    	this.totalSalePrice =  this.getTotal();
+    	this.netSalePriceCents = this.deal.netSalePriceCents;
+    	this.totalSalePrice =  this.calculateTotalSalePrice();
+    	this.netTotalSalePrice =  this.calculateTotalNetSalePrice();
     	this.credits = this.getUserCredits();
     	this.finalPrice = this.totalSalePrice - this.credits;
+    	this.fee = this.finalPrice - this.netTotalSalePrice;
     	this.invoiced = Boolean.FALSE;
     	this.canceled = Boolean.FALSE;
     	this.breakfastIncluded = this.deal.breakfastIncluded == null ? false : this.deal.breakfastIncluded;
@@ -148,7 +161,7 @@ public class Booking extends Model {
 		}
 	}
     
-    private Integer getTotalPrice() {
+    private Integer calculateTotalPrice() {
 		return this.deal.priceCents * this.nights;
 	}
 
@@ -172,9 +185,10 @@ public class Booking extends Model {
     	return Booking.all().filter("user", user).fetch();
     }
    
-    public Integer getTotal() {
+    private Integer calculateTotalSalePrice() {
     	Integer price = this.deal.salePriceCents;
     	if (this.nights >= 2){
+    		Logger.debug("Total price day 2: %s , total: %s", this.deal.priceDay2, price);
     		price += this.deal.priceDay2;
     	}
     	if (this.nights >= 3){
@@ -187,6 +201,25 @@ public class Booking extends Model {
     		price += this.deal.priceDay5;
     	}
     	Logger.debug("Total Sale price: " + price);
+
+        return price;
+    }
+    
+    private Float calculateTotalNetSalePrice() {
+    	Float price = this.deal.netSalePriceCents;
+    	if (this.nights >= 2){
+    		price += this.deal.netPriceDay2;
+    	}
+    	if (this.nights >= 3){
+    		price += this.deal.netPriceDay3;
+    	}
+    	if (this.nights >= 4){
+    		price += this.deal.netPriceDay4;
+    	}
+    	if (this.nights == 5){
+    		price += this.deal.netPriceDay5;
+    	}
+    	Logger.debug("Total Net Sale price: " + price);
 
         return price;
     }
@@ -260,6 +293,5 @@ public class Booking extends Model {
     		.filter("checkinDate>", start).filter("checkinDate<", end).count();
 		return bookings;
 	}
-	
 
 }

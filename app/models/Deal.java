@@ -3,6 +3,8 @@ package models;
 import helper.DateHelper;
 import helper.ImageHelper;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,6 +67,8 @@ public class Deal extends Model {
 	@Required
 	public Integer salePriceCents;
 	@Required
+	public Float netSalePriceCents;
+	@Required
 	@Min(0)
 	public Integer priceCents;
 	@Min(0)
@@ -75,6 +79,14 @@ public class Deal extends Model {
 	public Integer priceDay4;
 	@Min(0)
 	public Integer priceDay5;
+	@Min(0)
+	public Float netPriceDay2;
+	@Min(0)
+	public Float netPriceDay3;
+	@Min(0)
+	public Float netPriceDay4;
+	@Min(0)
+	public Float netPriceDay5;
 	@Required
 	@Min(0)
 	public Integer quantity;
@@ -176,6 +188,9 @@ public class Deal extends Model {
 		return all().filter("owner", owner).order("position").fetch();
 	}
 	
+	public static List<Deal> findDealsNotFromHotUsa(){
+		return all().filter("isHotUsa", Boolean.FALSE).fetch();
+	}
 
 	public static List<Deal> findDealsFromHotUsa(){
 		return all().filter("isHotUsa", Boolean.TRUE).fetch();
@@ -315,7 +330,7 @@ public class Deal extends Model {
 	 * @param lin
 	 * @param day
 	 */
-	public static void updateDealByCode(String hotelCode, int quantity, Integer price, Boolean breakfastIncluded, String lin, int day){
+	public static void updateDealByCode(String hotelCode, int quantity, Float price, Boolean breakfastIncluded, String lin, int day){
 	    Deal deal = Deal.findByHotelCode(hotelCode);
 	    //Some objects from datastore could come null so we check it
 	    deal.isFake = deal.isFake != null ? deal.isFake : Boolean.FALSE;
@@ -327,44 +342,18 @@ public class Deal extends Model {
 	    	deal.quantity = quantity;
 	    }
 	    
-	  //If is active time and price is bigger than before we want to desactivate the deal
+	  //If is active time and price is bigger than before we want to deactivate the deal
 	    City city = City.findById(deal.city.id);
-	    if (city != null && DateHelper.isActiveTime(DateHelper.getCurrentHour(city.utcOffset))
-	    		&& deal.active && deal.salePriceCents != null 
-	    		&& price != null && deal.salePriceCents < price){
+	    Boolean dealInUse = city != null && DateHelper.isActiveTime(DateHelper.getCurrentHour(city.utcOffset)) && deal.active && deal.salePriceCents != null && price != null;
+	    
+	    if ( dealInUse && day == 0 && deal.netSalePriceCents.compareTo(price) < 0 ){
 	    	deal.active = false;
-	    	Mails.hotusaRisePrices(deal);
+	    	Mails.hotusaRisePrices(deal, price);
 	    }
 	    
-	    switch (day) {
-			case 0:
-				 //If isFake we dont want to change the price automatically by the cron task
-			    if (price != null && price > 0 && !deal.isFake){
-			    	deal.salePriceCents = price;
-			    }
-			    //Set breakfast included
-			    deal.breakfastIncluded = breakfastIncluded;
-			    deal.bookingLine = lin;
-			    break;
-			case 1:
-				deal.priceDay2 = price;
-			    deal.bookingLine2 = lin;
-			    break;
-			case 2:
-				deal.priceDay3 = price;
-			    deal.bookingLine3 = lin;
-			    break;
-			case 3:
-				deal.priceDay4 = price;
-			    deal.bookingLine4 = lin;
-			    break;
-			case 4:
-				deal.priceDay5 = price;
-			    deal.bookingLine5 = lin;
-			    break;    
-			default:
-				break;
-		}
+	    Boolean updatePublicPrices = !dealInUse;
+	    deal.updateHotusaPrice(price, breakfastIncluded, lin, day, updatePublicPrices);
+	    
 	    Logger.debug("Updatind deal: " + deal.hotelName + " price: " + deal.salePriceCents + " quantity: " + quantity);
 	    deal.updated = Calendar.getInstance().getTime();
 	    
@@ -378,41 +367,69 @@ public class Deal extends Model {
 	 * @param lin
 	 * @param day
 	 */
-	public static void updatePriceByCode(String hotelCode, Integer price, String lin, int day){
-	    Deal deal = Deal.findByHotelCode(hotelCode);	    
-	    switch (day) {
-			case 0:
-				 //If isFake we dont want to change the price automatically by the cron task
-			    if (price != null && price > 0 && !deal.isFake){
-			    	deal.salePriceCents = price;
-			    }
-			    //Set breakfast included
-			    deal.bookingLine = lin;
-			    break;
-			case 1:
-				deal.priceDay2 = price;
-			    deal.bookingLine2 = lin;
-			    break;
-			case 2:
-				deal.priceDay3 = price;
-			    deal.bookingLine3 = lin;
-			    break;
-			case 3:
-				deal.priceDay4 = price;
-			    deal.bookingLine4 = lin;
-			    break;
-			case 4:
-				deal.priceDay5 = price;
-			    deal.bookingLine5 = lin;
-			    break;    
-			default:
-				break;
-		}
+	public static void updatePriceByCode(String hotelCode, Float price, String lin, int day){
+	    Deal deal = Deal.findByHotelCode(hotelCode);
+	    Boolean updatePublicPrices = Boolean.TRUE;
+	    deal.updateHotusaPrice(price, null, lin, day, updatePublicPrices);
 	    Logger.debug("Updating price for: " + deal.hotelName + " day: " + day );
 	    deal.updated = Calendar.getInstance().getTime();
 	    deal.update();
 	}
 	
+	private void updateHotusaPrice(Float price, Boolean breakfastIncluded, String lin, int day, Boolean updatePublicPrices){
+		Integer roundPrice = 0;
+		if (price != null){
+			roundPrice = roundPrice(price);
+		}
+		switch (day) {
+		case 0:
+			 //If isFake we dont want to change the price automatically by the cron task
+		    if (price != null && price > 0 && !this.isFake){
+		    	this.salePriceCents = updatePublicPrices ? roundPrice : this.salePriceCents;
+		    	this.netSalePriceCents = price;
+		    }
+		    //Set breakfast included
+		    if (breakfastIncluded != null){
+		    	this.breakfastIncluded = breakfastIncluded;
+		    }
+		    this.bookingLine = lin;
+		    break;
+		case 1:
+			this.priceDay2 = updatePublicPrices ? roundPrice : this.priceDay2;
+			this.netPriceDay2 = price;
+			this.quantityDay2 = 1;
+		    this.bookingLine2 = lin;
+		    break;
+		case 2:
+			this.priceDay3 = updatePublicPrices ? roundPrice : this.priceDay3;
+			this.netPriceDay3 = price;
+			this.quantityDay3 = 1;
+		    this.bookingLine3 = lin;
+		    break;
+		case 3:
+			this.priceDay4 = updatePublicPrices ? roundPrice : this.priceDay4;
+			this.netPriceDay4 = price;
+			this.quantityDay4 = 1;
+		    this.bookingLine4 = lin;
+		    break;
+		case 4:
+			this.priceDay5 = updatePublicPrices ? roundPrice : this.priceDay5;
+			this.netPriceDay5 = price;
+			this.quantityDay5 = 1;
+		    this.bookingLine5 = lin;
+		    break;    
+		default:
+			break;
+		}
+	}
+	
+	private Integer roundPrice(Float price){
+		BigDecimal priceRounded = new BigDecimal(price);
+		priceRounded = priceRounded.setScale(0, RoundingMode.DOWN);
+		return price.intValue();
+	}
+	
+		
 	/**
 	 * Hotusa API method
 	 * @param hotelCode code to find the hotel
@@ -578,6 +595,27 @@ public class Deal extends Model {
 	    else{
 	    	this.discount = 0;
 	    }
+	}
+
+	public void calculateNetPrices() {
+		this.company = Company.findById(this.company.id);
+		if (this.company.fee != null){
+	    	this.netSalePriceCents = calculateNetPriceByFee(this.salePriceCents);
+	    	this.netPriceDay2 = calculateNetPriceByFee(this.priceDay2);
+	    	this.netPriceDay3 = calculateNetPriceByFee(this.priceDay3);
+	    	this.netPriceDay4 = calculateNetPriceByFee(this.priceDay4);
+	    	this.netPriceDay5 = calculateNetPriceByFee(this.priceDay5);
+	    }
+	    else{
+	    	Logger.error("Owner updated deal but company has not the fee: %s ", this.hotelName);
+	    }
+	}
+	
+	private Float calculateNetPriceByFee(Integer price){
+		if (price != null){
+			return new Float(price - (price * this.company.fee / 100.0));
+		}
+		return null;
 	}
 
 }

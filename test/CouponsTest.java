@@ -1,3 +1,5 @@
+import java.util.Calendar;
+
 import models.Coupon;
 import models.MyCoupon;
 import models.User;
@@ -32,55 +34,87 @@ public class CouponsTest  extends UnitTest {
 	    // Create a new user and save it
 		User bob =  new User("bob@gmail.com", "secret", "Bob", "Smith");
 	    bob.insert();
-	    MyCoupon myCoupon = MyCoupon.findByKeyAndUser(bob.refererId, bob);
-	    assertNotNull(myCoupon);
-	    Logger.debug("coupon: " + myCoupon + " is valid: " + myCoupon.isValid());
-	    assertEquals(12, myCoupon.credits);
-	    assertTrue(myCoupon.isValid());
-	    //bob dont have credits until he uses his own coupon
-	    assertEquals(0, bob.credits);
 	    //Check if general coupon for his friends exists
 	    Coupon couponFriends = Coupon.findByKey(bob.refererId);
 	    assertNotNull(couponFriends);
-	    assertEquals(12, couponFriends.credits);
+	    assertEquals(20, couponFriends.credits);
+	    Logger.debug("coupon: " + couponFriends + " is valid: " + couponFriends.isValid());
+	    assertTrue(couponFriends.isValid());;
+	    MyCoupon myCoupon = MyCoupon.findByKeyAndUser(bob.refererId, bob);
+	    assertNull(myCoupon);
+	    //bob  have 0 credits	
+	    assertEquals(0, bob.calculateTotalCreditsFromMyCoupons());
+	   
 	}
 	
 	@Test
 	public void useOwnCoupon() throws InvalidCouponException{
+		Logger.debug("##### useOwnCoupon #####");
 		User bob =  new User("bob@gmail.com", "secret", "Bob", "Smith");
 	    bob.insert();
-	    //Bob use its own coupon
-	    MyCoupon myCoupon = MyCoupon.findByKeyAndUser(bob.refererId, bob);
-	    myCoupon.use();
-	    bob.get(); //refresh bob
-	    assertEquals(myCoupon.credits, bob.credits);
-	    assertTrue(myCoupon.used);
+	    Coupon coupon = Coupon.findByKey(bob.refererId);
+	    
 	    InvalidCouponException error = null;
 	    try {
-			myCoupon.use();
+	    	//Bob use its own coupon
+		    MyCoupon myCoupon = coupon.createMyCoupon(bob); 
+		    myCoupon.use();
 		} catch (InvalidCouponException e) {
 			error = e;
 		}
 		assertNotNull(error);
+		
+		bob.get(); //refresh bob
+	    assertEquals(0, bob.calculateTotalCreditsFromMyCoupons());
+	}
+	
+	@Test
+	public void useFirstCoupon() throws InvalidCouponException{
+		Logger.debug("##### useFirstCoupon #####");
+		User bob =  new User("bob@gmail.com", "secret", "Bob", "Smith");
+	    bob.insert();
+	    Coupon coupon = createWelcomeCoupon();
+	    InvalidCouponException error = null;
+	    try {
+	    	//Bob use the welcome coupon
+		    MyCoupon myCoupon = coupon.createMyCoupon(bob); 
+		    bob.get(); //refresh bob
+		    assertEquals(10, bob.calculateTotalCreditsFromMyCoupons());
+		    myCoupon.use();
+		    assertEquals(0, bob.calculateTotalCreditsFromMyCoupons());
+		} catch (InvalidCouponException e) {
+			error = e;
+		}
+		assertNull(error);
 	}
 	
 	@Test
 	public void useFriendCoupon() throws InvalidCouponException {
-		User bob =  new User("bob@gmail.com", "secret", "Bob", "Smith");
+		Logger.debug("##### useFriendCoupon #####");
+		User bob =  new User("bob@gmail.com", "secret", "Bob", "BOB");
 	    bob.insert();
-		User pepe =  new User("pepe@gmail.com", "secret", "Pepe", "Garcia");
+		User pepe =  new User("pepe@gmail.com", "secret", "Pepe", "PEPE");
 	    pepe.insert();
-	    //Pepe uses bob coupon so gives him 12€
+	    //Pepe uses bob coupon so gives him 20€
 	    Coupon couponBob = Coupon.findByKey(bob.refererId);
 	    MyCoupon myCouponPepe = couponBob.createMyCoupon(pepe);
-	    myCouponPepe.use();
-	    assertEquals(12, couponBob.credits);
-	    assertEquals(couponBob.credits, pepe.credits);
+	    assertEquals(20, couponBob.credits);
+	    int creditsUsed =  myCouponPepe.use();
+	    assertEquals(20,creditsUsed);
+	    assertEquals(20, bob.calculateTotalCreditsFromMyCoupons());
 	    assertEquals(couponBob.key, pepe.referer);
 	    myCouponPepe = MyCoupon.findByKeyAndUser(couponBob.key, pepe);
 	    assertNotNull(myCouponPepe);
 	    assertTrue(myCouponPepe.used);
-	    MyCoupon myCouponReferal = MyCoupon.findByKeyAndUser(pepe.refererId, bob);
-	    assertNull(myCouponReferal);
+	}
+	
+	private Coupon createWelcomeCoupon() {
+		Coupon coupon = new Coupon("WELCOME",10,"FIRST");
+	    Calendar calendar = Calendar.getInstance();
+	    calendar.add(Calendar.DAY_OF_YEAR, 5);
+	    coupon.expire = calendar.getTime();
+	    coupon.duration = 10;
+	    coupon.insert();
+	    return coupon;
 	}
 }

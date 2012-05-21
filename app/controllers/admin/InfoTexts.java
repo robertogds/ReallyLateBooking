@@ -9,8 +9,9 @@ import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
 import controllers.CRUD.ObjectType;
+import controllers.Security;
 
-@Check("admin")
+@Check(Security.EDITOR_ROLE)
 @With(Secure.class)
 @CRUD.For(InfoText.class)
 public class InfoTexts  extends controllers.CRUD {

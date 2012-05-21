@@ -3,135 +3,237 @@
 <div id="crudShow" class="control_panel">
 
         <h2 id="crudShowTitle">Control Panel</h2>
-        
-
+        <div>
+        <label style="width: 12.5%;">Start Date</label>  
+        <label>End Date</label>   
+        </div>
+        <br/> 
+		<div>
         #{form @updateStatistics()}
-        	<div>
-		     <label>Start Date</label>   
 			#{select 'dayStart', items:1..31, value:data.dayStart,  id:'daySelect' /}
 			#{select 'monthStart', items:1..12, value:data.monthStart,  id:'monthSelect' /}
 			#{select 'yearStart', items:2011..2012, value:data.yearStart,  id:'yearSelect' /}
-			</div>
-			<div>
-			 <label>End Date</label>   
+			
 			#{select 'dayEnd', items:1..31, value:data.dayEnd,  id:'daySelect' /}
 			#{select 'monthEnd', items:1..12, value:data.monthEnd,  id:'monthSelect' /}
 			#{select 'yearEnd', items:2011..2012, value:data.yearEnd,  id:'yearSelect' /}
-			</div>
-			<div>
-		 <label class="second">Start Date 2</label>   
-			#{select 'dayStartB', items:1..31, value:data.dayStartB,  id:'daySelect' /}
-			#{select 'monthStartB', items:1..12, value:data.monthStartB,  id:'monthSelect' /}
-			#{select 'yearStartB', items:2011..2012, value:data.yearStartB,  id:'yearSelect' /}
-			</div>
-			<div>
-			 <label class="second">End Date 2</label>   
-			#{select 'dayEndB', items:1..31, value:data.dayEndB,  id:'daySelect' /}
-			#{select 'monthEndB', items:1..12, value:data.monthEndB,  id:'monthSelect' /}
-			#{select 'yearEndB', items:2011..2012, value:data.yearEndB,  id:'yearSelect' /}
 			<input type="submit" value="Refresh" />
-			</div>
-
+		#{/form}
+		</div>
+		<div>
+		#{form @exportStatistics()}
+			#{select 'dayStart', items:1..31, value:data.dayStart,  id:'daySelect' /}
+			#{select 'monthStart', items:1..12, value:data.monthStart,  id:'monthSelect' /}
+			#{select 'yearStart', items:2011..2012, value:data.yearStart,  id:'yearSelect' /}
+			#{select 'dayEnd', items:1..31, value:data.dayEnd,  id:'daySelect' /}
+			#{select 'monthEnd', items:1..12, value:data.monthEnd,  id:'monthSelect' /}
+			#{select 'yearEnd', items:2011..2012, value:data.yearEnd,  id:'yearSelect' /}
+			<input type="submit" value="Export to CSV" />
+		#{/form}
+		</div>
+		
+		<div>
+		 #{form @exportStatisticsByDays()}
+			#{select 'dayStart', items:1..31, value:data.dayStart,  id:'daySelect' /}
+			#{select 'monthStart', items:1..12, value:data.monthStart,  id:'monthSelect' /}
+			#{select 'yearStart', items:2011..2012, value:data.yearStart,  id:'yearSelect' /}
+			
+			#{select 'dayEnd', items:1..31, value:data.dayEnd,  id:'daySelect' /}
+			#{select 'monthEnd', items:1..12, value:data.monthEnd,  id:'monthSelect' /}
+			#{select 'yearEnd', items:2011..2012, value:data.yearEnd,  id:'yearSelect' /}
+			<input type="submit" value="Export by day to CSV" />
+		#{/form}
+		</div>
+		 <br/> 
+		<div><label>USERS REGISTERED: ${data.registered}</label></div>
+		 <br/> 
         <div class="objectForm">
         <div id="crudListTable">
 			<table>
 				<thead>
 					<tr>
-						<th width="20%">
+						<th>
 							City
 						</th>
-						<th width="10%">
-							Visits
-						</th>
-						<th width="10%">
+						<th>
 							Bookings
 						</th>
-						<th width="10%">
-							Max Discount
+						<th>
+							Bookings Monday
 						</th>
-						<th width="10%">
-							Min Discount
+						<th>
+							Bookings Tuesday
 						</th>
-						<th width="10%">
-							Direct Active Hotels
+						<th>
+							Bookings Wednesday
 						</th>
-						<th width="10%">
-							Hotels
+						<th>
+							Bookings Thursday
 						</th>
-						<th width="10%">
-							Registered
+						<th>
+							Bookings Friday
 						</th>
-						
+						<th>
+							Bookings Saturday
+						</th>
+						<th>
+							Bookings Sunday
+						</th>
+						<th>
+							Bookings App
+						</th>
+						<th>
+							Bookings Web
+						</th>
+						<th>
+							Bookers
+						</th>
+						<th>
+							Comission
+						</th>
+						<th>
+							Sales
+						</th>
+						<th>
+							Nights per booking
+						</th>
+						<th>
+							Avg Price
+						</th>
+						<th>
+							Avg Comission
+						</th>
+						<th>
+							Bookings per user
+						</th>
 					</tr>
 				</thead>
 				<tbody>
-				%{ data.cities.eachWithIndex() { 
+				%{ data.stats.eachWithIndex() { 
 					key, value , index -> }%
 						 <tr class="${index % 2 ? 'even' : 'odd'}" >
 							<td>
-								${key.name}
+								${key}
 							</td>
 							<td>
-								<label> ${value.visits}</label> 
-								<label class="second"> ${data.citiesB[key].visits}</label> 
+								<label>${data.stats[key].bookings}</label> 
 							</td>
 							<td>
-								<label> ${value.bookings}</label> 
-								<label class="second"> ${data.citiesB[key].bookings}</label> 
+								<label>${data.stats[key].bookingsMonday}</label> 
 							</td>
 							<td>
-								${value.maxDiscount}%
+								<label>${data.stats[key].bookingsTuesday}</label> 
 							</td>
 							<td>
-								${value.minDiscount}%
+								<label>${data.stats[key].bookingsWednesday}</label> 
 							</td>
 							<td>
-								${value.activeDirectHotels}
+								<label>${data.stats[key].bookingsThursday}</label> 
 							</td>
 							<td>
-								${value.hotels}
+								<label>${data.stats[key].bookingsFriday}</label> 
 							</td>
 							<td>
-								<label> ${data.registered}</label> 
-								<label class="second"> ${data.registeredB}</label> 
+								<label>${data.stats[key].bookingsSaturday}</label> 
 							</td>
+							<td>
+								<label>${data.stats[key].bookingsSunday}</label> 
+							</td>
+							<td>
+								<label>${data.stats[key].bookingsApps}</label> 
+							</td>
+							<td>
+								<label>${data.stats[key].bookingsWeb}</label> 
+							</td>
+							<td>
+								<label>${data.stats[key].totalusers}</label> 
+							</td>
+							<td>
+								<label>${data.stats[key].totalCommission?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.stats[key].totalPrice?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.stats[key].nightsPerBookingAvg}</label> 
+							</td>
+							
+							<td>
+								<label>${data.stats[key].priceAvg?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.stats[key].commisionAvg?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.stats[key].bookingPerUserAvg}</label> 
+							</td>
+
 						</tr>
 				%{ } }%
-				<tr style="background-color: grey;">
+							<tr style="background-color: grey;">
 							<td>
-								Total
+								TOTAL
 							</td>
 							<td>
-								<label>%{ out.print(data.cities.collect{ key, value -> value.visits }.sum()) %}</label> 
-								<label class="second">%{ out.print(data.citiesB.collect{ key, value -> value.visits }.sum()) %}</label>
+								<label>${data.allCities.bookings}</label> 
 							</td>
 							<td>
-								<label>%{ out.print(data.cities.collect{ key, value -> value.bookings }.sum()) %}</label> 
-								<label class="second">%{ out.print(data.citiesB.collect{ key, value -> value.bookings }.sum()) %}</label>
+								<label>${data.allCities.bookingsMonday}</label> 
 							</td>
 							<td>
-								<label>%{ out.print(data.cities.collect{ key, value -> value.maxDiscount}.max()) %}%</label>
+								<label>${data.allCities.bookingsTuesday}</label> 
 							</td>
 							<td>
-								<label>%{ out.print(data.cities.collect{ key, value -> value.minDiscount}.min()) %}%</label>
+								<label>${data.allCities.bookingsWednesday}</label> 
 							</td>
 							<td>
-								<label>%{ out.print(data.cities.collect { key, value -> value.activeDirectHotels }.sum()) %}</label>
+								<label>${data.allCities.bookingsThursday}</label> 
 							</td>
 							<td>
-								<label>%{ out.print(data.cities.collect { key, value -> value.hotels }.sum()) %}</label>
+								<label>${data.allCities.bookingsFriday}</label> 
 							</td>
 							<td>
-								<label>${data.registered}</label> 
-								<label class="second">${data.registeredB}</label>
+								<label>${data.allCities.bookingsSaturday}</label> 
 							</td>
+							<td>
+								<label>${data.allCities.bookingsSunday}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsApps}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsWeb}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.totalusers}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.totalCommission?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.totalPrice?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.nightsPerBookingAvg}</label> 
+							</td>
+							
+							<td>
+								<label>${data.allCities.priceAvg?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.commisionAvg?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingPerUserAvg}</label> 
+							</td>
+
 						</tr>
 	</tbody>
 	
 	</table>
 	</div>
 </div>
-		#{/form}
+		
 		
 		<div id="chart_div"></div>
 </div>

@@ -1,6 +1,7 @@
 package helper.hotusa;
 
 import helper.DateHelper;
+import helper.UrlConnectionHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,6 +27,7 @@ import models.Booking;
 import models.City;
 import models.Country;
 import models.Deal;
+import notifiers.Mails;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -66,57 +69,6 @@ public final class HotUsaApiHelper {
 	
 	private static HotusaConfig config = HotusaConfig.instance;
 	
-	private static Document prepareRequest(String wsReq){
-		try {
-			wsReq = URLEncoder.encode(wsReq, "UTF-8");
-			String url = config.getRequestUrl(wsReq);
-			URL parsedUrl = new URL(url);
-			URLConnection urlConnection = parsedUrl.openConnection(); 
-			urlConnection.setConnectTimeout(15000); 
-			urlConnection.setReadTimeout(15000); 
-			
-			String xml = convertStreamToString(urlConnection.getInputStream());
-			xml = StringUtils.trim(xml);
-			Logger.debug("response code: " + xml);
-			
-    		Document doc = XML.getDocument(xml);
-    		return doc;
-
-        } catch (Exception e) {
-           Logger.error("Error receiving xml from hotusa: " + e);
-        } 
-        
-		return null;
-	
-	}
-	
-	public static String convertStreamToString(InputStream is)
-	    throws IOException {
-		/*
-		 * To convert the InputStream to String we use the
-		 * Reader.read(char[] buffer) method. We iterate until the
-		 * Reader return -1 which means there's no more data to
-		 * read. We use the StringWriter class to produce the string.
-		 */
-		if (is != null) {
-		    Writer writer = new StringWriter();
-		
-		    char[] buffer = new char[1024];
-		    try {
-		        Reader reader = new BufferedReader(
-		                new InputStreamReader(is, ENCODING));
-		        int n;
-		        while ((n = reader.read(buffer)) != -1) {
-		            writer.write(buffer, 0, n);
-		        }
-		    } finally {
-		        is.close();
-		    }
-		    return writer.toString();
-		} else {        
-		    return "";
-		}
-	}
 
 	private static String getAllHotelsByCityRequest(City city, Integer days){
 		List<Deal> deals = Deal.findDealsFromHotUsaByCity(city);
@@ -170,6 +122,33 @@ public final class HotUsaApiHelper {
  		"<marca/> </parametros></peticion>";
  		
 		return request;
+	}
+	
+	private static String reservationRequestCredit(Booking booking){
+		
+ 		String request = "<?xml version=\"1.0\" encoding=\""+ENCODING+"\"?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_reserva_3.dtd\">" +
+ 				"<peticion> <nombre>Peticion de Reserva</nombre> <agencia>ReallyLateBooking.com</agencia> <tipo>202</tipo> <parametros>" +
+ 				"<codigo_hotel>"+ booking.deal.hotelCode +"</codigo_hotel> <nombre_cliente>"+ booking.creditCardName +"</nombre_cliente> <observaciones></observaciones>" +
+ 				" <num_mensaje /><forma_pago>"+ config.payType +"</forma_pago> <tipo_targeta></tipo_targeta>" +
+ 				" <num_targeta></num_targeta> <mes_expiracion_targeta></mes_expiracion_targeta> <ano_expiracion_targeta></ano_expiracion_targeta>" +
+ 				" <titular_targeta></titular_targeta> <res>";
+		request = request + "<lin>"+ booking.deal.bookingLine +"</lin> ";
+
+ 		if (booking.nights >= 2){
+ 			request = request + "<lin>"+ booking.deal.bookingLine2 +"</lin> ";
+    	}
+    	if (booking.nights >= 3){
+    		request = request + "<lin>"+ booking.deal.bookingLine3 +"</lin> ";    	
+    	}
+    	if (booking.nights >= 4){
+    		request = request + "<lin>"+ booking.deal.bookingLine4 +"</lin> ";    	
+    	}
+    	if (booking.nights == 5){
+    		request = request + "<lin>"+ booking.deal.bookingLine5 +"</lin> ";    	
+    	}
+    	request = request + "</res> </parametros></peticion>";
+ 		
+ 		return request;
 	}
 	
 	private static String reservationRequest(Booking booking){
@@ -243,7 +222,9 @@ public final class HotUsaApiHelper {
 		for (City city : cities){
 			if (DateHelper.isWorkingTime(city.utcOffset)){
 				String wsReq = getAllHotelsByCityRequest(city, config.bookingDays);
-				parseHotelPricesResponse110(wsReq, config.bookingDays);
+				if (wsReq != null){
+					parseHotelPricesResponse110(wsReq, config.bookingDays);
+				}
 			}
 		}
 	}
@@ -261,7 +242,6 @@ public final class HotUsaApiHelper {
 	private static Deal parseHotelInfoResponse(String wsReq) {
 		Logger.debug("WS Request: " + wsReq);
 		Document xml = prepareRequest(wsReq);
-		Logger.debug("WS Response: " + xml.getTextContent());
 		if (xml != null){
 			if (xml.getElementsByTagName("hotel") != null){
 				String hotelCode = xml.getElementsByTagName("codigo_hotel").item(0).getTextContent();
@@ -382,6 +362,20 @@ public final class HotUsaApiHelper {
 			Logger.error("Didnt receive a correct answer from HotUsa Api");
 		}
 	}
+	
+	
+	private static Document prepareRequest(String wsReq) {
+		Document xml;
+		try {
+			xml = UrlConnectionHelper.prepareRequest(config.getRequestUrl(wsReq));
+		} catch (UnsupportedEncodingException e) {
+			Logger.error("Didnt receive a correct answer from HotUsa Api: %s", e);
+			return null;
+		}
+		return xml;
+	}
+
+
 	private static void parseHotelPricesResponse(String wsReq, int bookingDays){
 		Logger.debug("WSRequest: " + wsReq);
 		Document xml = prepareRequest(wsReq);
@@ -451,7 +445,7 @@ public final class HotUsaApiHelper {
 	}
 	
 	public static String reservation(Booking booking){
-		String wsReq = reservationRequest(booking);
+		String wsReq = reservationRequestCredit(booking);
 		Logger.debug("WSRequest: " + wsReq);
 		Document xml = prepareRequest(wsReq);
 		if (xml != null){
@@ -470,7 +464,13 @@ public final class HotUsaApiHelper {
 		else{
 			Logger.error("Didnt receive a correct answer from HotUsa Api. Xml Response is null");
 		}
-		
+		//We wont the deal to be active until we manually check if its an error or not.
+		Deal deal = Deal.findById(booking.deal.id);
+		deal.active = Boolean.FALSE;
+		deal.update();
+		String subject = "#ERROR# Hotusa dio error al confirmar la reserva " + booking.code;
+		String content = "Hotel: " + booking.hotelName + " User: " + booking.userEmail;
+		Mails.errorMail(subject, content);
 		return null;
 	}
 	
@@ -478,16 +478,17 @@ public final class HotUsaApiHelper {
 		String wsReq = confirmationRequest(localizador);
 		Document xml = prepareRequest(wsReq);
 		if (xml != null){
-			String status = xml.getElementsByTagName("estado").item(0).getTextContent();
-			Logger.debug("Confirmation status: " + status);
-			
-			if (status.equals("00")){
-				localizador = xml.getElementsByTagName("localizador").item(0).getTextContent();
-				Logger.debug("Confirmation is Ok, localizador: " + localizador);
-				return localizador;
-			}
-			else{
-				Logger.error("Reservation couldnt be completed");
+			if (xml.getElementsByTagName("estado").item(0) != null ){
+				String status = xml.getElementsByTagName("estado").item(0).getTextContent();
+				Logger.debug("Confirmation status: " + status);
+				if (status.equals("00")){
+					localizador = xml.getElementsByTagName("localizador").item(0).getTextContent();
+					Logger.debug("Confirmation is Ok, localizador: " + localizador);
+					return localizador;
+				}
+				else{
+					Logger.error("Reservation couldnt be completed");
+				}
 			}
 		}
 		else{

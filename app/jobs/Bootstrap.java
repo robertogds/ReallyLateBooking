@@ -1,5 +1,7 @@
 package jobs;
 
+import java.util.Calendar;
+
 import controllers.InfoTexts;
 import models.City;
 import models.Country;
@@ -69,6 +71,8 @@ public class Bootstrap extends Job {
 
 	private void initializeDeals() {
 		Country spain = new Country("España", "spain");
+		spain.active = true;
+		spain.hotusaCode = "MV";
 		spain.insert();
 		City coruña = new City("coruña", "coruña");
 		coruña.active = Boolean.TRUE;
@@ -119,8 +123,11 @@ public class Bootstrap extends Job {
 		madrid.country = spain;
 		madrid.root = "madrid";
 		madrid.mailchimpCode ="MAD";
+		madrid.hotusaCode = "MOLDAVIA";
+		madrid.hotusaProvCode = "MVMOL";
 		madrid.nameEN ="Madrid";
 		madrid.nameFR ="Madrid";
+		madrid.updated = Calendar.getInstance().getTime();
 		madrid.insert();
 		City madridNorth = new City("Madrid Norte", "madrid_north");
 		madridNorth.active = Boolean.TRUE;
@@ -186,10 +193,11 @@ public class Bootstrap extends Job {
 		cibeles.image4 = "madrid/embassy/completo4.jpg";
 		cibeles.image5 = "madrid/embassy/completo5.jpg";
 		cibeles.image10 = "madrid/embassy/completo10.jpg";
-		cibeles.hotelCode = "614546";
-		cibeles.isHotUsa = Boolean.FALSE;
+		cibeles.hotelCode = "601022";
+		cibeles.isHotUsa = Boolean.TRUE;
 		cibeles.contactEmail = "pablo@iipir.com";
 		cibeles.salePriceCents = 145;
+		cibeles.netSalePriceCents = (float) 125.0;
 		cibeles.priceCents = 188;
 		cibeles.priceDay2 = 80;
 		cibeles.priceDay3 = 110;

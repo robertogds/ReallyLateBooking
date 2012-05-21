@@ -5,7 +5,9 @@ import play.Logger;
 import play.i18n.Lang;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With({LogExceptions.class})
 public class InfoTexts extends Controller {
 	
 	public static final String DEAL_DETAIL_TEXT = "deal_detail_text";

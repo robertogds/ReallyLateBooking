@@ -87,10 +87,10 @@ public class Mails extends MailServiceFactory {
 	   }
 	   else{
 	   	  Message message = new Message();
-	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.deal.hotelName);
+	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.hotelName);
 	   	  message.setSender(HOLA_MAIL);
 	   	  String template = "Mails/userBookingConfirmation";
-	   	  message.setTo(booking.user.email);
+	   	  message.setTo(booking.userEmail);
 	   	  message.setBcc(RESERVAS_MAIL);
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", booking.user);
@@ -105,12 +105,12 @@ public class Mails extends MailServiceFactory {
    
    private static void userBookingConfirmationForFriend(Booking booking) {
 	   	  Message message = new Message();
-	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.deal.hotelName);
+	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.hotelName);
 	   	  message.setSender(HOLA_MAIL);
 	   	  String template = "Mails/userBookingConfirmationForFriend";
 	   	  User user = booking.user;
 	   	  message.setTo(booking.bookingForEmail);
-	   	  message.setCc(booking.user.email);
+	   	  message.setCc(booking.userEmail);
 	   	  message.setBcc(RESERVAS_MAIL);
 	   	  Map<String, Object> params = new HashMap<String, Object>();
 	   	  params.put("user", user);
@@ -129,9 +129,9 @@ public class Mails extends MailServiceFactory {
 	   }
 	   else{
 	   	  Message message = new Message();
-	   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.deal.hotelName);
+	   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.hotelName);
 	   	  message.setSender(HOLA_MAIL);
-	   	  message.setTo(booking.deal.contactEmail);
+	   	  message.setTo(booking.hotelEmail);
 	   	  message.setBcc(RESERVAS_MAIL); //easy way to know when a new booking is made
 	   	  String template = "Mails/hotelBookingConfirmation";
 	   	  Map<String, Object> params = new HashMap<String, Object>();
@@ -147,15 +147,15 @@ public class Mails extends MailServiceFactory {
    
    private static void hotelBookingConfirmationForFriend(Booking booking) {
 	  Message message = new Message();
-   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.deal.hotelName);
+   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.hotelName);
    	  message.setSender(HOLA_MAIL);
-   	  message.setTo(booking.deal.contactEmail);
+   	  message.setTo(booking.hotelEmail);
    	  message.setBcc(RESERVAS_MAIL); //easy way to know when a new booking is made
    	  String template = "Mails/hotelBookingConfirmationForFriend";
    	  Map<String, Object> params = new HashMap<String, Object>();
    	  params.put("user", booking.user);
    	  params.put("booking", booking);
-   	  
+   	  Logger.debug(" params: %s", params.toString());
    	  send(message, template, params);
    }
 
@@ -198,6 +198,18 @@ public class Mails extends MailServiceFactory {
 	   	  //set language to client original language
 	   	  Lang.set(lang);
     }
+   	
+   	public static void errorMail(String subject, String content) {
+   		Message message = new Message();
+   		message.setSubject(subject);
+   		message.setSender(HOLA_MAIL);
+   		message.setTo(SOPORTE_MAIL);
+   		String template = "Mails/errorMail";
+   		Map<String, Object> params = new HashMap<String, Object>();
+   		params.put("message", content);
+   		send(message, template, params);
+   		
+   	}
 
 	public static void contactForm(String email, String name, String text) {
 		Message message = new Message();

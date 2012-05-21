@@ -1,6 +1,8 @@
 package controllers;
 
 
+import helper.AffiliateHelper;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -16,7 +18,7 @@ import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
 
-@With(Analytics.class)
+@With({I18n.class, LogExceptions.class, Analytics.class})
 public class Cities  extends Controller {
 	public static final String DEFAULT_COUNTRY = "spain";
 	
@@ -32,6 +34,12 @@ public class Cities  extends Controller {
             redirect("http://" + request.host + request.url); 
         }
     }
+	
+	@Before(only = {"index"})
+	static void checkorigin() throws Throwable{
+		AffiliateHelper.checkorigin(session, params);
+	}
+	
 	
 	public static void index() {
 		Collection<City> cities = staticCities();
@@ -70,6 +78,7 @@ public class Cities  extends Controller {
 		return cities;
 	}
 
+	/** Json API Methods **/
 	public static void dealsByCityId(Long cityId) {
 		City city = City.findById(cityId);
 		Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
@@ -79,8 +88,7 @@ public class Cities  extends Controller {
 		}
         renderJSON(dealsDtos);
 	}
-
-	/** Json API Methods **/
+	
 	public static void cityListAll() {
         Collection<City> cities = City.findActiveCities();
         Collection<CityDTO> citiesDto = prepareCityDto(cities);

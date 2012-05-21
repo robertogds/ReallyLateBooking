@@ -1,0 +1,4 @@
+Date, Bookings, Bookings App, Bookings Web, Bookers, Comission, Sales, Nights per booking, Avg Price, Avg Comission, Bookings per user
+#{list items:dataList, as:'data' }
+${data.startDate?.format('dd-MMMM-yyyy')}, ${data.bookings}, ${data.bookingsApps},${data.bookingsWeb},${data.totalusers},${data.totalCommission?.formatCurrency('EUR')},${data.totalPrice?.formatCurrency('EUR')},${data.nightsPerBookingAvg},${data.priceAvg?.formatCurrency('EUR')},${data.commisionAvg?.formatCurrency('EUR')},${data.bookingPerUserAvg} 
+#{/list}	

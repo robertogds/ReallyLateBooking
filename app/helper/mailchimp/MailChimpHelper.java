@@ -1,6 +1,7 @@
 package helper.mailchimp;
 
 
+import helper.UrlConnectionHelper;
 import helper.hotusa.HotUsaApiHelper;
 import helper.mailchimp.models.CreateCampaignRequest;
 import helper.mailchimp.models.MailchimpCampaign;
@@ -9,6 +10,7 @@ import helper.mailchimp.models.MailchimpTemplate;
 import helper.mailchimp.models.SegmentOptions;
 
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -50,6 +52,7 @@ public final class MailChimpHelper {
 	public static boolean ping(){
 		return prepareRequest(PING, null) != null;
 	}
+	
 	
 	/**
 	 * Returns the lists in the account. The result is a Collection of {@code
@@ -122,7 +125,6 @@ public final class MailChimpHelper {
 		return campaignId;
 	}
 	
-	
 	public static String sendCampaign(String campaignId){
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("apikey", APIKEY);
@@ -131,7 +133,6 @@ public final class MailChimpHelper {
 		Logger.debug("############# ENVIO DE LA CAMPAÑA ##########");
 		return prepareRequest(CAMPAIGN_SEND, params) ;
 	}
-	
 	
 	
 	public static String sendCampaignTest(String campaignId, Collection<String> emails){
@@ -154,39 +155,19 @@ public final class MailChimpHelper {
 		return prepareRequest(CAMPAIGN_SEGMENT_TEST, params) ;
 	}
 	
-	private static String prepareRequest(String method, String params){
-		 try {
-			method = URLEncoder.encode(method, "UTF-8");
-			String url = BASE_URL + method;
-			URL parsedUrl = new URL(url);
-		    
-			HttpURLConnection connection = (HttpURLConnection) parsedUrl.openConnection();
-		    connection.setDoOutput(true);
-		    connection.setRequestMethod("POST");
-		    connection.addRequestProperty("Content-Type", "application/json");
-			
-		    if (params != null){
-		        OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-		        writer.write(params);
-		        writer.close();
-		    }
-		    
-		    Logger.debug("Connection string: %s", connection.getOutputStream().toString());
-	        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-	            // Note: Should check the content-encoding.
-	        	String response = HotUsaApiHelper.convertStreamToString(connection.getInputStream());
-				response = StringUtils.trim(response);
-				Logger.debug("response code: " + response);
-	    		return response;
-	        } else {
-	            throw new Exception();
-	        }
-	    } catch (Exception e) {
-	    	 Logger.error("Error receiving response from mailchimp: " + e);
-	    }
-		return null;
-		
+	
+	private static String prepareRequest(String method, String params) {
+		return UrlConnectionHelper.prepareRequest(createUrl(method), params, UrlConnectionHelper.CONTENT_JSON);
 	}
 
+	private static String createUrl(String method){
+		try {
+			method = URLEncoder.encode(method, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			Logger.error("Error encoding url: %s", e);
+			return null;
+		}
+		return BASE_URL + method;
+	}
 	
 }

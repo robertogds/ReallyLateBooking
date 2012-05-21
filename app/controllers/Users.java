@@ -30,7 +30,7 @@ import com.google.gson.JsonObject;
 
 import controllers.oauth.ApiSecurer;
 
-@With(I18n.class)
+@With({I18n.class, LogExceptions.class})
 public class Users extends Controller {
 	
 	@Before(only = {"dashboard", "updateAccount"})
@@ -61,8 +61,9 @@ public class Users extends Controller {
 			booking.city.get(); 
 			booking.deal.get();
 		}
-		List<MyCoupon> coupons = MyCoupon.findByUser(user);
-		render(user, bookings, totalBookings, coupons);
+		List<MyCoupon> coupons = MyCoupon.findActiveByUser(user);
+		Integer totalCoupons = coupons.size();
+		render(user, bookings, totalBookings, coupons, totalCoupons);
 	}
 	
 	public static void updateAccount(User user, String returnUrl) {
@@ -212,7 +213,12 @@ public class Users extends Controller {
 
 	public static void show(Long id)  {
 	    User user = User.findById(id);
-	    renderJSON(new UserDTO(user));
+	    if (user != null){
+			renderJSON(new UserStatusMessage(Http.StatusCode.OK, "OK", "User found", user));
+		}
+		else{
+			renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", "User not found"));
+		}
 	}
 	
 	public static void rememberPassword(){

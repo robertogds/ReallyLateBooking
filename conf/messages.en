@@ -43,8 +43,8 @@ booking.validation.all.required = All fields are required
 
 mail.welcome.subject = Welcome
 mail.remember.subject = Password recovery
-mail.bookinghotel.subject = #REALLYLATEBOOKING# Booking comfirmation at
-mail.bookinguser.subject = Booking comfirmation at
+mail.bookinghotel.subject = #REALLYLATEBOOKING# Booking confirmation at
+mail.bookinguser.subject = Booking confirmation at
 mails.booking.hotel.hi = Hi
 mails.booking.hotel.justbooked = have just made a reservation
 mails.booking.code = Reservation code
@@ -150,10 +150,10 @@ web.hotels.form.info = If you want to know more about RLB and be published in ou
 web.hotels.form.message = I'd like to have my hotel in RLB.
 web.modal.close=Close
 web.index.title=ReallyLateBooking, same day hotel bookings with big discounts
-web.index.h1=Hotel for tonight
-web.index.h1.small=Get discounts to 70&#37; for the best hotels.
-web.index.register.h2=Be a LateBooker!
-web.index.register.club=We're a <strong>private club</strong> so we can continue offering the best prices to our members.
+web.index.h1=Do you need a Hotel for tonight?
+web.index.h1.small=A new way of travel. Get discounts to 70&#37; for the best hotels, for the same day.
+web.index.register.h2=How it works?
+web.index.register.club=Hotels gives us their <strong>unsold rooms</strong> every day. And you can book a room in seconds, easy and secure.
 web.index.register.btn=I want to be a Latebooker!
 web.index.register.download=You can download <strong>our mobile app</strong>. It´s Free!
 web.index.login.fb.button=<strong>Login</strong> with <strong>Facebook</strong>
@@ -500,3 +500,20 @@ web.resetPassword.title = Reset your password
 user.remember.password.incorrect = You must introduce a password
 user.remember.password.success = You've succesfully changed your password. Enter the club now.
 user.remember.account.notfound = We couldnt find your account, please contact soporte@reallylatebooking.com
+
+web.dashboard.mycoupons.table.date=Activation
+web.dashboard.mycoupons.table.expiration=Expiration
+web.dashboard.mycoupons.table.code=Code
+web.dashboard.mycoupons.table.text=Description
+web.dashboard.mycoupons.table.credits= Credits
+web.dashboard.mycoupons.table.state= State
+coupon.create.error=This coupon is invalid or you've already used it
+coupon.create.correct= The coupon is correct and you can already enjoy the free credits
+coupon.title = Welcome credits
+web.dashboard.mycoupons.total = You have  %s&euro; off for your next booking
+web.dashboard.mycoupons.invite = Invite your friends and get 12&euro; for each one of them once they make their first booking
+web.dashboard.mycoupons.new=Do you have a coupon code?
+web.dashboard.mycoupons.new.button= Validate coupon
+
+itunes.url = http://itunes.apple.com/gb/app/reallylatebooking-las-mejores/id448918487?mt
+android.play.url = https://play.google.com/store/apps/details?id=com.iipir.rlb&hl=en

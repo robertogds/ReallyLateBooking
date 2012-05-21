@@ -96,6 +96,11 @@ public class City extends Model {
 	}
 
 
+	public static List<City> findAllRootCities() {
+		List<City> cities = all().filter("root", "").order("name").fetch();
+		return cities;
+	}
+	
 	public static List<City> findActiveCitiesByCountry(Country country){
 		return all().filter("country", country).filter("active", Boolean.TRUE).order("name").fetch();
 	}
@@ -103,6 +108,7 @@ public class City extends Model {
 	public static List<City> findActiveCitiesByRoot(String root){
 		return all().filter("root", root).filter("active", Boolean.TRUE).order("name").fetch();
 	}
+	
 	
 	public static void addTestCity(Collection<City> cities) {
 		City city = findByUrl("test");

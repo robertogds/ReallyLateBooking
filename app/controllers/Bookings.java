@@ -1,10 +1,17 @@
 package controllers;
 
+import helper.AffiliateHelper;
 import helper.JsonHelper;
+import helper.bidobido.BidoBidoHelper;
 import helper.hotusa.HotUsaApiHelper;
+import helper.paypal.PaypalHelper;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import models.Booking;
 import models.City;
@@ -23,6 +30,7 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.i18n.Messages;
 import play.mvc.Before;
+import play.mvc.Catch;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
@@ -32,7 +40,7 @@ import com.google.gson.JsonParseException;
 
 import controllers.oauth.ApiSecurer;
 
-@With(I18n.class)
+@With({I18n.class, LogExceptions.class})
 public class Bookings extends Controller{
 	
 	@Before(only = {"doBooking"})
@@ -40,7 +48,7 @@ public class Bookings extends Controller{
 		Security.checkConnected();
     }
 	
-	@Before(unless = {"doBooking"})
+	@Before(unless = {"doBooking","completeBooking"})
 	static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -51,7 +59,7 @@ public class Bookings extends Controller{
 		}
 	}
 	
-	public static void doBooking(@Valid Booking booking, @Required Long dealId){
+	public static void doBooking(@Valid Booking booking, @Required Long dealId, @Required String cancelUrl) throws UnsupportedEncodingException{
 		//Assign booking user to the current session user
 		User user = User.findById(Long.valueOf(session.get("userId")));
 		booking.user = user;
@@ -59,10 +67,10 @@ public class Bookings extends Controller{
 		booking.deal = deal;
 		booking.rooms = 1; //we dont allow more rooms by now
 		if (!validation.hasErrors()){ 
-			booking.validate(); //Custom validation
+			booking.validateNoCreditCart(); //Custom validation
 		}
 		if (!validation.hasErrors()){ 
-			tryBooking(booking, user);
+			tryBooking(booking, cancelUrl);
 		}
 		else{
 			params.flash(); // add http parameters to the flash scope
@@ -72,7 +80,7 @@ public class Bookings extends Controller{
 		}
 	}
 	
-	private static void tryBooking(Booking booking, User user){
+	private static void tryBooking(Booking booking, String cancelUrl) throws UnsupportedEncodingException{
 		Logger.debug("Valid booking from web");
 		//we need to fetch all the info form user and deal 
 		booking.city = City.findById(booking.deal.city.id);
@@ -80,51 +88,71 @@ public class Bookings extends Controller{
 		booking.deal.isHotUsa = booking.deal.isHotUsa != null ? booking.deal.isHotUsa : Boolean.FALSE;
 		booking.deal.isFake = booking.deal.isFake != null ? booking.deal.isFake : Boolean.FALSE;
 		booking.fromWeb = true;
+		//booking.canceled = true; //we save the booking as canceled and will set it to false when payment is completed
+		booking.pending = true;
 		booking.insert();
-		if (booking.deal.isHotUsa && !booking.deal.isFake ){
-			String localizador = HotUsaApiHelper.reservation(booking);
-			if (localizador != null){
-				saveUnconfirmedBooking(booking, localizador);
-			}
-			else{
-				Logger.error("It's not an error, Hotusa didnt give us the booking identifier. Why?");
-		        flash.error(Messages.get("booking.validation.over"));
-		        String cityUrl = booking.city.isRootCity() ? booking.city.url : booking.city.root;
-		        //If booking is not complete, delete booking
-				booking.delete();
-				Deals.list(cityUrl);
-			}
+		//String paymentUrl = BidoBidoHelper.getPaymentUrl(booking);
+		String paypalUrl = PaypalHelper.setCheckout(booking, cancelUrl);
+		redirect(paypalUrl);
+	}
+	
+	public static void completeBooking(String token, String PayerID){
+		Booking booking = Booking.findByPaypalToken(token);
+		User user = User.findById(Long.valueOf(session.get("userId")));
+		if (booking == null || user == null){
+			Logger.error("Can´t find Booking or User from Paypal with token %s for payerId %s", token, PayerID);
+			String subject = "#WARNING#  Can´t find Booking or User from Paypal with token " + token + " for payerId " + PayerID;
+			String content = " No se le ha hecho cargo en la tarjeta ni se ha reservado el hotel ";
+			Mails.errorMail(subject, content);
+			error();
 		}
 		else{
-			updateDealRooms(booking.deal.id, booking.rooms, booking.nights);
-			updateUserCredits(booking, user);
-			activateCouponToReferal(user);
-			Mails.hotelBookingConfirmation(booking);
+			booking.user = user;
+			Boolean paymentCompleted = PaypalHelper.confirmPayment(booking, token, PayerID);
+			if (paymentCompleted){
+				booking.deal = Deal.findById(booking.deal.id);
+				if ((booking.deal.isHotUsa != null && booking.deal.isHotUsa) && (booking.deal.isFake == null||!booking.deal.isFake )){ 
+					String localizador = HotUsaApiHelper.reservation(booking);
+					if (localizador != null){
+						saveUnconfirmedBooking(booking, localizador);
+					}
+					else{
+						Logger.error("It's not an error, Hotusa didnt give us the booking identifier. Why?");
+						String subject = "#ERROR#  Hotusa didnt give us the booking identifier. Booking is  " + booking.code;
+						String content = "#IMPORTANT# booking is already Payed with token " + token + " for payerId " + PayerID ;
+						Mails.errorMail(subject, content);
+				        flash.error(Messages.get("booking.validation.over"));
+				        String cityUrl = booking.city.isRootCity() ? booking.city.url : booking.city.root;
+						Deals.list(cityUrl);
+					}
+				}
+				else{
+					updateDealRooms(booking.deal.id, booking.rooms, booking.nights);
+					user.markMyCouponsAsUsed(booking.credits);
+					Mails.hotelBookingConfirmation(booking);
+				}
+				//inform affiliate of booking if neccessary
+				if (AffiliateHelper.fromAffiliate(session)) AffiliateHelper.sendAffiliateBooking(booking, session);
+				//inform user by mail 
+				Mails.userBookingConfirmation(booking);
+				//inform user at the web
+				flash.success(Messages.get("web.bookingForm.success"));
+				//send user to his bookings list
+				Users.dashboard();
+			}
+			else{
+				Logger.debug("Can´t make the charge to the credit card");
+				String subject = "#WARNING#  Intento de compra cancelado de la reserva  " + booking.code;
+				String content = "Puede que lo cancelase el usuario o que fallase. user: "+ user.email + " Token: " + token + " for payerId " + PayerID ;
+				Mails.errorMail(subject, content);
+				Deals.bookingForm(booking.deal.id);
+			}
 		}
-		//inform user by mail 
-		Mails.userBookingConfirmation(booking);
-		//inform user at the web
-		flash.success(Messages.get("web.bookingForm.success"));
-		//send user to his bookings list
-		Users.dashboard();
 	}
 	
-	private static void updateUserCredits(Booking booking, User user) {
-		user.credits = user.credits - booking.credits;
-		user.update();
-	}
-	private static void activateCouponToReferal(User user) {
-		if (StringUtils.isNotBlank(user.referer)){
-			User referer = User.findByRefererId(user.referer);
-			MyCoupon coupon = MyCoupon.findByKeyAndUser(user.refererId, referer);
-			coupon.active = Boolean.TRUE;
-			coupon.update();
-			//TODO send mail to referal?
-		}
-	}
+	
 	
 	/*** Json API methods ****/
-	
 	public static void listByUser(Long userId){
 		User user = User.findById(userId);
 		List<Booking> bookingList = Booking.findByUser(user);

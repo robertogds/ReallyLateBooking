@@ -58,18 +58,13 @@ public class Booking extends Model {
     @Required
     public Integer nights;
     public Integer rooms;
-    @Required
     public String creditCardType;
-    @Required
     public String creditCard;
-    @Required
     @MinSize(value=3)
     @MaxSize(value=70)
     public String creditCardName;
-    @Required
     @Valid
     public String creditCardExpiry;
-    @Required
     @MinSize(value=3)
     @MaxSize(value=4)
     public String creditCardCVC;
@@ -101,6 +96,22 @@ public class Booking extends Model {
 	public String comment;
 	public boolean breakfastIncluded;
 	public boolean fromWeb;
+	public String dealAddress;
+	public boolean payed;
+	public boolean pending;
+	public String paypalToken;
+	public String paypalPayerId;
+	public String hotelEmail;
+	public String userEmail;
+	public String transactionId;
+	public String orderTime;
+	public String amt;
+	public String currencyCode;
+	public String feeAmt;
+	public String settleAmt;
+	public String taxAmt;
+	public String exchangeRate;
+	public String paymentStatus;
 
     public Booking(Deal deal, User user) {
         this.deal = deal;
@@ -131,8 +142,11 @@ public class Booking extends Model {
     	this.finalPrice = this.totalSalePrice - this.credits;
     	this.fee = this.finalPrice - this.netTotalSalePrice;
     	this.invoiced = Boolean.FALSE;
-    	this.canceled = Boolean.FALSE;
+    	this.payed = Boolean.FALSE;
     	this.breakfastIncluded = this.deal.breakfastIncluded == null ? false : this.deal.breakfastIncluded;
+    	this.dealAddress = this.deal.address;
+    	this.hotelEmail = this.deal.contactEmail;
+    	this.userEmail = this.user.email;
     	super.insert();
 	}
 	
@@ -142,14 +156,10 @@ public class Booking extends Model {
 	 * If its hotusa we cant use credits
 	 * */
 	private Integer getUserCredits(){
-		if (this.deal.isHotUsa){
-			return 0;
-		}
-		else{
-			this.user.get();
-			int credits = this.user.credits <= this.totalSalePrice ? this.user.credits : this.totalSalePrice;
-	    	return credits;
-		}
+		this.user.get();
+		int credits = this.user.calculateTotalCreditsFromMyCoupons();
+		this.credits = credits <= this.totalSalePrice ? credits : this.totalSalePrice;
+	    return credits;
 	}
 	
 	private Integer getTotalNights(){
@@ -174,7 +184,7 @@ public class Booking extends Model {
     }
     
     public static List<Booking> findByDeal(Deal deal){
-    	return Booking.all().filter("deal", deal).fetch();
+    	return Booking.all().filter("deal", deal).filter("pending", Boolean.FALSE).filter("canceled", Boolean.FALSE).fetch();
     }
     
     public static List<Booking> findConfirmationRequiredDeals(){
@@ -182,7 +192,7 @@ public class Booking extends Model {
     }
     
     public static List<Booking> findByUser(User user){
-    	return Booking.all().filter("user", user).fetch();
+    	return Booking.all().filter("user", user).filter("canceled", Boolean.FALSE).fetch();
     }
    
     private Integer calculateTotalSalePrice() {
@@ -225,8 +235,7 @@ public class Booking extends Model {
     }
     
 
-	public void validate() {
-		Logger.debug("validate?");
+	public void validateNoCreditCart() {
 		Deal deal = Deal.findById(this.deal.id);
 		Logger.debug("Validating booking, we have: " + deal.quantity  + " and we book: " + this.getRooms());
 		//can't book if there are no enough rooms available
@@ -237,10 +246,12 @@ public class Booking extends Model {
 			Validation.addError("rooms", Messages.get("booking.validation.over"));
 			Logger.error("##AGOTADA: someone tried to make a reservation but there were no left rooms");
 		} 
-		else {
-			creditCardValid();
-			creditCardExpiryValid();
-		}
+	}
+	
+	public void validate() {
+		this.validateNoCreditCart();
+		creditCardValid();
+		creditCardExpiryValid();
 	}
 
     public void creditCardValid(){
@@ -253,7 +264,7 @@ public class Booking extends Model {
     
 	private void creditCardExpiryValid() {
 		 Logger.debug("creditCardExpiryValid?");
-		 String[] parsers = new String[] {"M/yyyy", "M'/'yyyy"};
+		 String[] parsers = new String[] {"M/yy", "M'/'yy"};
 		 Date date ;
 		 try {
 			 date = DateUtils.parseDate(this.creditCardExpiry, parsers);
@@ -289,9 +300,23 @@ public class Booking extends Model {
 	}
 
 	public static int countBookingsByCity(City city, Date start, Date end) {
-		int bookings = Booking.all().filter("city", city)
+		int bookings = Booking.all().filter("city", city).filter("canceled", Boolean.FALSE)
     		.filter("checkinDate>", start).filter("checkinDate<", end).count();
 		return bookings;
+	}
+	
+	public static Collection<Booking> findAllBookingsByDate(Date start, Date end) {
+		return Booking.all().filter("canceled", Boolean.FALSE)
+			.filter("checkinDate>", start).filter("checkinDate<", end).fetch();
+	}
+	
+	public static Collection<Booking> findAllBookingsByDateAndCity(City city, Date start, Date end) {
+		return Booking.all().filter("city", city).filter("canceled", Boolean.FALSE)
+			.filter("checkinDate>", start).filter("checkinDate<", end).fetch();
+	}
+
+	public static Booking findByPaypalToken(String token) {
+		 return all().filter("paypalToken", token).get();
 	}
 
 }

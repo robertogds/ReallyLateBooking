@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<testsuite failures="0" time="0.171" errors="0" skipped="0" tests="4" name="BasicTest">
-  <testcase classname="BasicTest" name="createAndRetrieveDeal" time="0.082">
+<testsuite failures="0" time="0.046" errors="0" skipped="0" tests="4" name="BasicTest">
+  <testcase classname="BasicTest" name="createAndRetrieveDeal" time="0.014">
       </testcase>
-  <testcase classname="BasicTest" name="findDealsFromCity" time="0.083">
+  <testcase classname="BasicTest" name="findDealsFromCity" time="0.028">
       </testcase>
-  <testcase classname="BasicTest" name="validateCreditCard" time="0.003">
+  <testcase classname="BasicTest" name="validateCreditCard" time="0.002">
       </testcase>
-  <testcase classname="BasicTest" name="validateInvalidCreditCard" time="0.003">
+  <testcase classname="BasicTest" name="validateInvalidCreditCard" time="0.002">
       </testcase>
 </testsuite>

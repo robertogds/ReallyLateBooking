@@ -1,5 +1,6 @@
 package helper;
 
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,6 +24,12 @@ public final class DateHelper {
 	public static final int CRON_START_HOUR = 9;
 	public static final int CRON_STOP_HOUR = 3;
 
+	
+	public static String dateToString(Date date){
+		Format formatter = new SimpleDateFormat(Play.configuration.getProperty("date.format"));
+		return formatter.format(date);
+	}
+	
 	/**
 	 * Returns the current state of a city base on his UTC time
 	 * @param utcOffset hours offset over the UTC time

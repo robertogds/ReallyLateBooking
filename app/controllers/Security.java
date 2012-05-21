@@ -8,8 +8,11 @@ import play.mvc.With;
 import play.mvc.Scope.Session;
 import models.*;
 
-@With(I18n.class)
 public class Security extends Secure.Security {
+	public static final String ADMIN_ROLE = "admin";
+	public static final String INVESTOR_ROLE = "investor";
+	public static final String EDITOR_ROLE = "editor";
+	public static final String OWNER_ROLE = "owner";
 	
 	static boolean authenticate(String username, String password) {
 	    return User.connect(username, DigestUtils.md5Hex(password)) != null;
@@ -23,11 +26,17 @@ public class Security extends Secure.Security {
 	static boolean check(String profile) {
 		Logger.debug("User connected: " + connected());
 		User user = User.findByEmail(connected());
-	    if("admin".equals(profile)) {
+	    if(ADMIN_ROLE.equals(profile)) {
 	        return user != null && user.isAdmin;
 	    }
-	    else if("owner".equals(profile)) {
-		    return user != null && user.isOwner;
+	    else if(OWNER_ROLE.equals(profile)) {
+		    return user != null && (user.isAdmin || user.isOwner);
+	    }
+	    else if(INVESTOR_ROLE.equals(profile)) {
+		    return user != null && (user.isAdmin || user.isInvestor);
+	    }
+	    else if(EDITOR_ROLE.equals(profile)) {
+		    return user != null && (user.isAdmin || user.isEditor);
 	    }
 	    
 	    return user != null;

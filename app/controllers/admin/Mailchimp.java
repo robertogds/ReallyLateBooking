@@ -31,9 +31,10 @@ import play.mvc.Router;
 import play.mvc.With;
 import controllers.Check;
 import controllers.Secure;
+import controllers.Security;
 
 
-@Check("admin")
+@Check(Security.ADMIN_ROLE)
 @With(Secure.class)
 public class Mailchimp extends Controller{
 	
@@ -150,7 +151,7 @@ public class Mailchimp extends Controller{
 			Integer emailsNumber = campaign.testSegmentOptions();
 			if (emailsNumber > 0){
 				String id = MailChimpHelper.campaignCreate(campaign);
-				Logger.error("## SENDING TEST WITH ID %s ###", id);
+				Logger.debug("## SENDING TEST WITH ID %s ###", id);
 				sendTestEmail(id);
 			}
 			else{

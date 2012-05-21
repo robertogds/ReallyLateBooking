@@ -14,6 +14,8 @@ public class UserDTO {
 	 public String token;
 	 public String secret;
 	 public String password;
+	 public String referer;
+	 public String refererId;
 	
 	 public UserDTO(User user) {
 		 validateUser(user);
@@ -24,6 +26,8 @@ public class UserDTO {
 		 token = user.token;
 		 secret = user.secret;
 		 password = user.password;
+		 referer = user.referer;
+		 refererId = user.refererId;
 	 }
 
 	private void validateUser(User user) {
@@ -31,7 +35,5 @@ public class UserDTO {
 			throw new InvalidParameterException("Object User cannot be null");
 		}
 	}
-	 
-	 
 	 
 }

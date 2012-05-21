@@ -41,11 +41,8 @@ booking.validation.all.required = Todos los campos son obligatorios
 
 
 mail.welcome.subject = Bienvenido
-
 mail.remember.subject = Recordar contraseña
-
 mail.bookinghotel.subject = #REALLYLATEBOOKING# Confirmación de reserva en
-
 mail.bookinguser.subject = Confirmacion de reserva en
 
 mails.booking.hotel.hi = Hola
@@ -159,10 +156,10 @@ web.hotels.form.info = Si quieres conocer más sobre nosotros y salir publicado 
 web.hotels.form.message = Me gustaría que publicasen mi hotel en RLB.
 web.modal.close=Cerrar
 web.index.title=ReallyLateBooking, reserva hotel para esta noche con descuento
-web.index.h1=Hotel para esta noche
-web.index.h1.small=Consigue descuentos de hasta el 70&#37; en los mejores hoteles.
-web.index.register.h2=¡Sé un latebooker ahora!
-web.index.register.club=Somos un <strong>club privado</strong> para seguir ofreciendo a nuestros miembros los mayores descuentos en hoteles.
+web.index.h1=¿Necesitas un hotel para hoy?
+web.index.h1.small=Una nueva forma de viajar. Reserva hoteles con hasta un 70&#37; de descuento y para el mismo día.
+web.index.register.h2=¿Cómo funciona?
+web.index.register.club=Los hoteles nos dejan las habitaciones que les quedan <strong>libres cada día</strong>. Puedes reservar una habitación en pocos segundos.
 web.index.register.btn=¡Quiero ser un latebooker!
 web.index.register.download=También puedes bajarte nuestra <strong>aplicación móvil</strong>. ¡Es Gratis!
 web.index.login.fb.button=<strong>Ingresar</strong> con <strong>Facebook</strong>
@@ -287,7 +284,7 @@ web.deal.detail.free.notyet.p = Durante estas primeras semanas la web está en b
 web.deal.detail.twitter = He encontrado hotel para esta noche en %s por solo %s€ en
 
 web.dashboard.mybookings.nobookings.h3 = Todavía no has realizado ninguna reserva. ¿A qué estás esperando?
-web.dashboard.mybookings.nobookings.p=As you purchase RLB deals, this page will contain a history of all purchased items for your personal reference.
+web.dashboard.mybookings.nobookings.p=Cuando hagas tu primera reserva, aquí podrás encontrar el detalle de la misma.
 web.dashboard.mybookings.nobookings.btn=Mira las ofertas de hoy ¡Hasta el 70&#37;!
 web.dashboard.mybookings.table.date=Fecha
 web.dashboard.mybookings.table.hotel=Hotel
@@ -476,8 +473,8 @@ web.cities.florencia= Florencia
 web.cities.lisboa= Lisboa
 web.cities.londres= Londres
 web.cities.madrid= Madrid
-web.cities.milan= Milan 
-web.cities.paris= Paris
+web.cities.milan= Milán 
+web.cities.paris= París
 web.cities.praga= Praga
 web.cities.roma= Roma
 web.cities.valencia= Valencia
@@ -510,3 +507,20 @@ web.resetPassword.title = Cambia tu contraseña
 user.remember.password.incorrect = Debes introducir una contraseña
 user.remember.password.success = Has cambiado tu contraseña correctamente. Ya puedes entrar en el club.
 user.remember.account.notfound = No hemos encontrado tu cuenta. Contacta con soporte@reallylatebooking.com
+
+web.dashboard.mycoupons.table.date=Activación
+web.dashboard.mycoupons.table.expiration=Expira
+web.dashboard.mycoupons.table.code=Código
+web.dashboard.mycoupons.table.text=Descripción
+web.dashboard.mycoupons.table.credits= Créditos
+web.dashboard.mycoupons.table.state= Estado
+coupon.create.error=Este cupón ya no es válido o no es acumulable
+coupon.create.correct= El cupón es correcto y ya puedes usarlo para tu próxima reserva
+coupon.title = Cupón de bienvenida
+web.dashboard.mycoupons.total = Tienes un total de  %s&euro; de descuento para tu próxima reserva
+web.dashboard.mycoupons.invite = Invita a tus amigos y recibirás 12&euro; extra por cada amigo que realice una reserva en RLB
+web.dashboard.mycoupons.new=¿Tienes un código de cupón?
+web.dashboard.mycoupons.new.button= Validar código
+
+itunes.url = http://itunes.apple.com/es/app/reallylatebooking-las-mejores/id448918487?mt
+android.play.url = https://play.google.com/store/apps/details?id=com.iipir.rlb&hl=es

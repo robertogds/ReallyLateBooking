@@ -5,7 +5,7 @@ import java.io.*;
 
 import play.Logger;
 
-public class CreditCardHelper {
+public final class CreditCardHelper {
   public static final int INVALID          = -1;  
   public static final int VISA             = 0;
   public static final int MASTERCARD       = 1;

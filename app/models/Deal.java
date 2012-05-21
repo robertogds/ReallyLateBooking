@@ -235,28 +235,34 @@ public class Deal extends Model {
 	 * @return all the active deals by city base on current time
 	 */
 	public static Collection<Deal> findActiveDealsByCityV2(City city) {
-		if (!city.isRootCity()){
-			String root = city.root;
-			city = City.findByUrl(root);
-			Logger.info("City is not root, we search the root: %s and found $s",root, city.name);
+		if (city != null){
+			if (!city.isRootCity()){
+				String root = city.root;
+				city = City.findByUrl(root);
+				Logger.info("City is not root, we search the root: %s and found $s",root, city.name);
+			}
+			switch (DateHelper.getCurrentStateByCityHour(city.utcOffset)) {
+				case (DateHelper.CITY_CLOSED):
+					Logger.info("V2. We are closed");
+					return new ArrayList<Deal>();
+				case (DateHelper.CITY_OPEN_DAY):
+					HashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
+					Logger.info("V2. We are all opened");
+					return dealsMapToListWithMax(dealsMap);
+				case (DateHelper.CITY_OPEN_NIGHT):
+					HashMap<City, List<Deal>> dealsMapAll = findAllActiveDealsByCityV2(city);
+					Integer hour = DateHelper.getCurrentHour(city.utcOffset);
+					Logger.debug("V2. Is between 0am and 6am. Hour:  " + hour);
+					return findActiveDealsByNight(dealsMapAll, hour);
+				default:
+					Logger.error("This never should happen. What hour is it?");
+					return new ArrayList<Deal>();
+			 }
 		}
-		switch (DateHelper.getCurrentStateByCityHour(city.utcOffset)) {
-			case (DateHelper.CITY_CLOSED):
-				Logger.info("V2. We are closed");
-				return new ArrayList<Deal>();
-			case (DateHelper.CITY_OPEN_DAY):
-				HashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
-				Logger.info("V2. We are all opened");
-				return dealsMapToListWithMax(dealsMap);
-			case (DateHelper.CITY_OPEN_NIGHT):
-				HashMap<City, List<Deal>> dealsMapAll = findAllActiveDealsByCityV2(city);
-				Integer hour = DateHelper.getCurrentHour(city.utcOffset);
-				Logger.debug("V2. Is between 0am and 6am. Hour:  " + hour);
-				return findActiveDealsByNight(dealsMapAll, hour);
-			default:
-				Logger.error("This never should happen. What hour is it?");
-				return new ArrayList<Deal>();
-		 }
+		else{
+			Logger.error("##findActiveDealsByCityV2: Trying to find deals but city is null");
+			return null;
+		}
 	}
 
 	/**
@@ -346,7 +352,7 @@ public class Deal extends Model {
 	    City city = City.findById(deal.city.id);
 	    Boolean dealInUse = city != null && DateHelper.isActiveTime(DateHelper.getCurrentHour(city.utcOffset)) && deal.active && deal.salePriceCents != null && price != null;
 	    
-	    if ( dealInUse && day == 0 && deal.netSalePriceCents.compareTo(price) < 0 ){
+	    if ( dealInUse && day == 0 && deal.bestPrice != null && deal.bestPrice.compareTo(price.intValue()) < 0 ){
 	    	deal.active = false;
 	    	Mails.hotusaRisePrices(deal, price);
 	    }

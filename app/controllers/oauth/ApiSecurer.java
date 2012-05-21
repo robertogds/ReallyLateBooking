@@ -51,10 +51,6 @@ public class ApiSecurer {
 		return correct;
 	}
 	
-	public static Boolean validateSignature(String token, String message, String timestamp){
-		
-		return Boolean.FALSE;
-	}
 	
     /**
      * Check that the given message with the given secret is valid.
@@ -85,7 +81,7 @@ public class ApiSecurer {
     
     
     public static Boolean checkValidTimestamp(long timestamp){
-    	long miliseconds = Calendar.getInstance().getTimeInMillis();
+    	long miliseconds = currentTimestamp();
     	//we add 10 hours 
     	long seconds = miliseconds + 64000000;
     	
@@ -96,6 +92,9 @@ public class ApiSecurer {
     	return Boolean.FALSE;
     }
     
+    public static long currentTimestamp(){
+    	return  Calendar.getInstance().getTimeInMillis();
+    }
     
     /**
      * Computes MD5 signature.

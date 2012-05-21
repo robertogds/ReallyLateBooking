@@ -1,37 +1,83 @@
+#{mustache.template 'coupon_item'}
+	<tr class=summary>
+		<td> {{created}} </td>
+		<td> {{expire}} </td>
+		<td> {{key}} </td>
+		<td> {{title}} </td>
+		<td> {{credits}}&euro; </td>
+		<td> {{used}} </td>
+	</tr>
+#{/mustache.template}
+		<script>	
+		%{
+			timestamp = controllers.oauth.ApiSecurer.currentTimestamp()
+			signature = controllers.oauth.ApiSecurer.calculateMD5('/user/'+user.id+'/coupons/'+user.token+'/'+timestamp, user.secret)
+		}%
+			function updateCoupons() {
+				$.getJSON("/user/${user.id}/coupons/${user.token}/${timestamp}/${signature}", function(data) {
+					  var coupons = "";
+					  var credits = 0;
+					  $.each(data, function(key, val) {
+						  coupons = coupons + PlayMustache.to_html("coupon_item", val);
+						  credits = credits + val.credits;
+					  });
+					  $('#credits').html(credits);
+					  $('#couponsBody').html(coupons);
+				});
+			}
+		</script>	
 <div class="row-fluid">
 	        					<div class="span12 ">
-	        						#{ifnot coupons?.size > 0  }
+	        						#{if totalCoupons == 0  }
 	        							<div class="row-fluid">
 		        							<div class="span12 noBookings">
 		        								<h3>No tienes ningún crédito. ¿quieres conseguir créditos para reservar habitaciones gratis?</h3>
 		        								<p>Invita a tus amigos y recibirás 12€ por cada amigo que realice una reserva en RLB</p>
 			        						</div>
 		        						</div>
-	        						#{/ifnot}
+	        						#{/if}
 	        						#{else}
-						            	<table class="zebra-striped" id="bookings">
+	        							<div class="row-fluid">
+		        							<div class="span12 ">
+										<table class="table table-bordered" id="coupons">
 									        <thead>
 									          <tr>
-									            <th class="blue header">Activación</th>
-									             <th class="blue header">Expira</th>
-									            <th class="blue header">Código</th>
-									            <th class="blue header">Créditos</th>
-									            <th class="blue header">Usado</th>
-									           </tr>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.date'}</th>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.expiration'}</th>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.code'}</th>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.text'}</th>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.credits'}</th>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.state'}</th>
+									          </tr>
 									        </thead>
-									        <tbody>
+									        <tbody id="couponsBody">
 									        	#{list items:coupons, as:'coupon'}
-									        		<tr class=summary>
-											            <td>${coupon.created.format('dd MMMM yyyy')}</td>
-											            <td>${coupon.expire.format('dd MMMM yyyy')}</td>
-											            <td>${coupon.key}</td>
-											            <td>${coupon.credits}&euro;</td>
-											            <td>${coupon.used}</td>
-											            </td>
-										        	</tr>
+									        		#{mustache.print 'coupon_item', context:coupon/}
 									        	#{/list}
 									         </tbody>
 									     </table>
+									     </div>
+		        						</div>
+		        						<div class="row-fluid">
+		        							<div class="span12">
+		        								%{ 
+		        								 totalCredits = '<strong id="credits">'+ coupons.collect{it.credits }.sum() + '</strong>'
+		        								%}
+		        								<h3>&{'web.dashboard.mycoupons.total', totalCredits }</h3>
+		        								<p>&{'web.dashboard.mycoupons.invite'}</p>
+			        						</div>
+		        						</div>
 								     #{/else}
+									<div class="row-fluid">
+		        							<div class="span12">
+		        								<h3>&{'web.dashboard.mycoupons.new'}</h3>
+		        								#{remote.form action:@Coupons.validateAjax() , resultDiv:'alert-success', errorDiv:'alert-error', callback:'updateCoupons()' }
+											     	<input type="text" name="key" value="">
+											     	<input class="btn btn-primary btn-large" type="submit" id="coupon" value="&{'web.dashboard.mycoupons.new.button'}" />
+											     	
+											     #{/remote.form}
+			        						</div>
+		        						</div>
+								     
 								</div>
 							</div>

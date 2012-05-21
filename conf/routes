@@ -5,67 +5,95 @@
 # Import Secure routes
 *       /                                       module:secure
 
+
+###  i18n ROUTES ###
+ 
+ # Home page
+GET      /{<en|fr|es>lang}/?                     					Application.index
+GET      /{<en|fr|es>lang}/landing?                              	Application.mobileDetection
+ #Owners
+GET	   	 /{<en|fr|es>lang}/extranet/?								Owners.index
+GET	   	 /{<en|fr|es>lang}/extranet/edit/?							Owners.edit
+# Deals
+GET  	 /{<en|fr|es>lang}/web/deals/bookingForm/{id}/?				Deals.bookingForm
+GET 	 /{<en|fr|es>lang}/web/deals/{cityUrl}/?					Deals.list
+GET 	 /{<en|fr|es>lang}/web/deals/{cityUrl}/{id}/?				Deals.show
+# Cities
+GET 	 /{<en|fr|es>lang}/web/cities/?							   	Cities.index
+# Users 
+GET		 /{<en|fr|es>lang}/dashboard/?								Users.dashboard
+GET 	 /{<en|fr|es>lang}/users/resetpasswordform/{code}/?			Users.resetPasswordForm
+#Owners
+GET	   	 /{<en|fr|es>lang}/extranet/?								Owners.index
+GET	   	 /{<en|fr|es>lang}/extranet/edit/?							Owners.edit
+
+
+### END i18n ROUTES ###
 # Home page
-GET     /                                       Application.index
-GET 	/pruebas								Application.pruebas
+GET     /                                     						Application.index
+GET 	/pruebas													Application.pruebas
+GET     /bootstrap?                              					Application.bootstrap
+GET     /landing?                              						Application.mobileDetection
 
+	
 # Cron tasks
-GET     /cron/refreshHotUsaPrices               Deals.refreshHotUsaPrices
-GET     /cron/movePrices               			Deals.movePrices
-GET     /cron/confirmReservations               Application.confirmReservations
+GET     /cron/refreshHotUsaPrices               					Deals.refreshHotUsaPrices
+GET     /cron/movePrices               								Deals.movePrices
+GET     /cron/confirmReservations               					Application.confirmReservations
 
-GET 	/admin/showmoveprices					Deals.showMovePrices
-
-
-GET     /bootstrap                              Application.bootstrap
-
-
-GET 	/admin									module:crudsiena
-GET     /admin/statistics						admin.Statistics.index
-GET     /admin/statistics/stats					admin.Statistics.stats(format:'json')
-GET     /admin/statistics/repare				admin.Statistics.repare
-GET		/admin/cities/order/{list}				admin.Cities.order(format:'json')
+GET 	/admin/showmoveprices										Deals.showMovePrices
+GET 	/admin														module:crudsiena
+GET     /admin/statistics											admin.Statistics.index
+GET     /admin/statistics/stats										admin.Statistics.stats(format:'json')
+GET     /admin/statistics/repare									admin.Statistics.repare
+GET		/admin/cities/order/{list}									admin.Cities.order(format:'json')
 
 # Deals
-GET 	/deals/{cityUrl}						Deals.iPhoneList(format:'json')
-GET 	/v2/deals/{cityUrl}						Deals.listV2(format:'json')
-GET  	/web/deals/bookingForm/{id}				Deals.bookingForm
-GET 	/web/deals/{cityUrl}					Deals.list
-GET 	/web/deals/{cityUrl}/{id}				Deals.show
+GET 	/deals/{cityUrl}						    				Deals.iPhoneList(format:'json')
+GET 	/v2/deals/{cityUrl}											Deals.listV2(format:'json')
+GET  	/web/deals/bookingForm/{id}/?								Deals.bookingForm
+GET  	/web/deals/completeBooking/?								Bookings.completeBooking
+GET 	/web/deals/{cityUrl}/?										Deals.list
+GET 	/web/deals/{cityUrl}/{id}/?									Deals.show
 
 
 
 # Cities
-GET 	/cities/dealsbycityid/{cityId}			Cities.dealsByCityId(format:'json')
-GET 	/cities/{countryUrl}					Cities.cityListByCountry(format:'json')
-GET 	/cities							    	Cities.cityList(format:'json')
-GET 	/v2/cities							    Cities.cityListAll(format:'json')
-GET 	/web/cities							   	Cities.index
+GET 	/cities/dealsbycityid/{cityId} 								Cities.dealsByCityId(format:'json')
+GET 	/cities/{countryUrl}										Cities.cityListByCountry(format:'json')
+GET 	/cities								    					Cities.cityList(format:'json')
+GET 	/v2/cities								    				Cities.cityListAll(format:'json')
+GET 	/web/cities/?							   					Cities.index
 
 #Countries
-GET 	/countries							    Countries.countryList(format:'json')
+GET 	/countries								    				Countries.countryList(format:'json')
 
+
+#Coupons Rest
+GET     /user/{userId}/coupons/{token}/{timestamp}/{signature}      Coupons.listByUser(format:'json')
+POST    /coupon/{token}/{timestamp}/{signature}         			Coupons.create(format:'json')
+POST    /coupon?									       			Coupons.validateCode(format:'json')
 
 # Bookings Rest
 GET     /user/{userId}/bookings/{token}/{timestamp}/{signature}     Bookings.listByUser(format:'json')
 POST    /booking/{token}/{timestamp}/{signature}         			Bookings.create(format:'json')
 
-# Users Rest
-GET		/dashboard													Users.dashboard
+# Users 
+GET		/dashboard/?												Users.dashboard
 POST    /users/login                            				    Users.login(format:'json')
 POST	/users/remember 											Users.rememberPassword(format:'json')
 GET     /users/activate/{code}                  					Application.activate
-GET     /user/{id}/{token}/{timestamp}/{signature}            		Users.show(format:'json')
+GET     /user/{id}/{token}/{timestamp}/{signature} 	            	Users.show(format:'json')
 POST    /users               										Users.create(format:'json')
-PUT     /user/{id}/{token}/{timestamp}/{signature}           		Users.update(format:'json')
+PUT     /user/{id}/{token}/{timestamp}/{signature}	         		Users.update(format:'json')
 GET 	/users/resetpasswordform/{code}								Users.resetPasswordForm
 
 # Info text
-GET     /info/{key}            					InfoTexts.show(format:'json')
+GET     /info/{key}            										InfoTexts.show(format:'json')
 
 #Owners
-GET	   	/extranet								Owners.index
-GET	   	/extranet/edit							Owners.edit
+GET	   	/extranet/?													Owners.index
+GET	   	/extranet/edit/?											Owners.edit
 
 
 

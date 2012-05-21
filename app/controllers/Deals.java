@@ -1,5 +1,6 @@
 package controllers;
 
+import helper.AffiliateHelper;
 import helper.DateHelper;
 import helper.hotusa.HotUsaApiHelper;
 
@@ -19,7 +20,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
 
-@With(Analytics.class)
+@With({I18n.class, LogExceptions.class, Analytics.class})
 public class Deals extends Controller {
 	
 	@Before(only = {"show","list","bookingForm"})
@@ -38,6 +39,11 @@ public class Deals extends Controller {
 			Security.checkConnected();
 		}
     }
+	
+	@Before(only = {"bookingForm", "show", "list"})
+	static void checkorigin() throws Throwable{
+		AffiliateHelper.checkorigin(session, params);
+	}
 	
 	/**
 	 * Renders the booking form for the given deal

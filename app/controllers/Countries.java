@@ -12,7 +12,7 @@ import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
 
-@With(Analytics.class)
+@With({I18n.class, LogExceptions.class, Analytics.class})
 public class Countries  extends Controller {
 	
 	public static void countryList() {

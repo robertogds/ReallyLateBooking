@@ -8,7 +8,7 @@
 		            <span class="icon-bar"></span> 
 		         </a>
           
-		          <a class="brand" href="/"><img src="http://d2f5bmx5jz1oq8.cloudfront.net/web/logo_black_300.png" alt="ReallyLateBooking" title="ReallyLateBooking"></a>
+		          <a class="brand" href="/${lang}"><img src="http://d2f5bmx5jz1oq8.cloudfront.net/web/logo_black_300.png" alt="ReallyLateBooking" title="ReallyLateBooking"></a>
 		          <div class="nav-collapse">
 				          <ul class="nav">
 				          	<!-- <li id="debug"><a href="#">Responsive debugging</a></li> -->
@@ -41,7 +41,7 @@
 						              <ul class="dropdown-menu">
 						                <li><a data-toggle="modal" href="#hotelsForm">&{'web.forHotels.new'}</a></li>
 						                <li class="divider"></li>
-						                <li><a href="@{Owners.index()}">&{'web.forHotels.extranet'}</a></li>
+						                <li><a href="/${lang}@{Owners.index()}">&{'web.forHotels.extranet'}</a></li>
 						              </ul>
 					              </li>
 					             <li><a href="http://www.reallylatebooking.com">&{'web.howitworks'}</a></li>
@@ -88,7 +88,7 @@
 	                <textarea class="span5" name="message" id="message" rows="6" value="${flash.message}"></textarea>
 	              </div>
 	             </div>
-	           <input name="returnUrl" id="returnUrl" value="/"  type="hidden">
+	           <input name="returnUrl" id="returnUrl" value="/${lang}"  type="hidden">
 		  </div>
 		  <div class="modal-footer">
 		    <button type="submit" class="btn btn-primary" >&{'web.contact.send.btn'}</button>
@@ -136,7 +136,7 @@
 	                <textarea class="span5" name="message" id="message" rows="6" value="${flash.message}" placeholder="&{'web.hotels.form.message'}"></textarea>
 	              </div>
 	             </div>
-	           <input name="returnUrl" id="returnUrl" value="/"  type="hidden">
+	           <input name="returnUrl" id="returnUrl" value="/${lang}"  type="hidden">
 		  </div>
 		  <div class="modal-footer">
 		    <button type="submit" class="btn btn-primary" >&{'web.contact.send.btn'}</button>

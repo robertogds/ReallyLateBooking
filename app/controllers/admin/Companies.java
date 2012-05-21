@@ -14,8 +14,9 @@ import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
 import controllers.CRUD.ObjectType;
+import controllers.Security;
 
-@Check("admin")
+@Check(Security.EDITOR_ROLE)
 @With(Secure.class)
 @CRUD.For(Company.class)
 public class Companies extends controllers.CRUD {

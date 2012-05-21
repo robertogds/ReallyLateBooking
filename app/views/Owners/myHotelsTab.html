@@ -44,7 +44,7 @@
 	                 #{a @Owners.edit(deal.id)} ${deal.hotelName}  #{/a}       
 	             </td>
 	              <td>
-	              	 ${models.City.findById(deal.city.id).name }
+	              	 ${models.City.findById(deal.city?.id)?.name }
 	             </td>
 	              <td>
 	                  ${deal.priceCents}      

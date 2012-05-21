@@ -150,8 +150,8 @@ web.modal.close=Fermer
 web.index.title=ReallyLateBooking, réservations d'hôtel pour le même jour avec de gros rabais
 web.index.h1=Besoin d’un hôtel pour ce soir ?
 web.index.h1.small=Réservez votre hôtel pour ce soir et économisez jusqu’a 70&#37;  dans les meilleurs hôtels partout en Europe.
-web.index.register.h2=Soyez un LateBooker!
-web.index.register.club=Nous sommes un <strong>club privé</strong> afin que nous puissions continuer à offrir les meilleurs prix pour nos membres.
+web.index.register.h2=Comment ça marche?
+web.index.register.club=Les Hôtels nous donnent leurs <strong>chambres invendues</strong> tous les jours. Réservez une chambre simplement et en toute sécurité.
 web.index.register.btn=Je veux être un Latebooker!
 web.index.register.download=
 web.index.login.fb.button=<strong>Login</strong> avec <strong>Facebook</strong>
@@ -507,3 +507,19 @@ user.remember.password.incorrect =  Vous devez introduire un mot de passe
 user.remember.password.success = Vous avez changé votre mot de passe avec succès. Entrez dans le club maintenant.
 user.remember.account.notfound = Nous ne pouvions pas trouver votre compte, s'il vous plaît contactez soporte@reallylatebooking.com
 
+web.dashboard.mycoupons.table.date=Activation
+web.dashboard.mycoupons.table.expiration=Expiration
+web.dashboard.mycoupons.table.code=Code
+web.dashboard.mycoupons.table.text=Description
+web.dashboard.mycoupons.table.credits= Credits
+web.dashboard.mycoupons.table.state= State
+coupon.create.error=This coupon is invalid or you've already used it
+coupon.create.correct= The coupon is correct and you can already enjoy the free credits
+coupon.title = Welcome credits
+web.dashboard.mycoupons.total = You have  %s&euro; off for your next booking
+web.dashboard.mycoupons.invite = Invite your friends and get 12&euro; for each one of them once they make their first booking
+web.dashboard.mycoupons.new=Do you have a coupon code?
+web.dashboard.mycoupons.new.button= Validate coupon
+
+itunes.url = http://itunes.apple.com/fr/app/reallylatebooking-las-mejores/id448918487?mt
+android.play.url = https://play.google.com/store/apps/details?id=com.iipir.rlb&hl=fr

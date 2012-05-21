@@ -22,7 +22,16 @@
 	#sortable li span { position: absolute; margin-left: -1.3em; }
 	</style>
     
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="//assets.transloadit.com/js/jquery.transloadit2.js"></script>
+<script type="text/javascript">
+   // We call .transloadit() after the DOM is initialized:
+   $(document).ready(function() {
+     $('#MyForm').transloadit({
+        wait: true
+     });
+   });
+</script>
     
   </head>
 
@@ -30,6 +39,16 @@
 <pre> 
     <div id="info">Waiting for update</div> 
 </pre> 
+
+<form id="MyForm" action="http://api2.transloadit.com/assemblies" enctype="multipart/form-data" method="POST">
+<input type="hidden" name="params" value="{&quot;auth&quot;:{&quot;key&quot;:&quot;24ec1ca3d9224f3aa74d3c7f1ba78a5a&quot;},&quot;template_id&quot;:&quot;ffaae1063bfd4587baf51e8d91324ad5&quot;,&quot;redirect_url&quot;:&quot;http://localhost:8000/pruebas&quot;}" />
+<input type="file" name="my_file" multiple="multiple" />
+<input type="text" name="hotel" value="hotelTest"/>
+<input type="text" name="city" value="cityTest"/>
+
+<input type="submit" value="Upload">
+</form>
+
 <ul id="test-list"> 
   <li id="listItem_1"> 
     <img src="arrow.png" alt="move" width="16" height="16" class="handle" /> 

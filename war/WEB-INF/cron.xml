@@ -3,7 +3,7 @@
   <cron>
     <url>/cron/refreshHotUsaPrices</url>
     <description>Repopulate hotel availability every 20 minutes</description>
-    <schedule>every 20 minutes</schedule>
+    <schedule>every 15 minutes</schedule>
   </cron>
   <cron>
     <url>/cron/confirmReservations</url>

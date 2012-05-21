@@ -12,7 +12,7 @@ import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.With;
 
-@With(I18n.class)
+@With({I18n.class, LogExceptions.class})
 public class Invitations extends Controller {
 	
 	 public static void getInvite(@Required @Email String email, String returnUrl) throws Throwable {

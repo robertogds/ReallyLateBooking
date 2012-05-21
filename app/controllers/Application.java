@@ -1,5 +1,7 @@
 package controllers;
 
+import helper.AffiliateHelper;
+import helper.UAgentInfo;
 import helper.hotusa.HotUsaApiHelper;
 
 import java.util.List;
@@ -15,10 +17,11 @@ import play.data.validation.Email;
 import play.data.validation.Required;
 import play.i18n.Messages;
 import play.mvc.Before;
+import play.mvc.Catch;
 import play.mvc.Controller;
 import play.mvc.With;
 
-@With(I18n.class)
+@With({I18n.class, LogExceptions.class})
 public class Application extends Controller {
 	
 	@Before(only = {"login", "authenticate","register"})
@@ -27,6 +30,11 @@ public class Application extends Controller {
   //          redirect("https://" + request.host + request.url); 
    //     }
     }
+	
+	@Before(only = {"index"})
+	static void checkorigin() throws Throwable{
+		AffiliateHelper.checkorigin(session, params);
+	}
 	
 	public static void index() {
 		if(Security.isConnected() && Security.connectedUserExists()){
@@ -47,11 +55,11 @@ public class Application extends Controller {
 			user.insert();
 			Mails.welcome(user);
 			flash.success(Messages.get("web.register.correct"));
-			login(username, password, returnUrl);
+			login(username, password);
+	        redirect(returnUrl);
 		}
 		else{
 			flash.error(Messages.get("web.register.incorrect"));
-			Logger.error("RETURN URL: " +returnUrl);
 			redirect(returnUrl);
 		}
 	}
@@ -111,12 +119,25 @@ public class Application extends Controller {
 		index(); 
 	}
 	
+	public static void mobileDetection(){
+		//Http.Header header = Http.Request.current().headers.get("user-agent"); 
+		String userAgent = request.headers.get("user-agent") != null ? request.headers.get("user-agent").value() : "";
+		String accept = request.headers.get("accept")!= null ? request.headers.get("accept").value() : "";
+		UAgentInfo agent = new UAgentInfo(userAgent, accept);
+		Logger.debug("User-Agent: %s isIphone: %s isAndroid: %s", userAgent, agent.isIphone, agent.isIphone);
+		if (agent.isIphone){
+			redirect(Messages.get("itunes.url"));
+		}
+		else if (agent.isAndroidPhone){
+			redirect(Messages.get("android.play.url"));
+		}
+		index();
+	}
 	
 	public static void activate(String code){
 		Logger.debug("##### Validatind user with code: " + code);
 		User user = User.all().filter("validationCode", code).get();
 		if (user != null){
-			Logger.debug("User is not null");
 			user.validated = true;
 			user.update();
 			Mails.welcome(user);
@@ -136,9 +157,11 @@ public class Application extends Controller {
 				booking.update();
 				booking.deal = Deal.findById(booking.deal.id);
 				booking.user = User.findById(booking.user.id);
-				Mails.userBookingConfirmation(booking);
 			}
 			else{
+				String subject = "#ERROR# Hotusa dio error al confirmar la reserva " + booking.code;
+				String content = "Hotel: " + booking.hotelName + " User: " + booking.userEmail;
+				Mails.errorMail(subject, content);
 				Logger.error("DANGER: Confirmation not received but User thinks its confirmed");
 			}
 		}

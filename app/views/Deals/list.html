@@ -39,6 +39,8 @@
 
 #{set 'rightColumn'}
 	#{include 'components/customerSupport.html' /}
+	<br />
+	#{include 'components/facebookStream.html' /}
 #{/set}
 		<div class="row-fluid">
 				<ul class="breadcrumb">
@@ -118,6 +120,7 @@
 			#{/elseif}
 			  <div class="row-fluid">
 	        	<div class="span12">
+	        	  <div class="category">
 	        		<div class="deal">
 			        	<div class="hotelInfo">
 			        		<div class="row-fluid">
@@ -135,6 +138,7 @@
 							           		<div class="row-fluid">
 							           			<div class="span7 price">
 							           				<span>&{'web.deal.tonight'}</span> ${deal.salePriceCents}&euro;
+							           				 
 							           			</div>
 							           			<div class="span4 more-info">
 							           				#{if deal.quantity > 0 }
@@ -167,7 +171,6 @@
 							           							</strong> &{'web.deal.detail.rooms'}  
 							           							<br /> 
 							           						&{'web.deal.detail.left'} 
-							           						
 							           				</div>
 							           		</div>
 							           </div>
@@ -175,6 +178,7 @@
 				        		</div>
 			        		</div>	
 				        </div>
+				    </div>
 				    </div>
 				</div>
 			</div>

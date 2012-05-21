@@ -1,5 +1,8 @@
 package helper.hotusa;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import play.Play;
 
 /**
@@ -30,7 +33,8 @@ public class HotusaConfig {
 		this.bookingDays = new Integer(Play.configuration.getProperty("hotusa.api.bookingDays"));
 	}
 	
-	public String getRequestUrl(String wsReq){
+	public String getRequestUrl(String wsReq) throws UnsupportedEncodingException{
+		wsReq = URLEncoder.encode(wsReq, "UTF-8");
 		return this.apiUrl + "?codigousu="+ this.sCodigousu +"&clausu=" 
 		+ this.sClausu +"&afiliacio="+ this.sAfiliacio +"&secacc="
 		+ this.sSecacc+"&xml="+wsReq;

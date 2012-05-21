@@ -1,11 +1,16 @@
 package models.dto;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder.Case;
 
 import play.Logger;
+import siena.Model;
 
 import models.Booking;
 import models.City;
@@ -15,47 +20,15 @@ import models.User;
 
 public class StatisticDTO {
 	
-    public HashMap<City, CityData> cities;
-    public HashMap<City, CityData> citiesB;
+    public HashMap<String, CityData> stats;
+    public CityData allCities;
     public int registered;
-    public int hotels;
-    public int activeDirectHotels;
-    public int bookings;
     public int dayStart;
     public int monthStart;
     public int yearStart;
     public int dayEnd;
     public int monthEnd;
     public int yearEnd;
-    public int registeredB;
-    public int hotelsB;
-    public int activeDirectHotelsB;
-    public int bookingsB;
-    public int dayStartB;
-    public int monthStartB;
-    public int yearStartB;
-    public int dayEndB;
-    public int monthEndB;
-    public int yearEndB;
-
-	public StatisticDTO(Collection<City> cities, Calendar calStart, Calendar calEnd, Calendar calStartB, Calendar calEndB) {
-		this(cities, calStart,  calEnd);
-		Date startB = calStartB.getTime();
-		Date endB = calEndB.getTime();
-		Logger.debug("Statistics Start Time B: " + startB.toString());
-		Logger.debug("Statistics End Time B: " + endB.toString());
-		this.dayStartB = calStartB.get(Calendar.DAY_OF_MONTH);
-		this.monthStartB = calStartB.get(Calendar.MONTH) + 1;
-		this.yearStartB = calStartB.get(Calendar.YEAR);
-		this.dayEndB = calEndB.get(Calendar.DAY_OF_MONTH);
-		this.monthEndB =  calEndB.get(Calendar.MONTH) + 1;
-		this.yearEndB = calEndB.get(Calendar.YEAR);
-		this.registeredB = User.countNewUsersByDate(calStartB, calEndB);
-		this.citiesB = new HashMap<City, CityData>();
-		for (City city : cities){
-			this.citiesB.put(city, new CityData(city, startB, endB));
-		}
-	}
 	
 	public StatisticDTO(Collection<City> cities, Calendar calStart, Calendar calEnd) {
 		Date start = calStart.getTime();
@@ -69,9 +42,26 @@ public class StatisticDTO {
 		this.monthEnd =  calEnd.get(Calendar.MONTH) + 1;
 		this.yearEnd = calEnd.get(Calendar.YEAR);
 	    this.registered = User.countNewUsersByDate(calStart, calEnd);
-		this.cities = new HashMap<City, CityData>();
+	    this.stats = new HashMap<String, CityData>();
+	    
+	    Collection<Booking> bookings = Booking.findAllBookingsByDate(start, end);
+	    this.allCities =  new CityData(bookings);
+	    
 		for (City city : cities){
-			this.cities.put(city, new CityData(city, start, end));
+			Collection<Booking> bookingsCity= new ArrayList<Booking>();
+			Logger.debug("Adding bookings from city: %s", city.name);
+			Collection<Booking> bookingsRoot = Booking.findAllBookingsByDateAndCity(city,start, end);
+			bookingsCity.addAll(bookingsRoot);
+			if (!city.isSimpleCity()){
+				List<City> cityZones = City.findActiveCitiesByRoot(city.url);
+				for (City location: cityZones) {
+					Logger.debug("Adding bookings from city zone: %s", location.name);
+					Collection<Booking> bookingsZone = Booking.findAllBookingsByDateAndCity(location,start, end);
+					bookingsCity.addAll(bookingsZone);
+				}
+			}
+			stats.put(city.url, new CityData(bookingsCity));
 		}
 	}
+	
 }

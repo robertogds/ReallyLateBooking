@@ -1,9 +1,12 @@
 package models;
 
+import helper.UtilsHelper;
+
 import java.security.InvalidParameterException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import models.dto.StatusMessage;
 import models.dto.UserStatusMessage;
@@ -15,6 +18,7 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.h2.util.MathUtils;
 
 import play.Logger;
+import play.Play;
 import play.data.validation.Email;
 import play.data.validation.Password;
 import play.data.validation.Required;
@@ -82,8 +86,10 @@ public class User extends Model{
     public String fbAccessToken;
     public String fbExpires;
     public String referer;
-    public int credits;
+    //public int credits;
 	public String refererId;
+	public boolean isInvestor;
+	public boolean isEditor;
     
     public User() {
     	super();
@@ -91,14 +97,14 @@ public class User extends Model{
     
     public User(String email, String password, String firstName, String lastName) {
         this.email = email;
-        this.password =  DigestUtils.md5Hex(password);
+        this.password =  password != null ? DigestUtils.md5Hex(password) : null;
         this.firstName = firstName;
         this.lastName = lastName;
     }
     
     public User(String email, String password, String firstName, String lastName, boolean isAdmin, boolean validated) {
         this.email = email;
-        this.password =  DigestUtils.md5Hex(password);
+        this.password =  password != null ? DigestUtils.md5Hex(password) : null;
         this.firstName = firstName;
         this.lastName = lastName;
         this.isAdmin = isAdmin;
@@ -128,16 +134,18 @@ public class User extends Model{
 	}
     
 	private String createRefererId() {
-		return (this.firstName.trim() + this.lastName.trim() + RandomUtils.nextInt(100)).toUpperCase();
+		return (UtilsHelper.truncate(this.lastName.trim(), 5) + RandomUtils.nextInt(99)).toUpperCase();
 	}
 
 	private void createUserCoupons(){
 		String key = this.refererId;
 		//Create his coupon for the first booking
-		MyCoupon myCoupon = new MyCoupon(this, key, Coupon.CREDITS_FIRST_DEFAULT);
-		myCoupon.insert();
+		//MyCoupon myCoupon = new MyCoupon(this, key, Coupon.CREDITS_FIRST_DEFAULT);
+		//myCoupon.insert();
 		//Create the coupon so his friends can find it
-		Coupon coupon =  new Coupon(key,Coupon.CREDITS_REFERER_DEFAULT, Coupon.CREDITS_REFERER_TYPE);
+		Coupon coupon =  new Coupon(key,new Integer(Play.configuration.getProperty("coupons.referal.credits")), Coupon.CREDITS_REFERER_TYPE);
+		coupon.title = Messages.get("coupon.title");
+		coupon.duration = new Integer(Play.configuration.getProperty("coupons.referal.duration"));
 		coupon.insert();
 	}
 	
@@ -152,8 +160,8 @@ public class User extends Model{
 	 * @param data
 	 */
     private static void registerOrLoginFromFaceBook(JsonObject data) {
-    	String email = data.get("email").getAsString();
-    	User user = User.findByEmail(email);
+    	String email = data.get("email") != null ? data.get("email").getAsString() : null;
+    	User user = email!= null? User.findByEmail(email) : new User();
     	user.getUserDataFromFB(data);
     	registerOrLoginFromFacebook(user);
     	user.createUserSession();
@@ -175,18 +183,22 @@ public class User extends Model{
 	}
 
 	private void getUserDataFromFB(JsonObject data) {
-		this.firstName = data.get("first_name") != null ?  data.get("first_name").getAsString() : "no_name";
-		this.lastName = data.get("last_name") != null ?  data.get("last_name").getAsString() : "no_name";
-		this.email = data.get("email") != null ? data.get("email").getAsString() : "no_email";
-		this.isFacebook = Boolean.TRUE;
-		this.fbid = data.get("id") != null ? data.get("id").getAsString() : "no_id";
-		this.fbLink = data.get("link") != null ? data.get("link").getAsString() : "no_fb_link";
-		this.fbUsername = data.get("username") != null ? data.get("username").getAsString() : null;
-		this.gender = data.get("gender") != null ? data.get("gender").getAsString() : null;
-		this.timezone = data.get("timezone") != null ? data.get("timezone").getAsInt() : null;
-		this.locale = data.get("locale") != null ? data.get("locale").getAsString() : null;
-		this.fbAccessToken = data.get("accessToken") != null ? data.get("accessToken").getAsString() : null;
-		this.fbExpires = data.get("expires") != null ? data.get("expires").getAsString() : null;
+		try {
+			this.firstName = data.get("first_name") != null ?  data.get("first_name").getAsString() : "no_name";
+			this.lastName = data.get("last_name") != null ?  data.get("last_name").getAsString() : "no_name";
+			this.email = data.get("email") != null ? data.get("email").getAsString() : "no_email";
+			this.isFacebook = Boolean.TRUE;
+			this.fbid = data.get("id") != null ? data.get("id").getAsString() : "no_id";
+			this.fbLink = data.get("link") != null ? data.get("link").getAsString() : "no_fb_link";
+			this.fbUsername = data.get("username") != null ? data.get("username").getAsString() : null;
+			this.gender = data.get("gender") != null ? data.get("gender").getAsString() : null;
+			this.timezone = data.get("timezone") != null ? data.get("timezone").getAsInt() : null;
+			this.locale = data.get("locale") != null ? data.get("locale").getAsString() : null;
+			this.fbAccessToken = data.get("accessToken") != null ? data.get("accessToken").getAsString() : null;
+			this.fbExpires = data.get("expires") != null ? data.get("expires").getAsString() : null;
+		} catch (Exception e) {
+			Logger.error("Error extracting data from fb user", e);
+		}
 	}
 	
 	public static User loginJson(String json) { 
@@ -253,7 +265,7 @@ public class User extends Model{
     }
 
 	public void updateDetails(User user) {
-		if (!this.email.equalsIgnoreCase(user.email.trim())){
+		if (this.email != null && user.email != null && !this.email.equalsIgnoreCase(user.email.trim())){
 			this.email = user.email.trim().isEmpty() ? this.email : user.email.trim().toLowerCase();
 			validateEmail();
 		}
@@ -298,4 +310,35 @@ public class User extends Model{
 							filter("created<", calEnd.getTime()).count();
 		return users;
 	}
+
+	public int calculateTotalCreditsFromMyCoupons() {
+		List<MyCoupon> coupons = MyCoupon.findActiveByUser(this);
+		Integer credits = 0;
+		for (MyCoupon coupon : coupons){
+			if (coupon.isNotExpiredNorUsed()){
+				credits += coupon.credits;
+			}
+		}
+		return credits;
+	}
+
+	public void markMyCouponsAsUsed(Integer creditsUsed) {
+		List<MyCoupon> coupons = MyCoupon.findActiveByUser(this);
+		Integer credits = 0;
+		for (MyCoupon coupon : coupons){
+			if ( credits >= creditsUsed){
+				break;
+			}
+			else if (coupon.isNotExpiredNorUsed()){
+				credits +=  coupon.useValidUnused();
+			}
+		}
+	}
+
+	/*
+	public void updateUserCredits(Integer credits) {
+		this.credits = this.credits - credits;
+		this.update();
+	}
+	*/
 }

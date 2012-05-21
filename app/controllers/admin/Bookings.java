@@ -14,8 +14,9 @@ import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
 import controllers.CRUD.ObjectType;
+import controllers.Security;
 
-@Check("admin")
+@Check(Security.ADMIN_ROLE)
 @With(Secure.class)
 @CRUD.For(Booking.class)
 public class Bookings extends controllers.CRUD{

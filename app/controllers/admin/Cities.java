@@ -15,8 +15,9 @@ import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
+import controllers.Security;
 
-@Check("admin")
+@Check(Security.EDITOR_ROLE)
 @With(Secure.class)
 @CRUD.For(City.class)
 public class Cities extends controllers.CRUD {

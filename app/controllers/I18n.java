@@ -5,7 +5,9 @@ import play.mvc.Before;
 import play.mvc.Controller;
 
 public class I18n extends Controller{
-
+	
+	
+	
 	@Before
     static void checkLang() throws Throwable {
         // Authent
@@ -15,8 +17,16 @@ public class I18n extends Controller{
         }
 	}
 	
+	@Before
+    static void addLanguageParam(String lang){
+		if (lang != null){
+			Lang.change(lang);
+		}
+    }
+	
 	public static void changeLang(String lang, String redirectUrl){
-		Lang.change(lang);
+		redirectUrl = redirectUrl.replaceFirst("(es|fr|en)", lang);
 		redirect(redirectUrl);
 	}
+	
 }

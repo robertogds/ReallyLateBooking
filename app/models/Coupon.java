@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
 import play.Logger;
+import play.Play;
 import play.data.validation.Validation;
 
 import siena.DateTime;
@@ -21,29 +22,27 @@ import siena.Table;
 
 @Table("coupons")
 public class Coupon extends Model{
-	private static final int EXPIRATION_DEFAULT = 100;
-	public static final int CREDITS_FIRST_DEFAULT = 12;
-	public static final int CREDITS_REFERER_DEFAULT = 12;
 	public static final String CREDITS_REFERER_TYPE = "REFERER";
 	
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
 	
 	public String key;
+	public String title;
+	public String type;
 	public int credits;
+	public int duration;
 	@DateTime
     public Date created;
 	@DateTime
     public Date expire;
-	
-	public String type;
 	
 	public Coupon() {
 		super();
 	}
 	public Coupon(String key, int credits, String type) {
 		super();
-		this.expire = this.getExpirationDateByMonths(EXPIRATION_DEFAULT);
+		this.expire = this.getExpirationDateByMonths(new Integer(Play.configuration.getProperty("coupons.referal.duration")));
 		this.created = Calendar.getInstance().getTime();
 		this.credits = credits;
 		this.type = type;
@@ -90,8 +89,9 @@ public class Coupon extends Model{
 	 * If coupon is REFERER type, then also adds the coupon to the referer.
 	 **/
 	public MyCoupon createMyCoupon(User user) throws InvalidCouponException {
-		if (isValid() && (StringUtils.isBlank(user.referer) || !this.type.equals(CREDITS_REFERER_TYPE))){
-			MyCoupon newCoupon = new MyCoupon(this, user);
+		MyCoupon newCoupon = new MyCoupon(this, user);
+		if (newCoupon.isValidForUser()){
+			Logger.debug("Coupon %s is valid for user with refererId %s ", newCoupon.key, user.refererId);
 			newCoupon.insert();
 			if (this.type.equals(CREDITS_REFERER_TYPE)){
 				newCoupon.createRefererCoupon(user);
@@ -99,6 +99,7 @@ public class Coupon extends Model{
 			return newCoupon;
 		}
 		else{
+			Logger.debug("Coupon %s is NOT valid for user with refererId %s ", newCoupon.key, user.refererId);
 			throw new InvalidCouponException();
 		}
 	}

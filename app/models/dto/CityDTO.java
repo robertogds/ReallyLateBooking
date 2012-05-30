@@ -27,7 +27,9 @@ public class CityDTO {
 	public String root;
 	public boolean showHint;
 	public String hint;
+	public boolean hasZones;
 	public boolean isRoot;
+	public String country;
 	
 	public CityDTO(City city){
 		this.id = city.id;
@@ -38,20 +40,25 @@ public class CityDTO {
 		this.root = city.root;
 		this.showHint = city.showHint;
 		this.hint = city.hintEN;
+		city.country.get();
+		this.country = city.country.nameEN;
 		this.isRoot = city.isRootCity();
+		this.hasZones = city.isRootCityWithZones();
 		
 		String lang = Lang.get();
 		if (lang != null){
 			Logger.debug("Filling city info with locale: " + lang);
-			if (lang.equals("es") || lang.equals("es_ES")){
+			if (lang.equalsIgnoreCase("es") || lang.equalsIgnoreCase("es_ES")){
 				this.name = city.name;
 				this.hint = city.hintES;
+				this.country = city.country.name;
 				Logger.debug("Filling city info with Spanish : " + this.name);
 			}
-			else if (lang.equals("fr")){
+			else if (lang.equalsIgnoreCase("fr")){
 				Logger.debug("Filling city info with French ");
 				this.name = city.nameFR;
 				this.hint = city.hintFR;
+				this.country = city.country.nameFR;
 			}
 			else{
 				Logger.debug("Lang is not spanish nor french: " + lang);

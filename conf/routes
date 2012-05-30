@@ -35,7 +35,8 @@ GET 	/pruebas													Application.pruebas
 GET     /bootstrap?                              					Application.bootstrap
 GET     /landing?                              						Application.mobileDetection
 
-	
+POST 	/transloadit												Deals.transloadit
+
 # Cron tasks
 GET     /cron/refreshHotUsaPrices               					Deals.refreshHotUsaPrices
 GET     /cron/movePrices               								Deals.movePrices

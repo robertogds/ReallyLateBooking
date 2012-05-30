@@ -58,6 +58,7 @@ public class City extends Model {
 	public String hintES;
 	public String hintEN;
 	public String hintFR;	
+	public int position;
 	
 	public City(String name, String url){
 		this.name = name;
@@ -106,7 +107,7 @@ public class City extends Model {
 	}
 	
 	public static List<City> findActiveCitiesByRoot(String root){
-		return all().filter("root", root).filter("active", Boolean.TRUE).order("name").fetch();
+		return all().filter("root", root).filter("active", Boolean.TRUE).order("position").fetch();
 	}
 	
 	
@@ -118,9 +119,12 @@ public class City extends Model {
 	}
 
 	public boolean isRootCity() {
+		return isRootCityWithZones() || isSimpleCity();
+	}
+	
+	public boolean isRootCityWithZones() {
 		return StringUtils.isBlank(this.root);
 	}
-
 	
 	/**
 	 * Check if city has no zones
@@ -129,6 +133,5 @@ public class City extends Model {
 	public boolean isSimpleCity(){
 		return this.root != null && root.equalsIgnoreCase(this.url);
 	}
-	
 	
 }

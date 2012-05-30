@@ -35,40 +35,52 @@ import siena.Model;
 import siena.Query;
 
 public class Booking extends Model {
+	public static final String RESTEL = "RESTEL";
     
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
-	
+	public String code;
     @Index("user_index")
     public User user;
-    
-    @Index("company_index")
-    public Company company;
-    
-    @Index("invoice_index")
-    public Invoice invoice;
-    
-    @Index("city_index")
-    public City city;
-    
-    @Index("deal_index")
-    public Deal deal;
+    public String hotelName;
+    public String hotelEmail;
+    public String userFirstName;
+	public String userLastName;
+    public String userEmail;
     @DateTime
     public Date checkinDate;
-    @Required
+	@Required
     public Integer nights;
     public Integer rooms;
-    public String creditCardType;
-    public String creditCard;
-    @MinSize(value=3)
-    @MaxSize(value=70)
-    public String creditCardName;
-    @Valid
-    public String creditCardExpiry;
-    @MinSize(value=3)
-    @MaxSize(value=4)
-    public String creditCardCVC;
-    public String code;
+    public Integer finalPrice;
+	public Integer credits;
+    public Integer totalSalePrice;
+	public Float netTotalSalePrice;
+	public Float fee;
+	public boolean payed;
+	public boolean pending;
+    public boolean bookingForFriend;
+    public String bookingForFirstName;
+	public String bookingForLastName;
+	public String bookingForEmail;
+    public boolean breakfastIncluded;
+	public boolean fromWeb;
+	public boolean isHotusa;
+	public Boolean needConfirmation;
+	public Boolean canceled;
+	public Boolean invoiced;
+	
+    @Index("company_index")
+    public Company company;
+    @Index("invoice_index")
+    public Invoice invoice;
+    @Index("city_index")
+    public City city;
+    @Index("deal_index")
+    public Deal deal;
+	public String dealAddress;
+	@MaxSize(10000)
+	public String comment;
 	public Integer salePriceCents;
 	public Float netSalePriceCents;
 	public Integer priceCents;
@@ -80,29 +92,18 @@ public class Booking extends Model {
 	public Float netPriceDay3;
 	public Float netPriceDay4;
 	public Float netPriceDay5;
-	public Integer totalSalePrice;
-	public Float netTotalSalePrice;
-	public Integer finalPrice;
-	public Integer credits;
-	public String hotelName;
-	public Boolean needConfirmation;
-	public Boolean canceled;
-	public Boolean invoiced;
-    public String bookingForFirstName;
-	public String bookingForLastName;
-	public String bookingForEmail;
-	public Float fee;
-	@MaxSize(10000)
-	public String comment;
-	public boolean breakfastIncluded;
-	public boolean fromWeb;
-	public String dealAddress;
-	public boolean payed;
-	public boolean pending;
+    public String creditCardType;
+    public String creditCard;
+    @MinSize(value=3)
+    @MaxSize(value=70)
+    public String creditCardName;
+    @Valid
+    public String creditCardExpiry;
+    @MinSize(value=3)
+    @MaxSize(value=4)
+    public String creditCardCVC;
 	public String paypalToken;
 	public String paypalPayerId;
-	public String hotelEmail;
-	public String userEmail;
 	public String transactionId;
 	public String orderTime;
 	public String amt;
@@ -124,6 +125,11 @@ public class Booking extends Model {
     	this.checkinDate = DateHelper.getTodayDate();
     	this.code = RandomStringUtils.randomAlphanumeric(8);
     	this.deal = Deal.findById(this.deal.id); //fetch deal from datastore
+    	//if is an old object from datastore without the boolean set
+    	this.deal.isHotUsa = this.deal.isHotUsa != null ? this.deal.isHotUsa : Boolean.FALSE;
+    	this.deal.isFake = this.deal.isFake != null ? this.deal.isFake : Boolean.FALSE;
+    	this.city = City.findById(this.deal.city.id);
+    	this.user = User.findById(this.user.id);
     	this.hotelName = this.deal.hotelName;
     	this.priceDay2 = this.deal.priceDay2;
     	this.priceDay3 = this.deal.priceDay3;
@@ -143,11 +149,16 @@ public class Booking extends Model {
     	this.fee = this.finalPrice - this.netTotalSalePrice;
     	this.invoiced = Boolean.FALSE;
     	this.payed = Boolean.FALSE;
+    	this.canceled = Boolean.FALSE; 
+    	this.isHotusa = this.deal.isHotUsa;
     	this.breakfastIncluded = this.deal.breakfastIncluded == null ? false : this.deal.breakfastIncluded;
     	this.dealAddress = this.deal.address;
     	this.hotelEmail = this.deal.contactEmail;
-    	this.userEmail = this.user.email;
-    	super.insert();
+    	this.bookingForFriend = !this.user.email.equalsIgnoreCase(this.bookingForEmail);
+    	this.userEmail = this.bookingForFriend ? this.bookingForEmail : this.user.email;
+    	this.userFirstName = this.bookingForFriend ? this.bookingForFirstName :this.user.firstName;
+    	this.userLastName =this.bookingForFriend ? this.bookingForLastName : this.user.lastName;
+     	super.insert();
 	}
 	
 	/*

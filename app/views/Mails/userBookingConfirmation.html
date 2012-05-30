@@ -20,7 +20,7 @@
 				<tr>
 					<td colspan="2">
 						<h1 style="font-size:16px; color:#0098CB;">&{'mails.booking.client.title'}</h1>
-						<p>&{'mails.booking.hotel.hi'} <strong>${user.firstName}</strong>, &{'mails.booking.client.justbooked'} <strong>${booking.hotelName}</strong></p>
+						<p>&{'mails.booking.hotel.hi'} <strong>${booking.userFirstName}</strong>, &{'mails.booking.client.justbooked'} <strong>${booking.hotelName}</strong></p>
 						<p>&{'mails.booking.client.showreceipt'}</p>
 						<table width="200px" bgcolor="#0098CB">
 							<tr><td style="text-align:center;">
@@ -73,24 +73,22 @@
 				</tr>
 				<tr>
 					<td colspan="2" valign="top">
+						<strong style="font-size:14px;margin-bottom:5px; float:left; color:#0098CB;">&{'mails.booking.client.bookPaid'}</strong>
+						<br/><br/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="top">
 						<strong style="font-size:14px; margin-bottom:5px; float:left;color:#0098CB;">&{'mails.booking.hotel.client.data'}:</strong>
 						<br/><br/>
 						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
 							<tr>
 								<td style="color:#858C92;">&{'mails.booking.client.name'}:</td>
-								<td><strong>${user.lastName}, ${user.firstName}</strong></td>
+								<td><strong>${booking.userLastName}, ${booking.userFirstName}</strong></td>
 							</tr>
 							<tr>
 								<td style="color:#858C92;">&{'mails.booking.client.email'}:</td>
-								<td><strong>${user.email}</strong></td>
-							</tr>
-							<tr>
-								<td style="color:#858C92;">&{'mails.booking.client.creditcard'}:</td>
-								<td><strong>${booking.creditCardType}</strong></td>
-							</tr>
-							<tr>
-								<td style="color:#858C92;">&{'mails.booking.client.creditcardname'}:</td>
-								<td><strong>${booking.creditCardName}</strong></td>
+								<td><strong>${booking.userEmail}</strong></td>
 							</tr>
 						</table>
 						<br/><br/>
@@ -119,7 +117,7 @@
 
 			<img src="@@{'/public/images/logo_small.gif'}" style="margin-top:3px;" width="166" height="22"/><br/>
 			<strong style="padding-left:2px;">&{'mails.rlb.booking.department'}</strong><br/>
-			<span style="padding-left:2px;">616 975 363</span><br/>
+			<span style="padding-left:2px;">&{'mails.rlb.booking.department.phone'}</span><br/>
 			<a href="http://www.reallylatebooking.com" style="color:#0098CB; padding-left:2px;" >reallylatebooking.com</a><br/>
 			
 		</td>

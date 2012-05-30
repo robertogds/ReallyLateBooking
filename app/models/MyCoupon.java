@@ -41,9 +41,10 @@ public class MyCoupon extends Model{
 	public MyCoupon() {
 		super();
 	}
+	
 	public MyCoupon(User user, String key, int credits) {
 		super();
-		this.user = user;
+		this.user = this.assignToUser(user);
 		this.expire = this.getExpirationDateByDays(EXPIRATION_DEFAULT);
 		this.created = Calendar.getInstance().getTime();
 		this.credits = credits;
@@ -52,9 +53,10 @@ public class MyCoupon extends Model{
 		this.active = true;
 	}
 	
+	
 	public MyCoupon(User user, String key, int credits, int duration) {
 		super();
-		this.user = user;
+		this.user = this.assignToUser(user);
 		this.expire = this.getExpirationDateByDays(EXPIRATION_DEFAULT);
 		this.created = Calendar.getInstance().getTime();
 		this.credits = credits;
@@ -65,7 +67,7 @@ public class MyCoupon extends Model{
 
 	public MyCoupon(Coupon coupon, User user) {
 		super();
-		this.user = user;
+		this.user = this.assignToUser(user);
 		this.expire = this.getExpirationDateByDays(coupon.duration);
 		this.created = Calendar.getInstance().getTime();
 		this.key = coupon.key;
@@ -81,7 +83,7 @@ public class MyCoupon extends Model{
     }
 	
     public static MyCoupon findActiveByKey(String key){
-    	return MyCoupon.all().filter("key", key).filter("active", true).order("-created").get();
+    	return MyCoupon.all().filter("key", key.toUpperCase()).filter("active", true).order("-created").get();
     }
     
     public static MyCoupon findById(Long id) {
@@ -92,8 +94,12 @@ public class MyCoupon extends Model{
     	return MyCoupon.all().filter("user", user).filter("active", true).order("-created").fetch();
     }
     
+    public static List<MyCoupon> findActiveByUserOrderByCredits(User user){
+    	return MyCoupon.all().filter("user", user).filter("active", true).order("-credits").fetch();
+    }
+    
 	public static MyCoupon findByKeyAndUser(String key, User user) {
-		return MyCoupon.all().filter("key", key).filter("user", user).order("-created").get();
+		return MyCoupon.all().filter("key", key.toUpperCase()).filter("user", user).order("-created").get();
 	}
 	
 	public String toString() {
@@ -107,52 +113,11 @@ public class MyCoupon extends Model{
 		return calendar.getTime();
 	}
 
-	/**
-	 * returns true if the expiration date is in the future
-	 * and this user has not been referred before
-	 * */
-	public Boolean isValidForUser() {
-		return this.isReferalValid() && this.isNotExpired();
-	}
 	
-	/**
-	 * returns true if the expiration date is in the future
-	 * */
-	public Boolean isNotExpired() {
-		Calendar now = Calendar.getInstance();
-		Calendar expire = Calendar.getInstance();
-		expire.setTime(this.expire);
-		Logger.debug("ISNOTEXPIRED: Now %s Expire: %s",now.getTime(), expire.getTime());
-		return now.before(expire);
-	}
-	
-	/**
-	 * returns true if the expiration date is in the future
-	 * and this coupon has not been used before by the user
-	 * */
-	public Boolean isNotExpiredNorUsed() {
-		return  isNotExpired() && !this.used;
-	}
-	
-	/**
-	 * returns true this user has not been referred before
-	 * */
-	public Boolean isReferalValid(){
-		this.user.get();
-		Logger.debug("IsReferalValid= isUserOwnCoupon:%s isReferer:%s referalCouponUsed:%s", isUserOwnCoupon(), this.isReferer, referalCouponUsed());
-		if( isUserOwnCoupon() || (this.isReferer && referalCouponUsed() ) ){
-			return Boolean.FALSE;
-		}
-		return Boolean.TRUE;
-	}
-	
-	private Boolean referalCouponUsed(){
-		return StringUtils.isNotBlank(this.user.referer);
-	}
-	
-	private Boolean isUserOwnCoupon(){
-		Boolean ownCoupon = this.key.equalsIgnoreCase(this.user.refererId) ;
-		return ownCoupon;
+	private void validateUsed() throws InvalidCouponException{
+		if (this.used){
+			throw new InvalidCouponException("No puedes usar un cupón dos veces pillin");
+		}		
 	}
 	
 	/**
@@ -161,20 +126,56 @@ public class MyCoupon extends Model{
 	 * @throws InvalidCouponException
 	 */
 	public Integer use() throws InvalidCouponException{
-		if (isNotExpiredNorUsed()){
-			return this.useValidUnused();
-		}
-		else{
-			throw new InvalidCouponException();
-		}
+		validateExpiration();
+		validateUsed();
+		return this.useValidUnused();
 	}
-	
 	
 	public Integer useValidUnused(){
 		this.used = true;
 		this.update();
 		this.activateCouponToReferal();
 		return this.credits;
+	}
+	
+	public void createRefererCoupon(User user) {
+		User referer = User.findByRefererId(this.key);
+		if (referer != null){
+			//Update the user with the referer key
+			user.referer = referer.refererId;
+			user.update();
+			Logger.info("A friend used his coupon so gives %s a new coupon %s ", referer.refererId,  user.refererId);
+			Coupon invitedCoupon = Coupon.findByKey(user.refererId);
+			MyCoupon refererCoupon = new MyCoupon(referer, user.refererId, invitedCoupon.credits, invitedCoupon.duration);
+			refererCoupon.isReferer = Boolean.TRUE;
+			refererCoupon.active = Boolean.FALSE; //set to active at booking
+			refererCoupon.insert();
+			//When the first friend register we considerer the referer is not a new user anymore
+			referer.update();
+		}
+		else{
+			Logger.info("Referer key doesnt seem to be an active user: " + this.key);
+		}
+		
+	}
+	
+	/**
+	 * returns true if the expiration date is in the past
+	 * or this coupon has already been used before by the user
+	 * */
+	public Boolean expiredOrUsed() {
+		return  expired() || this.used;
+	}
+	
+	/**
+	 * returns true if the expiration date is in the past
+	 * */
+	private Boolean expired() {
+		Calendar now = Calendar.getInstance();
+		Calendar expire = Calendar.getInstance();
+		expire.setTime(this.expire);
+		//Logger.debug("EXPIRED: Now %s Expire: %s",now.getTime(), expire.getTime());
+		return now.after(expire);
 	}
 	
 	private void activateCouponToReferal() {
@@ -195,23 +196,22 @@ public class MyCoupon extends Model{
 		}
 	}
 	
-	public void createRefererCoupon(User user) {
-		User referer = User.findByRefererId(this.key);
-		if (referer != null){
-			//Update the user with the referer key
-			user.referer = referer.refererId;
-			user.update();
-			Logger.info("A friend used his coupon so gives %s a new coupon %s ", referer.refererId,  user.refererId);
-			Coupon invitedCoupon = Coupon.findByKey(user.refererId);
-			MyCoupon refererCoupon = new MyCoupon(referer, user.refererId, invitedCoupon.credits, invitedCoupon.duration);
-			refererCoupon.isReferer = Boolean.TRUE;
-			refererCoupon.active = Boolean.FALSE; //set to active at booking
-			refererCoupon.insert();
-		}
-		else{
-			Logger.info("Referer key doesnt seem to be an active user: " + this.key);
-		}
-		
+	/**
+	 * Mark the user as not new once he gets the first coupon
+	 * @param user
+	 * @return
+	 */
+	private User assignToUser(User user) {
+		user.get();
+		user.isNew = false;
+		user.update();
+		return user;
 	}
 	
+	private void validateExpiration() throws InvalidCouponException {
+		if (this.expired()){
+			throw new InvalidCouponException("El cupón está caducado");
+		}
+	}
+
 }

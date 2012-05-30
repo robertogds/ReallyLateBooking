@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<testsuite failures="0" time="0.143" errors="0" skipped="0" tests="4" name="CouponsTest">
-  <testcase classname="CouponsTest" name="createUserandRetrievecoupon" time="0.03">
+<testsuite failures="0" time="0.152" errors="0" skipped="0" tests="4" name="CouponsTest">
+  <testcase classname="CouponsTest" name="createUserandRetrievecoupon" time="0.026">
       </testcase>
-  <testcase classname="CouponsTest" name="useOwnCoupon" time="0.022">
+  <testcase classname="CouponsTest" name="useOwnCoupon" time="0.018">
       </testcase>
-  <testcase classname="CouponsTest" name="useFirstCoupon" time="0.032">
+  <testcase classname="CouponsTest" name="useFirstCoupon" time="0.055">
       </testcase>
-  <testcase classname="CouponsTest" name="useFriendCoupon" time="0.059">
+  <testcase classname="CouponsTest" name="useFriendCoupon" time="0.053">
       </testcase>
 </testsuite>

@@ -27,7 +27,7 @@ import siena.Table;
 public class MyCouponDTO {
 	
     public Long id;
-	public User user;
+	public Long userId;
 	public String key;
 	public int credits;
     public String created;
@@ -44,10 +44,10 @@ public class MyCouponDTO {
 	public MyCouponDTO(MyCoupon coupon) {
 		super();
 		this.id = coupon.id;
-		this.user = coupon.user;
+		this.userId = coupon.user.id;
 		this.expire = DateHelper.dateToString(coupon.expire);
 		this.created =  DateHelper.dateToString(coupon.created);
-		this.credits = coupon.isNotExpiredNorUsed() ? coupon.credits : 0;
+		this.credits = coupon.expiredOrUsed() ? 0 : coupon.credits ;
 		this.key = coupon.key;
 		this.used = coupon.used;
 		this.active = coupon.active;

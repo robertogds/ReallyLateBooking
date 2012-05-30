@@ -7,6 +7,10 @@ import helper.hotusa.HotUsaApiHelper;
 import java.util.*;
 
 import com.google.appengine.api.urlfetch.HTTPHeader;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import models.*;
 import models.dto.CityDTO;
@@ -78,7 +82,7 @@ public class Deals extends Controller {
 	 * @param deal
 	 */
 	private static void prepareDeal(Deal deal){
-		DealDTO dealDto = new DealDTO(deal);
+		DealDTO dealDto = new DealDTO(deal, deal.city.url);
 		dealDto.textToHtml();
 		renderArgs.put("deal", dealDto);
 	}
@@ -95,7 +99,7 @@ public class Deals extends Controller {
 			Collection<Deal> deals = Deal.findActiveDealsByCityV2(cityOrig);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
-				dealsDtos.add(new DealDTO(deal));
+				dealsDtos.add(new DealDTO(deal, cityOrig.url));
 			}
 			
 			int hour = DateHelper.getCurrentHour(cityOrig.utcOffset);
@@ -115,7 +119,27 @@ public class Deals extends Controller {
 			notFound();
 		}
 	}
-	
+
+	public static void transloadit(String dealId, String city, String hotel, String transloadit, String redirectUrl){
+		Deal deal = Deal.findById(new Long(dealId));
+		deal.autoImageUrl = Boolean.TRUE;	
+		//Logger.debug("Transloadit params: %s",  params.get("transloadit").toString());
+		JsonParser parser = new JsonParser();
+		JsonObject response = (JsonObject)parser.parse(params.get("transloadit"));
+		JsonObject results = response.getAsJsonObject("results");
+		//Logger.debug("Transloadit Results: %s",  results.toString());
+		JsonArray images = results.getAsJsonArray("compress");
+		Logger.debug("Transloadit compress: %s",  images.toString());
+		for (JsonElement image: images){
+			JsonObject imageObject = image.getAsJsonObject();
+			String name = imageObject.get("name").getAsString();
+			String url = imageObject.get("url").getAsString();
+			Logger.debug("### name:%s url:%s", name, url);
+			deal.addImage(city +"/"+ hotel +"/" + name);
+		} 
+		deal.update();
+		redirect(redirectUrl);
+	}
 	
 	/**
 	 * Retrieves all the active deals from all the active locations
@@ -126,12 +150,20 @@ public class Deals extends Controller {
 	public static void listV2(String cityUrl) {
 		City city = City.findByUrl(cityUrl);
 		if (city != null){
-			Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
-	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
-			for (Deal deal: deals){
-				dealsDtos.add(new DealDTO(deal));
+			int hour = DateHelper.getCurrentHour(city.utcOffset);
+			boolean open = DateHelper.isActiveTime(hour);
+			if (!open){
+				//renderJSON(new StatusMessage(DateHelper.CITY_CLOSED, DateHelper.getTimeToOpenString(hour), "Not open yet"));
+				renderJSON(new ArrayList<DealDTO>());
 			}
-	        renderJSON(dealsDtos);
+			else{
+				Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
+		        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
+				for (Deal deal: deals){
+					dealsDtos.add(new DealDTO(deal, city.url));
+				}
+		        renderJSON(dealsDtos);
+			}
 		}
 		else{
 			renderJSON(new StatusMessage(Http.StatusCode.NOT_FOUND, "NOT_FOUND", Messages.get("city.notfound")));
@@ -149,7 +181,7 @@ public class Deals extends Controller {
 		City city = City.findByUrl(cityUrl);
 		if (city != null){
 			//odd workaround to maintain backwards compatibility with the city zones
-			if (city.isRootCity()){
+			if (city.isRootCityWithZones()){
 				city = city.mainZone;
 				city.get();
 			}
@@ -157,7 +189,7 @@ public class Deals extends Controller {
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
 				deal.fecthCity(); //retrieves city object to not to send just the city id
-				dealsDtos.add(new DealDTO(deal));
+				dealsDtos.add(new DealDTO(deal, city.url));
 			}
 	        renderJSON(dealsDtos);
 		}

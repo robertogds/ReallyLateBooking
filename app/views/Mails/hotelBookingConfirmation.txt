@@ -1,5 +1,5 @@
 &{'mails.booking.hotel.hi'},
-${user.firstName} &{'mails.booking.hotel.justbooked'}:
+${booking.userFirstName} &{'mails.booking.hotel.justbooked'}:
 
 	&{'mails.booking.code'}    ${booking.code}
 							
@@ -17,8 +17,8 @@ ${user.firstName} &{'mails.booking.hotel.justbooked'}:
 								#{/else}
 		
 	&{'mails.booking.hotel.client.data'}:
-		&{'mails.booking.client.name'}: ${user.lastName}, ${user.firstName} 
-		&{'mails.booking.client.email'}: ${user.email}
+		&{'mails.booking.client.name'}: ${booking.userLastName}, ${booking.userFirstName} 
+		&{'mails.booking.client.email'}: ${booking.userEmail}
 	
 	&{'mails.booking.hotel.rlb.data'}:
 		&{'mails.booking.hotel.rlb.payment'}: ${booking.netTotalSalePrice}&euro;
@@ -32,7 +32,7 @@ ${user.firstName} &{'mails.booking.hotel.justbooked'}:
 		&{'mails.booking.hotel.remember.li2'}
 			
 	&{'mails.rlb.booking.department'}
-		616 975 363
+		&{'mails.rlb.booking.department.phone'}
 		www.reallylatebooking.com
 		
 		

@@ -22,15 +22,17 @@
 	#sortable li span { position: absolute; margin-left: -1.3em; }
 	</style>
     
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script type="text/javascript" src="//assets.transloadit.com/js/jquery.transloadit2.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="//assets.transloadit.com/js/jquery.transloadit2.js"></script>
+
+
 <script type="text/javascript">
-   // We call .transloadit() after the DOM is initialized:
-   $(document).ready(function() {
-     $('#MyForm').transloadit({
-        wait: true
-     });
-   });
+$(document).ready(function() {
+    $('#MyForm').transloadit({
+       wait: true,
+       fields: true
+    });
+  });
 </script>
     
   </head>
@@ -49,45 +51,7 @@
 <input type="submit" value="Upload">
 </form>
 
-<ul id="test-list"> 
-  <li id="listItem_1"> 
-    <img src="arrow.png" alt="move" width="16" height="16" class="handle" /> 
-    <strong>Item 1 </strong>with a link to <a href="http://www.google.co.uk/" rel="nofollow">Google</a> 
-  </li> 
-  <li id="listItem_2"> 
-    <img src="arrow.png" alt="move" width="16" height="16" class="handle" /> 
-    <strong>Item 2</strong> 
-  </li> 
-  <li id="listItem_3"> 
-    <img src="arrow.png" alt="move" width="16" height="16" class="handle" /> 
-    <strong>Item 3</strong> 
-  </li> 
-  <li id="listItem_4"> 
-    <img src="arrow.png" alt="move" width="16" height="16" class="handle" /> 
-    <strong>Item 4</strong> 
-  </li> 
-</ul> 
 			
-	<!-- Obtener jQuery del CDN de Google, con una URL relativa al protocolo; fallback a copia local si es necesario -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
-    <script>
-	   	$(function() {
-	   		$("#test-list").sortable({ 
-	   		    handle : '.handle', 
-	   		    update : function () { 
-	   		      var order = $('#test-list').sortable('serialize'); 
-	   		      
-	   		   		alert(order);
-	   		   	 var listAction = #{jsAction @admin.Cities.order(':orderList') /}
-	   		  	 $.post(listAction, function(order) {
-	   			   	$('#info').html(order);
-	   			  });
-	   		   	 //$("#info").load( listAction(order));
-	   		    } 
-	   		  }); 
-		});
-	</script>
 
   </body>
 </html>

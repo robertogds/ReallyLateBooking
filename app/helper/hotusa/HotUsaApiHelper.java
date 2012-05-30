@@ -70,8 +70,7 @@ public final class HotUsaApiHelper {
 	private static HotusaConfig config = HotusaConfig.instance;
 	
 
-	private static String getAllHotelsByCityRequest(City city, Integer days){
-		List<Deal> deals = Deal.findDealsFromHotUsaByCity(city);
+	private static String getAllHotelsByCityRequest(City city, List<Deal> deals, Integer days){
 		if (deals.isEmpty()){
 			return null;
 		}
@@ -125,10 +124,10 @@ public final class HotUsaApiHelper {
 	}
 	
 	private static String reservationRequestCredit(Booking booking){
-		
+		String client = booking.userFirstName + " " + booking.userLastName;
  		String request = "<?xml version=\"1.0\" encoding=\""+ENCODING+"\"?> <!DOCTYPE peticion SYSTEM \"http://xml.hotelresb2b.com/xml/dtd/pet_reserva_3.dtd\">" +
  				"<peticion> <nombre>Peticion de Reserva</nombre> <agencia>ReallyLateBooking.com</agencia> <tipo>202</tipo> <parametros>" +
- 				"<codigo_hotel>"+ booking.deal.hotelCode +"</codigo_hotel> <nombre_cliente>"+ booking.creditCardName +"</nombre_cliente> <observaciones></observaciones>" +
+ 				"<codigo_hotel>"+ booking.deal.hotelCode +"</codigo_hotel> <nombre_cliente>"+ client +"</nombre_cliente> <observaciones></observaciones>" +
  				" <num_mensaje /><forma_pago>"+ config.payType +"</forma_pago> <tipo_targeta></tipo_targeta>" +
  				" <num_targeta></num_targeta> <mes_expiracion_targeta></mes_expiracion_targeta> <ano_expiracion_targeta></ano_expiracion_targeta>" +
  				" <titular_targeta></titular_targeta> <res>";
@@ -221,14 +220,44 @@ public final class HotUsaApiHelper {
 	public static void getHotelPricesByCityList(List<City> cities){
 		for (City city : cities){
 			if (DateHelper.isWorkingTime(city.utcOffset)){
-				String wsReq = getAllHotelsByCityRequest(city, config.bookingDays);
+				List<Deal> dealsAsked = Deal.findDealsFromHotUsaByCity(city);
+				String wsReq = getAllHotelsByCityRequest(city, dealsAsked, config.bookingDays);
 				if (wsReq != null){
-					parseHotelPricesResponse110(wsReq, config.bookingDays);
+					List<String> dealCodesReceived = parseHotelPricesResponse110(wsReq, config.bookingDays);
+					checkDealsNotReceived(dealsAsked, dealCodesReceived);
 				}
 			}
 		}
 	}
 	
+	/**
+	 * Will unpublish all the hotel we asked for availability but didn´t receive in the hotusa response
+	 * @param dealsAsked all the hotusa deals 
+	 * @param dealCodesReceived the codes of the hotels received from hotusa
+	 */
+	private static void checkDealsNotReceived(List<Deal> dealsAsked,
+			List<String> dealCodesReceived) {
+		for (Deal deal : dealsAsked){
+			Boolean dealFound = Boolean.FALSE;
+			for (String code: dealCodesReceived){
+				if (deal.hotelCode.equalsIgnoreCase(code)){
+					Logger.debug("### Hotel %s found among hotusa response. ", deal.hotelName);
+					dealFound = Boolean.TRUE;
+					break;
+				}
+			}
+			//If deal was not among the deals received we must to unpublish it
+			if (!dealFound){
+				Logger.debug("### Hotel %s not found among hotusa response. Cant be active.", deal.hotelName);
+				deal.active = Boolean.FALSE;
+				deal.quantity = 0;
+				deal.update();
+			}
+		}
+		
+	}
+
+
 	public static void getHotelPrices(List<Deal> deals){
 		String wsReq = getPriceByHotelRequest(deals, config.bookingDays);
 		parseHotelPricesResponse(wsReq, config.bookingDays);
@@ -298,9 +327,10 @@ public final class HotUsaApiHelper {
 		return request;
 	}
 
-	private static void parseHotelPricesResponse110(String wsReq, int bookingDays){
+	private static List<String> parseHotelPricesResponse110(String wsReq, int bookingDays){
 		Logger.debug("WSRequest: " + wsReq);
 		Document xml = prepareRequest(wsReq);
+		List<String>  dealCodes  =  new ArrayList<String>();
 		if (xml != null){
 			if (xml.getElementsByTagName("hot") != null){
 				int hotels = xml.getElementsByTagName("hot").getLength();
@@ -308,6 +338,7 @@ public final class HotUsaApiHelper {
 				for (int hotel=0; hotel < hotels; hotel++){
 					hotelNode = (Element)xml.getElementsByTagName("hot").item(hotel);
 					String hotelCode = hotelNode.getElementsByTagName("cod").item(0).getTextContent();
+					dealCodes.add(hotelCode);
 					//Si se acepta el pago directo
 					String pdr = hotelNode.getElementsByTagName("pdr").item(0).getTextContent();
 					for (int day=0; day < bookingDays ; day++){
@@ -335,9 +366,7 @@ public final class HotUsaApiHelper {
 							else {
 								//if current day is the first one, the hotel is marked as sold out 
 								if (day == 0) {
-									int quantity = 0; 
-									Deal.updateDealByCode(hotelCode, quantity, null, null, lin, day);
-									Logger.debug("Hotel is sold out for tonight: " + hotelCode);
+									markHotelSoldOut(hotelCode);
 								}
 								//if is not the first day, we just update price
 								else{
@@ -361,8 +390,18 @@ public final class HotUsaApiHelper {
 			//TODO
 			Logger.error("Didnt receive a correct answer from HotUsa Api");
 		}
+		return dealCodes;
 	}
 	
+	private static void markHotelSoldOut(String hotelCode){
+		int quantity = 0; 
+		int day = 0;
+		String lin = null;
+		Float price = null;
+		Boolean breakfastIncluded = null;
+		Deal.updateDealByCode(hotelCode, quantity, price, breakfastIncluded, lin, day);
+		Logger.debug("Hotel is sold out for tonight: " + hotelCode);
+	}
 	
 	private static Document prepareRequest(String wsReq) {
 		Document xml;

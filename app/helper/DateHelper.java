@@ -151,8 +151,10 @@ public final class DateHelper {
 		hour = hour == 25 ? 1 : hour;
 		
 		if (Play.mode.isDev()){
-			hour = 13;
+		//	hour = 11;
 		}
+		Logger.info("City local hour is: " + hour);
+
 		return hour;
 		
 	}
@@ -178,6 +180,13 @@ public final class DateHelper {
 		calEnd.set(Calendar.SECOND, 59);
 	}
 
-
+	public static String getTimeToOpenString(Integer hour) {
+		Date countdown = DateHelper.getTimeToOpen(hour);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(countdown);
+		long miliseconds =  (calendar.get(Calendar.HOUR_OF_DAY) * 3600000) + (calendar.get(Calendar.MINUTE) * 60000) + (calendar.get(Calendar.SECOND) * 1000);
+		//return calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
+		return ""+miliseconds;
+	}
 	
 }

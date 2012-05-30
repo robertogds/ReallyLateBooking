@@ -43,6 +43,7 @@ import controllers.oauth.ApiSecurer;
 @With({I18n.class, LogExceptions.class})
 public class Bookings extends Controller{
 	
+	
 	@Before(only = {"doBooking"})
     static void checkConnected() {
 		Security.checkConnected();
@@ -82,13 +83,7 @@ public class Bookings extends Controller{
 	
 	private static void tryBooking(Booking booking, String cancelUrl) throws UnsupportedEncodingException{
 		Logger.debug("Valid booking from web");
-		//we need to fetch all the info form user and deal 
-		booking.city = City.findById(booking.deal.city.id);
-		//if is an old object from datastore without the boolean set
-		booking.deal.isHotUsa = booking.deal.isHotUsa != null ? booking.deal.isHotUsa : Boolean.FALSE;
-		booking.deal.isFake = booking.deal.isFake != null ? booking.deal.isFake : Boolean.FALSE;
 		booking.fromWeb = true;
-		//booking.canceled = true; //we save the booking as canceled and will set it to false when payment is completed
 		booking.pending = true;
 		booking.insert();
 		//String paymentUrl = BidoBidoHelper.getPaymentUrl(booking);
@@ -122,7 +117,7 @@ public class Bookings extends Controller{
 						String content = "#IMPORTANT# booking is already Payed with token " + token + " for payerId " + PayerID ;
 						Mails.errorMail(subject, content);
 				        flash.error(Messages.get("booking.validation.over"));
-				        String cityUrl = booking.city.isRootCity() ? booking.city.url : booking.city.root;
+				        String cityUrl = booking.city.isRootCityWithZones() ? booking.city.url : booking.city.root;
 						Deals.list(cityUrl);
 					}
 				}
@@ -134,6 +129,7 @@ public class Bookings extends Controller{
 				//inform affiliate of booking if neccessary
 				if (AffiliateHelper.fromAffiliate(session)) AffiliateHelper.sendAffiliateBooking(booking, session);
 				//inform user by mail 
+				booking.code = booking.isHotusa ? Booking.RESTEL + "-"+booking.code : booking.code;
 				Mails.userBookingConfirmation(booking);
 				//inform user at the web
 				flash.success(Messages.get("web.bookingForm.success"));
@@ -185,25 +181,23 @@ public class Bookings extends Controller{
 	
 	
 	private static void validateAndSave(@Valid Booking booking){
-		booking.validate(); //validate object and fill errors map if exist
+		booking.validateNoCreditCart(); //validate object and fill errors map if exist
 		if (!validation.hasErrors()){ 
 			Logger.debug("Valid booking");
-			//we need to fetch all the info form user and deal 
-			booking.deal = Deal.findById(booking.deal.id);
-			booking.user = User.findById(booking.user.id);
-			booking.city = City.findById(booking.deal.city.id);
-			//if is an old object from datastore without the boolean set
-			booking.deal.isHotUsa = booking.deal.isHotUsa != null ? booking.deal.isHotUsa : Boolean.FALSE;
-			booking.deal.isFake = booking.deal.isFake != null ? booking.deal.isFake : Boolean.FALSE;
 			booking.insert();
 			if (booking.deal.isHotUsa && !booking.deal.isFake ){
 				doHotUsaReservation(booking);
 			}
 			else{
 				updateDealRooms(booking.deal.id, booking.rooms, booking.nights);
-				Mails.hotelBookingConfirmation(booking);
+				
 			}
-
+			//We mark all the coupons needed as used
+			booking.user =  User.findById(booking.user.id);
+			booking.user.markMyCouponsAsUsed(booking.credits);
+			
+			//Send email to user and hotel
+			Mails.hotelBookingConfirmation(booking);
 			Mails.userBookingConfirmation(booking);
 			
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
@@ -216,6 +210,7 @@ public class Bookings extends Controller{
 		}
 	}
 	
+
 	private static void doHotUsaReservation(Booking booking){
 		String localizador = HotUsaApiHelper.reservation(booking);
 		if (localizador != null){

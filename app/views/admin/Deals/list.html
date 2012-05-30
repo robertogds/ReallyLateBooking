@@ -7,7 +7,10 @@
 	<div id="crudListTable">
 		#{crud.table fields:['hotelName', 'city'] }
 		  #{crud.custom 'city'}
-		  	 ${models.City.findById(object.city?.id) }
+		  	%{
+		  		city = models.City.findById(object.city?.id)
+		  	}%
+		  	 ${city}
 		   #{/crud.custom}
    		#{/crud.table}
 	</div>

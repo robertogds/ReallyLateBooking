@@ -119,9 +119,8 @@ public class Mailchimp extends Controller{
 	private static void createI18nCampaignByCityAndLang(City city, Collection<Deal> deals, String lang) throws UnsupportedEncodingException{
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
-				dealsDtos.add(new DealDTO(deal));
+				dealsDtos.add(new DealDTO(deal, city.url));
 			}
-			
 			String header = city.name; 
 			String listId = Setting.findByKey(Setting.MC_LIST_ID).value;
 			String fromEmail = Setting.findByKey(Setting.MC_FROM_EMAIL).value;

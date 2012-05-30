@@ -1,13 +1,3 @@
-#{mustache.template 'coupon_item'}
-	<tr class=summary>
-		<td> {{created}} </td>
-		<td> {{expire}} </td>
-		<td> {{key}} </td>
-		<td> {{title}} </td>
-		<td> {{credits}}&euro; </td>
-		<td> {{used}} </td>
-	</tr>
-#{/mustache.template}
 		<script>	
 		%{
 			timestamp = controllers.oauth.ApiSecurer.currentTimestamp()
@@ -18,7 +8,11 @@
 					  var coupons = "";
 					  var credits = 0;
 					  $.each(data, function(key, val) {
-						  coupons = coupons + PlayMustache.to_html("coupon_item", val);
+						  coupons = coupons + '<tr class=summary>' + 
+						  	'<td>' + val.created + '</td> <td>' + val.expire
+						  	+ '</td> <td>'+ val.key + '</td><td>' + val.title
+						  	+ '</td><td>'+ val.credits + ' &euro; </td><td>'+ 
+						  	val.used + '</td></tr>';
 						  credits = credits + val.credits;
 					  });
 					  $('#credits').html(credits);
@@ -52,7 +46,14 @@
 									        </thead>
 									        <tbody id="couponsBody">
 									        	#{list items:coupons, as:'coupon'}
-									        		#{mustache.print 'coupon_item', context:coupon/}
+									        		<tr class=summary>
+														<td> ${coupon.created} </td>
+														<td> ${coupon.expire} </td>
+														<td> ${coupon.key} </td>
+														<td> ${coupon.title} </td>
+														<td> ${coupon.credits}&euro; </td>
+														<td> ${coupon.used} </td>
+													</tr>
 									        	#{/list}
 									         </tbody>
 									     </table>

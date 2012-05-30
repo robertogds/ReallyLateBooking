@@ -82,84 +82,43 @@ public class Mails extends MailServiceFactory {
    
    
    public static void userBookingConfirmation(Booking booking) {
-	   if (StringUtils.isNotBlank(booking.bookingForEmail)){
-		   userBookingConfirmationForFriend(booking);
-	   }
-	   else{
-	   	  Message message = new Message();
-	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.hotelName);
-	   	  message.setSender(HOLA_MAIL);
-	   	  String template = "Mails/userBookingConfirmation";
-	   	  message.setTo(booking.userEmail);
-	   	  message.setBcc(RESERVAS_MAIL);
-	   	  Map<String, Object> params = new HashMap<String, Object>();
-	   	  params.put("user", booking.user);
-	   	  params.put("booking", booking);
-	   	  Deal deal = Deal.findById(booking.deal.id);
-	   	  params.put("deal", deal);
-	   	  Logger.debug("Message to: " + message.getHtmlBody() + " to: " + message.getTo());
-	   	  send(message, template, params); 
-	   }
-
+   	  Message message = new Message();
+   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.hotelName);
+   	  message.setSender(HOLA_MAIL);
+   	  String template = "Mails/userBookingConfirmation";
+   	  message.setTo(booking.userEmail);
+   	  if (booking.bookingForFriend){
+   		message.setCc(booking.user.email);
+   	  }
+   	  message.setBcc(RESERVAS_MAIL);
+   	  Map<String, Object> params = new HashMap<String, Object>();
+   	  params.put("booking", booking);
+   	  Deal deal = Deal.findById(booking.deal.id);
+   	  params.put("deal", deal);
+   	  Logger.debug("Message to: " + message.getHtmlBody() + " to: " + message.getTo());
+   	  send(message, template, params); 
    }
    
-   private static void userBookingConfirmationForFriend(Booking booking) {
-	   	  Message message = new Message();
-	   	  message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.hotelName);
-	   	  message.setSender(HOLA_MAIL);
-	   	  String template = "Mails/userBookingConfirmationForFriend";
-	   	  User user = booking.user;
-	   	  message.setTo(booking.bookingForEmail);
-	   	  message.setCc(booking.userEmail);
-	   	  message.setBcc(RESERVAS_MAIL);
-	   	  Map<String, Object> params = new HashMap<String, Object>();
-	   	  params.put("user", user);
-	   	  params.put("booking", booking);
-	   	  Deal deal = Deal.findById(booking.deal.id);
-	   	  params.put("deal", deal);
-	   	  send(message, template, params);
-   }
    
    public static void hotelBookingConfirmation(Booking booking) {
 	   String lang = Lang.get(); 
-	   	  //We want hotels email to be rendered in Spanish
-	   	  Lang.set("es");
-	   if (StringUtils.isNotBlank(booking.bookingForEmail)){
-		   hotelBookingConfirmationForFriend(booking);
-	   }
-	   else{
-	   	  Message message = new Message();
-	   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.hotelName);
-	   	  message.setSender(HOLA_MAIL);
-	   	  message.setTo(booking.hotelEmail);
-	   	  message.setBcc(RESERVAS_MAIL); //easy way to know when a new booking is made
-	   	  String template = "Mails/hotelBookingConfirmation";
-	   	  Map<String, Object> params = new HashMap<String, Object>();
-	   	  params.put("user", booking.user);
-	   	  params.put("booking", booking);
-	   	  
-	   	  send(message, template, params);
-	   	 
-	   }
-	   //set language to client original language
-	   Lang.set(lang);
-   }
-   
-   private static void hotelBookingConfirmationForFriend(Booking booking) {
-	  Message message = new Message();
+   	  //We want hotels email to be rendered in Spanish
+   	  Lang.set("es");
+   	  
+   	  Message message = new Message();
    	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.hotelName);
    	  message.setSender(HOLA_MAIL);
    	  message.setTo(booking.hotelEmail);
    	  message.setBcc(RESERVAS_MAIL); //easy way to know when a new booking is made
-   	  String template = "Mails/hotelBookingConfirmationForFriend";
+   	  String template = "Mails/hotelBookingConfirmation";
    	  Map<String, Object> params = new HashMap<String, Object>();
-   	  params.put("user", booking.user);
    	  params.put("booking", booking);
-   	  Logger.debug(" params: %s", params.toString());
    	  send(message, template, params);
+	   	 
+	   //set language to client original language
+	   Lang.set(lang);
    }
-
-
+   
    public static void ownerUpdatedDeal(Deal deal) {
 	      String lang = Lang.get(); 
 	   	  //We want hotels email to be rendered in Spanish

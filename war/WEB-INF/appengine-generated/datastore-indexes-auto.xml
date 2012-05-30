@@ -1,21 +1,37 @@
-<!-- Indices written at Mon, 21 May 2012 20:03:49 CEST -->
+<!-- Indices written at Tue, 29 May 2012 19:03:45 CEST -->
 
 <datastore-indexes>
 
-    <!-- Used 27 times in query history -->
-    <datastore-index kind="coupons" ancestor="false" source="auto">
-        <property name="key" direction="asc"/>
-        <property name="created" direction="desc"/>
+    <!-- Used 7 times in query history -->
+    <datastore-index kind="statistics" ancestor="false" source="auto">
+        <property name="path" direction="asc"/>
+        <property name="date" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 15 times in query history -->
-    <datastore-index kind="mycoupons" ancestor="false" source="auto">
-        <property name="key" direction="asc"/>
-        <property name="user" direction="asc"/>
-        <property name="created" direction="desc"/>
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="cities" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="root" direction="asc"/>
+        <property name="position" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 33 times in query history -->
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="deals" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="city" direction="asc"/>
+        <property name="position" direction="asc"/>
+        <property name="priceCents" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="deals" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="secondCity" direction="asc"/>
+        <property name="position" direction="asc"/>
+        <property name="priceCents" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
     <datastore-index kind="mycoupons" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="user" direction="asc"/>

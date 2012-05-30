@@ -67,12 +67,11 @@ public class DealDTO {
 	public Boolean active;
 	public Boolean isHotUsa;
 
-	public DealDTO(Deal deal) {
+	public DealDTO(Deal deal, String cityRoot) {
 		validateDeal(deal);
 		this.id = deal.id;
 		this.hotelName = deal.hotelName;
-		deal.city.get();
-		this.city = new CityDTO(deal.city);
+		this.city = this.findCurrentCity(deal, cityRoot);
 		this.salePriceCents = deal.salePriceCents;
 		this.priceCents = deal.priceCents;
 		this.priceDay2 = deal.priceDay2;
@@ -125,7 +124,19 @@ public class DealDTO {
 			this.foodDrinkText = deal.foodDrinkTextFR;
 		}
 		this.createDetailText(deal.customDetailText, lang);
-		ImageHelper.prepareImagesRoutes(this);
+		ImageHelper.prepareImagesRoutes(this, deal.autoImageUrl);
+	}
+
+	private CityDTO findCurrentCity(Deal deal, String cityRoot) {
+		deal.city.get();
+		//If deal has a second city and the current city url is not the main city, then assign the second city to the deal DTO
+		if (deal.secondCity != null && !deal.city.url.equalsIgnoreCase(cityRoot)){
+			deal.secondCity.get();
+			return new CityDTO(deal.secondCity);
+		}
+		else{
+			return new CityDTO(deal.city);
+		}
 	}
 
 	private void createDetailText(boolean customText, String lang){

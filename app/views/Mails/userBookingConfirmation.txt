@@ -1,4 +1,4 @@
-&{'mails.booking.hotel.hi'} ${user.firstName}, &{'mails.booking.client.justbooked'} ${booking.hotelName}
+&{'mails.booking.hotel.hi'} ${booking.userFirstName}, &{'mails.booking.client.justbooked'} ${booking.hotelName}
 
 	&{'mails.booking.client.showreceipt'}
 		&{'mails.booking.code'} ${booking.code}
@@ -17,10 +17,8 @@
 			&{'mails.booking.price'}: ${booking.totalSalePrice}&euro; &{'mails.booking.tax'}
 			
 		&{'mails.booking.hotel.client.data'}:
-			&{'mails.booking.client.name'}: ${user.lastName}, ${user.firstName}
-			&{'mails.booking.client.email'}: ${user.email}
-			&{'mails.booking.client.creditcard'}: ${booking.creditCardType}
-			&{'mails.booking.client.creditcardname'}: ${booking.creditCardName}
+			&{'mails.booking.client.name'}: ${booking.userLastName}, ${booking.userFirstName}
+			&{'mails.booking.client.email'}: ${booking.userEmail}
 			
 			
 		&{'mails.booking.client.thanks'}

@@ -12,9 +12,7 @@
 			#{/if}
 		#{/ifErrors}
 		var credits = 0;
-		#{if user?.credits > 0 && !deal.isHotUsa}
-			credits= ${user?.credits};
-		#{/if}
+		%{ credits = 0 }%
 		var totalPrice = ${deal.salePriceCents};
 		var creditCard = 'visa';
 		#{ifErrors}

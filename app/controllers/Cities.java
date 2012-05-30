@@ -84,13 +84,17 @@ public class Cities  extends Controller {
 		Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
         Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 		for (Deal deal: deals){
-			dealsDtos.add(new DealDTO(deal));
+			dealsDtos.add(new DealDTO(deal, city.url));
 		}
         renderJSON(dealsDtos);
 	}
 	
 	public static void cityListAll() {
-        Collection<City> cities = City.findActiveCities();
+		Collection<Country> countries = Country.findActiveCountries();
+		Collection<City> cities =  new ArrayList<City>();
+		for (Country country : countries){
+			cities.addAll(City.findActiveCitiesByCountry(country));
+		}
         Collection<CityDTO> citiesDto = prepareCityDto(cities);
         renderJSON(citiesDto);
 	} 

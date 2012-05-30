@@ -1,11 +1,24 @@
 #{extends 'CRUD/layout.html' /}
+#{set 'moreScripts'}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="//assets.transloadit.com/js/jquery.transloadit2.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#imageForm').transloadit({
+       wait: true,
+       fields: true
+    });
+  });
+</script>
+#{/set}
 %{
     def keyVal = play.modules.siena.SienaModelUtils.keyValue(object)
-  }%
+}%
 <div id="crudShow" class="${type.name}">
 	
 	<h2 id="crudShowTitle">&{'crud.show.title', type.modelName}</h2>
 	
+		
 	<div class="objectForm">
 	#{form action:@save(keyVal), enctype:'multipart/form-data'}
 			#{crud.form} 
@@ -52,8 +65,20 @@
 			<input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />
 		</p>
 	#{/form}
+
 	</div>
-	
+	%{
+		  		city = models.City.findById(object.city?.id)
+		  	}%
+		<form id="imageForm"  action="http://api2.transloadit.com/assemblies" enctype="multipart/form-data" method="POST">
+					<input type="hidden" name="params" value="{&quot;auth&quot;:{&quot;key&quot;:&quot;24ec1ca3d9224f3aa74d3c7f1ba78a5a&quot;},&quot;template_id&quot;:&quot;ffaae1063bfd4587baf51e8d91324ad5&quot;,&quot;redirect_url&quot;:&quot;@@{Deals.transloadit()}&quot;}" />
+					<input type="hidden" name="dealId" value="${object.id}"/>
+					<input type="file" name="my_file" multiple="multiple" />
+					<input type="hidden" name="hotel" value="${object.hotelName?.slugify()}"/>
+					<input type="hidden" name="city" value="${city?.url?.slugify()}"/>
+					<input type="hidden" name="redirectUrl" value="${request.url}"/>
+					<input type="submit" value="Upload Hotel Images">
+		</form>
 	#{form @delete(keyVal)}
 		<p class="crudDelete">
 			<input type="submit" value="&{'crud.delete', type.modelName}" />

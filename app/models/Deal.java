@@ -11,8 +11,11 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import notifiers.Mails;
 
@@ -55,6 +58,8 @@ public class Deal extends Model {
 	@Required
 	@Index("city_index")
     public City city;
+	@Index("second_city_index")
+    public City secondCity;
 	@Required
 	@Index("owner_index")
     public User owner;
@@ -164,6 +169,7 @@ public class Deal extends Model {
 	public String bookingLine3;
 	public String bookingLine4;
 	public String bookingLine5;
+	public boolean autoImageUrl;
 	
 	public Deal(String hotelName, City city) {
 		this.hotelName = hotelName;
@@ -208,6 +214,14 @@ public class Deal extends Model {
         return all().filter("city", city).filter("active", Boolean.TRUE).order("-salePriceCents").order("-discount").fetch();
     }
 	
+	public static List<Deal> findActiveByCityOrderPositionPrice(City city) {
+        return all().filter("city", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch();
+    }
+	
+	private static List<Deal> findSecondCityActiveByCityOrderPositionPrice(City city) {
+		return all().filter("secondCity", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch();
+	}
+	
 	public static List<Deal> findAllActiveDealsByCityId(Long cityId){
 		City city = City.findById(cityId);
 		return findAllActiveDealsByCity(city).fetch();
@@ -236,7 +250,7 @@ public class Deal extends Model {
 	 */
 	public static Collection<Deal> findActiveDealsByCityV2(City city) {
 		if (city != null){
-			if (!city.isRootCity()){
+			if (!city.isRootCityWithZones()){
 				String root = city.root;
 				city = City.findByUrl(root);
 				Logger.info("City is not root, we search the root: %s and found $s",root, city.name);
@@ -246,11 +260,11 @@ public class Deal extends Model {
 					Logger.info("V2. We are closed");
 					return new ArrayList<Deal>();
 				case (DateHelper.CITY_OPEN_DAY):
-					HashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
+					LinkedHashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
 					Logger.info("V2. We are all opened");
 					return dealsMapToListWithMax(dealsMap);
 				case (DateHelper.CITY_OPEN_NIGHT):
-					HashMap<City, List<Deal>> dealsMapAll = findAllActiveDealsByCityV2(city);
+					LinkedHashMap<City, List<Deal>> dealsMapAll = findAllActiveDealsByCityV2(city);
 					Integer hour = DateHelper.getCurrentHour(city.utcOffset);
 					Logger.debug("V2. Is between 0am and 6am. Hour:  " + hour);
 					return findActiveDealsByNight(dealsMapAll, hour);
@@ -310,12 +324,13 @@ public class Deal extends Model {
 	 * @param city
 	 * @return Returns all deals by city independently of the time
 	 */
-	public static HashMap<City, List<Deal>> findAllActiveDealsByCityV2(City city){
-		HashMap<City, List<Deal>> dealsMap = new HashMap<City, List<Deal>>();
+	public static LinkedHashMap<City, List<Deal>> findAllActiveDealsByCityV2(City city){
+		LinkedHashMap<City, List<Deal>> dealsMap = new LinkedHashMap<City, List<Deal>>();
 		List<City> cities = City.findActiveCitiesByRoot(city.url);
 		for (City location: cities) {
 			List<Deal> active = new ArrayList<Deal>();
-			active.addAll(all().filter("city", location).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch());
+			active.addAll(findActiveByCityOrderPositionPrice(location));
+			active.addAll(findSecondCityActiveByCityOrderPositionPrice(location));
 			dealsMap.put(location, active);
 		}
 		return dealsMap;
@@ -525,7 +540,7 @@ public class Deal extends Model {
 	 * @param dealsMap
 	 * @return Returns all the active deals in all the zones of a city.
 	 */
-	private static List<Deal> dealsMapToListWithMax(HashMap<City, List<Deal>> dealsMap) {
+	private static List<Deal> dealsMapToListWithMax(LinkedHashMap<City, List<Deal>> dealsMap) {
 		List<Deal> deals = new ArrayList<Deal>();
 		for(City city: dealsMap.keySet()){
 			List<Deal> zoneDeals = selectMaxDeals(dealsMap.get(city));
@@ -541,7 +556,7 @@ public class Deal extends Model {
 	 * @param hour
 	 * @return Returns all the active deals in all the zones of a city at a given hour.
 	 */
-	private static List<Deal> findActiveDealsByNight(HashMap<City, List<Deal>> dealsMap, Integer hour){
+	private static List<Deal> findActiveDealsByNight(LinkedHashMap<City, List<Deal>> dealsMap, Integer hour){
 		List<Deal> activeDeals = new ArrayList<Deal>();
 		Logger.debug("Is between 0am and 6am. Hour:  " + hour);
 		// iterate over zones to limit deals list to MAXDEALS
@@ -622,6 +637,40 @@ public class Deal extends Model {
 			return new Float(price - (price * this.company.fee / 100.0));
 		}
 		return null;
+	}
+
+	public void addImage(String image) {
+		if (StringUtils.isBlank(this.image1)){
+			this.image1 = image;
+		}
+		else if (StringUtils.isBlank(this.image2)){
+			this.image2 = image;
+		}
+		else if (StringUtils.isBlank(this.image3)){
+			this.image3 = image;
+		}
+		else if (StringUtils.isBlank(this.image4)){
+			this.image4 = image;
+		}
+		else if (StringUtils.isBlank(this.image5)){
+			this.image5 = image;
+		}
+		else if (StringUtils.isBlank(this.image6)){
+			this.image6 = image;
+		}
+		else if (StringUtils.isBlank(this.image7)){
+			this.image7 = image;
+		}
+		else if (StringUtils.isBlank(this.image8)){
+			this.image8 = image;
+		}
+		else if (StringUtils.isBlank(this.image9)){
+			this.image9 = image;
+		}
+		else if (StringUtils.isBlank(this.image10)){
+			this.image10 = image;
+		}
+		
 	}
 
 }

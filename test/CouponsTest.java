@@ -11,6 +11,7 @@ import org.junit.Test;
 import controllers.Coupons;
 
 import play.Logger;
+import play.mvc.Http.Response;
 import play.test.UnitTest;
 
 
@@ -38,8 +39,8 @@ public class CouponsTest  extends UnitTest {
 	    Coupon couponFriends = Coupon.findByKey(bob.refererId);
 	    assertNotNull(couponFriends);
 	    assertEquals(20, couponFriends.credits);
-	    Logger.debug("coupon: " + couponFriends + " is valid: " + couponFriends.isValid());
-	    assertTrue(couponFriends.isValid());;
+	    Logger.debug("coupon: " + couponFriends + " is valid: " + !couponFriends.expired());
+	    assertFalse(couponFriends.expired());
 	    MyCoupon myCoupon = MyCoupon.findByKeyAndUser(bob.refererId, bob);
 	    assertNull(myCoupon);
 	    //bob  have 0 credits	
@@ -53,7 +54,6 @@ public class CouponsTest  extends UnitTest {
 		User bob =  new User("bob@gmail.com", "secret", "Bob", "Smith");
 	    bob.insert();
 	    Coupon coupon = Coupon.findByKey(bob.refererId);
-	    
 	    InvalidCouponException error = null;
 	    try {
 	    	//Bob use its own coupon
@@ -61,6 +61,7 @@ public class CouponsTest  extends UnitTest {
 		    myCoupon.use();
 		} catch (InvalidCouponException e) {
 			error = e;
+			Logger.debug("Error: %s", e.getMessage());
 		}
 		assertNotNull(error);
 		
@@ -77,12 +78,14 @@ public class CouponsTest  extends UnitTest {
 	    InvalidCouponException error = null;
 	    try {
 	    	//Bob use the welcome coupon
+	    	Logger.debug("Bob is new: %s", bob.isNew);
 		    MyCoupon myCoupon = coupon.createMyCoupon(bob); 
 		    bob.get(); //refresh bob
 		    assertEquals(10, bob.calculateTotalCreditsFromMyCoupons());
 		    myCoupon.use();
 		    assertEquals(0, bob.calculateTotalCreditsFromMyCoupons());
 		} catch (InvalidCouponException e) {
+			Logger.debug("Error: %s", e.getMessage());
 			error = e;
 		}
 		assertNull(error);
@@ -108,8 +111,9 @@ public class CouponsTest  extends UnitTest {
 	    assertTrue(myCouponPepe.used);
 	}
 	
+	
 	private Coupon createWelcomeCoupon() {
-		Coupon coupon = new Coupon("WELCOME",10,"FIRST");
+		Coupon coupon = new Coupon("WELCOME",10,Coupon.CREDITS_WELCOME_TYPE);
 	    Calendar calendar = Calendar.getInstance();
 	    calendar.add(Calendar.DAY_OF_YEAR, 5);
 	    coupon.expire = calendar.getTime();

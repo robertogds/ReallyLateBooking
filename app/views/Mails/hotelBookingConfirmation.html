@@ -17,7 +17,7 @@
 				<tr>
 					<td colspan="2">
 						<p>&{'mails.booking.hotel.hi'},</p>
-						<p><strong>${user.firstName}</strong> &{'mails.booking.hotel.justbooked'}:</p>
+						<p><strong>${booking.userFirstName}</strong> &{'mails.booking.hotel.justbooked'}:</p>
 						
 						<table width="200px" bgcolor="#0098CB">
 							<tr><td style="text-align:center;">
@@ -61,7 +61,7 @@
 							</tr>
 							<tr>
 								<td style="color:#858C92;">&{'mails.booking.price'}:</td>
-								<td><strong>${booking.netTotalSalePrice}&euro; &{'mails.booking.tax'}</strong></td>
+								<td><strong>${booking.totalSalePrice}&euro; &{'mails.booking.tax'}</strong></td>
 							</tr>
 						</table>
 					</td>
@@ -70,11 +70,11 @@
 						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
 							<tr>
 								<td style="color:#858C92;">&{'mails.booking.client.name'}:</td>
-								<td><strong>${user.lastName}, ${user.firstName} </strong></td>
+								<td><strong>${booking.userLastName}, ${booking.userFirstName} </strong></td>
 							</tr>
 							<tr>
 								<td style="color:#858C92;">&{'mails.booking.client.email'}:</td>
-								<td><strong>${user.email}</strong></td>
+								<td><strong>${booking.userEmail}</strong></td>
 							</tr>
 						</table>
 					</td>

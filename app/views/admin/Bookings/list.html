@@ -6,7 +6,7 @@
 
 
 	<div id="crudListTable">
-		#{crud.table fields:['code','user','checkinDate','hotelName', 'priceCents', 'salePriceCents','fromWeb','payed','invoiced','pending','canceled'] }
+		#{crud.table fields:['code','user','checkinDate','hotelName', 'finalPrice', 'netTotalSalePrice','credits','fromWeb','payed','invoiced','pending','canceled'] }
 		   #{crud.custom 'code'}
 		   		<a href="@{admin.Bookings.show(object.id)}">
 				   	${object.code}

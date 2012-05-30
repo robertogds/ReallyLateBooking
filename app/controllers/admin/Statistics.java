@@ -128,7 +128,7 @@ public class Statistics extends Controller {
 		Collection<City> rootCities = new ArrayList<City>();
 		Collection<City> cities = City.findAllCities();
 		for (City city: cities){
-			if (city.isRootCity() || city.isSimpleCity()){
+			if (city.isRootCity()){
 				rootCities.add(city);
 			}
 		}

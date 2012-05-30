@@ -71,6 +71,8 @@ public class BookingDTO {
 	public String dealAddress;
     @Expose
 	public boolean payed;
+    @Expose
+	public Integer credits;
 
     
 	public BookingDTO(Booking booking) {
@@ -85,7 +87,7 @@ public class BookingDTO {
 		this.creditCardExpiry = booking.creditCardExpiry;
 		this.creditCardCVC = booking.creditCardCVC;
 		this.creditCardType = booking.creditCardType;
-		this.code = booking.code;
+		this.code = booking.isHotusa ? Booking.RESTEL + "-" + booking.code :  booking.code;
 		this.salePriceCents = booking.totalSalePrice;
 		this.priceCents = booking.priceCents;
 		this.priceDay2 = booking.priceDay2;
@@ -99,6 +101,7 @@ public class BookingDTO {
 		this.canceled = booking.canceled;
 		this.breakfastIncluded = booking.breakfastIncluded;
 		this.dealAddress = booking.dealAddress;
+		this.credits = booking.credits;
 		this.payed = booking.payed;
 		Logger.debug("Formating booking date with locale: " + Lang.getLocale());
 		this.checkinDate = booking.checkinDate!= null ? 

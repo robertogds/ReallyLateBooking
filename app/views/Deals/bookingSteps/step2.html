@@ -49,14 +49,14 @@
 										              </div>
 										            </div>
 										          </div><!-- /clearfix -->
-										          #{if user?.credits > 0 && !deal.isHotUsa}
+										          #{if credits > 0 }
 										          <div class="clearfix">
 										            <label for="credits">&{'web.bookingForm.2.credits'}</label>
 										            <div class="input">
 										              <div class="input-prepend">
 										                <span class="add-on">&euro;</span>
 										                <input class="large disabled" id="credits" name="credits" 
-										                	disabled  type="text" value="&{'web.bookingForm.2.credits.value', user?.credits}">
+										                	disabled  type="text" value="&{'web.bookingForm.2.credits.value', credits}">
 										                <span class="help-block">&{'web.bookingForm.2.credits.hint'}</span>
 										              </div>
 										            </div>
@@ -71,8 +71,8 @@
 										               		<span><i class="icon-asterisk"></i></span> &{'web.bookingForm.2.total'}:
 										              </div>
 										              <div class="span9">
-										              		#{if user?.credits > 0 && !deal.isHotUsa}
-										              			<span id="total-booking-precredits">${deal.salePriceCents}</span>&euro; - ${user?.credits}&euro; = <span id="total-booking" class="total-booking">${deal.salePriceCents - user?.credits}</span>&euro; <small>&{'web.bookingForm.2.tax'}</small>
+										              		#{if credits > 0 }
+										              			<span id="total-booking-precredits">${deal.salePriceCents}</span>&euro; - ${credits}&euro; = <span id="total-booking" class="total-booking">${deal.salePriceCents - credits}</span>&euro; <small>&{'web.bookingForm.2.tax'}</small>
 										              		#{/if}
 										              		#{else}
 										               			<span id="total-booking" class="total-booking">${deal.salePriceCents}</span>&euro; <small>&{'web.bookingForm.2.tax'}</small>

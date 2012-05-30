@@ -42,7 +42,7 @@ public class Coupons extends Controller {
 		Security.checkConnected();
     }
 	
-	@Before(unless = {"validate","validateAjax"})
+	@Before(unless = {"validate","validateAjax","create"})
 	static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -61,18 +61,23 @@ public class Coupons extends Controller {
 	 * Return to the given returnUrl
 	 * */
 	public static void validate(@Required String key, String returnUrl){
-		validateAndSave(Long.valueOf(session.get("userId")), key);
+		try {
+			validateAndSave(Long.valueOf(session.get("userId")), key);
+		} catch (InvalidCouponException e) {
+			validation.addError("key", e.getMessage());
+		}
 		redirect(returnUrl);
 	}
 	
 	public static void validateAjax(@Required String key) {
 		Logger.debug("Create Coupon from code " + key);	
-		MyCoupon myCoupon = validateAndSave(Long.valueOf(session.get("userId")), key);
-		if (!validation.hasErrors()){ 
+		MyCoupon myCoupon;
+		try {
+			myCoupon = validateAndSave(Long.valueOf(session.get("userId")), key);
 			renderCouponCreated(myCoupon);
-		}
-		else{
-			renderCouponError();
+		} catch (InvalidCouponException e) {
+			validation.addError("key", e.getMessage());
+			renderCouponError(e.getMessage());
 		}
 	}
 	
@@ -90,57 +95,47 @@ public class Coupons extends Controller {
 	
 	public static void create(String json) {
 		String body = json != null ? json : params.get("body");
-		Logger.debug("Create Coupon " + body);	
-		if (json != null){
+		Logger.debug("Create Coupon %s", body);	
+		if (body != null){
 			MyCoupon myCoupon;
 			try {
-				myCoupon = new Gson().fromJson(json, MyCoupon.class);
-				myCoupon = validateAndSave(myCoupon.user.id, myCoupon.key);
-				if (!validation.hasErrors()){ 
+				myCoupon = new Gson().fromJson(body, MyCoupon.class);
+				try {
+					myCoupon = validateAndSave(myCoupon.user.id, myCoupon.key);
 					renderCouponCreated(myCoupon);
+				} catch (InvalidCouponException e) {
+					renderCouponError(e.getMessage());
 				}
 			} catch (JsonParseException e) {
 				Logger.error("Error parsing coupon json", e);
-			} finally{
-				renderCouponError();
-			}
+				renderCouponError("Error interno, no hemos podido validar tu cupón, contacta con soporte@reallylatebooking.com");
+			} 
 		}
-		renderCouponError();
+		renderCouponError("Error interno, no hemos podido validar tu cupón, contacta con soporte@reallylatebooking.com");
 	}
 	
 	
-	private static MyCoupon validateAndSave(Long userId, String key){
+	private static MyCoupon validateAndSave(Long userId, String key) throws InvalidCouponException{
+		Logger.debug("Validating Coupon with key %s for user with id %s", key, userId);	
 		User user= User.findById(userId);
 		MyCoupon myCoupon = MyCoupon.findByKeyAndUser(key, user);
 		if (myCoupon == null){
 			Coupon coupon = Coupon.findByKey(key);
 			if (coupon == null){
 				Logger.debug("Couldn't find Coupon with key %s", key);
-				validation.addError("key",  Messages.get("coupon.create.error"));
+				throw new InvalidCouponException("Codigo de cupón no encontrado");
 			}
 			else{
-				myCoupon = createMyCoupon(coupon, user);
+				myCoupon = coupon.createMyCoupon(user);
 			}
 		}
 		else{
-			Logger.debug("Couldn't find MyCoupon for user %s with key %s", user.email, key);
-			validation.addError("key",  Messages.get("coupon.create.error"));
+			Logger.debug("Can't use a MyCoupon twice: for user %s with key %s", user.email, key);
+			throw new InvalidCouponException("Ya no eres un user nuevo");
 		}
 		return myCoupon;
 	}
 	
-	
-	/**
-	 * Use a code to get the user coupon and the referer if necessary 
-	 * */
-	private static MyCoupon createMyCoupon(Coupon coupon, User user){
-		try {
-			return coupon.createMyCoupon(user);
-		} catch (InvalidCouponException e) {
-			validation.addError("key",  Messages.get("coupon.create.error"));
-			return null;
-		}
-	}
 	
 	private static void renderCouponCreated(MyCoupon myCoupon){
 		Logger.debug("Valid Coupon %s", myCoupon.key);
@@ -150,9 +145,9 @@ public class Coupons extends Controller {
 		renderJSON(response);
 	}
 	
-	private static void renderCouponError(){
+	private static void renderCouponError(String message){
 		String messageJson = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
-				new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("coupon.create.error")));
+				new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", message));
 		renderJSON(messageJson);
 	}
 }

@@ -17,9 +17,15 @@ import play.data.validation.Email;
 import play.data.validation.Required;
 import play.i18n.Messages;
 import play.mvc.Before;
-import play.mvc.Catch;
 import play.mvc.Controller;
 import play.mvc.With;
+
+import com.google.appengine.repackaged.org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @With({I18n.class, LogExceptions.class})
 public class Application extends Controller {
@@ -69,7 +75,7 @@ public class Application extends Controller {
         redirect(returnUrl);
 	}
     
-    public static void authenticate(@Required String username, String password) throws Throwable {
+    public static void authenticate(@Required String username, @Required String password) throws Throwable {
     	login(username, password);
         // Redirect to the original URL (or /)
         Secure.redirectToOriginalURL();
@@ -172,18 +178,15 @@ public class Application extends Controller {
 	}
 	
 	
-	
-	
 	private static void login(String username, String password){
-        // Check tokens
-        Boolean allowed = (Boolean)Security.authenticate(username, password);
-        if(validation.hasErrors() || !allowed) {
-            flash.keep("url");
-            flash.error(Messages.get("web.login.incorrect"));
-            params.flash();
+        if(!validation.hasErrors() && 
+        		Security.authenticate(username, password)) {
+        	connectUser(username);
         }
         else{
-        	connectUser(username);
+        	flash.keep("url");
+            flash.error(Messages.get("web.login.incorrect"));
+            params.flash();
         }
     }
 	

@@ -90,6 +90,7 @@ public class User extends Model{
 	public String refererId;
 	public boolean isInvestor;
 	public boolean isEditor;
+	public boolean isNew;
     
     public User() {
     	super();
@@ -129,6 +130,7 @@ public class User extends Model{
 		this.isFacebook = this.isFacebook!=null ? this.isFacebook : Boolean.FALSE;
 		this.refererId = this.createRefererId();
 		this.locale = Lang.get();
+		this.isNew = true;
     	super.insert();
     	this.createUserCoupons();
 	}
@@ -160,27 +162,29 @@ public class User extends Model{
 	 * @param data
 	 */
     private static void registerOrLoginFromFaceBook(JsonObject data) {
+    	Logger.debug("Login/Registering user from facebook: %s ", data.toString());
     	String email = data.get("email") != null ? data.get("email").getAsString() : null;
-    	User user = email!= null? User.findByEmail(email) : new User();
-    	user.getUserDataFromFB(data);
-    	registerOrLoginFromFacebook(user);
+    	User user = email!= null? User.findByEmail(email) : null;
+    	if (user == null){
+    		user = registerFromFacebook(data);
+    		user.get();
+    	}
+    	else{
+    		user.getUserDataFromFB(data);
+    	}
     	user.createUserSession();
 	}
     
-    private static void registerOrLoginFromFacebook(User user) {
-    	if (user != null){
-    		Logger.debug("User exists: " + user.email);
-    		user.fromWeb = true;
-    		user.update();
-    	}
-    	else{
-    		Logger.debug("User new from Facebook" );
-    		user = new User();
-    		user.fromWeb = true;
-    		user.insert();
-    		Mails.welcome(user);
-    	}
+    private static User registerFromFacebook(JsonObject data) {
+		Logger.debug("User new from Facebook" );
+		User user = new User();
+		user.fromWeb = true;
+		user.getUserDataFromFB(data);
+		user.insert();
+		Mails.welcome(user);
+		return user;
 	}
+
 
 	private void getUserDataFromFB(JsonObject data) {
 		try {
@@ -237,7 +241,7 @@ public class User extends Model{
     }
 	
 	public static User findByEmail(String email){
-    	return User.all().filter("email", email.trim().toLowerCase()).get();
+    	return email != null ? User.all().filter("email", email.trim().toLowerCase()).get(): null;
     }
 	
 	public static User findByRefererId(String refererId){
@@ -257,7 +261,7 @@ public class User extends Model{
     }
     
     public static User findByEmailAndPassword(String email, String password){
-    	return User.all().filter("email", email.trim().toLowerCase()).filter("password", password.trim()).get();
+    	return email != null ? User.all().filter("email", email.trim().toLowerCase()).filter("password", password.trim()).get() : null;
     }
  
     public String toString() {
@@ -315,7 +319,7 @@ public class User extends Model{
 		List<MyCoupon> coupons = MyCoupon.findActiveByUser(this);
 		Integer credits = 0;
 		for (MyCoupon coupon : coupons){
-			if (coupon.isNotExpiredNorUsed()){
+			if (!coupon.expiredOrUsed()){
 				credits += coupon.credits;
 			}
 		}
@@ -323,13 +327,13 @@ public class User extends Model{
 	}
 
 	public void markMyCouponsAsUsed(Integer creditsUsed) {
-		List<MyCoupon> coupons = MyCoupon.findActiveByUser(this);
+		List<MyCoupon> coupons = MyCoupon.findActiveByUserOrderByCredits(this);
 		Integer credits = 0;
 		for (MyCoupon coupon : coupons){
 			if ( credits >= creditsUsed){
 				break;
 			}
-			else if (coupon.isNotExpiredNorUsed()){
+			else if (!coupon.expiredOrUsed()){
 				credits +=  coupon.useValidUnused();
 			}
 		}

@@ -92,6 +92,15 @@ mails.recoverpass.p1 = You've just requested to recover your password.
 mails.recoverpass.p2 = Click the next link and set your new password:
 mails.recoverpass.link = Recover my password
 
+mail.friend.registered = Your friend %s is now a Latebooker like you!
+mails.friend.newlatebooker =  Thanks for this new LateBooker!
+mails.friend.registerd.hi = Hi <strong>%s</strong>, your friend <strong>%s</strong> has just registered using your invitation.
+mails.friend.morecredits = When %s made the first booking, you'll get <strong>%s€</strong>. Invite more friends and get more free credits:
+mails.friend.personalcode = Personal Code
+mail.friend.firstbooking = Your friend %s has just booked a room
+mails.friend.newcredits = You have new credits available
+mails.friend.firstbooking.hi = Hi <strong>%s</strong>, your friend <strong>%s</strong> has just booked a room at RLB
+mails.friend.firstBooking.more = So, here you have a gift: %s€ for your next booking. Invite more friends and get more free credits:
 
 extranet.list.title =  Your Hotels
 extranet.title = ReallyLateBooking Extranet 
@@ -185,7 +194,7 @@ web.contact.send.btn = Send message
 web.contact.incorrect = There's some errors, check them out and try again.
 web.contact.correct = Thanks for contacting us, we'll answer asap.
 web.contact.intro = You can contact us 24/7. We'll read your message instantly.
-web.bookingForm.popover=Clicking this button you're booking <strong class='nights'>"+nights+"</strong> nights,  double room <strong>for tonight</strong>  at a total cost (tax included) of <strong class='total-price'>"+totalPrice+"&euro;</strong>
+web.bookingForm.popover=Clicking this button you're booking <strong class='nights'>"+nights+"</strong> nights,  double room <strong>for tonight</strong>  at a total cost (tax included) of <strong class='total-price'>"+totalPrice+"€</strong>
 web.bookingForm.hint.strong = You almost have your room for tonight, just a few seconds left!
 web.bookingForm.hint.simple = It's easy, fast and secure.
 web.bookingForm.hint.remember = Remember that you can't choose dates: our prices are only for tonight.
@@ -227,7 +236,7 @@ web.bookingForm.4.cardname.hint=As written on the card.
 web.bookingForm.button=Book for tonight
 web.bookingForm.popover.title=Book at %s
 web.bookingForm.2.credits = Your credits
-web.bookingForm.2.credits.value = You have %s&euro; off
+web.bookingForm.2.credits.value = You have %s€ off
 web.bookingForm.2.credits.hint = If you have a coupon, write it above
 web.bookingForm.error = Oops‚ it seems to be some errors.
 web.bookingForm.success= Your booking is confirmed.
@@ -268,7 +277,7 @@ web.deal.detail.around.h2=Nearby
 web.deal.detail.buy.btn=Book now
 web.deal.detail.soldedout.btn=Sold out
 web.deal.detail.free=Do you want it free?
-web.deal.detail.free.hint=With each invite your giving 12€ for their first booking and you get 12€
+web.deal.detail.free.hint=With each invite your giving 20€ for their first booking and you get 20€
 web.deal.detail.free.invite=Invite your friends
 web.deal.detail.free.getcredits=and get credits for booking free
 web.deal.detail.location.h2=Location
@@ -509,11 +518,21 @@ web.dashboard.mycoupons.table.credits= Credits
 web.dashboard.mycoupons.table.state= State
 coupon.create.error=This coupon is invalid or you've already used it
 coupon.create.correct= The coupon is correct and you can already enjoy the free credits
-coupon.title = Welcome credits
-web.dashboard.mycoupons.total = You have  %s&euro; off for your next booking
-web.dashboard.mycoupons.invite = Invite your friends and get 12&euro; for each one of them once they make their first booking
+coupon.title = Welcome
+coupon.create.internalerror = Internal error, we could not validate your coupon, contact soporte@reallylatebooking.com
+coupon.create.nofound = There are no coupon with this code, have you written it right?
+coupon.create.twice = You can only use each coupon once, invite more friends to get credits.
+coupon.create.welcome.notnew = This coupon is only for new users who have not validated other coupon before.
+coupon.create.owncoupon = You can not use your own code. Give it to your friends and get 20€ when they book a room.
+coupon.create.referer.twice = This coupon can not be combined with another that you've used. Invite more friends to get credits.
+coupon.create.expired = The coupon has expired. Get more credits by inviting your friends to RLB.
+
+web.dashboard.mycoupons.total = You have  %s€ off for your next booking
+web.dashboard.mycoupons.invite = Invite your friends and get 20€ for each one of them once they make their first booking
 web.dashboard.mycoupons.new=Do you have a coupon code?
 web.dashboard.mycoupons.new.button= Validate coupon
 
+web.index.itunes.btn= Download for iPhone
+web.index.android.btn= Download for Android
 itunes.url = http://itunes.apple.com/gb/app/reallylatebooking-las-mejores/id448918487?mt
 android.play.url = https://play.google.com/store/apps/details?id=com.iipir.rlb&hl=en

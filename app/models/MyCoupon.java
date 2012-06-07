@@ -1,10 +1,15 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import notifiers.Mails;
+
 import org.apache.commons.lang.StringUtils;
+
+import controllers.admin.MyCoupons;
 
 import play.Logger;
 
@@ -82,9 +87,14 @@ public class MyCoupon extends Model{
     	return Model.all(MyCoupon.class);
     }
 	
-    public static MyCoupon findActiveByKey(String key){
-    	return MyCoupon.all().filter("key", key.toUpperCase()).filter("active", true).order("-created").get();
-    }
+    public static List<MyCoupon> findByKey(String key) {
+    	if (key != null){
+        	return MyCoupon.all().filter("key", key.trim().toUpperCase()).order("-created").fetch();
+    	}
+    	else{
+    		return new ArrayList<MyCoupon>();
+    	}
+	}
     
     public static MyCoupon findById(Long id) {
         return all().filter("id", id).get();
@@ -93,13 +103,20 @@ public class MyCoupon extends Model{
     public static List<MyCoupon> findActiveByUser(User user){
     	return MyCoupon.all().filter("user", user).filter("active", true).order("-created").fetch();
     }
-    
+    public static List<MyCoupon> findByUser(User user) {
+    	return MyCoupon.all().filter("user", user).order("-created").fetch();
+	}
     public static List<MyCoupon> findActiveByUserOrderByCredits(User user){
     	return MyCoupon.all().filter("user", user).filter("active", true).order("-credits").fetch();
     }
     
 	public static MyCoupon findByKeyAndUser(String key, User user) {
-		return MyCoupon.all().filter("key", key.toUpperCase()).filter("user", user).order("-created").get();
+		if (key != null && user!= null){
+    		return MyCoupon.all().filter("key", key.trim().toUpperCase()).filter("user", user).order("-created").get();
+    	}
+		else{
+			return null;
+		}
 	}
 	
 	public String toString() {
@@ -139,19 +156,22 @@ public class MyCoupon extends Model{
 	}
 	
 	public void createRefererCoupon(User user) {
+		User friend = user;
 		User referer = User.findByRefererId(this.key);
 		if (referer != null){
 			//Update the user with the referer key
-			user.referer = referer.refererId;
-			user.update();
-			Logger.info("A friend used his coupon so gives %s a new coupon %s ", referer.refererId,  user.refererId);
-			Coupon invitedCoupon = Coupon.findByKey(user.refererId);
-			MyCoupon refererCoupon = new MyCoupon(referer, user.refererId, invitedCoupon.credits, invitedCoupon.duration);
+			friend.referer = referer.refererId;
+			friend.update();
+			Logger.info("A friend used his coupon so gives %s a new coupon %s ", referer.refererId,  friend.refererId);
+			Coupon invitedCoupon = Coupon.findByKey(friend.refererId);
+			MyCoupon refererCoupon = new MyCoupon(referer, friend.refererId, invitedCoupon.credits, invitedCoupon.duration);
+			refererCoupon.title = "FRIEND";
 			refererCoupon.isReferer = Boolean.TRUE;
 			refererCoupon.active = Boolean.FALSE; //set to active at booking
 			refererCoupon.insert();
 			//When the first friend register we considerer the referer is not a new user anymore
 			referer.update();
+			Mails.friendRegistered(referer, friend, refererCoupon);
 		}
 		else{
 			Logger.info("Referer key doesnt seem to be an active user: " + this.key);
@@ -188,7 +208,7 @@ public class MyCoupon extends Model{
 			try {
 				coupon.active = Boolean.TRUE;
 				coupon.update();
-				//TODO send mail to referal?
+				Mails.friendFirstBooking(referer, user, coupon);
 				//TODO notificaciones
 			} catch (Exception e) {
 				Logger.error("Can´t find coupon for referer:%s and user %s", user.refererId, referer.email);
@@ -213,5 +233,6 @@ public class MyCoupon extends Model{
 			throw new InvalidCouponException("El cupón está caducado");
 		}
 	}
+
 
 }

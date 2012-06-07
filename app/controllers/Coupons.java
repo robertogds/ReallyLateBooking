@@ -34,7 +34,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
 
-@With({I18n.class, LogExceptions.class, Analytics.class})
+@With({I18n.class, LogExceptions.class})
 public class Coupons extends Controller {
 	
 	@Before(only = {"validate","validateAjax"})
@@ -62,7 +62,7 @@ public class Coupons extends Controller {
 	 * */
 	public static void validate(@Required String key, String returnUrl){
 		try {
-			validateAndSave(Long.valueOf(session.get("userId")), key);
+			Coupon.validateAndSave(Long.valueOf(session.get("userId")), key);
 		} catch (InvalidCouponException e) {
 			validation.addError("key", e.getMessage());
 		}
@@ -73,7 +73,7 @@ public class Coupons extends Controller {
 		Logger.debug("Create Coupon from code " + key);	
 		MyCoupon myCoupon;
 		try {
-			myCoupon = validateAndSave(Long.valueOf(session.get("userId")), key);
+			myCoupon = Coupon.validateAndSave(Long.valueOf(session.get("userId")), key);
 			renderCouponCreated(myCoupon);
 		} catch (InvalidCouponException e) {
 			validation.addError("key", e.getMessage());
@@ -101,39 +101,17 @@ public class Coupons extends Controller {
 			try {
 				myCoupon = new Gson().fromJson(body, MyCoupon.class);
 				try {
-					myCoupon = validateAndSave(myCoupon.user.id, myCoupon.key);
+					myCoupon = Coupon.validateAndSave(myCoupon.user.id, myCoupon.key);
 					renderCouponCreated(myCoupon);
 				} catch (InvalidCouponException e) {
 					renderCouponError(e.getMessage());
 				}
 			} catch (JsonParseException e) {
 				Logger.error("Error parsing coupon json", e);
-				renderCouponError("Error interno, no hemos podido validar tu cupón, contacta con soporte@reallylatebooking.com");
+				renderCouponError(Messages.get("coupon.create.internalerror"));
 			} 
 		}
-		renderCouponError("Error interno, no hemos podido validar tu cupón, contacta con soporte@reallylatebooking.com");
-	}
-	
-	
-	private static MyCoupon validateAndSave(Long userId, String key) throws InvalidCouponException{
-		Logger.debug("Validating Coupon with key %s for user with id %s", key, userId);	
-		User user= User.findById(userId);
-		MyCoupon myCoupon = MyCoupon.findByKeyAndUser(key, user);
-		if (myCoupon == null){
-			Coupon coupon = Coupon.findByKey(key);
-			if (coupon == null){
-				Logger.debug("Couldn't find Coupon with key %s", key);
-				throw new InvalidCouponException("Codigo de cupón no encontrado");
-			}
-			else{
-				myCoupon = coupon.createMyCoupon(user);
-			}
-		}
-		else{
-			Logger.debug("Can't use a MyCoupon twice: for user %s with key %s", user.email, key);
-			throw new InvalidCouponException("Ya no eres un user nuevo");
-		}
-		return myCoupon;
+		renderCouponError(Messages.get("coupon.create.internalerror"));
 	}
 	
 	

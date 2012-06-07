@@ -13,6 +13,7 @@ import models.Booking;
 import models.City;
 import models.Company;
 import models.Deal;
+import models.User;
 import play.Logger;
 import play.mvc.With;
 import controllers.CRUD;
@@ -74,13 +75,13 @@ public class Deals extends controllers.CRUD {
         List<Deal> deals = Deal.all().fetch();
 		for (Deal deal: deals){
 			if (deal.company != null){
-				deal.company.get();
+				deal.company = Company.findById(deal.company.id);
 			}
 			if (deal.owner != null){
-				deal.owner.get();
+				deal.owner = User.findById(deal.owner.id);
 			}
 			if (deal.city != null){
-				deal.city.get();
+				deal.city = City.findById(deal.city.id);
 			}
 		}
         List objects = deals;

@@ -12,6 +12,7 @@ import org.apache.commons.lang.Validate;
 import play.Logger;
 import play.Play;
 import play.data.validation.Validation;
+import play.i18n.Messages;
 
 import siena.DateTime;
 import siena.Generator;
@@ -55,7 +56,7 @@ public class Coupon extends Model{
     }
 	
     public static Coupon findByKey(String key){
-    	return Coupon.all().filter("key", key.toUpperCase()).order("-created").get();
+    	return Coupon.all().filter("key", key.trim().toUpperCase()).order("-created").get();
     }
     
     public static Coupon findById(Long id) {
@@ -66,6 +67,34 @@ public class Coupon extends Model{
 		return "key: " + this.key + " credits: " +  this.credits + " expire: " + this.expire;
 	}
 	
+	
+	/**
+	 * validates a coupon code for a user
+	 * @param userId
+	 * @param key
+	 * @return
+	 * @throws InvalidCouponException
+	 */
+	public static MyCoupon validateAndSave(Long userId, String key) throws InvalidCouponException{
+		Logger.debug("Validating Coupon with key %s for user with id %s", key, userId);	
+		User user= User.findById(userId);
+		MyCoupon myCoupon = MyCoupon.findByKeyAndUser(key, user);
+		if (myCoupon == null){
+			Coupon coupon = Coupon.findByKey(key);
+			if (coupon == null){
+				Logger.debug("Couldn't find Coupon with key %s", key);
+				throw new InvalidCouponException(Messages.get("coupon.create.nofound"));
+			}
+			else{
+				myCoupon = coupon.createMyCoupon(user);
+			}
+		}
+		else{
+			Logger.debug("Can't use a MyCoupon twice: for user %s with key %s", user.email, key);
+			throw new InvalidCouponException(Messages.get("coupon.create.twice"));
+		}
+		return myCoupon;
+	}
 	
 	/**
 	 * returns true if the expiration date is in the future
@@ -101,12 +130,12 @@ public class Coupon extends Model{
 	private void validateisNew(User user) throws InvalidCouponException {
 		Logger.debug(" User is new: %s" , user.isNew);
 		if (!user.isNew && this.onlyForNews()){
-			throw new InvalidCouponException("Ya no eres un user nuevo");
+			throw new InvalidCouponException(Messages.get("coupon.create.welcome.notnew"));
 		}
 	}
 	private void validateOwnCoupon(User user) throws InvalidCouponException{
 		if (this.key.equalsIgnoreCase(user.refererId)){
-			throw new InvalidCouponException("No puedes usar tu propio cupón");
+			throw new InvalidCouponException(Messages.get("coupon.create.owncoupon"));
 		}
 	}
 	
@@ -119,13 +148,13 @@ public class Coupon extends Model{
 	 * */
 	public void validateReferalValid(User user) throws InvalidCouponException{
 		if (this.type.equals(Coupon.CREDITS_REFERER_TYPE) && referalCouponUsed(user)){
-			throw new InvalidCouponException("No puedes usar un cupón de amigo más de una vez");
+			throw new InvalidCouponException(Messages.get("coupon.create.referer.twice"));
 		}
 	}
 	
 	private void validateExpiration() throws InvalidCouponException {
 		if (this.expired()){
-			throw new InvalidCouponException("El cupón está caducado");
+			throw new InvalidCouponException(Messages.get("coupon.create.expired"));
 		}
 	}
 	

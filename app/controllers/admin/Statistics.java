@@ -96,7 +96,7 @@ public class Statistics extends Controller {
 			DateHelper.setLastDayHour(tonight);
 			
 			Collection<Booking> bookingsToday = Booking.findAllBookingsByDate(now.getTime(), tonight.getTime());
-		    CityData dataToday =  new CityData(bookingsToday);
+		    CityData dataToday =  new CityData(bookingsToday, now.getTime(), tonight.getTime());
 		    dataToday.startDate = now.getTime();
 		    dataList.add(dataToday);
 		    

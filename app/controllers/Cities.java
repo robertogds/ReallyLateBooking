@@ -18,7 +18,7 @@ import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
 
-@With({I18n.class, LogExceptions.class, Analytics.class})
+@With({I18n.class, LogExceptions.class})
 public class Cities  extends Controller {
 	public static final String DEFAULT_COUNTRY = "spain";
 	

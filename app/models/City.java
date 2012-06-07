@@ -82,28 +82,28 @@ public class City extends Model {
 	}
 
 	public static List<City> findActiveCities(int offset, int limit) {
-		List<City> cities = all().filter("active", Boolean.TRUE).order("name").offset(offset).fetch(limit);
+		List<City> cities = all().filter("active", Boolean.TRUE).order("url").offset(offset).fetch(limit);
 		return cities;
 	}
 	
 	public static List<City> findActiveCities() {
-		List<City> cities = all().filter("active", Boolean.TRUE).order("name").fetch();
+		List<City> cities = all().filter("active", Boolean.TRUE).order("url").fetch();
 		return cities;
 	}
 	
 	public static List<City> findAllCities() {
-		List<City> cities = all().order("name").fetch();
+		List<City> cities = all().order("url").fetch();
 		return cities;
 	}
 
 
 	public static List<City> findAllRootCities() {
-		List<City> cities = all().filter("root", "").order("name").fetch();
+		List<City> cities = all().filter("root", "").order("url").fetch();
 		return cities;
 	}
 	
 	public static List<City> findActiveCitiesByCountry(Country country){
-		return all().filter("country", country).filter("active", Boolean.TRUE).order("name").fetch();
+		return all().filter("country", country).filter("active", Boolean.TRUE).order("url").fetch();
 	}
 	
 	public static List<City> findActiveCitiesByRoot(String root){

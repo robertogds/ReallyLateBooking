@@ -24,7 +24,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
 
-@With({I18n.class, LogExceptions.class, Analytics.class})
+@With({I18n.class, LogExceptions.class})
 public class Deals extends Controller {
 	
 	@Before(only = {"show","list","bookingForm"})
@@ -153,8 +153,8 @@ public class Deals extends Controller {
 			int hour = DateHelper.getCurrentHour(city.utcOffset);
 			boolean open = DateHelper.isActiveTime(hour);
 			if (!open){
-				//renderJSON(new StatusMessage(DateHelper.CITY_CLOSED, DateHelper.getTimeToOpenString(hour), "Not open yet"));
-				renderJSON(new ArrayList<DealDTO>());
+				renderJSON(new StatusMessage(DateHelper.CITY_CLOSED, DateHelper.getTimeToOpenString(hour), "Not open yet"));
+				//renderJSON(new ArrayList<DealDTO>());
 			}
 			else{
 				Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);

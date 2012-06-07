@@ -16,5 +16,6 @@
     <schedule>every day 06:05</schedule>
     <timezone>Europe/Madrid</timezone>
   </cron>
+
 </cronentries>
 

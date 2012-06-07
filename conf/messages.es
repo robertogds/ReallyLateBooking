@@ -98,6 +98,16 @@ mails.freenight.p2 = El primero que nos envie a info@reallylatebooking.com los e
 mails.freenight.p3 = Seguro que tienes 5 amigos con IPhone, ¡no pierdas esta oportunidad y date un capricho!
 mail.freenight.subject = Hotel 4* Gratis esta noche en Madrid
 
+mail.friend.registered = Tu amigo %s ya es un LateBooker como tú
+mails.friend.newlatebooker = ¡Gracias por crear un nuevo LateBooker!
+mails.friend.registerd.hi = Hola <strong>%s</strong>, tu amigo <strong>%s</strong> acaba de registrarse en RLB usando tu invitación.
+mails.friend.morecredits = Cuando %s realice su primera reserva, recibirás un cupón de <strong>%s€</strong>. Invita a más amigos para conseguir reservas gratis:
+mails.friend.personalcode = Código personal
+mail.friend.firstbooking = Tu amigo %s ha reservado en RLB
+mails.friend.newcredits = Tienes nuevos créditos gratis disponibles
+mails.friend.firstbooking.hi = Hola <strong>%s</strong>, tu amigo <strong>%s</strong> acaba de hacer su primera reserva en RLB.
+mails.friend.firstBooking.more = Como tú lo invitaste a RLB, te regalamos %s€ para tu próxima reserva. Invita a más amigos para conseguir más créditos:
+
 extranet.list.title =  Tus Hoteles
 extranet.title = ReallyLateBooking Extranet 
 
@@ -191,7 +201,7 @@ web.contact.send.btn = Enviar mensaje
 web.contact.incorrect = Hay algún error en el formulario de contacto, revisa los datos y vuelve a enviarlo.
 web.contact.correct = Gracias por escribirnos, leeremos tu mensaje lo antes posible.
 web.contact.intro = Puedes contactar con nosotros los 7 días de la semana, las 24 horas. Leeremos tu mensaje al instante.
-web.bookingForm.popover=Al pulsar este botón haces una reserva de <strong class='nights'>"+nights+"</strong> noches en habitación doble <strong> para entrar hoy</strong>  por un coste total (impuestos incluidos) de <strong class='total-price'>"+totalPrice+"&euro;</strong>
+web.bookingForm.popover=Al pulsar este botón haces una reserva de <strong class='nights'>"+nights+"</strong> noches en habitación doble <strong> para entrar hoy</strong>  por un coste total (impuestos incluidos) de <strong class='total-price'>"+totalPrice+"€</strong>
 web.bookingForm.hint.strong = Estás a pocos segundos de tener tu reserva de hotel para esta noche!
 web.bookingForm.hint.simple = Es muy sencillo, rápido y seguro.
 web.bookingForm.hint.remember = Recuerda que no puedes escoger la fecha: nuestros precios son sólo para esta noche.
@@ -233,7 +243,7 @@ web.bookingForm.4.cardname.hint=Tal y como figura en la tarjeta
 web.bookingForm.button=Reserva para esta noche
 web.bookingForm.popover.title=Reserva en %s
 web.bookingForm.2.credits = Tus créditos
-web.bookingForm.2.credits.value = Tienes %s&euro; de descuento
+web.bookingForm.2.credits.value = Tienes %s€ de descuento
 web.bookingForm.2.credits.hint = Si tienes un cupón valídalo arriba
 web.bookingForm.error = Oops‚ parece que hay algun error en los datos.
 web.bookingForm.success= Tu reserva se ha realizado correctamente.
@@ -274,7 +284,7 @@ web.deal.detail.around.h2=Los alrededores
 web.deal.detail.buy.btn=Reserva ya
 web.deal.detail.soldedout.btn=Agotado
 web.deal.detail.free=¿Lo quieres gratis?
-web.deal.detail.free.hint=Con cada invitación les regalas 12€ para su primera reserva y tú recibes otros 12€
+web.deal.detail.free.hint=Con cada invitación les regalas 20€ para su primera reserva y tú recibes otros 20€
 web.deal.detail.free.invite=Invita a tus amigos
 web.deal.detail.free.getcredits=y consigue créditos para reservar gratis
 web.deal.detail.location.h2=Situación
@@ -516,11 +526,23 @@ web.dashboard.mycoupons.table.credits= Créditos
 web.dashboard.mycoupons.table.state= Estado
 coupon.create.error=Este cupón ya no es válido o no es acumulable
 coupon.create.correct= El cupón es correcto y ya puedes usarlo para tu próxima reserva
-coupon.title = Cupón de bienvenida
-web.dashboard.mycoupons.total = Tienes un total de  %s&euro; de descuento para tu próxima reserva
-web.dashboard.mycoupons.invite = Invita a tus amigos y recibirás 12&euro; extra por cada amigo que realice una reserva en RLB
+coupon.title = Bienvenida
+coupon.create.internalerror = Error interno, no hemos podido validar tu cupón, contacta con soporte@reallylatebooking.com
+coupon.create.nofound = No tenemos ningún cupón con ese código, ¿lo has escrito bien?
+coupon.create.twice = Solo puedes usar cada cupón una vez, invita a más amigos para conseguir créditos.
+coupon.create.welcome.notnew = Este cupón de bienvenida es sólo para usuarios nuevos y que no han validado antes otro cupón.
+coupon.create.owncoupon = No puedes usar tu propio código. Dáselo a tus amigos y consigue 20€ cuando hagan una reserva.
+coupon.create.referer.twice = Este cupón no es acumulable con otro que ya has utilizado. Invita a más amigos para conseguir créditos.
+coupon.create.expired = El cupón ha caducado. Consigue más créditos invitando a tus amigos a RLB.
+
+web.dashboard.mycoupons.total = Tienes un total de  %s€ de descuento para tu próxima reserva
+web.dashboard.mycoupons.invite = Invita a tus amigos y recibirás 20€ extra por cada amigo que realice una reserva en RLB
 web.dashboard.mycoupons.new=¿Tienes un código de cupón?
 web.dashboard.mycoupons.new.button= Validar código
+
+
+web.index.itunes.btn= Descarga para iPhone
+web.index.android.btn= Descarga para Android
 
 itunes.url = http://itunes.apple.com/es/app/reallylatebooking-las-mejores/id448918487?mt
 android.play.url = https://play.google.com/store/apps/details?id=com.iipir.rlb&hl=es

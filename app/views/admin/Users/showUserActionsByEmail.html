@@ -1,0 +1,120 @@
+#{extends 'CRUD/layout.html' /}
+
+
+<div id="crudList">
+	
+	<h2 id="crudListTitle">Actions From user ${user.email}</h2>
+	
+	<p>	
+		<a href="@{admin.Users.show(user.id)}">
+		  	 	Edit ${user.email}
+		 </a>
+	</p>
+	
+	<h3>Bookings</h3>
+			<table class="table table-bordered" id="bookings">
+		        <thead>
+		          <tr>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.date'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.hotel'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.city'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.code'}</th>
+		            <th class="blue header">&{'web.dashboard.mybookings.table.price'}</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+		        	#{list items:bookings, as:'booking'}
+		        		<tr class=summary>
+				            <td>
+				            	<a  href="@{admin.Bookings.show(booking.id)}" >${booking.checkinDate.format('dd MMMM yyyy')}</a>
+				            </td>
+				            <td>${booking.hotelName}</td>
+				            <td>${booking.city?.name}</td>
+				            <td>${booking.code}</td>
+				            #{if booking.finalPrice > 0}
+				            	<td>${booking.finalPrice}&euro;</td>
+				            #{/if}
+				            #{else}
+				            	<td>${booking.salePriceCents}&euro;</td>
+				            #{/else}
+				            
+			        	</tr>
+		        	#{/list}
+		         </tbody>
+		     </table>
+		  
+		<h3>Coupons</h3>
+			<table class="table table-bordered" id="coupons">
+									        <thead>
+									          <tr>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.date'}</th>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.expiration'}</th>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.code'}</th>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.text'}</th>
+									            <th class="blue header">&{'web.dashboard.mycoupons.table.credits'}</th>
+									            <th class="blue header">Used</th>
+									          </tr>
+									        </thead>
+									        <tbody id="couponsBody">
+									        	#{list items:coupons, as:'coupon'}
+									        		<tr class=summary>
+														<td> 
+															<a href="@{admin.MyCoupons.show(coupon.id)}">
+													  	 		${coupon.created}
+													  	 	</a> 
+													  	 </td>
+														<td> ${coupon.expire} </td>
+														<td> ${coupon.key} </td>
+														<td> ${coupon.title} </td>
+														<td> ${coupon.credits}&euro; </td>
+														<td> ${coupon.used} </td>
+													</tr>
+									        	#{/list}
+									         </tbody>
+									     </table>
+<br>
+<strong>TOTAL AVAILABLE CREDTIS: ${credits}</strong>									     
+<br><br>
+	#{form @admin.Users.addCouponToUser() , id:'form'}
+		<label>Add coupon to user</label>
+   		<input type="text" name="key" value="code">
+   		<input type="hidden" name="user.id" value="${user.id}">
+   		<input type="submit" value="Validate" />
+   	#{/form}
+		
+			<h3>Friends</h3>
+<table class="table table-bordered" id="coupons">
+	<thead>
+		<tr>
+			<th class="blue header">email</th>
+			<th class="blue header">firstName</th>
+			<th class="blue header">lastName</th>
+			<th class="blue header">isFacebook</th>
+			<th class="blue header">fromWeb</th>
+			<th class="blue header">locale</th>
+			<th class="blue header">created</th>
+			<th class="blue header">lastAppLogin</th>
+			<th class="blue header">lastWebLogin</th>
+		</tr>
+	</thead>
+	<tbody id="couponsBody">
+		#{list items:friends, as:'friend'}
+		<tr class=summary>
+			<td><a href="@{admin.Users.show(friend.id)}">
+					${friend.email} 
+				</a>
+			</td>
+			<td>${friend.firstName}</td>
+			<td>${friend.lastName}</td>
+			<td>${friend.isFacebook}</td>
+			<td>${friend.fromWeb}</td>
+			<td>${friend.locale}</td>
+			<td>${friend.created}</td>
+			<td>${friend.lastAppLogin}</td>
+			<td>${friend.lastWebLogin}</td>
+		</tr>
+		#{/list}
+	</tbody>
+</table>
+
+</div>

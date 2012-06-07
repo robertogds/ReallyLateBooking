@@ -1,0 +1,13 @@
+&{'mails.friend.newcredits'}
+
+&{'mails.friend.firstbooking.hi', referer.firstName, friend.firstName}
+
+&{'mails.friend.personalcode'} ${referer.refererId}	
+	
+		http://www.reallylatebooking.com 
+		&{'mails.booking.client.social'} 
+		http://www.facebook.com/ReallyLateBooking 
+		http://twitter.com/#!/rlatebooking/
+			
+
+&{'mails.rlb.footer'}

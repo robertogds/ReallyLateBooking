@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder.Case;
@@ -20,7 +21,7 @@ import models.User;
 
 public class StatisticDTO {
 	
-    public HashMap<String, CityData> stats;
+    public LinkedHashMap<String, CityData> stats;
     public CityData allCities;
     public int registered;
     public int dayStart;
@@ -42,10 +43,10 @@ public class StatisticDTO {
 		this.monthEnd =  calEnd.get(Calendar.MONTH) + 1;
 		this.yearEnd = calEnd.get(Calendar.YEAR);
 	    this.registered = User.countNewUsersByDate(calStart, calEnd);
-	    this.stats = new HashMap<String, CityData>();
+	    this.stats = new LinkedHashMap<String, CityData>(); 
 	    
 	    Collection<Booking> bookings = Booking.findAllBookingsByDate(start, end);
-	    this.allCities =  new CityData(bookings);
+	    this.allCities =  new CityData(bookings, start, end);
 	    
 		for (City city : cities){
 			Collection<Booking> bookingsCity= new ArrayList<Booking>();
@@ -60,7 +61,7 @@ public class StatisticDTO {
 					bookingsCity.addAll(bookingsZone);
 				}
 			}
-			stats.put(city.url, new CityData(bookingsCity));
+			stats.put(city.url, new CityData(bookingsCity, start, end));
 		}
 	}
 	

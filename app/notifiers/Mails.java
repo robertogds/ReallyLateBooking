@@ -21,6 +21,7 @@ import com.google.apphosting.api.ApiProxy.ApiDeadlineExceededException;
 import models.Booking;
 import models.City;
 import models.Deal;
+import models.MyCoupon;
 import models.User;
 import play.Logger;
 import play.exceptions.MailException;
@@ -118,6 +119,35 @@ public class Mails extends MailServiceFactory {
 	   //set language to client original language
 	   Lang.set(lang);
    }
+   
+   
+	public static void friendRegistered(User referer, User friend, MyCoupon refererCoupon) {
+		Message message = new Message();
+		message.setSubject(Messages.get("mail.friend.registered", friend.firstName));
+		message.setSender(HOLA_MAIL);
+		String template = "Mails/friendRegistered";
+		message.setTo(referer.email);
+		message.setBcc(HOLA_MAIL);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("referer", referer);
+		params.put("friend", friend);
+		params.put("coupon", refererCoupon);
+		send(message, template, params); 
+	}
+	
+	public static void friendFirstBooking(User referer, User user, MyCoupon coupon) {
+		Message message = new Message();
+		message.setSubject(Messages.get("mail.friend.firstbooking", user.firstName));
+		message.setSender(HOLA_MAIL);
+		String template = "Mails/friendFirstBooking";
+		message.setTo(referer.email);
+		message.setBcc(HOLA_MAIL);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("referer", referer);
+		params.put("friend", user);
+		params.put("coupon", coupon);
+		send(message, template, params); 
+	}
    
    public static void ownerUpdatedDeal(Deal deal) {
 	      String lang = Lang.get(); 

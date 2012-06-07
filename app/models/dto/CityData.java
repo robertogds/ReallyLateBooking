@@ -1,5 +1,7 @@
 package models.dto;
 
+import helper.DateHelper;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -29,17 +31,19 @@ public class CityData {
     public int bookingsWeb= 0;
     public int bookingsApps= 0;
     public int totalusers= 0;
+    public int days = 0;
     public float totalCommission = 0;
     public float totalPrice = 0;
     public float nightsPerBookingAvg=0;
     public float priceAvg=0;
     public float commisionAvg=0;
     public float bookingPerUserAvg=0;
+    public float bookingsPerDay = 0;
     public Date startDate;
 
 	
-	public CityData(Collection<Booking> bookings){
-		this.initializaData(bookings);
+	public CityData(Collection<Booking> bookings, Date start, Date end){
+		this.initializaData(bookings, start, end);
 	}
 	
 	public void initialiceVisits(City city, Date start, Date end){
@@ -49,30 +53,32 @@ public class CityData {
 		this.activeDirectHotels = Deal.countActiveDirectHotelsByCity(city, start, end);
 	}
 	
-	private void initializaData(Collection<Booking> bookings){
-			this.bookings = bookings.size();
-			 float nights = 0;
-			 this.totalPrice = 0;
-			 List<User> users = new ArrayList<User>(); 
-			 for (Booking booking: bookings){
-				Logger.debug("## Initializing statistics data: %s", booking.code);
-			    nights = nights + booking.nights;
-			    this.totalPrice = this.totalPrice + booking.totalSalePrice;
-			    if (booking.fromWeb){
-			    	this.bookingsWeb++;
-			    }
-			    else{
-			    	this.bookingsApps++;
-			    }
-			    this.totalCommission += booking.totalSalePrice - booking.netTotalSalePrice;
-			    this.addBookingDayOfWeek(booking.checkinDate.getDay());
-			    this.addDistinctUser(users, booking.user);
-			 }
-			 this.nightsPerBookingAvg = this.bookings > 0 ? nights / this.bookings : 0;
-			 this.priceAvg = this.bookings > 0 ? this.totalPrice / this.bookings : 0;
-			 this.commisionAvg = this.bookings > 0 ? this.totalCommission / this.bookings : 0;
-			 this.totalusers = users.size();
-			 this.bookingPerUserAvg = this.bookings > 0 &&  this.totalusers > 0 ? new Float(this.bookings) / this.totalusers : 0;
+	private void initializaData(Collection<Booking> bookings, Date start, Date end){
+		this.bookings = bookings.size();
+		this.days = DateHelper.daysBetween(start, end);
+		float nights = 0;
+		this.totalPrice = 0;
+		List<User> users = new ArrayList<User>(); 
+		for (Booking booking: bookings){
+			Logger.debug("## Initializing statistics data: %s", booking.code);
+			nights = nights + booking.nights;
+			this.totalPrice = this.totalPrice + booking.totalSalePrice;
+			if (booking.fromWeb){
+				this.bookingsWeb++;
+			}
+			else{
+				this.bookingsApps++;
+			}
+			this.totalCommission += booking.totalSalePrice - booking.netTotalSalePrice;
+			this.addBookingDayOfWeek(booking.checkinDate.getDay());
+			this.addDistinctUser(users, booking.user);
+		}
+		this.nightsPerBookingAvg = this.bookings > 0 ? nights / this.bookings : 0;
+		this.priceAvg = this.bookings > 0 ? this.totalPrice / this.bookings : 0;
+		this.commisionAvg = this.bookings > 0 ? this.totalCommission / this.bookings : 0;
+		this.totalusers = users.size();
+		this.bookingPerUserAvg = this.bookings > 0 &&  this.totalusers > 0 ? new Float(this.bookings) / this.totalusers : 0;
+		this.bookingsPerDay = this.bookings > 0 ? new Float(this.bookings) / this.days : 0;
 	}
 
 	private void addDistinctUser(List<User> users, User user) {

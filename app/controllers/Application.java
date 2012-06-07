@@ -8,7 +8,9 @@ import java.util.List;
 
 import jobs.Bootstrap;
 import models.Booking;
+import models.Coupon;
 import models.Deal;
+import models.MyCoupon;
 import models.User;
 import notifiers.Mails;
 import play.Logger;
@@ -42,6 +44,32 @@ public class Application extends Controller {
 		AffiliateHelper.checkorigin(session, params);
 	}
 	
+
+	@Before(only={"index"})
+	public static void mobileDetection(){
+		//Http.Header header = Http.Request.current().headers.get("user-agent"); 
+		String userAgent = request.headers.get("user-agent") != null ? request.headers.get("user-agent").value() : "";
+		String accept = request.headers.get("accept")!= null ? request.headers.get("accept").value() : "";
+		UAgentInfo agent = new UAgentInfo(userAgent, accept);
+		Logger.debug("User-Agent: %s isIphone: %s isAndroid: %s", userAgent, agent.isIphone, agent.isIphone);
+		if (agent.isIphone || agent.isAndroidPhone){
+			mobile();
+		}
+	}
+	
+	public static void full() {
+		if(Security.isConnected() && Security.connectedUserExists()){
+			Cities.index();
+		}
+		else{
+			renderTemplate("Application/index.html");
+		}
+    }
+	
+	public static void mobile() {
+		render();
+	}
+	
 	public static void index() {
 		if(Security.isConnected() && Security.connectedUserExists()){
 			Cities.index();
@@ -52,22 +80,23 @@ public class Application extends Controller {
     }
     
     public static void register(@Required @Email String username, @Required String password, String firstName, String lastName, String returnUrl) throws Throwable{
-		boolean isAdmin = false;
-		boolean validated = true;
-		User user = new User(username, password, firstName, lastName,  isAdmin,  validated);
-		user.fromWeb = true;
-		user.validate();
+    	returnUrl = returnUrl != null ? returnUrl : "/";
 		if (!validation.hasErrors()){
-			user.insert();
-			Mails.welcome(user);
-			flash.success(Messages.get("web.register.correct"));
-			login(username, password);
-	        redirect(returnUrl);
+			boolean isAdmin = false;
+			boolean validated = true;
+			User user = new User(username, password, firstName, lastName,  isAdmin,  validated);
+			user.fromWeb = true;
+			user.validate();
+			if (!validation.hasErrors()){
+				user.insert();
+				Mails.welcome(user);
+				flash.success(Messages.get("web.register.correct"));
+				login(username, password);
+		        redirect(returnUrl);
+			}
 		}
-		else{
-			flash.error(Messages.get("web.register.incorrect"));
-			redirect(returnUrl);
-		}
+		flash.error(Messages.get("web.register.incorrect"));
+		redirect(returnUrl);
 	}
     
     public static void login(@Required @Email String username, @Required String password, String returnUrl) throws Throwable{
@@ -125,7 +154,21 @@ public class Application extends Controller {
 		index(); 
 	}
 	
-	public static void mobileDetection(){
+	private static void recreateCoupons(){
+		Logger.debug("## START DELETING COUPONS ####");
+		List<Coupon> coupons = Coupon.all().fetch();
+		for (Coupon coupon : coupons){
+			coupon.delete();
+		}
+
+		Logger.debug("## START RECREATING REFERAL COUPONS ####");
+		List<User> users = User.all().fetch();
+		for (User user: users){
+			user.recreateRefererCoupon();
+		}
+	}
+	
+	public static void landing(){
 		//Http.Header header = Http.Request.current().headers.get("user-agent"); 
 		String userAgent = request.headers.get("user-agent") != null ? request.headers.get("user-agent").value() : "";
 		String accept = request.headers.get("accept")!= null ? request.headers.get("accept").value() : "";

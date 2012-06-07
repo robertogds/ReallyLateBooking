@@ -1,0 +1,37 @@
+#{extends 'layoutMobile.html' /}
+<div align='center' class='header'>
+	<div>
+		<img id="logo" title="ReallyLateBooking" src="/public/images/logo_black.png" alt="ReallyLateBooking" width="300px">
+	</div>
+	<h1>&{'web.index.title'}</h1>
+</div>
+<ul class='ui-listview'>
+<li>
+<div class='ui-button'>
+<div class='ui-button-text'>
+<a href="&{'itunes.url'}" 
+	onClick="_gaq.push(['_trackEvent', 'iphone', 'Download', 'web Mobile']);">
+&{'web.index.itunes.btn'}
+</a>
+</div>
+<span class='ui-arrow'></span>
+</div>
+</li>
+<li class='last'>
+<div class='ui-button'>
+<div class='ui-button-text'>
+
+<a href="&{'android.play.url'}" onClick="_gaq.push(['_trackEvent', 'android', 'Download', 'web Mobile']);">
+&{'web.index.android.btn'}
+</a>
+</div>
+<span class='ui-arrow'></span>
+</div>
+</li>
+</ul>
+<div class='infobox'>
+<span>
+#{a @Application.full() }Web Original#{/a}
+</span>
+<span>&copy; 2011 IIPIR Software Solutions SL.</span>
+</div>

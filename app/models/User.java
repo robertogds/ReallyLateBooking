@@ -14,6 +14,7 @@ import notifiers.Mails;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.h2.util.MathUtils;
 
@@ -29,6 +30,7 @@ import play.i18n.Messages;
 import play.modules.crudsiena.CrudUnique;
 import play.mvc.Http;
 import play.mvc.Scope.Session;
+import play.templates.JavaExtensions;
 import siena.DateTime;
 import siena.Generator;
 import siena.Id;
@@ -123,7 +125,7 @@ public class User extends Model{
         this.validationCode = RandomStringUtils.randomAlphanumeric(12);
         this.token = RandomStringUtils.randomAlphanumeric(12);
         this.secret = RandomStringUtils.randomAlphanumeric(24);
-        this.email = this.email.toLowerCase();
+        this.email = this.email !=null ? this.email.toLowerCase() : null;
         this.created = Calendar.getInstance().getTime();
         this.isAdmin = this.isAdmin!=null ? this.isAdmin : Boolean.FALSE;
 		this.isOwner = this.isOwner!=null ? this.isOwner : Boolean.FALSE;
@@ -135,8 +137,20 @@ public class User extends Model{
     	this.createUserCoupons();
 	}
     
+	public void recreateRefererCoupon(){
+		this.refererId = this.createRefererId();
+		this.update();
+		this.createUserCoupons();
+	}
+	
 	private String createRefererId() {
-		return (UtilsHelper.truncate(this.lastName.trim(), 5) + RandomUtils.nextInt(99)).toUpperCase();
+		String lastName = StringUtils.isBlank(this.lastName) ? "" : this.lastName.trim();
+		lastName = JavaExtensions.slugify(lastName);
+		lastName = UtilsHelper.truncate(lastName, 5);
+		if (lastName.length() < 5){
+			lastName += RandomStringUtils.randomAlphabetic(5 - lastName.length());
+		}
+		return (lastName + RandomUtils.nextInt(99)).toUpperCase();
 	}
 
 	private void createUserCoupons(){

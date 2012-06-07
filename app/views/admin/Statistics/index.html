@@ -59,25 +59,13 @@
 							Bookings
 						</th>
 						<th>
-							Bookings Monday
+							Bookings per day
 						</th>
 						<th>
-							Bookings Tuesday
+							Sales
 						</th>
 						<th>
-							Bookings Wednesday
-						</th>
-						<th>
-							Bookings Thursday
-						</th>
-						<th>
-							Bookings Friday
-						</th>
-						<th>
-							Bookings Saturday
-						</th>
-						<th>
-							Bookings Sunday
+							Comission (-credits)
 						</th>
 						<th>
 							Bookings App
@@ -86,13 +74,7 @@
 							Bookings Web
 						</th>
 						<th>
-							Bookers
-						</th>
-						<th>
-							Comission
-						</th>
-						<th>
-							Sales
+							Users Booking
 						</th>
 						<th>
 							Nights per booking
@@ -109,6 +91,46 @@
 					</tr>
 				</thead>
 				<tbody>
+					<tr style="background-color: grey;">
+							<td>
+								TOTAL
+							</td>
+							<td>
+								<label>${data.allCities.bookings}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsPerDay}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.totalPrice?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.totalCommission?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsApps}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsWeb}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.totalusers}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.nightsPerBookingAvg}</label> 
+							</td>
+							
+							<td>
+								<label>${data.allCities.priceAvg?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.commisionAvg?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingPerUserAvg}</label> 
+							</td>
+
+						</tr>
 				%{ data.stats.eachWithIndex() { 
 					key, value , index -> }%
 						 <tr class="${index % 2 ? 'even' : 'odd'}" >
@@ -119,25 +141,13 @@
 								<label>${data.stats[key].bookings}</label> 
 							</td>
 							<td>
-								<label>${data.stats[key].bookingsMonday}</label> 
+								<label>${data.stats[key].bookingsPerDay}</label> 
 							</td>
 							<td>
-								<label>${data.stats[key].bookingsTuesday}</label> 
+								<label>${data.stats[key].totalPrice?.formatCurrency('EUR').raw()}</label> 
 							</td>
 							<td>
-								<label>${data.stats[key].bookingsWednesday}</label> 
-							</td>
-							<td>
-								<label>${data.stats[key].bookingsThursday}</label> 
-							</td>
-							<td>
-								<label>${data.stats[key].bookingsFriday}</label> 
-							</td>
-							<td>
-								<label>${data.stats[key].bookingsSaturday}</label> 
-							</td>
-							<td>
-								<label>${data.stats[key].bookingsSunday}</label> 
+								<label>${data.stats[key].totalCommission?.formatCurrency('EUR').raw()}</label> 
 							</td>
 							<td>
 								<label>${data.stats[key].bookingsApps}</label> 
@@ -147,12 +157,6 @@
 							</td>
 							<td>
 								<label>${data.stats[key].totalusers}</label> 
-							</td>
-							<td>
-								<label>${data.stats[key].totalCommission?.formatCurrency('EUR').raw()}</label> 
-							</td>
-							<td>
-								<label>${data.stats[key].totalPrice?.formatCurrency('EUR').raw()}</label> 
 							</td>
 							<td>
 								<label>${data.stats[key].nightsPerBookingAvg}</label> 
@@ -170,64 +174,6 @@
 
 						</tr>
 				%{ } }%
-							<tr style="background-color: grey;">
-							<td>
-								TOTAL
-							</td>
-							<td>
-								<label>${data.allCities.bookings}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.bookingsMonday}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.bookingsTuesday}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.bookingsWednesday}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.bookingsThursday}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.bookingsFriday}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.bookingsSaturday}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.bookingsSunday}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.bookingsApps}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.bookingsWeb}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.totalusers}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.totalCommission?.formatCurrency('EUR').raw()}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.totalPrice?.formatCurrency('EUR').raw()}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.nightsPerBookingAvg}</label> 
-							</td>
-							
-							<td>
-								<label>${data.allCities.priceAvg?.formatCurrency('EUR').raw()}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.commisionAvg?.formatCurrency('EUR').raw()}</label> 
-							</td>
-							<td>
-								<label>${data.allCities.bookingPerUserAvg}</label> 
-							</td>
-
-						</tr>
 	</tbody>
 	
 	</table>

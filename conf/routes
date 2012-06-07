@@ -10,7 +10,10 @@
  
  # Home page
 GET      /{<en|fr|es>lang}/?                     					Application.index
-GET      /{<en|fr|es>lang}/landing?                              	Application.mobileDetection
+GET      /{<en|fr|es>lang}/landing?                              	Application.landing
+GET      /{<en|fr|es>lang}/mobile?                              	Application.mobile
+GET      /{<en|fr|es>lang}/full?                              		Application.full
+
  #Owners
 GET	   	 /{<en|fr|es>lang}/extranet/?								Owners.index
 GET	   	 /{<en|fr|es>lang}/extranet/edit/?							Owners.edit
@@ -33,7 +36,9 @@ GET	   	 /{<en|fr|es>lang}/extranet/edit/?							Owners.edit
 GET     /                                     						Application.index
 GET 	/pruebas													Application.pruebas
 GET     /bootstrap?                              					Application.bootstrap
-GET     /landing?                              						Application.mobileDetection
+GET     /landing?                              						Application.landing
+GET     /mobile?                              						Application.mobile
+GET     /full?                              						Application.full
 
 POST 	/transloadit												Deals.transloadit
 
@@ -96,8 +101,9 @@ GET     /info/{key}            										InfoTexts.show(format:'json')
 GET	   	/extranet/?													Owners.index
 GET	   	/extranet/edit/?											Owners.edit
 
-
-
+# API REST JSON PARTNERS
+#Countries
+GET 	/api/countries								    			rest.Countries.list(format:'json')
 
 GET     /favicon.ico                  staticFile:/public/images/favicon.ico
 GET     /humans.txt                   staticFile:/public/humans.txt

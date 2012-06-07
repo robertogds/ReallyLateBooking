@@ -154,7 +154,7 @@ public class Booking extends Model {
     	this.breakfastIncluded = this.deal.breakfastIncluded == null ? false : this.deal.breakfastIncluded;
     	this.dealAddress = this.deal.address;
     	this.hotelEmail = this.deal.contactEmail;
-    	this.bookingForFriend = !this.user.email.equalsIgnoreCase(this.bookingForEmail);
+    	this.bookingForFriend = this.bookingForEmail != null && !this.user.email.equalsIgnoreCase(this.bookingForEmail);
     	this.userEmail = this.bookingForFriend ? this.bookingForEmail : this.user.email;
     	this.userFirstName = this.bookingForFriend ? this.bookingForFirstName :this.user.firstName;
     	this.userLastName =this.bookingForFriend ? this.bookingForLastName : this.user.lastName;
@@ -202,8 +202,12 @@ public class Booking extends Model {
     	return Booking.all().filter("needConfirmation", Boolean.TRUE).fetch();
     }
     
+    public static List<Booking> findAllByUser(User user){
+    	return Booking.all().filter("user", user).fetch();
+    }
+    
     public static List<Booking> findByUser(User user){
-    	return Booking.all().filter("user", user).filter("canceled", Boolean.FALSE).fetch();
+    	return Booking.all().filter("user", user).filter("canceled", Boolean.FALSE).filter("pending", Boolean.FALSE).fetch();
     }
    
     private Integer calculateTotalSalePrice() {

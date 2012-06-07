@@ -27,4 +27,9 @@
 	<p class="crudListExport"  id="exportAll">
 		<a href="@{admin.Users.exportAll}">Export all users as CSV </a>
 	</p>
+	
+   	#{form @admin.Users.showUserActionsByEmail() , id:'form'}
+   		<input type="text" name="email" value="search user by email">
+   		<input type="submit" value="Search" />
+   	#{/form}
 </div>

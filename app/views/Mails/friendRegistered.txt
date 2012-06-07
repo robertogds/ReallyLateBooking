@@ -1,0 +1,15 @@
+&{'mails.friend.newlatebooker'}
+
+&{'mails.friend.registerd.hi', referer.firstName, friend.firstName}
+
+&{'mails.friend.morecredits', friend.firstName, coupon.credits}</p>
+	&{'mails.friend.personalcode'} ${referer.refererId}
+	
+	
+		http://www.reallylatebooking.com 
+		&{'mails.booking.client.social'} 
+		http://www.facebook.com/ReallyLateBooking 
+		http://twitter.com/#!/rlatebooking/
+			
+
+&{'mails.rlb.footer'}

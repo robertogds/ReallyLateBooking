@@ -107,6 +107,10 @@ public class Bookings extends Controller{
 			if (paymentCompleted){
 				booking.deal = Deal.findById(booking.deal.id);
 				if ((booking.deal.isHotUsa != null && booking.deal.isHotUsa) && (booking.deal.isFake == null||!booking.deal.isFake )){ 
+					//If we are booking for more than one nights we need to refresh de lin codes 
+					if (booking.nights > 1){
+						HotUsaApiHelper.refreshAvailability(booking);
+					}
 					String localizador = HotUsaApiHelper.reservation(booking);
 					if (localizador != null){
 						saveUnconfirmedBooking(booking, localizador);
@@ -212,6 +216,10 @@ public class Bookings extends Controller{
 	
 
 	private static void doHotUsaReservation(Booking booking){
+		//If we are booking for more than one nights we need to refresh de lin codes 
+		if (booking.nights > 1){
+			HotUsaApiHelper.refreshAvailability(booking);
+		}
 		String localizador = HotUsaApiHelper.reservation(booking);
 		if (localizador != null){
 			saveUnconfirmedBooking(booking, localizador);

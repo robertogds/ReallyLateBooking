@@ -51,6 +51,7 @@ public class Deal extends Model {
 	@Required
 	public String hotelName;	
 	public String hotelCode;
+	public String hotelCode2;
 	public String trivagoCode;
 	public Boolean isHotUsa;
 	public Boolean isFake;
@@ -164,12 +165,14 @@ public class Deal extends Model {
 	public String image8;
 	public String image9;
 	public String image10;
+	public String bookingHotelCode;
 	public String bookingLine;
 	public String bookingLine2;
 	public String bookingLine3;
 	public String bookingLine4;
 	public String bookingLine5;
 	public boolean autoImageUrl;
+	
 	
 	public Deal(String hotelName, City city) {
 		this.hotelName = hotelName;
@@ -232,7 +235,11 @@ public class Deal extends Model {
 	}
 	
 	public static Deal findByHotelCode(String hotelCode) {
-		return all().filter("hotelCode", hotelCode).get();
+		Deal deal = all().filter("hotelCode", hotelCode).get();
+		if (deal == null){
+			deal = all().filter("hotelCode2", hotelCode).get();
+		}
+		return deal;
 	}
 	
 	public static Query<Deal> all() {
@@ -350,8 +357,9 @@ public class Deal extends Model {
 	 * @param breakfastIncluded
 	 * @param lin
 	 * @param day
+	 * @param removeIfPriceRaised 
 	 */
-	public static void updateDealByCode(String hotelCode, int quantity, Float price, Boolean breakfastIncluded, String lin, int day){
+	public static void updateDealByCode(String hotelCode, int quantity, Float price, Boolean breakfastIncluded, String lin, int day, Boolean removeIfPriceRaised){
 	    Deal deal = Deal.findByHotelCode(hotelCode);
 	    //Some objects from datastore could come null so we check it
 	    deal.isFake = deal.isFake != null ? deal.isFake : Boolean.FALSE;
@@ -367,7 +375,7 @@ public class Deal extends Model {
 	    City city = City.findById(deal.city.id);
 	    Boolean dealInUse = city != null && DateHelper.isActiveTime(DateHelper.getCurrentHour(city.utcOffset)) && deal.active && deal.salePriceCents != null && price != null;
 	    
-	    if ( dealInUse && day == 0 && deal.bestPrice != null && deal.bestPrice.compareTo(price.intValue()) < 0 ){
+	    if (removeIfPriceRaised && dealInUse && day == 0 && deal.bestPrice != null && deal.bestPrice.compareTo(price.intValue()) < 0 ){
 	    	deal.active = false;
 	    	Mails.hotusaRisePrices(deal, price);
 	    }
@@ -379,6 +387,30 @@ public class Deal extends Model {
 	    deal.updated = Calendar.getInstance().getTime();
 	    
 	    deal.update();
+	}
+	
+	public static void updateBookingHotelCode(String hotelCode) {
+		Deal deal = Deal.findByHotelCode(hotelCode);
+		deal.bookingHotelCode = hotelCode;
+		deal.update();
+	}
+	
+	public static void updatePricesAllDaysByCode(String hotelCode, Float price) {
+		Deal deal = Deal.findByHotelCode(hotelCode);
+		Integer roundedPrice = roundPrice(price);
+		if (deal.netPriceDay2 != null && price.compareTo(deal.netPriceDay2) > 0){
+			deal.priceDay2= roundedPrice;
+		}
+		if (deal.netPriceDay3 != null && price.compareTo(deal.netPriceDay3) > 0){
+			deal.priceDay3= roundedPrice;
+		}
+		if (deal.netPriceDay4 != null && price.compareTo(deal.netPriceDay4) > 0){
+			deal.priceDay4= roundedPrice;
+		}
+		if (deal.netPriceDay5 != null && price.compareTo(deal.netPriceDay5) > 0){
+			deal.priceDay5= roundedPrice;
+		}
+		deal.update();
 	}
 	
 	/**
@@ -444,7 +476,7 @@ public class Deal extends Model {
 		}
 	}
 	
-	private Integer roundPrice(Float price){
+	private  static Integer roundPrice(Float price){
 		BigDecimal priceRounded = new BigDecimal(price);
 		priceRounded = priceRounded.setScale(0, RoundingMode.DOWN);
 		return price.intValue();
@@ -458,6 +490,7 @@ public class Deal extends Model {
 	 * Deletes deal prices for the days after the given day and updates the deal in BD
 	 * */
 	public static void cleanNextDays(String hotelCode, int day) {
+		Logger.debug("### cleanNextDays for hotelCode %s and day %s ", hotelCode, day);
 		Deal deal = Deal.findByHotelCode(hotelCode);		
 		switch (day) {
 			case 0:
@@ -465,7 +498,11 @@ public class Deal extends Model {
 				deal.priceDay3 = null;
 				deal.priceDay4 = null;
 				deal.priceDay5 = null;
-				deal.bookingLine = null;
+				deal.netPriceDay2 = null;
+				deal.netPriceDay3 = null;
+				deal.netPriceDay4 = null;
+				deal.netPriceDay5 = null;
+				//deal.bookingLine = null;
 				deal.bookingLine2 = null;
 				deal.bookingLine3 = null;
 				deal.bookingLine4 = null;
@@ -475,7 +512,10 @@ public class Deal extends Model {
 				deal.priceDay3 = null;
 				deal.priceDay4 = null;
 				deal.priceDay5 = null;
-				deal.bookingLine2 = null;
+				deal.netPriceDay3 = null;
+				deal.netPriceDay4 = null;
+				deal.netPriceDay5 = null;
+				//deal.bookingLine2 = null;
 				deal.bookingLine3 = null;
 				deal.bookingLine4 = null;
 				deal.bookingLine5 = null;
@@ -483,18 +523,19 @@ public class Deal extends Model {
 			case 2:
 				deal.priceDay4 = null;
 				deal.priceDay5 = null;
-				deal.bookingLine3 = null;
+				deal.netPriceDay4 = null;
+				deal.netPriceDay5 = null;
+				//deal.bookingLine3 = null;
 				deal.bookingLine4 = null;
 				deal.bookingLine5 = null;
 			    break;
 			case 3:
 				deal.priceDay5 = null;
-				deal.bookingLine4 = null;
+				deal.netPriceDay5 = null;
+				//deal.bookingLine4 = null;
 				deal.bookingLine5 = null;
 			    break;   
-			case 4:
-				deal.bookingLine5 = null;
-			    break;  
+
 			default:
 				break;
 		}

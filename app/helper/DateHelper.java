@@ -151,7 +151,7 @@ public final class DateHelper {
 		hour = hour == 25 ? 1 : hour;
 		
 		if (Play.mode.isDev()){
-		//	hour = 11;
+			hour = 13;
 		}
 		Logger.info("City local hour is: " + hour);
 
@@ -188,5 +188,24 @@ public final class DateHelper {
 		//return calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
 		return ""+miliseconds;
 	}
+
+	public static int daysBetween(Date start, Date end) {
+		Calendar startCalendar =  Calendar.getInstance();
+		startCalendar.setTime(start);
+		Calendar endCalendar =  Calendar.getInstance();
+		endCalendar.setTime(end);
+		return daysBetweenCalendars(startCalendar, endCalendar);
+	}
+	
+	//assert: startDate must be before endDate  
+	public static int daysBetweenCalendars(Calendar startDate, Calendar endDate) {  
+		  Calendar date = (Calendar) startDate.clone();  
+		  int daysBetween = 0;  
+		  while (date.before(endDate)) {  
+		    date.add(Calendar.DAY_OF_MONTH, 1);  
+		    daysBetween++;  
+		  }  
+		  return daysBetween;  
+	}  
 	
 }

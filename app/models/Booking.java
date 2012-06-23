@@ -145,8 +145,8 @@ public class Booking extends Model {
     	this.totalSalePrice =  this.calculateTotalSalePrice();
     	this.netTotalSalePrice =  this.calculateTotalNetSalePrice();
     	this.credits = this.getUserCredits();
-    	this.finalPrice = this.totalSalePrice - this.credits;
-    	this.fee = this.finalPrice - this.netTotalSalePrice;
+    	this.finalPrice = this.totalSalePrice > this.credits ? this.totalSalePrice - this.credits : 0;
+    	this.fee = this.totalSalePrice - this.netTotalSalePrice;
     	this.invoiced = Boolean.FALSE;
     	this.payed = Boolean.FALSE;
     	this.canceled = Boolean.FALSE; 
@@ -154,7 +154,8 @@ public class Booking extends Model {
     	this.breakfastIncluded = this.deal.breakfastIncluded == null ? false : this.deal.breakfastIncluded;
     	this.dealAddress = this.deal.address;
     	this.hotelEmail = this.deal.contactEmail;
-    	this.bookingForFriend = this.bookingForEmail != null && !this.user.email.equalsIgnoreCase(this.bookingForEmail);
+    	this.bookingForFriend = (this.bookingForEmail != null && !this.user.email.equalsIgnoreCase(this.bookingForEmail))
+    						|| (this.bookingForLastName != null && !this.user.lastName.equalsIgnoreCase(this.bookingForLastName));
     	this.userEmail = this.bookingForFriend ? this.bookingForEmail : this.user.email;
     	this.userFirstName = this.bookingForFriend ? this.bookingForFirstName :this.user.firstName;
     	this.userLastName =this.bookingForFriend ? this.bookingForLastName : this.user.lastName;
@@ -163,13 +164,12 @@ public class Booking extends Model {
 	
 	/*
 	 * Returns the total credits used for the current booking
-	 * If the user has more credits than the booking total price they cant be used.
-	 * If its hotusa we cant use credits
+	 * If the user has more credits than the booking total price they cant all be used.
 	 * */
 	private Integer getUserCredits(){
 		this.user.get();
 		int credits = this.user.calculateTotalCreditsFromMyCoupons();
-		this.credits = credits <= this.totalSalePrice ? credits : this.totalSalePrice;
+		credits = credits <= this.totalSalePrice ? credits : this.totalSalePrice;
 	    return credits;
 	}
 	
@@ -325,8 +325,18 @@ public class Booking extends Model {
 			.filter("checkinDate>", start).filter("checkinDate<", end).fetch();
 	}
 	
+	public static Collection<Booking> findAllNonPendingBookingsByDate(Date start, Date end) {
+		return Booking.all().filter("canceled", Boolean.FALSE).filter("pending", Boolean.FALSE)
+			.filter("checkinDate>", start).filter("checkinDate<", end).fetch();
+	}
+	
 	public static Collection<Booking> findAllBookingsByDateAndCity(City city, Date start, Date end) {
 		return Booking.all().filter("city", city).filter("canceled", Boolean.FALSE)
+			.filter("checkinDate>", start).filter("checkinDate<", end).fetch();
+	}
+	
+	public static Collection<Booking> findAllNonPendindBookingsByDateAndCity(City city, Date start, Date end) {
+		return Booking.all().filter("city", city).filter("canceled", Boolean.FALSE).filter("pending", Boolean.FALSE)
 			.filter("checkinDate>", start).filter("checkinDate<", end).fetch();
 	}
 

@@ -197,9 +197,27 @@ public class Mails extends MailServiceFactory {
    		Map<String, Object> params = new HashMap<String, Object>();
    		params.put("message", content);
    		send(message, template, params);
-   		
    	}
 
+   	public static void bookingErrorMail(Booking booking) {
+   		Message message = new Message();
+   		message.setSubject(Messages.get("mails.booking.error.subject", booking.hotelName));
+   		message.setSender(HOLA_MAIL);
+   		message.setCc(SOPORTE_MAIL);
+   		User user = User.findById(booking.user.id);
+   		if (user != null && user.email != null){
+   			message.setTo(user.email);
+   	   		String template = "Mails/bookingErrorMail";
+   	   		Map<String, Object> params = new HashMap<String, Object>();
+   	   		params.put("user", user);
+   	   		params.put("booking", booking);
+   	   		send(message, template, params);
+   		}
+   		else{
+   			Logger.warn("We can´t send the error email because user %s have not an email", booking.user.id);
+   		}
+   	}
+   	
 	public static void contactForm(String email, String name, String text) {
 		Message message = new Message();
 	 	message.setSubject("Email de contacto desde la web de " + email);
@@ -216,7 +234,7 @@ public class Mails extends MailServiceFactory {
 	public static void hotelForm(String email, String name, String hotelName,
 			String phone, String text) {
 		Message message = new Message();
-	 	message.setSubject("Uno hotel interesado desde la web: " + hotelName);
+	 	message.setSubject("Un hotel interesado desde la web: " + hotelName);
 	 	message.setSender(HOLA_MAIL);
 	 	message.setTo(SOPORTE_MAIL);
 	 	String template = "Mails/hotelForm";
@@ -244,7 +262,7 @@ public class Mails extends MailServiceFactory {
            bodyHtml = templateHtml.render(params);
            message.setHtmlBody(bodyHtml);
        } catch (TemplateNotFoundException e) {
-    	   Logger.info("Template html email not found ", e);
+    	   Logger.warn("Template html email not found ", e);
        }
 
        try {
@@ -252,10 +270,10 @@ public class Mails extends MailServiceFactory {
            bodyText = templateText.render(params);
            message.setTextBody(bodyText);
        } catch (TemplateNotFoundException e) {
-    	   Logger.error("Template text email not found ", e);
+    	   Logger.warn("Template text email not found ", e);
        }
        
-       if (StringUtils.isNotEmpty(bodyHtml) || StringUtils.isNotEmpty(bodyText)){
+       if (message.getTo() != null && (StringUtils.isNotEmpty(bodyHtml) || StringUtils.isNotEmpty(bodyText))){
     	try {
     		Logger.debug("Sending email...", bodyHtml);
    			getMailService().send(message);
@@ -267,6 +285,7 @@ public class Mails extends MailServiceFactory {
        }
 	   
    }
+
 
 
 }

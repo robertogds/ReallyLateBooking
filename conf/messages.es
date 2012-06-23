@@ -38,6 +38,7 @@ booking.validation.creditcardtype = Tipo de tarjeta inválida
 booking.validation.creditcardexpiry = La fecha de expiración debe ser futura
 booking.validation.cvc = El código de seguridad es inválido
 booking.validation.all.required = Todos los campos son obligatorios
+booking.validation.problem = Ha ocurrido un error pero puede que tu reserva esté confirmada igualmente. Por favor, envíanos un email a soporte@reallylatebooking.com con tu número de teléfono y te llamaremos.
 
 
 mail.welcome.subject = Bienvenido
@@ -80,13 +81,14 @@ mails.booking.client.showreceipt = Ense&ntilde;a tu reserva en la aplicación m�
 mails.booking.client.thanks = Muchas gracias por confiar en nosotros para tus reservas de última hora. Esperamos que disfrutes la estancia y vuelvas a visitarnos pronto.
 mails.booking.client.social = Para estar al día de todas nuestras ofertas y las nuevas ciudades abre la aplicación en tu móvil con frecuencia, y visita nuestras paginas en  
 mails.booking.client.bookPaid = RLB realizará el cargo en tu tarjeta de crédito. No debes hacer ningún pago en el hotel.
-
+mails.booking.error.subject = #IMPORTANTE# Problema con tu reserva en %s
+mails.booking.error.hotel = Ha ocurrido un error al realizar tu reserva en %s, por favor, contesta a este email con tu número de teléfono y nosotros te llamaremos para confirmar el estado de tu reserva.
 
 mails.welcome.welcome = bienvenido a ReallyLateBooking
-mails.welcome.p1 = Reserva hotel ESTA NOCHE con un descuento de hasta un 70&#37; sobre el precio habitual.
-mails.welcome.p2 = ¿Por qué solo 3 hoteles en cada ciudad? Porque solo te ofrecemos hoteles de calidad y así podemos negociar los mejores precios con cada hotel.
+mails.welcome.p1 = Reserva hotel <strong style="color: #0C1924;">ESTA NOCHE con un descuento de hasta un 70&#37;</strong>  sobre el precio habitual.
+mails.welcome.p2 = ¿Por qué solo 3 hoteles en cada ciudad? porque <strong style="color: #0C1924;">solo te ofrecemos hoteles de calidad</strong> y así podemos negociar los mejores precios con cada hotel.
 mails.welcome.p3 = Confía en  ReallyLateBooking para conseguir los mejores precios y sin necesidad de reservar días antes. Siempre tendrás habitaciones disponibles el último día.
-mails.welcome.p4 = Disfruta este nuevo modo de viajar, ¡reserva ahora tu HOTEL PARA ESTA NOCHE!
+mails.welcome.p4 = Disfruta este nuevo modo de viajar, <strong style="color: #0C1924;">¡reserva ahora tu HOTEL PARA ESTA NOCHE!</strong>
 
 mails.recoverpass.p1 = Recibes este email porque has solicitado recuperar tu password.
 mails.recoverpass.p2 = Haz clic en el siguiente enlace e introduce tu nuevo password:
@@ -194,6 +196,7 @@ web.howitworks = Cómo funciona
 web.contact = Contacto
 web.support = Soporte
 web.cities = Ciudades
+web.cities.more = Más Ciudades
 web.cities.h1=Estas son las ciudades en las que tenemos ofertas
 web.contact.title = Escribe al equipo de RLB
 web.contact.message = Tu mensaje
@@ -392,6 +395,7 @@ web.extranet.hotel.open.sorry=Ya hemos publicado las ofertas de hoy, tu oferta n
 web.extranet.updatedeal.incorrect.price = Tu hotel está publicado en RLB por lo que no puedes subir el precio a partir de las 12pm. Si por algún motivo especial necesitas cambiarlo, ponte en contacto con nosotros. Muchas gracias.
 web.extranet.updatedeal.success.solded = Has desactivado correctamente la oferta. Tu hotel no saldrá a la venta hoy en RLB.
 web.extranet.updatedeal.incorrect.quantity = La disponibilidad debe ser como mínimo la misma que para esta noche. A no ser que para esta noche la disponibilidad sea 0.
+web.extranet.hotel.notconfigured = Su cuenta no está bien configurada. Hemos comunicado el error a soporte, le contactaremos lo antes posible.
 owners.company.title = Datos de Facturación
 owners.company.name = Nombre
 owners.company.nif = Cif
@@ -455,7 +459,7 @@ mails.seedeal.link = Reservar
 mailchimp.template.preheader.city = eDreams te ofrece las mejores ofertas de hotel para esta noche en <strong>%s</strong> con ReallyLateBooking.
 mailchimp.template.preheader.see_correctly=No ves el email correctamente?
 mailchimp.template.preheader.see_browser=Verlo en el navegador
-mailchimp.template.h1_header = Entra ahora gratis en el club privado de ReallyLateBooking. Sólo para clientes de eDreams.
+mailchimp.template.h1_header = <strong>15€ de regalo</strong> por ser cliente de eDreams. Regístrate ahora e introduce el código <strong>EDREAMSRLB</strong>
 mailchimp.template.header = Hotel en <strong >%s</strong>, esta noche hasta 70&#37; dto.
 mailchimp.template.now = Esta noche
 mailchimp.template.testimonials=Testimonios de Latebookers:
@@ -534,15 +538,33 @@ coupon.create.welcome.notnew = Este cupón de bienvenida es sólo para usuarios 
 coupon.create.owncoupon = No puedes usar tu propio código. Dáselo a tus amigos y consigue 20€ cuando hagan una reserva.
 coupon.create.referer.twice = Este cupón no es acumulable con otro que ya has utilizado. Invita a más amigos para conseguir créditos.
 coupon.create.expired = El cupón ha caducado. Consigue más créditos invitando a tus amigos a RLB.
-
 web.dashboard.mycoupons.total = Tienes un total de  %s€ de descuento para tu próxima reserva
 web.dashboard.mycoupons.invite = Invita a tus amigos y recibirás 20€ extra por cada amigo que realice una reserva en RLB
 web.dashboard.mycoupons.new=¿Tienes un código de cupón?
 web.dashboard.mycoupons.new.button= Validar código
-
+web.dashboard.mycoupons.nocredits =Upps, no tienes ningún crédito.
+web.dashboard.mycoupons.isnew =Te regalamos 10€ para tu primera reserva: <small>Escribe el código <strong>RLB</strong></small>
+web.dashboard.mycoupons.morecredits = ¿Quieres conseguir créditos para reservar habitaciones gratis? 
+web.dashboard.mycoupons.invite =Invita a tus amigos y recibirás 20€ por cada amigo que realice una reserva en RLB
+web.dashboard.mycoupons.notused = Sin usar
+web.dashboard.mycoupons.used = Usado
+web.dashboard.mycoupons.invite.theyget = Le daremos 20€ a tus amigos que se registren y canjeen tu código personal.
+web.dashboard.mycoupons.invite.youget = Además te regalamos 20€ cuando realicen su primera reserva.
+web.dashboard.mycoupons.invite.code = Comparte tu Código personal 
+web.invite.referer.code = ReallyLateBooking, te regalo 20€. Solo tienes que registrarte y validar el cupón: %s
+web.dashboard.mycoupons.invite.facebook = Invitar por Facebook
+web.dashboard.mycoupons.invite.twitter = Invitar por Twitter
+web.dashboard.mycoupons.invite.email = Invitar por Email
+web.invite.referer.twitter = Te regalo 20€ para reservar tu hotel en RLB, usa el código %s
+web.contact.captcha = ¿Eres humano? escribe este texto
 
 web.index.itunes.btn= Descarga para iPhone
 web.index.android.btn= Descarga para Android
 
 itunes.url = http://itunes.apple.com/es/app/reallylatebooking-las-mejores/id448918487?mt
 android.play.url = https://play.google.com/store/apps/details?id=com.iipir.rlb&hl=es
+
+email.welcome.sharefacebook.img = http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/share_facebook_sp.gif
+email.welcome.sharetwitter.img = http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/share_twitter_sp.gif
+
+warning.update.iphone = Para utilizar RLB debes actualizar la versión de tu iPhone. En tu iPhone ve a Ajustes > General > Actualización de software

@@ -13,6 +13,7 @@ import play.Logger;
 import models.Booking;
 import models.City;
 import models.Deal;
+import models.MyCoupon;
 import models.Statistic;
 import models.User;
 
@@ -30,13 +31,20 @@ public class CityData {
     public int bookingsSunday= 0;
     public int bookingsWeb= 0;
     public int bookingsApps= 0;
+    public int bookingsWithCredits = 0;
+    public int bookingsWithoutCredits = 0;
+    public int bookingsMGM = 0;
     public int totalusers= 0;
+    public int firstBookingUsers = 0;
+    public int repeatingUsers = 0;
     public int days = 0;
     public float totalCommission = 0;
     public float totalPrice = 0;
+    public int totalCredits = 0;
     public float nightsPerBookingAvg=0;
     public float priceAvg=0;
     public float commisionAvg=0;
+    public float creditsAvg = 0;
     public float bookingPerUserAvg=0;
     public float bookingsPerDay = 0;
     public Date startDate;
@@ -63,11 +71,18 @@ public class CityData {
 			Logger.debug("## Initializing statistics data: %s", booking.code);
 			nights = nights + booking.nights;
 			this.totalPrice = this.totalPrice + booking.totalSalePrice;
+			this.totalCredits += booking.credits != null ? booking.credits : 0;
 			if (booking.fromWeb){
 				this.bookingsWeb++;
 			}
 			else{
 				this.bookingsApps++;
+			}
+			if (booking.credits != null && booking.credits > 0){
+				this.bookingsWithCredits++;
+			}
+			else{
+				this.bookingsWithoutCredits++;
 			}
 			this.totalCommission += booking.totalSalePrice - booking.netTotalSalePrice;
 			this.addBookingDayOfWeek(booking.checkinDate.getDay());
@@ -76,7 +91,11 @@ public class CityData {
 		this.nightsPerBookingAvg = this.bookings > 0 ? nights / this.bookings : 0;
 		this.priceAvg = this.bookings > 0 ? this.totalPrice / this.bookings : 0;
 		this.commisionAvg = this.bookings > 0 ? this.totalCommission / this.bookings : 0;
+		this.creditsAvg = this.bookings > 0 ? this.totalCredits / this.bookings : 0;
 		this.totalusers = users.size();
+		this.bookingsMGM = MyCoupon.countAllRefererByUsedDate(start, end);
+		this.firstBookingUsers = User.countAllFirstBookingByDate(start, end);
+		this.repeatingUsers = this.totalusers - this.firstBookingUsers;
 		this.bookingPerUserAvg = this.bookings > 0 &&  this.totalusers > 0 ? new Float(this.bookings) / this.totalusers : 0;
 		this.bookingsPerDay = this.bookings > 0 ? new Float(this.bookings) / this.days : 0;
 	}

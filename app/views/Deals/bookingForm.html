@@ -11,8 +11,11 @@
 				nights = ${flash['booking.nights']};
 			#{/if}
 		#{/ifErrors}
-		var credits = 0;
-		%{ credits = 0 }%
+			%{ credits = user?.calculateTotalCreditsFromMyCoupons() 
+					   credits = credits!= null ? credits : 0;
+					}%
+		var credits = ${credits};
+		
 		var totalPrice = ${deal.salePriceCents};
 		var creditCard = 'visa';
 		#{ifErrors}
@@ -25,6 +28,9 @@
 			}
 			$('#total-booking-precredits').html(totalPrice);
 			totalPrice = totalPrice - credits;
+			if (totalPrice < 0) {
+				totalPrice = 0;
+			}
 			$('.total-booking').html(totalPrice);
 		}
 		function updateExpiryCard(){

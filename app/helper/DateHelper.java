@@ -143,7 +143,7 @@ public final class DateHelper {
 	public static Integer getCurrentHour(Integer utcOffset){
 		Calendar now = Calendar.getInstance();
 		Integer hour = now.get(Calendar.HOUR_OF_DAY);
-		Logger.info("Server hour is: " + hour);
+		//Logger.info("Server hour is: " + hour);
 		hour = hour + utcOffset; //we are utc+1 and gae is UTC
 		// 24 = 0
 		hour = hour == 24 ? 0 : hour;
@@ -153,7 +153,7 @@ public final class DateHelper {
 		if (Play.mode.isDev()){
 			hour = 13;
 		}
-		Logger.info("City local hour is: " + hour);
+		//Logger.info("City local hour is: " + hour);
 
 		return hour;
 		

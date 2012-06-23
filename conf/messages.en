@@ -39,6 +39,8 @@ booking.validation.creditcardtype = Invalid credit card type
 booking.validation.creditcardexpiry = Expiration date must be in the future
 booking.validation.cvc = Invalid cvc code
 booking.validation.all.required = All fields are required
+booking.validation.problem = Ups, an error has occurred but your booking may be correctly confirmed. Please, send us your phone number by email to soporte@reallylatebooking.com and we'll call you.
+
 
 
 mail.welcome.subject = Welcome
@@ -81,6 +83,9 @@ mails.booking.client.showreceipt = Show the booking receipt screen on your mobil
 mails.booking.client.thanks = Thanks a lot for choosing us as your really last minute hotel reservation platform. Enjoy your stay and come visit us soon!.
 mails.booking.client.social = If you dont want to loose any of our deals, visit us at 
 mails.booking.client.bookPaid = RLB will charge your credit card. You should not make any payment at the hotel.
+mails.booking.error.subject = #IMPORTANT# Problem with your booking at %s
+mails.booking.error.hotel = An error has occurred but your booking at %s may be correctly confirmed. Please, reply to this email and send us your phone number and we'll call you.
+
 
 mails.welcome.welcome = welcome to ReallyLateBooking
 mails.welcome.p1 = Book same-day hotel rooms from your mobile phone and get really big discounts.
@@ -187,6 +192,7 @@ web.howitworks = How it works
 web.contact = Contact
 web.support = Support
 web.cities = Cities
+web.cities.more = More Cities
 web.cities.h1=The cities where we have deals
 web.contact.title =Write to RLB team
 web.contact.message = Your message
@@ -371,7 +377,7 @@ web.extranet.mybookings.title= Bookings history
 web.extranet.company.title = Invoice data
 web.extranet.help.title = Help and support
 web.extranet.updatedeal.incorrect = Check the errors and try again.
-web.extranet.updatedeal.success = The deal has bean correctly activated. Thanks!
+web.extranet.updatedeal.success = The deal has been correctly activated. Thanks!
 web.dashboard.mybookings.table.nights = Nights	
 web.dashboard.mybookings.table.customer = Customers
 web.dashboard.mybookings.table.invoiced = Invoiced
@@ -385,6 +391,7 @@ web.extranet.hotel.open.sorry=We've already published the deals for tonight. You
 web.extranet.updatedeal.incorrect.price = Your hotel is active and published at RLB so you can´t increase the price. If, for any special reason, you need to do it, please contact us. 
 web.extranet.updatedeal.success.solded = You've correctly deactivated the deal. This hotel won't be published today.
 web.extranet.updatedeal.incorrect.quantity = Number of rooms for more days must be at least equals to the rooms for tonight. Except if it's 0 for tonight .
+web.extranet.hotel.notconfigured = Your account is not correctly configured. We've registered de error and will contact you asap.
 
 owners.company.title = Invoice data
 owners.company.name = Name
@@ -448,6 +455,7 @@ mailchimp.template.preheader.city = eDreams offers the best hotel deals for toni
 mailchimp.template.preheader.see_correctly=Can't see the email correctly?
 mailchimp.template.preheader.see_browser=See it in the browser
 mailchimp.template.h1_header = Enter the private club ReallyLateBooking now. Exclusive offer for customers of eDreams.
+mailchimp.template.h1_header = <strong>Get 15€ free</strong> for eDreams customers. Register now and write the code <strong>EDREAMSRLB</strong>
 mailchimp.template.header =Hotel in <strong >%s</strong>, tonight up to 70&#37; off.
 mailchimp.template.now = Tonight
 mailchimp.template.testimonials=Testimonials of Latebookers:
@@ -526,13 +534,32 @@ coupon.create.welcome.notnew = This coupon is only for new users who have not va
 coupon.create.owncoupon = You can not use your own code. Give it to your friends and get 20€ when they book a room.
 coupon.create.referer.twice = This coupon can not be combined with another that you've used. Invite more friends to get credits.
 coupon.create.expired = The coupon has expired. Get more credits by inviting your friends to RLB.
-
 web.dashboard.mycoupons.total = You have  %s€ off for your next booking
 web.dashboard.mycoupons.invite = Invite your friends and get 20€ for each one of them once they make their first booking
 web.dashboard.mycoupons.new=Do you have a coupon code?
 web.dashboard.mycoupons.new.button= Validate coupon
+web.dashboard.mycoupons.nocredits =Upps, you have no credits
+web.dashboard.mycoupons.isnew =Here you have 10€ for your first booking: <small>Introduce the code <strong>RLB</strong></small>
+web.dashboard.mycoupons.morecredits = Do you want more free credits?
+web.dashboard.mycoupons.invite = Give your personal code to your friends and get 20€ when they book a room.
+web.dashboard.mycoupons.notused = OK
+web.dashboard.mycoupons.used = Used
+web.dashboard.mycoupons.invite.theyget = You friends get 20€ when registering and using your personal code.
+web.dashboard.mycoupons.invite.youget = You get 20€ when they book a room the first time.
+web.dashboard.mycoupons.invite.code = Share your personal code
+web.invite.referer.code = ReallyLateBooking, Here you have 20€. You just have to register and enter this code: %s
+web.dashboard.mycoupons.invite.facebook = Invite by Facebook
+web.dashboard.mycoupons.invite.twitter = Invite by Twitter
+web.dashboard.mycoupons.invite.email = Invite by Email
+web.invite.referer.twitter = Here you have a gift: 20€ free for a hotel booking at RLB, just enter this code: %s
+web.contact.captcha = Are you human? write this text
 
 web.index.itunes.btn= Download for iPhone
 web.index.android.btn= Download for Android
 itunes.url = http://itunes.apple.com/gb/app/reallylatebooking-las-mejores/id448918487?mt
 android.play.url = https://play.google.com/store/apps/details?id=com.iipir.rlb&hl=en
+
+email.welcome.sharefacebook.img = http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/share_facebook_en.gif
+email.welcome.sharetwitter.img = http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/share_twitter_en.gif
+
+warning.update.iphone = For using RLB you should update your iPhone. Go to Settings > General > Software Update.

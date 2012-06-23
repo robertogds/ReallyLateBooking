@@ -103,7 +103,7 @@ public class BookingDTO {
 		this.dealAddress = booking.dealAddress;
 		this.credits = booking.credits;
 		this.payed = booking.payed;
-		Logger.debug("Formating booking date with locale: " + Lang.getLocale());
+		//Logger.debug("Formating booking date with locale: " + Lang.getLocale());
 		this.checkinDate = booking.checkinDate!= null ? 
 					DateFormat.getDateInstance(DateFormat.MEDIUM, Lang.getLocale()).format(booking.checkinDate):
 					"";

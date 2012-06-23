@@ -85,7 +85,8 @@ public class Mailchimp extends Controller{
 		for (City city: cities){
 			if (city.isSimpleCity()){
 				Logger.debug("Creating campaing for city %s", city.name);
-				List<Deal> deals = Deal.findActiveDealsByCity(city);
+				Boolean noLimits = Boolean.FALSE;
+				List<Deal> deals = Deal.findActiveDealsByCity(city, noLimits);
 				if (deals.size() < 3){
 					citiesErrors.add(city.name);
 				}

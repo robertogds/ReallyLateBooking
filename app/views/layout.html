@@ -32,7 +32,7 @@
     
     <meta property="og:site_name" content="ReallyLateBooking"/>
     <meta property="og:merchant" content=" #{get 'merchant' /}"/>
-    <meta property="fb:app_id" content="195465620529574"/>
+    <meta property="fb:app_id" content="${play.configuration['fbconnect.id']}"/>
     <meta property="og:type" content="reallylatebooking:deal"/>
     <meta property="og:title" content="#{get 'title' /}"/>
    <!--  <meta property="og:url" content="${request.url}"/>  -->
@@ -53,8 +53,8 @@
    <script>
 	  window.fbAsyncInit = function() {
 	    FB.init({
-	      appId      : '195465620529574', // App ID
-	      channelUrl : '/channel.html', // Channel File
+	      appId      : '${play.configuration['fbconnect.id']}', // App ID
+	      //channelUrl : '//club.reallylatebooking.com/channel.html', // Channel File
 	      status     : true, // check login status
 	      cookie     : true, // enable cookies to allow the server to access the session
 	      xfbml      : true  // parse XFBML

@@ -44,7 +44,7 @@ public final class PaypalHelper {
 	}
 	
 	public static Boolean confirmPayment(Booking booking, String token, String payerID){
-		Map<String, String> nvp = doExpressCheckOutPayment(token, payerID, booking.totalSalePrice.toString());
+		Map<String, String> nvp = doExpressCheckOutPayment(token, payerID, booking.finalPrice.toString());
 		String strAck = nvp.get("ACK").toString();
         if(strAck !=null && strAck.equalsIgnoreCase("Success") ||strAck.equalsIgnoreCase("SuccessWithWarning")){
         	booking.transactionId =nvp.get("TRANSACTIONID").toString();
@@ -90,7 +90,7 @@ public final class PaypalHelper {
 		params.put("METHOD", "SetExpressCheckout"); 
 		params.put("VERSION", config.VERSION); 
 		params.put("PAYMENTACTION", PAYMENTACTION_SALE);
-		params.put("AMT", booking.totalSalePrice); 
+		params.put("AMT", booking.finalPrice); 
 		params.put("ReturnUrl", config.returnUrl); 
 		params.put("CANCELURL", cancelUrl); 
 		params.put("CURRENCYCODE", "EUR"); 
@@ -105,7 +105,7 @@ public final class PaypalHelper {
 		params.put("SOLUTIONTYPE", "Sole"); // No paypal account needed 
 		params.put("LANDINGPAGE", "Billing"); // Non login page 
 		params.put("CHANNELTYPE", "Merchant"); 
-		params.put("PAYMENTREQUEST_0_AMT", booking.totalSalePrice); 
+		params.put("PAYMENTREQUEST_0_AMT", booking.finalPrice); 
 		params.put("PAYMENTREQUEST_0_CURRENCYCODE", "EUR"); 
 		params.put("PAYMENTREQUEST_0_CUSTOM", booking.hotelName); 
 		params.put("PAYMENTREQUEST_0_PAYMENTACTION", "Sale"); 
@@ -113,7 +113,7 @@ public final class PaypalHelper {
 		params.put("GIFTRECEIPTENABLE", "0"); 
 		params.put("GIFTWRAPENABLE", "0"); 
 		params.put("L_PAYMENTREQUEST_0_NAME0",  booking.hotelName); 
-		params.put("L_PAYMENTREQUEST_0_AMT0", booking.totalSalePrice); 
+		params.put("L_PAYMENTREQUEST_0_AMT0", booking.finalPrice); 
 		params.put("L_PAYMENTREQUEST_0_QTY0", "1"); 
 		
 		String back = UrlConnectionHelper.prepareRequest(config.apiEndpoint, createQueryString(params), "application/x-www-form-urlencoded");

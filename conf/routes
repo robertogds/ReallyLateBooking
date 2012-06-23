@@ -34,7 +34,7 @@ GET	   	 /{<en|fr|es>lang}/extranet/edit/?							Owners.edit
 ### END i18n ROUTES ###
 # Home page
 GET     /                                     						Application.index
-GET 	/pruebas													Application.pruebas
+GET 	/{<en|fr|es>lang}/pruebas									Application.pruebas
 GET     /bootstrap?                              					Application.bootstrap
 GET     /landing?                              						Application.landing
 GET     /mobile?                              						Application.mobile
@@ -109,6 +109,7 @@ GET     /favicon.ico                  staticFile:/public/images/favicon.ico
 GET     /humans.txt                   staticFile:/public/humans.txt
 GET     /robots.txt                   staticFile:/public/robots.txt
 GET     /crossdomain.xml              staticFile:/public/crossdomain.xml
+GET     /channel.html             	  staticFile:/public/channel.html
 
 
 # Map static resources from the /app/public folder to the /public path

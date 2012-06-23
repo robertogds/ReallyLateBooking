@@ -14,7 +14,7 @@ public class LogExceptions extends Controller{
     public static void logIllegalState(Throwable throwable) {
         Logger.error("Internal error %s…", throwable);
         throwable.printStackTrace();
-        Mails.errorMail("#WARNING# Internal Server Error", throwable.getMessage());
+        Mails.errorMail("#WARNING# Internal Server Error", throwable.toString());
     }
 	
 }

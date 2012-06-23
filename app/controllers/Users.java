@@ -1,6 +1,7 @@
 package controllers;
 
 import helper.JsonHelper;
+import helper.UAgentInfo;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ import controllers.oauth.ApiSecurer;
 @With({I18n.class, LogExceptions.class})
 public class Users extends Controller {
 	
+	public static final String IPHONE_WRONG_VERSION = "5.0.1";
+	
 	@Before(only = {"dashboard", "updateAccount"})
     static void checkConnected() {
 		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
@@ -50,8 +53,33 @@ public class Users extends Controller {
 		}
 	}
 	
+	@Before(only = {"login", "update","rememberPassword"})
+	public static void mobileVersionDetectionStop(){
+		//Http.Header header = Http.Request.current().headers.get("user-agent"); 
+		String userAgent = request.headers.get("user-agent") != null ? request.headers.get("user-agent").value() : "";
+		String accept = request.headers.get("accept")!= null ? request.headers.get("accept").value() : "";
+		UAgentInfo agent = new UAgentInfo(userAgent, accept);
+		Logger.debug(userAgent);
+		if (agent.isIphone && userAgent.contains(IPHONE_WRONG_VERSION)){
+			Logger.debug("Es un iphone " + IPHONE_WRONG_VERSION);
+			renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "UPDATE IPHONE", Messages.get("warning.update.iphone")));
+		}
+	}
+	
+	@Before(only = {"create"})
+	public static void mobileVersionDetectionContinue(){
+		//Http.Header header = Http.Request.current().headers.get("user-agent"); 
+		String userAgent = request.headers.get("user-agent") != null ? request.headers.get("user-agent").value() : "";
+		String accept = request.headers.get("accept")!= null ? request.headers.get("accept").value() : "";
+		UAgentInfo agent = new UAgentInfo(userAgent, accept);
+		Logger.debug(userAgent);
+		if (agent.isIphone && userAgent.contains(IPHONE_WRONG_VERSION)){
+			Logger.debug("Es un iphone " + IPHONE_WRONG_VERSION);
+			params.put("updateIphone", IPHONE_WRONG_VERSION);
+		}
+	}
+	
 	/** RLB Web Methods **/
-
 	public static void dashboard(){
 		Logger.debug("SESION: " + session);
 		User user= User.findById(Long.valueOf(session.get("userId")));
@@ -176,9 +204,16 @@ public class Users extends Controller {
 					user.insert();
 					UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "CREATED", Messages.get("user.create.correct"), user);
 					Logger.debug("User correctly created " + new Gson().toJson(message));	
-					Mails.welcome(user);
-					//Mails.validate(user);
-					renderJSON(message);
+					if (!user.isFacebook){
+						Mails.welcome(user);
+					}
+					if (params._contains("updateIphone") && params.get("updateIphone").equals(IPHONE_WRONG_VERSION)){
+						Mails.errorMail("Se ha registrado un user con la versión 5.0.1", "User email " + user.email + " user.id: " + user.id);
+						renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "UPDATE IPHONE", Messages.get("warning.update.iphone")));
+					}
+					else{
+						renderJSON(message);
+					}
 				}
 				else{
 					UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), user);

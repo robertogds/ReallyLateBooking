@@ -1,13 +1,16 @@
 package controllers;
 
+import groovy.lang.IncorrectClosureArgumentsException;
 import helper.AffiliateHelper;
 import helper.JsonHelper;
+import helper.UAgentInfo;
 import helper.bidobido.BidoBidoHelper;
 import helper.hotusa.HotUsaApiHelper;
 import helper.paypal.PaypalHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +24,8 @@ import models.User;
 import models.dto.BookingDTO;
 import models.dto.BookingStatusMessage;
 import models.dto.StatusMessage;
+import models.exceptions.InvalidBookingCodeException;
+import models.exceptions.InvalidCouponException;
 import notifiers.Mails;
 
 import org.apache.commons.lang.StringUtils;
@@ -86,9 +91,21 @@ public class Bookings extends Controller{
 		booking.fromWeb = true;
 		booking.pending = true;
 		booking.insert();
-		//String paymentUrl = BidoBidoHelper.getPaymentUrl(booking);
-		String paypalUrl = PaypalHelper.setCheckout(booking, cancelUrl);
-		redirect(paypalUrl);
+		booking.get();
+		if (booking.finalPrice > 0){
+			//String paymentUrl = BidoBidoHelper.getPaymentUrl(booking);
+			String paypalUrl = PaypalHelper.setCheckout(booking, cancelUrl);
+			redirect(paypalUrl);
+		}
+		else {
+			Logger.debug("We have more credits than the room cost, so no need to go to paypal");
+			booking.payed = true;
+        	booking.canceled = false;
+        	booking.pending = false;
+        	booking.update();
+			User user = User.findById(Long.valueOf(session.get("userId")));
+			paymentFromWebCompleted(booking, user, "User had credits so payed 0", "User had credits so payed 0");
+		}
 	}
 	
 	public static void completeBooking(String token, String PayerID){
@@ -105,40 +122,7 @@ public class Bookings extends Controller{
 			booking.user = user;
 			Boolean paymentCompleted = PaypalHelper.confirmPayment(booking, token, PayerID);
 			if (paymentCompleted){
-				booking.deal = Deal.findById(booking.deal.id);
-				if ((booking.deal.isHotUsa != null && booking.deal.isHotUsa) && (booking.deal.isFake == null||!booking.deal.isFake )){ 
-					//If we are booking for more than one nights we need to refresh de lin codes 
-					if (booking.nights > 1){
-						HotUsaApiHelper.refreshAvailability(booking);
-					}
-					String localizador = HotUsaApiHelper.reservation(booking);
-					if (localizador != null){
-						saveUnconfirmedBooking(booking, localizador);
-					}
-					else{
-						Logger.error("It's not an error, Hotusa didnt give us the booking identifier. Why?");
-						String subject = "#ERROR#  Hotusa didnt give us the booking identifier. Booking is  " + booking.code;
-						String content = "#IMPORTANT# booking is already Payed with token " + token + " for payerId " + PayerID ;
-						Mails.errorMail(subject, content);
-				        flash.error(Messages.get("booking.validation.over"));
-				        String cityUrl = booking.city.isRootCityWithZones() ? booking.city.url : booking.city.root;
-						Deals.list(cityUrl);
-					}
-				}
-				else{
-					updateDealRooms(booking.deal.id, booking.rooms, booking.nights);
-					user.markMyCouponsAsUsed(booking.credits);
-					Mails.hotelBookingConfirmation(booking);
-				}
-				//inform affiliate of booking if neccessary
-				if (AffiliateHelper.fromAffiliate(session)) AffiliateHelper.sendAffiliateBooking(booking, session);
-				//inform user by mail 
-				booking.code = booking.isHotusa ? Booking.RESTEL + "-"+booking.code : booking.code;
-				Mails.userBookingConfirmation(booking);
-				//inform user at the web
-				flash.success(Messages.get("web.bookingForm.success"));
-				//send user to his bookings list
-				Users.dashboard();
+				paymentFromWebCompleted(booking, user, token, PayerID);
 			}
 			else{
 				Logger.debug("Can´t make the charge to the credit card");
@@ -150,8 +134,27 @@ public class Bookings extends Controller{
 		}
 	}
 	
+	private static void paymentFromWebCompleted(Booking booking, User user, String token, String payerID) {
+		booking.deal = Deal.findById(booking.deal.id);
+		try {
+			doCompleteReservation(booking);
+		} catch (InvalidBookingCodeException e) {
+			Mails.bookingErrorMail(booking);
+	        flash.error(Messages.get("booking.validation.problem"));
+	        Users.dashboard();
+		}
+		updateAndNotifyUserBooking(booking);
+		
+		//inform affiliate of booking if neccessary
+		if (AffiliateHelper.fromAffiliate(session)) AffiliateHelper.sendAffiliateBooking(booking, session);
+		//inform user at the web
+		flash.success(Messages.get("web.bookingForm.success"));
+		//send user to his bookings list
+		Users.dashboard();
+		
+	}
 	
-	
+
 	/*** Json API methods ****/
 	public static void listByUser(Long userId){
 		User user = User.findById(userId);
@@ -185,24 +188,16 @@ public class Bookings extends Controller{
 	
 	
 	private static void validateAndSave(@Valid Booking booking){
+		booking.insert();
 		booking.validateNoCreditCart(); //validate object and fill errors map if exist
 		if (!validation.hasErrors()){ 
-			Logger.debug("Valid booking");
-			booking.insert();
-			if (booking.deal.isHotUsa && !booking.deal.isFake ){
-				doHotUsaReservation(booking);
+			try {
+				doCompleteReservation(booking);
+			} catch (InvalidBookingCodeException e) {
+				Mails.bookingErrorMail(booking);
+				renderBookingError(booking);
 			}
-			else{
-				updateDealRooms(booking.deal.id, booking.rooms, booking.nights);
-				
-			}
-			//We mark all the coupons needed as used
-			booking.user =  User.findById(booking.user.id);
-			booking.user.markMyCouponsAsUsed(booking.credits);
-			
-			//Send email to user and hotel
-			Mails.hotelBookingConfirmation(booking);
-			Mails.userBookingConfirmation(booking);
+			updateAndNotifyUserBooking(booking);
 			
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 					new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", 
@@ -215,20 +210,36 @@ public class Bookings extends Controller{
 	}
 	
 
-	private static void doHotUsaReservation(Booking booking){
-		//If we are booking for more than one nights we need to refresh de lin codes 
-		if (booking.nights > 1){
-			HotUsaApiHelper.refreshAvailability(booking);
-		}
-		String localizador = HotUsaApiHelper.reservation(booking);
-		if (localizador != null){
-			saveUnconfirmedBooking(booking, localizador);
+	private static void updateAndNotifyUserBooking(Booking booking) {
+		//We mark all the coupons needed as used
+		booking.user =  User.findById(booking.user.id);
+		booking.user.markMyCouponsAsUsed(booking.credits);
+		//inform user by mail 
+		booking.code = booking.isHotusa ? Booking.RESTEL + "-"+booking.code : booking.code;
+		//Send email to user and hotel
+		Mails.hotelBookingConfirmation(booking);
+		Mails.userBookingConfirmation(booking);
+	}
+
+	private static void doCompleteReservation(Booking booking) throws InvalidBookingCodeException{
+		if ((booking.deal.isHotUsa != null && booking.deal.isHotUsa) && (booking.deal.isFake == null||!booking.deal.isFake )){ 
+			//If we are booking for more than one nights we need to refresh de lin codes 
+			if (booking.nights > 1){
+				HotUsaApiHelper.refreshAvailability(booking);
+			}
+			String localizador = HotUsaApiHelper.reservation(booking);
+			if (localizador != null){
+				saveUnconfirmedBooking(booking, localizador);
+			}
+			else{
+				validation.addError("rooms", Messages.get("booking.validation.problem"));
+				booking.pending = Boolean.TRUE;
+				booking.update();
+				throw new InvalidBookingCodeException("Localizador from hotusa is null");
+			}
 		}
 		else{
-			Logger.error("It's not an error, Hotusa didnt give us the booking identifier. Why?");
-			validation.addError("rooms", Messages.get("booking.validation.over"));
-			booking.delete();
-			renderBookingError(booking);
+			updateDealRooms(booking.deal.id, booking.rooms, booking.nights);
 		}
 	}
 	

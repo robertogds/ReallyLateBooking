@@ -1,0 +1,11 @@
+*{* 
+			<div class="control-group #{ifError 'message'} error #{/ifError}">
+	              <div class="controls">
+	                <label for="code">&{'web.contact.captcha'} </label>
+					%{randomID = play.libs.Codec.UUID() }%
+					<input class="input-large" type="text" name="code" id="code" size="18" value="" />
+				    <img src="@{Application.captcha(randomID)}" />
+				    <input type="hidden" name="randomID" value="${randomID}" />
+	              </div>
+	             </div>
+	             *}* 

@@ -4,6 +4,8 @@ import helper.AffiliateHelper;
 import helper.UAgentInfo;
 import helper.hotusa.HotUsaApiHelper;
 
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 
 import jobs.Bootstrap;
@@ -15,9 +17,12 @@ import models.User;
 import notifiers.Mails;
 import play.Logger;
 import play.Play;
+import play.cache.Cache;
 import play.data.validation.Email;
 import play.data.validation.Required;
 import play.i18n.Messages;
+import play.libs.Codec;
+import play.libs.Images;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -79,9 +84,11 @@ public class Application extends Controller {
 		}
     }
     
-    public static void register(@Required @Email String username, @Required String password, String firstName, String lastName, String returnUrl) throws Throwable{
+    public static void register(@Required String username, @Required String password, String firstName, String lastName, String returnUrl) throws Throwable{
+    	username = username  != null ? username.trim().toLowerCase() : username;
     	returnUrl = returnUrl != null ? returnUrl : "/";
-		if (!validation.hasErrors()){
+		if (!validation.hasErrors() && validation.email(username).ok){
+			Logger.debug("##  User register is correct %s", username); 
 			boolean isAdmin = false;
 			boolean validated = true;
 			User user = new User(username, password, firstName, lastName,  isAdmin,  validated);
@@ -92,9 +99,11 @@ public class Application extends Controller {
 				Mails.welcome(user);
 				flash.success(Messages.get("web.register.correct"));
 				login(username, password);
+				Logger.debug("##  User has validate correctly and now redirect to %s", returnUrl); 
 		        redirect(returnUrl);
 			}
 		}
+		Logger.debug("##  User register hasErrors %s", username); 
 		flash.error(Messages.get("web.register.incorrect"));
 		redirect(returnUrl);
 	}
@@ -120,7 +129,9 @@ public class Application extends Controller {
         redirect("Application.index");
     }
     
-    public static void contactForm(@Required @Email String email, String name, @Required String message, String returnUrl){
+    public static void contactForm(@Required @Email String email, String name, @Required String message,
+    		String returnUrl,  String code, String randomID){
+    	//validation.equals(code, Cache.get(randomID));
     	if(validation.hasErrors()) {
             params.flash();
             flash.error(Messages.get("web.contact.incorrect"));
@@ -132,7 +143,10 @@ public class Application extends Controller {
     	redirect(returnUrl);
     }
     
-    public static void hotelsForm(@Required @Email String email, @Required String hotelName, @Required String phone, String name, @Required String message, String returnUrl){
+    public static void hotelsForm(@Required @Email String email, @Required String hotelName, 
+    		@Required String phone, String name, @Required String message, String returnUrl,
+    		 String code, String randomID){
+    	//validation.equals(code, Cache.get(randomID));
     	if(validation.hasErrors()) {
             params.flash();
             flash.error(Messages.get("web.contact.incorrect"));
@@ -152,20 +166,6 @@ public class Application extends Controller {
 			//End of workaround
 		}
 		index(); 
-	}
-	
-	private static void recreateCoupons(){
-		Logger.debug("## START DELETING COUPONS ####");
-		List<Coupon> coupons = Coupon.all().fetch();
-		for (Coupon coupon : coupons){
-			coupon.delete();
-		}
-
-		Logger.debug("## START RECREATING REFERAL COUPONS ####");
-		List<User> users = User.all().fetch();
-		for (User user: users){
-			user.recreateRefererCoupon();
-		}
 	}
 	
 	public static void landing(){
@@ -217,7 +217,37 @@ public class Application extends Controller {
 	}
 	
 	public static void pruebas(){
-		render();
+		//User user = User.all().fetch().get(0);
+		Collection<Booking> bookings = Booking.all().order("checkinDate").fetch();
+		Logger.debug("Total bookings %s", bookings.size());
+		for(Booking booking: bookings){
+			Logger.debug("Booking date %s booking code %s", booking.checkinDate, booking.code);
+			User user =  User.findById(booking.user.id);
+			
+			if (user.firstBookingDate == null){
+				user.firstBookingDate = booking.checkinDate;
+				user.update();
+			}
+			else{
+				Calendar firstBookingCal = Calendar.getInstance();
+				firstBookingCal.setTime(user.firstBookingDate);
+				
+				Calendar bookingCal = Calendar.getInstance();
+				bookingCal.setTime(booking.checkinDate);
+				
+				if (bookingCal.before(firstBookingCal)){
+					Logger.debug("bookingCal %s is before first booking %s", bookingCal.getTime(), firstBookingCal.getTime());
+					user.firstBookingDate = booking.checkinDate;
+					user.update();
+				}
+				else{
+					Logger.debug("bookingCal %s is NOT before first booking %s", bookingCal.getTime(), firstBookingCal.getTime());
+				}
+			}
+			
+			
+		}
+		//renderTemplate("Mails/welcomeV2.html", user);
 	}
 	
 	
@@ -245,5 +275,12 @@ public class Application extends Controller {
     	if (user!= null){
     		user.createUserSession();
     	}
+    }
+    
+    public static void captcha(String id) {
+        Images.Captcha captcha = Images.captcha();
+        String code = captcha.getText("#FF");
+        Cache.set(id, code, "10mn");
+        renderBinary(captcha);
     }
 }

@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import controllers.CRUD.Hidden;
 
 import play.Logger;
+import play.Play;
 import play.data.validation.Email;
 import play.data.validation.Max;
 import play.data.validation.MaxSize;
@@ -253,9 +254,10 @@ public class Deal extends Model {
 	/**
 	 * Version 2. Cities can have root cities and zones.
 	 * @param city
+	 * @param noLimits 
 	 * @return all the active deals by city base on current time
 	 */
-	public static Collection<Deal> findActiveDealsByCityV2(City city) {
+	public static Collection<Deal> findActiveDealsByCityV2(City city, Boolean noLimits) {
 		if (city != null){
 			if (!city.isRootCityWithZones()){
 				String root = city.root;
@@ -269,12 +271,12 @@ public class Deal extends Model {
 				case (DateHelper.CITY_OPEN_DAY):
 					LinkedHashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
 					Logger.info("V2. We are all opened");
-					return dealsMapToListWithMax(dealsMap);
+					return dealsMapToListWithMax(dealsMap, noLimits);
 				case (DateHelper.CITY_OPEN_NIGHT):
 					LinkedHashMap<City, List<Deal>> dealsMapAll = findAllActiveDealsByCityV2(city);
 					Integer hour = DateHelper.getCurrentHour(city.utcOffset);
 					Logger.debug("V2. Is between 0am and 6am. Hour:  " + hour);
-					return findActiveDealsByNight(dealsMapAll, hour);
+					return findActiveDealsByNight(dealsMapAll, hour, noLimits);
 				default:
 					Logger.error("This never should happen. What hour is it?");
 					return new ArrayList<Deal>();
@@ -292,7 +294,7 @@ public class Deal extends Model {
 	 * @return all the active deals by city base on current time
 	 */
 	@Deprecated
-	public static List<Deal> findActiveDealsByCity(City city){
+	public static List<Deal> findActiveDealsByCity(City city, Boolean noLimits){
 	
 		switch (DateHelper.getCurrentStateByCityHour(city.utcOffset)) {
 			case (DateHelper.CITY_CLOSED):
@@ -302,13 +304,13 @@ public class Deal extends Model {
 			case (DateHelper.CITY_OPEN_DAY):
 				// between 12 and 23 all deals are open
 				Logger.info("We are all opened ");
-				return findAllActiveDealsByCity(city).fetch(MAXDEALS);
+				return findAllActiveDealsByCity(city).fetch(findMaxDeals(noLimits));
 			case (DateHelper.CITY_OPEN_NIGHT):
 				//Is between 0am and 6am. Fetch all active deals and select the first MAXDEALS active
 				Integer hour = DateHelper.getCurrentHour(city.utcOffset);
 				Logger.debug("Is between 0am and 6am. Hour:  " + hour);
 				List<Deal> activeDeals = findAllActiveDealsByCity(city).fetch();
-				return selectMaxDealsByHour(activeDeals, hour);
+				return selectMaxDealsByHour(activeDeals, hour, noLimits);
 			default:
 				Logger.error("This never should happen. What hour is it?");
 				return new ArrayList<Deal>();
@@ -568,7 +570,8 @@ public class Deal extends Model {
 	
 	public Boolean dealIsPublished(){
 		City city = City.findByUrl(this.city.root);
-		Collection<Deal> deals = findActiveDealsByCityV2(city);
+		Boolean noLimits = Boolean.FALSE;
+		Collection<Deal> deals = findActiveDealsByCityV2(city, noLimits);
 		for (Deal deal: deals){
 			if (deal.id.equals(this.id)) return Boolean.TRUE;
 		}
@@ -581,10 +584,10 @@ public class Deal extends Model {
 	 * @param dealsMap
 	 * @return Returns all the active deals in all the zones of a city.
 	 */
-	private static List<Deal> dealsMapToListWithMax(LinkedHashMap<City, List<Deal>> dealsMap) {
+	private static List<Deal> dealsMapToListWithMax(LinkedHashMap<City, List<Deal>> dealsMap, Boolean noLimits) {
 		List<Deal> deals = new ArrayList<Deal>();
 		for(City city: dealsMap.keySet()){
-			List<Deal> zoneDeals = selectMaxDeals(dealsMap.get(city));
+			List<Deal> zoneDeals = selectMaxDeals(dealsMap.get(city), noLimits);
 			deals.addAll(zoneDeals);
 		}
 		return deals;
@@ -597,12 +600,12 @@ public class Deal extends Model {
 	 * @param hour
 	 * @return Returns all the active deals in all the zones of a city at a given hour.
 	 */
-	private static List<Deal> findActiveDealsByNight(LinkedHashMap<City, List<Deal>> dealsMap, Integer hour){
+	private static List<Deal> findActiveDealsByNight(LinkedHashMap<City, List<Deal>> dealsMap, Integer hour, Boolean noLimits){
 		List<Deal> activeDeals = new ArrayList<Deal>();
 		Logger.debug("Is between 0am and 6am. Hour:  " + hour);
 		// iterate over zones to limit deals list to MAXDEALS
 		for(City city: dealsMap.keySet()){
-			List<Deal> zoneDeals = selectMaxDealsByHour(dealsMap.get(city), hour);
+			List<Deal> zoneDeals = selectMaxDealsByHour(dealsMap.get(city), hour, noLimits);
 			activeDeals.addAll(zoneDeals);
 		}
 		return activeDeals;
@@ -613,15 +616,20 @@ public class Deal extends Model {
 	 * @param list
 	 * @return
 	 */
-	private static List<Deal> selectMaxDeals(List<Deal> list) {
+	private static List<Deal> selectMaxDeals(List<Deal> list, Boolean noLimits) {
+		int maxDeals = findMaxDeals(noLimits);
 		List<Deal> zoneDeals = new ArrayList<Deal>();
 		for (Deal deal : list){
 			zoneDeals.add(deal);
-			if (zoneDeals.size() == MAXDEALS){
+			if (zoneDeals.size() == maxDeals){
 				break;
 			}
 		}
 		return zoneDeals;
+	}
+	
+	private static int findMaxDeals(Boolean noLimits){
+		return noLimits? 50 : MAXDEALS;
 	}
 	
 	/**
@@ -630,13 +638,14 @@ public class Deal extends Model {
 	 * @param hour
 	 * @return
 	 */
-	private static List<Deal> selectMaxDealsByHour(List<Deal> list, Integer hour) {
+	private static List<Deal> selectMaxDealsByHour(List<Deal> list, Integer hour, Boolean noLimits) {
+		int maxDeals = findMaxDeals(noLimits);
 		List<Deal> zoneDeals = new ArrayList<Deal>();
 		for (Deal deal : list){
 			// after 24 we check the limitHour
 			if (deal.limitHour != null && deal.limitHour > hour){
 				zoneDeals.add(deal);
-				if (zoneDeals.size() == MAXDEALS){
+				if (zoneDeals.size() == maxDeals){
 					break;
 				}
 			}

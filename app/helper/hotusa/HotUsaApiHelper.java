@@ -31,6 +31,7 @@ import notifiers.Mails;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -107,10 +108,10 @@ public final class HotUsaApiHelper {
 	 */
 	public static String reservation(Booking booking){
 		booking = Booking.findById(booking.id);
-		String wsReq = reservationRequestCredit(booking);
-		Logger.debug("WSRequest: " + wsReq);
-		Document xml = prepareRequest(wsReq);
-		if (xml != null){
+		try {
+			String wsReq = reservationRequestCredit(booking);
+			Logger.debug("WSRequest: " + wsReq);
+			Document xml = prepareRequest(wsReq);
 			String status = xml.getElementsByTagName("estado").item(0).getTextContent();
 			Logger.debug("Reservation status: " + status);
 			if (status.equals("00")){
@@ -122,17 +123,16 @@ public final class HotUsaApiHelper {
 			else{
 				Logger.error("Reservation couldnt be completed. Status received was not 00");
 			}
+		} catch (Exception e) {
+			Logger.error(e.getMessage());
+			//We wont the deal to be active until we manually check if its an error or not.
+			Deal deal = Deal.findById(booking.deal.id);
+			deal.active = Boolean.FALSE;
+			deal.update();
+			String subject = "#ERROR# Hotusa dio error al confirmar la reserva " + booking.code;
+			String content = "Se ha desactivado el Hotel: " + booking.hotelName + " User: " + booking.userEmail;
+			Mails.errorMail(subject, content);
 		}
-		else{
-			Logger.error("Didnt receive a correct answer from HotUsa Api. Xml Response is null");
-		}
-		//We wont the deal to be active until we manually check if its an error or not.
-		Deal deal = Deal.findById(booking.deal.id);
-		deal.active = Boolean.FALSE;
-		deal.update();
-		String subject = "#ERROR# Hotusa dio error al confirmar la reserva " + booking.code;
-		String content = "Hotel: " + booking.hotelName + " User: " + booking.userEmail;
-		Mails.errorMail(subject, content);
 		return null;
 	}
 	
@@ -366,10 +366,13 @@ public final class HotUsaApiHelper {
 			}
 			//If deal was not among the deals received we must to unpublish it
 			if (!dealFound){
-				Logger.debug("### Hotel %s not found among hotusa response. Cant be active.", deal.hotelName);
-				deal.active = Boolean.FALSE;
-				deal.quantity = 0;
-				deal.update();
+				//Only if we are asking for a one night only, we want to deactivate the deal
+				if (bookingDays == 1){
+					Logger.debug("### Hotel %s not found among hotusa response. Cant be active.", deal.hotelName);
+					deal.active = Boolean.FALSE;
+					deal.quantity = 0;
+					deal.update();
+				}
 				notAvailableDeals.add(deal);
 				int day = bookingDays -2; //we want to clean all the days after the last day asked for dispo
 				Deal.cleanNextDays(deal.hotelCode, day);

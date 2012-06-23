@@ -47,21 +47,21 @@ public class CityDTO {
 		
 		String lang = Lang.get();
 		if (lang != null){
-			Logger.debug("Filling city info with locale: " + lang);
+			//Logger.debug("Filling city info with locale: " + lang);
 			if (lang.equalsIgnoreCase("es") || lang.equalsIgnoreCase("es_ES")){
 				this.name = city.name;
 				this.hint = city.hintES;
 				this.country = city.country.name;
-				Logger.debug("Filling city info with Spanish : " + this.name);
+				//Logger.debug("Filling city info with Spanish : " + this.name);
 			}
 			else if (lang.equalsIgnoreCase("fr")){
-				Logger.debug("Filling city info with French ");
+				//Logger.debug("Filling city info with French ");
 				this.name = city.nameFR;
 				this.hint = city.hintFR;
 				this.country = city.country.nameFR;
 			}
 			else{
-				Logger.debug("Lang is not spanish nor french: " + lang);
+				//Logger.debug("Lang is not spanish nor french: " + lang);
 			}
 		}
 	}

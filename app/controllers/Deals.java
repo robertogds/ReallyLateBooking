@@ -96,23 +96,28 @@ public class Deals extends Controller {
 	public static void list(String cityUrl) {
 		City cityOrig = City.findByUrl(cityUrl);
 		if (cityOrig != null){
-			Collection<Deal> deals = Deal.findActiveDealsByCityV2(cityOrig);
-	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
-			for (Deal deal: deals){
-				dealsDtos.add(new DealDTO(deal, cityOrig.url));
-			}
-			
+			CityDTO city = new CityDTO(cityOrig);
 			int hour = DateHelper.getCurrentHour(cityOrig.utcOffset);
 			boolean open = DateHelper.isActiveTime(hour);
-			if (!open){
+			Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
+			
+			if (open){
+				User user = (User)renderArgs.get("user");
+				user = user!= null ? User.findById(user.id) : null;
+				Boolean noLimits = user!= null && user.isPartner;
+				Collection<Deal> deals = Deal.findActiveDealsByCityV2(cityOrig, noLimits);
+				for (Deal deal: deals){
+					dealsDtos.add(new DealDTO(deal, cityOrig.url));
+				}
+				if (city.showHint){
+					flash.error(city.hint);
+				}
+			}
+			else{
 				Date countdown = DateHelper.getTimeToOpen(hour);
 				renderArgs.put("countdown", countdown);
 			}
-			CityDTO city = new CityDTO(cityOrig);
 			
-			if (city.showHint){
-				flash.error(city.hint);
-			}
 	        render(city, dealsDtos, open);
 		}
 		else{
@@ -157,7 +162,8 @@ public class Deals extends Controller {
 				//renderJSON(new ArrayList<DealDTO>());
 			}
 			else{
-				Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
+				Boolean noLimits = Boolean.FALSE;
+				Collection<Deal> deals = Deal.findActiveDealsByCityV2(city, noLimits);
 		        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 				for (Deal deal: deals){
 					dealsDtos.add(new DealDTO(deal, city.url));
@@ -185,7 +191,8 @@ public class Deals extends Controller {
 				city = city.mainZone;
 				city.get();
 			}
-			Collection<Deal> deals = Deal.findActiveDealsByCity(city);
+			Boolean noLimits = Boolean.FALSE;
+			Collection<Deal> deals = Deal.findActiveDealsByCity(city, noLimits);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
 				deal.fecthCity(); //retrieves city object to not to send just the city id

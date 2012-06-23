@@ -81,7 +81,8 @@ public class Cities  extends Controller {
 	/** Json API Methods **/
 	public static void dealsByCityId(Long cityId) {
 		City city = City.findById(cityId);
-		Collection<Deal> deals = Deal.findActiveDealsByCityV2(city);
+		Boolean noLimits = Boolean.FALSE;
+		Collection<Deal> deals = Deal.findActiveDealsByCityV2(city, noLimits);
         Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 		for (Deal deal: deals){
 			dealsDtos.add(new DealDTO(deal, city.url));

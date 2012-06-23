@@ -19,12 +19,23 @@ import play.Logger;
 import play.data.validation.Required;
 import play.i18n.Messages;
 import play.mvc.Before;
+import play.mvc.Catch;
 import play.mvc.Controller;
 import play.mvc.With;
 
 @Check("owner")
 @With({LogExceptions.class, Secure.class})
 public class Owners extends Controller{
+	
+	@Catch(Exception.class)
+    public static void logIllegalState(Throwable throwable) {
+        Logger.error("Internal error %s…", throwable);
+        throwable.printStackTrace();
+        User user = User.findByEmail(Security.connected());
+        Mails.errorMail("#EXTRANET ERROR# User:" + user.firstName + " email: "+ user.email, throwable.toString());
+        flash.put("error", Messages.get("web.extranet.hotel.notconfigured"));
+        index();
+    }
 	
 	public static void index() { 
 		User user = User.findByEmail(Security.connected());
@@ -39,16 +50,10 @@ public class Owners extends Controller{
 		if (deal != null && deal.owner != null && deal.owner.equals(user)){
 			List<Booking> bookings = Booking.findByDeal(deal);
 			int totalBookings = bookings.size();
-			if(deal.company != null){
-				deal.company.get();
-			}
-			if(deal.city != null){
-				deal.city.get();
-			}
+			deal.company.get();
+			deal.city.get();
 			for(Booking booking: bookings){
-				if (booking.user != null){
-					booking.user.get();
-				}
+				booking.user.get();
 			}
 			int hour = DateHelper.getCurrentHour(deal.city.utcOffset);
 			boolean open = DateHelper.isActiveTime(hour);
@@ -64,7 +69,6 @@ public class Owners extends Controller{
 				else{
 					flash.put("warning", Messages.get("web.extranet.hotel.open.sorry"));
 				}
-				
 			}
 			render(deal, user, bookings, totalBookings);
 		}
@@ -73,8 +77,8 @@ public class Owners extends Controller{
 		}
 	}
 	
-	public static void save(Long id, @Required Integer quantity, @Required Integer salePriceCents, @Required Integer bestPrice, boolean breakfastIncluded,
-			Integer priceDay2, Integer priceDay3, Integer priceDay4, Integer priceDay5, Integer quantityDay2, Integer quantityDay3, Integer quantityDay4, Integer quantityDay5) {
+	public static void save(Long id, @Required int quantity, @Required int salePriceCents, @Required int bestPrice, boolean breakfastIncluded,
+			int priceDay2, int priceDay3, int priceDay4, int priceDay5, int quantityDay2, int quantityDay3, int quantityDay4, int quantityDay5) {
 	    if(validation.hasErrors()) {
 	    	flash.error(Messages.get("web.extranet.updatedeal.incorrect"));
             params.flash();
@@ -82,60 +86,53 @@ public class Owners extends Controller{
 	        Logger.debug("Errors " + validation.errorsMap().toString());
 	    }
 	    else{
-	    	// Retrieve post
 		     Deal deal = Deal.findById(id);
 		    // Edit
 		    deal.quantity = salePriceCents == 0 ? 0 : quantity;
-		    deal.priceDay2 = priceDay2 == null || priceDay2 == 0 ? null : priceDay2;
-		    deal.priceDay3 = priceDay3 == null || priceDay3 == 0 ? null : priceDay3;
-		    deal.priceDay4 = priceDay4 == null || priceDay4 == 0 ? null : priceDay4;
-		    deal.priceDay5 = priceDay5 == null || priceDay5 == 0 ? null : priceDay5;
-		    
+		    deal.priceDay2 = priceDay2 == 0 || quantityDay2 == 0 ? null : priceDay2;
+		    deal.priceDay3 = priceDay3 == 0 || quantityDay3 == 0 ? null : priceDay3;
+		    deal.priceDay4 = priceDay4 == 0 || quantityDay4 == 0 ? null : priceDay4;
+		    deal.priceDay5 = priceDay5 == 0 || quantityDay5 == 0 ? null : priceDay5;
 		    
 		    if (checkQuantityDay(deal.priceDay2, deal.quantity, quantityDay2) &&
-		    		checkQuantityDay(deal.priceDay3, deal.quantity, quantityDay3) &&
-		    		checkQuantityDay(deal.priceDay4, deal.quantity, quantityDay4) &&
-		    		checkQuantityDay(deal.priceDay5, deal.quantity, quantityDay5)){
-		    	deal.quantityDay2 = quantityDay2;
-		    	deal.quantityDay3 = quantityDay3;
-			    deal.quantityDay4 = quantityDay4;
-			    deal.quantityDay5 = quantityDay5;
+		    	checkQuantityDay(deal.priceDay3, deal.quantity, quantityDay3) &&
+		    	checkQuantityDay(deal.priceDay4, deal.quantity, quantityDay4) &&
+		    	checkQuantityDay(deal.priceDay5, deal.quantity, quantityDay5)){
+		    	deal.quantityDay2 = quantityDay2 > 0 ? quantityDay2 : null;
+		    	deal.quantityDay3 = quantityDay3 > 0 ? quantityDay3 : null;
+			    deal.quantityDay4 = quantityDay4 > 0 ? quantityDay4 : null;
+			    deal.quantityDay5 = quantityDay5 > 0 ? quantityDay5 : null;
 		    }
 		    else{
 		    	flash.error(Messages.get("web.extranet.updatedeal.incorrect.quantity"));
 	    		edit(id);
 		    }
 		    
-		    deal.updated = Calendar.getInstance().getTime();
-		    deal.breakfastIncluded = breakfastIncluded;
-		    deal.city.get();
-		    
 		    //If quantity is 0 the deal cant be active
+		    deal.city.get();
 		    if (quantity > 0 ){
 		    	if (deal.dealIsPublished() && deal.salePriceCents!=null && deal.salePriceCents < salePriceCents){
 		    		flash.error(Messages.get("web.extranet.updatedeal.incorrect.price"));
+		    		edit(id);
 		    	}
 		    	else{
-		    		deal.salePriceCents = salePriceCents;
-		    		deal.bestPrice = bestPrice;
-		    		deal.calculateNetPrices();
-		    		deal.calculateDiscount();
-		    		deal.update();
-				    //Notify RLB of the updated prices
-				    Mails.ownerUpdatedDeal(deal);
 				    flash.success(Messages.get("web.extranet.updatedeal.success"));
 		    	}
 		    }
 		    else{
-		    	deal.salePriceCents = salePriceCents;
-	    		deal.bestPrice = bestPrice;
-	    		deal.calculateDiscount();
 		    	deal.active = Boolean.FALSE;
-		    	flash.success(Messages.get("web.extranet.updatedeal.success.solded"));
-		    	deal.update();
-			    //Notify RLB of the updated prices
-			    Mails.ownerUpdatedDeal(deal);
+			    flash.success(Messages.get("web.extranet.updatedeal.success.solded"));
 		    }
+		    
+		    deal.updated = Calendar.getInstance().getTime();
+		    deal.breakfastIncluded = breakfastIncluded;
+		    deal.salePriceCents = salePriceCents;
+    		deal.bestPrice = bestPrice;
+    		deal.calculateNetPrices();
+    		deal.calculateDiscount();
+    		deal.update();
+    		//Notify RLB of the updated prices
+		    Mails.ownerUpdatedDeal(deal);
 	    }
 	    edit(id);
 	}
@@ -149,9 +146,9 @@ public class Owners extends Controller{
 	 * @return
 	 */
 	private static boolean checkQuantityDay(Integer priceDay,
-			Integer quantity, Integer quantityDay) {
+			int quantity, int quantityDay) {
 		if (priceDay != null){
-	    	if (quantityDay== null || (quantity > 0 && quantityDay < quantity)){
+	    	if (quantity > 0 && quantityDay < quantity){
 	    		return false;
 	    	}
 	    }

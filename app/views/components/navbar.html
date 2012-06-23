@@ -88,6 +88,8 @@
 	                <textarea class="span5" name="message" id="message" rows="6" value="${flash.message}"></textarea>
 	              </div>
 	             </div>
+	              #{include 'components/captcha.html' /}
+	              
 	           <input name="returnUrl" id="returnUrl" value="/${lang}"  type="hidden">
 		  </div>
 		  <div class="modal-footer">
@@ -136,6 +138,8 @@
 	                <textarea class="span5" name="message" id="message" rows="6" value="${flash.message}" placeholder="&{'web.hotels.form.message'}"></textarea>
 	              </div>
 	             </div>
+	             #{include 'components/captcha.html' /}
+	             
 	           <input name="returnUrl" id="returnUrl" value="/${lang}"  type="hidden">
 		  </div>
 		  <div class="modal-footer">

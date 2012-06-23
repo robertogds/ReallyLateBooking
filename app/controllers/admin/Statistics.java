@@ -27,45 +27,48 @@ import controllers.CRUD.ObjectType;
 @With(Secure.class)
 public class Statistics extends Controller {
 	
-	public static void index() {
+	public static void index(boolean notIncludePending) {
 		//A data to today
 		Calendar calStart = Calendar.getInstance();
 		Calendar calEnd = Calendar.getInstance();
 		DateHelper.setFirstDayHour(calStart);
+		StatisticDTO data = prepareStatistic(calStart, calEnd, !notIncludePending);
+
 		//B data to the whole last year
-		Calendar calStartB = Calendar.getInstance();
-		DateHelper.setFirstDayHour(calStartB);
-		calStartB.add(Calendar.DAY_OF_YEAR, -365);
-		Calendar calEndB = Calendar.getInstance();
-		StatisticDTO data = prepareStatistic(calStart, calEnd);
-		StatisticDTO dataB = prepareStatistic(calStartB, calEndB);
-        render(data, dataB);
+		//Calendar calStartB = Calendar.getInstance();
+		//DateHelper.setFirstDayHour(calStartB);
+		//calStartB.add(Calendar.DAY_OF_YEAR, -365);
+		//Calendar calEndB = Calendar.getInstance();
+		//StatisticDTO dataB = prepareStatistic(calStartB, calEndB, includePending);
+		
+        render(data, notIncludePending);
 	}
 	
 	
 	public static void updateStatistics(int dayStart, int monthStart, int yearStart,
 			int dayEnd, int monthEnd, int yearEnd, int dayStartB, int monthStartB, 
-			int yearStartB, int dayEndB, int monthEndB, int yearEndB){
+			int yearStartB, int dayEndB, int monthEndB, int yearEndB, boolean notIncludePending){
 		Calendar calStart = Calendar.getInstance();
 		Calendar calEnd = Calendar.getInstance();
-		Calendar calStartB = Calendar.getInstance();
-		Calendar calEndB = Calendar.getInstance();
 		calStart.set(yearStart, monthStart-1, dayStart);
 		DateHelper.setFirstDayHour(calStart);
 		calEnd.set(yearEnd, monthEnd-1, dayEnd);
 		DateHelper.setLastDayHour(calEnd);
-		calStartB.set(yearStartB, monthStartB-1, dayStartB);
-		DateHelper.setFirstDayHour(calStartB);
-		calEndB.set(yearEndB, monthEndB-1, dayEndB);
-		DateHelper.setLastDayHour(calEndB);
-		StatisticDTO data = prepareStatistic(calStart, calEnd);
-		StatisticDTO dataB = prepareStatistic(calStartB, calEndB);
+		StatisticDTO data = prepareStatistic(calStart, calEnd, !notIncludePending);
 		
-        renderTemplate("admin/Statistics/index.html", data, dataB);
+		//Calendar calStartB = Calendar.getInstance();
+		//Calendar calEndB = Calendar.getInstance();
+		//calStartB.set(yearStartB, monthStartB-1, dayStartB);
+		//DateHelper.setFirstDayHour(calStartB);
+		//calEndB.set(yearEndB, monthEndB-1, dayEndB);
+		//DateHelper.setLastDayHour(calEndB);
+		//StatisticDTO dataB = prepareStatistic(calStartB, calEndB);
+		
+        renderTemplate("admin/Statistics/index.html", data, notIncludePending);
 	}
 	
 	public static void exportStatistics(int dayStart, int monthStart, int yearStart,
-			int dayEnd, int monthEnd, int yearEnd){
+			int dayEnd, int monthEnd, int yearEnd, boolean notIncludePending){
 		Calendar calStart = Calendar.getInstance();
 		Calendar calEnd = Calendar.getInstance();
 		calStart.set(yearStart, monthStart-1, dayStart);
@@ -73,7 +76,7 @@ public class Statistics extends Controller {
 		calEnd.set(yearEnd, monthEnd-1, dayEnd);
 		DateHelper.setLastDayHour(calEnd);
 		
-		StatisticDTO data = prepareStatistic(calStart, calEnd);
+		StatisticDTO data = prepareStatistic(calStart, calEnd, !notIncludePending);
 	    
 		render("admin/Statistics/exportByCity.csv", data);
 	}
@@ -105,7 +108,6 @@ public class Statistics extends Controller {
 				break;
 			}
 		}
-	    
 		render("admin/Statistics/export.csv", dataList);
 	}
 	
@@ -124,7 +126,7 @@ public class Statistics extends Controller {
 	}
 
 
-	private static StatisticDTO prepareStatistic(Calendar start, Calendar end) {
+	private static StatisticDTO prepareStatistic(Calendar start, Calendar end, boolean includePending) {
 		Collection<City> rootCities = new ArrayList<City>();
 		Collection<City> cities = City.findAllCities();
 		for (City city: cities){
@@ -132,7 +134,7 @@ public class Statistics extends Controller {
 				rootCities.add(city);
 			}
 		}
-		StatisticDTO dto = new StatisticDTO(rootCities, start, end);
+		StatisticDTO dto = new StatisticDTO(rootCities, start, end, includePending);
 		return dto;
 	}
 	

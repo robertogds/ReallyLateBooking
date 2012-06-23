@@ -2,6 +2,7 @@ package models;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,8 @@ public class MyCoupon extends Model{
     public Date created;
 	@DateTime
     public Date expire;
+	@DateTime
+    public Date usedDate;
 	public boolean isReferer;
 	public boolean active;
 	public boolean used;
@@ -119,6 +122,25 @@ public class MyCoupon extends Model{
 		}
 	}
 	
+	public static Collection<MyCoupon> findAllByUsedDate(Date start, Date end) {
+		return MyCoupon.all().filter("used", Boolean.TRUE)
+			.filter("usedDate>", start).filter("usedDate<", end).fetch();
+	}
+	
+	public static Collection<MyCoupon> findAllRefererByUsedDate(Date start, Date end) {
+		return allRefererByUsedDate(start, end).fetch();
+	}
+	
+	public static int countAllRefererByUsedDate(Date start, Date end) {
+		return allRefererByUsedDate(start, end).count();
+	}
+	
+	public static Query<MyCoupon> allRefererByUsedDate(Date start, Date end) {
+		return MyCoupon.all().filter("used", Boolean.TRUE).filter("isReferer", Boolean.TRUE)
+			.filter("usedDate>", start).filter("usedDate<", end);
+	}
+	
+	
 	public String toString() {
 		return "key: " + this.key + " credits: " +  this.credits + " expire: " + this.expire;
 	}
@@ -150,6 +172,7 @@ public class MyCoupon extends Model{
 	
 	public Integer useValidUnused(){
 		this.used = true;
+		this.usedDate = Calendar.getInstance().getTime();
 		this.update();
 		this.activateCouponToReferal();
 		return this.credits;

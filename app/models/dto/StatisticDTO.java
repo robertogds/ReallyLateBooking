@@ -24,6 +24,8 @@ public class StatisticDTO {
     public LinkedHashMap<String, CityData> stats;
     public CityData allCities;
     public int registered;
+    public int registeredWeb;
+    public int registeredApp;
     public int dayStart;
     public int monthStart;
     public int yearStart;
@@ -31,7 +33,7 @@ public class StatisticDTO {
     public int monthEnd;
     public int yearEnd;
 	
-	public StatisticDTO(Collection<City> cities, Calendar calStart, Calendar calEnd) {
+	public StatisticDTO(Collection<City> cities, Calendar calStart, Calendar calEnd, boolean includePending) {
 		Date start = calStart.getTime();
 		Date end = calEnd.getTime();
 		Logger.debug("Statistics Start Time : " + start.toString());
@@ -43,21 +45,23 @@ public class StatisticDTO {
 		this.monthEnd =  calEnd.get(Calendar.MONTH) + 1;
 		this.yearEnd = calEnd.get(Calendar.YEAR);
 	    this.registered = User.countNewUsersByDate(calStart, calEnd);
+	    this.registeredWeb = User.countNewWebUsersByDate(calStart, calEnd);
+	    this.registeredApp = this.registered - this.registeredWeb;
 	    this.stats = new LinkedHashMap<String, CityData>(); 
 	    
-	    Collection<Booking> bookings = Booking.findAllBookingsByDate(start, end);
+	    Collection<Booking> bookings = includePending ?  Booking.findAllBookingsByDate(start, end) : Booking.findAllNonPendingBookingsByDate(start, end);
 	    this.allCities =  new CityData(bookings, start, end);
 	    
 		for (City city : cities){
 			Collection<Booking> bookingsCity= new ArrayList<Booking>();
 			Logger.debug("Adding bookings from city: %s", city.name);
-			Collection<Booking> bookingsRoot = Booking.findAllBookingsByDateAndCity(city,start, end);
+			Collection<Booking> bookingsRoot = includePending ? Booking.findAllBookingsByDateAndCity(city,start, end) : Booking.findAllNonPendindBookingsByDateAndCity(city,start, end);
 			bookingsCity.addAll(bookingsRoot);
 			if (!city.isSimpleCity()){
 				List<City> cityZones = City.findActiveCitiesByRoot(city.url);
 				for (City location: cityZones) {
 					Logger.debug("Adding bookings from city zone: %s", location.name);
-					Collection<Booking> bookingsZone = Booking.findAllBookingsByDateAndCity(location,start, end);
+					Collection<Booking> bookingsZone = includePending ? Booking.findAllBookingsByDateAndCity(location,start, end): Booking.findAllNonPendindBookingsByDateAndCity(location,start, end);
 					bookingsCity.addAll(bookingsZone);
 				}
 			}

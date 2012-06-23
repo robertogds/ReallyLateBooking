@@ -1,56 +1,94 @@
-<html>
-<body>
-<style>
-	html, body { margin:0; padding:0;}
-</style>
-<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#0D1E28">
-	<tr><td>
-	<table width="400px">
-	<tr>
-		<td style="padding:5px;">
-			<img src="@@{'/public/images/logo_top.gif'}" width="309" height="40"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:5px;">
-			<table width="100%" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;">
-				<tr>
-					<td colspan="2">
-						<h1 style="font-size:16px;">&{'mails.booking.hotel.hi'} <strong>${user.firstName}</strong>,<br/>
+<html style="margin: 0;padding: 0;">
+<head>
+	<meta charset="utf-8">
+</head>
+<body style="margin: 0;padding: 0;">
+	<div id="wrapper" style="padding: 10px;max-width: 500px;color: #596366;font-family: arial, sans-serif;font-size: 12px;">
+		<!-- HEADER -->
+		<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/rlb_logo_mail.gif" alt="ReallyLateBooking" title="ReallyLateBooking" id="rlb_top_logo" style="width: 100%;max-width: 226px;max-height: 40px;margin-bottom: 20px;">
+		
+		<!-- TITLE -->
+		<div class="title" style="margin-bottom: 20px;">
+			<h1 class="h1" style="margin: 0;font-size: 18px;color: #0C1924;font-weight: normal;">&{'mails.booking.hotel.hi'} <strong>${user.firstName}</strong>,
 						&{'mails.welcome.welcome'}</h1>
-					</td>
-				</tr>
-				<tr>
-					
-					<td valign="top">
-						<p>&{'mails.welcome.p1'}</p>
-						<p>&{'mails.welcome.p2'}</p>
-						<p>&{'mails.welcome.p3'}</p>
-						<p>&{'mails.welcome.p4'}</p>
-						
-						<br/><br/>
-						<img src="@@{'/public/images/logo_small.gif'}" style="margin-top:3px;" width="166" height="22"/><br/>
-			<a href="http://www.reallylatebooking.com" style="color:#0098CB; padding-left:2px;">reallylatebooking.com</a><br/>
-			<p>&{'mails.booking.client.social'} <a href="http://www.facebook.com/ReallyLateBooking" style="color:#0098CB;">Facebook</a>, <a href="http://twitter.com/#!/rlatebooking/" style="color:#0098CB;">Twitter</a>.</p>
+		</div>
+		<!-- CONTENT -->
+		<p style="color: #596366;font-size: 12px;margin: 0 0 10px 0;clear: both;">&{'mails.welcome.p1'}</p>
+		<p style="color: #596366;font-size: 12px;margin: 0 0 10px 0;clear: both;">
+			&{'mails.welcome.p2'}
+		</p>
+		<p style="color: #596366;font-size: 12px;margin: 0 0 10px 0;clear: both;">
+			&{'mails.welcome.p4'}
+		</p>
+		
+		<div id="promoCodeWrap" style="border-top: solid 1px #0098CB;border-bottom: solid 1px #0098CB;padding: 10px 0;">
+			<!-- PROMO CODE -->
+			<p style="color: #596366;font-size: 12px;margin: 0 0 10px 0;clear: both;">
+				<strong style="color: #0C1924;">&{'web.dashboard.mycoupons.morecredits'}</strong>
+				<br>
+				&{'web.dashboard.mycoupons.invite'}
+			</p>	
+			<div id="promoCode" style="width: 70%;max-width: 200px;height: 57px;max-height: 57px;margin-bottom: 10px;background-color: #0C1924;color: #fff;border-radius: 5px 0 0 5px;float: left;">
+				<span style="display: block;text-align: center;font-size: 10px;padding-top: 10px;">&{'web.dashboard.mycoupons.invite.code'}</span>
+				<strong style="display: block;text-align: center;font-size: 20px;padding-bottom: 10px;">${user.refererId}</strong>
+			</div>
+			<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/promoCodeArrow.gif" class="promoCodeArrow" style="float: left;background-color: #0C1924;margin-right: 5px;">
 			
-					</td>
-					<td valign="top" width="290" valign="top">
-						<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/androidYiphone.jpg" width="284" height="293"/>
-					</td>
-				</tr>
-			</table>
+			<div class="small_banner_group shareSocial" style="float: left;margin-right: 3px;">
+				<a href="http://www.facebook.com/sharer/sharer.php?u=http://www.reallylatebooking.com&t=&{'web.invite.referer.twitter', user.refererId}" title="Follow us on Facebook" style="color: #045976;text-decoration: none;padding: 10px 5px 9px;margin-right: 5px;margin-bottom: 10px;float: left;border-radius: 5px;">
+					<img src="&{'email.welcome.sharefacebook.img'}" class="small_banner" style="border: 0;width: 108px;height: 37px;">
+				</a>
+				<a href="https://twitter.com/share?button_hashtag=${user.refererId}&lang=en&url=http://club.reallylatebooking.com/${lang}&via=rlatebooking&text=&{'web.invite.referer.twitter', user.refererId}&related=rlatebooking_fr" 
+					title="Follow us on Twitter" style="color: #045976;text-decoration: none;padding: 10px 5px 9px;margin-right: 5px;margin-bottom: 10px;float: left;border-radius: 5px;">
+					<img src="&{'email.welcome.sharetwitter.img'}" class="small_banner" style="border: 0;width: 108px;height: 37px;">
+				</a>
+			</div>
+			<p style="color: #596366;font-size: 12px;margin: 0 0 10px 0;clear: both;">
+				&{'web.dashboard.mycoupons.invite.theyget'}
+				<br>
+				&{'web.dashboard.mycoupons.invite.youget'}
+			</p>
 			
-		</td>
-	</tr>
-	<tr>
-	</tr>
-	<tr>
-		<td style="font-family:arial, sans-serif; padding:20px 5px;; font-size:11px; color:#ccc;">
+		</div>
+		
+		<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/rlb_mail_displays.jpg" class="content_image" style="margin: 10px 0 10px 0;width: 100%;max-width: 500px;">
+		
+		<!-- FOOTER -->
+		<div class="signature" style="margin-bottom: 20px;">
+			<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/rlb_logo_mail_footer.gif" alt="ReallyLateBooking" title="ReallyLateBooking" id="rlb_footer_logo" style="width: 136px;height: 16px;">
+			<p style="color: #596366;font-size: 12px;margin: 0 0 10px 0;clear: both;">
+				<span class="department" style="color: #0C1924;font-weight: bold;margin: 0;display: block;">&{'mails.rlb.booking.department'}</span>
+				<span class="telephone" style="color: #596366;font-weight: bold;margin: 0;display: block;">&{'mails.rlb.booking.department.phone'}</span>
+				<span class="site_url" style="color: #0C1924;font-weight: bold;margin: 0;display: block;">
+					<a href="http://www.reallylatebooking.com" style="color: #045976;text-decoration: none;">www.reallylatebooking.com</a>
+				</span>
+		</p></div>
+		<p class="small" style="color: #596366;font-size: 10px;margin: 0 0 10px 0;clear: both;">
+			&{'mails.booking.client.social'} <a href="http://www.facebook.com/ReallyLateBooking" style="color: #045976;text-decoration: none;">Facebook</a>, <a href="http://twitter.com/#!/rlatebooking/" style="color: #045976;text-decoration: none;">Twitter</a>.
+		</p>
+		<div class="small_banner_group" style="float: left;margin-right: 3px;">
+			<a href="&{'itunes.url'}" title="Download iPhone App" style="color: #045976;text-decoration: none;">
+				<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/mail_appStore.gif" class="small_banner" style="border: 0;width: 108px;height: 37px;">
+			</a>
+			<a href="&{'android.play.url'}" title="Download Android App" style="color: #045976;text-decoration: none;">
+				<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/mail_android.gif" class="small_banner" style="border: 0;width: 108px;height: 37px;">
+			</a>
+		</div>
+		<div class="small_banner_group" style="float: left;margin-right: 3px;">
+			<a href="http://www.facebook.com/ReallyLateBooking" title="Follow us on Facebook" style="color: #045976;text-decoration: none;">
+				<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/mail_facebook.gif" class="small_banner" style="border: 0;width: 108px;height: 37px;">
+			</a>
+			<a href="http://twitter.com/#!/rlatebooking/" title="Follow us on Twitter" style="color: #045976;text-decoration: none;">
+				<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/mail_twitter.gif" class="small_banner" style="border: 0;width: 108px;height: 37px;">
+			</a>
+		</div>
+		
+		<p class="small powerBy" style="color: #8D989A;font-size: 10px;margin: 0 0 10px 0;clear: both;padding: 20px 0;">
+			<span class="textLogo">
+				<em class="really" style="font-style: normal;color: #5A6366;">Really</em><em class="late" style="font-style: normal;color: #0098CB;">Late</em><em class="booking" style="font-style: normal;color: #0C1924;">Booking</em>
+			</span>
 			&{'mails.rlb.footer'}
-		</td>
-	</tr>
-	</table>
-	</td></tr>
-</table>
+		</p>
+	</div>
 </body>
 </html>

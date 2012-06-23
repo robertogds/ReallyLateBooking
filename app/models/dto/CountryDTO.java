@@ -32,13 +32,13 @@ public class CountryDTO {
 		this.longitude = country.longitude;
 		
 		String lang = Lang.get();
-		Logger.debug("Filling country info with locale: " + lang);
+		//Logger.debug("Filling country info with locale: " + lang);
 		if (lang.equals("es")){
-			Logger.debug("Filling country info with Spanish ");
+			//Logger.debug("Filling country info with Spanish ");
 			this.name = country.name;
 		}
 		else if (lang.equals(Lang.getLocale().FRENCH.getLanguage())){
-			Logger.debug("Filling country info with French ");
+			//Logger.debug("Filling country info with French ");
 			this.name = country.nameFR;
 		}
 	}

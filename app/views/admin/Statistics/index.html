@@ -17,6 +17,7 @@
 			#{select 'dayEnd', items:1..31, value:data.dayEnd,  id:'daySelect' /}
 			#{select 'monthEnd', items:1..12, value:data.monthEnd,  id:'monthSelect' /}
 			#{select 'yearEnd', items:2011..2012, value:data.yearEnd,  id:'yearSelect' /}
+			<input type="hidden" name="notIncludePending" value="${notIncludePending}">
 			<input type="submit" value="Refresh" />
 		#{/form}
 		</div>
@@ -45,15 +46,17 @@
 		#{/form}
 		</div>
 		 <br/> 
-		<div><label>USERS REGISTERED: ${data.registered}</label></div>
-		 <br/> 
         <div class="objectForm">
         <div id="crudListTable">
 			<table>
 				<thead>
-					<tr>
+					<tr style="font-size: 12px;">
 						<th>
 							City
+						</th>
+						<th>
+							Users
+							Reg.
 						</th>
 						<th>
 							Bookings
@@ -68,13 +71,34 @@
 							Comission (-credits)
 						</th>
 						<th>
+							Credits
+						</th>
+						<th>
+							Users Reg. App
+						</th>
+						<th>
 							Bookings App
+						</th>
+						<th>
+							Users Reg. Web
 						</th>
 						<th>
 							Bookings Web
 						</th>
 						<th>
+							Bookings using credits
+						</th>
+						<th>
+							Bookings MGM
+						</th>
+						<th>
 							Users Booking
+						</th>
+						<th>
+							Users First Booking
+						</th>
+						<th>
+							Users Repeat Booking
 						</th>
 						<th>
 							Nights per booking
@@ -84,6 +108,9 @@
 						</th>
 						<th>
 							Avg Comission
+						</th>
+						<th>
+							Avg Credits
 						</th>
 						<th>
 							Bookings per user
@@ -96,10 +123,13 @@
 								TOTAL
 							</td>
 							<td>
+								<label>${data.registered}</label> 
+							</td>
+							<td>
 								<label>${data.allCities.bookings}</label> 
 							</td>
 							<td>
-								<label>${data.allCities.bookingsPerDay}</label> 
+								<label>${data.allCities.bookingsPerDay.round(2)}</label> 
 							</td>
 							<td>
 								<label>${data.allCities.totalPrice?.formatCurrency('EUR').raw()}</label> 
@@ -108,16 +138,37 @@
 								<label>${data.allCities.totalCommission?.formatCurrency('EUR').raw()}</label> 
 							</td>
 							<td>
+								<label>${data.allCities.totalCredits?.formatCurrency('EUR').raw()}</label>
+							</td>
+							<td>
+								<label>${data.registeredApp}</label> 
+							</td>
+							<td>
 								<label>${data.allCities.bookingsApps}</label> 
+							</td>
+							<td>
+								<label>${data.registeredWeb}</label> 
 							</td>
 							<td>
 								<label>${data.allCities.bookingsWeb}</label> 
 							</td>
 							<td>
+								<label>${data.allCities.bookingsWithCredits}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsMGM}</label> 
+							</td>
+							<td>
 								<label>${data.allCities.totalusers}</label> 
 							</td>
 							<td>
-								<label>${data.allCities.nightsPerBookingAvg}</label> 
+								<label>${data.allCities.firstBookingUsers}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.repeatingUsers}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.nightsPerBookingAvg?.round(2)}</label> 
 							</td>
 							
 							<td>
@@ -127,7 +178,10 @@
 								<label>${data.allCities.commisionAvg?.formatCurrency('EUR').raw()}</label> 
 							</td>
 							<td>
-								<label>${data.allCities.bookingPerUserAvg}</label> 
+								<label>${data.allCities.creditsAvg?.formatCurrency('EUR').raw()}</label>
+							</td>
+							<td>
+								<label>${data.allCities.bookingPerUserAvg?.round(2)}</label> 
 							</td>
 
 						</tr>
@@ -138,10 +192,13 @@
 								${key}
 							</td>
 							<td>
+								
+							</td>
+							<td>
 								<label>${data.stats[key].bookings}</label> 
 							</td>
 							<td>
-								<label>${data.stats[key].bookingsPerDay}</label> 
+								<label>${data.stats[key].bookingsPerDay?.round(2)}</label> 
 							</td>
 							<td>
 								<label>${data.stats[key].totalPrice?.formatCurrency('EUR').raw()}</label> 
@@ -150,16 +207,35 @@
 								<label>${data.stats[key].totalCommission?.formatCurrency('EUR').raw()}</label> 
 							</td>
 							<td>
+								<label>${data.stats[key].totalCredits?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								
+							</td>
+							<td>
 								<label>${data.stats[key].bookingsApps}</label> 
 							</td>
 							<td>
+								
+							</td>
+							<td>
 								<label>${data.stats[key].bookingsWeb}</label> 
+							</td>
+							
+							<td>
+								<label>${data.stats[key].bookingsWithCredits}</label> 
+							</td>
+							<td>
 							</td>
 							<td>
 								<label>${data.stats[key].totalusers}</label> 
 							</td>
 							<td>
-								<label>${data.stats[key].nightsPerBookingAvg}</label> 
+							</td>
+							<td>
+							</td>
+							<td>
+								<label>${data.stats[key].nightsPerBookingAvg?.round(2)}</label> 
 							</td>
 							
 							<td>
@@ -169,7 +245,10 @@
 								<label>${data.stats[key].commisionAvg?.formatCurrency('EUR').raw()}</label> 
 							</td>
 							<td>
-								<label>${data.stats[key].bookingPerUserAvg}</label> 
+								<label>${data.stats[key].creditsAvg?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							<td>
+								<label>${data.stats[key].bookingPerUserAvg?.round(2)}</label> 
 							</td>
 
 						</tr>

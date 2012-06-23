@@ -1,14 +1,20 @@
 package controllers.admin;
 
+import helper.hotusa.HotUsaApiHelper;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
 import models.Booking;
+import models.City;
 import models.Coupon;
+import models.Deal;
 import models.MyCoupon;
 import models.User;
+import models.exceptions.InvalidBookingCodeException;
 import models.exceptions.InvalidCouponException;
+import notifiers.Mails;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -25,14 +31,36 @@ import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
-import controllers.CRUD.ObjectType;
 import controllers.Security;
+import controllers.CRUD.ObjectType;
 
 @Check(Security.EDITOR_ROLE)
 @With(Secure.class)
 @CRUD.For(User.class)
 public class Users extends controllers.CRUD  {
 	
+	/*
+	 * Override list method from CRUD 
+	 * 
+	 * */
+	public static void list(int page, String search, String searchFields, String orderBy, String order, String[] fields) {
+		searchFields = null;
+		search = null;
+        ObjectType type = ObjectType.get(getControllerClass());
+        notFoundIfNull(type);
+        if (page < 1) {
+            page = 1;
+        }
+        
+        List<Object> objects = type.findPage(page, search, searchFields, orderBy, order, (String) request.args.get("where"));
+        Long count = new Long(User.all().count());
+        Long totalCount = count;
+        try {
+            render(type, objects, count, totalCount, page, orderBy, order);
+        } catch (TemplateNotFoundException e) {
+            render("CRUD/list.html", type, objects, count, totalCount, page, orderBy, order);
+        }
+    }
 	/*
 	 * Override save method from CRUD in order to MD5 the pass
 	 * 
@@ -137,7 +165,8 @@ public class Users extends controllers.CRUD  {
 				}
 				Logger.debug("Amigos encontrados: %s", friends.size());
 				int credits = user.calculateTotalCreditsFromMyCoupons();
-				render(user, coupons, bookings, friends, credits);
+				List<City> cities = City.findActiveCities();
+				render(user, coupons, bookings, friends, credits, cities);
 			}
 		}
 		redirect("/admin/users");
@@ -153,6 +182,99 @@ public class Users extends controllers.CRUD  {
 		showUserActionsByEmail(user.email);
 	}
 	
+	public static void createBooking(@Required Long dealId, @Required Long cityId, User user, Integer nights){
+		user = User.findById(user.id);
+		Deal deal = Deal.findById(dealId);
+		Booking booking = new Booking(deal, user);
+		booking.rooms = 1; //we dont allow more rooms by now
+		booking.nights = nights;
+		booking.validateNoCreditCart(); //Custom validation
+		
+		if (!validation.hasErrors()){ 
+			booking.payed = true;
+	        booking.canceled = false;
+	        booking.pending = false;
+			booking.insert();
+			try {
+				doCompleteReservation(booking);
+			} catch (InvalidBookingCodeException e) {
+		        flash.error(Messages.get("booking.validation.problem"));
+		        showUserActionsByEmail(user.email);
+			}
+			updateAndNotifyUserBooking(booking);
+			
+			flash.success(Messages.get("web.bookingForm.success"));
+		}
+		else{
+			params.flash(); // add http parameters to the flash scope
+	        validation.keep(); // keep the errors for the next request
+	        Logger.debug("Errors " + validation.errorsMap().toString());
+		}
+		showUserActionsByEmail(user.email);
+	}
 	
 	
+	
+	//DUPLICATE FROM BOOKINGS CONTROLLER
+	private static void doCompleteReservation(Booking booking) throws InvalidBookingCodeException{
+		if ((booking.deal.isHotUsa != null && booking.deal.isHotUsa) && (booking.deal.isFake == null||!booking.deal.isFake )){ 
+			//If we are booking for more than one nights we need to refresh de lin codes 
+			if (booking.nights > 1){
+				HotUsaApiHelper.refreshAvailability(booking);
+			}
+			String localizador = HotUsaApiHelper.reservation(booking);
+			if (localizador != null){
+				saveUnconfirmedBooking(booking, localizador);
+			}
+			else{
+				validation.addError("rooms", Messages.get("booking.validation.problem"));
+				booking.pending = Boolean.TRUE;
+				booking.update();
+				throw new InvalidBookingCodeException("Localizador from hotusa is null");
+			}
+		}
+		else{
+			updateDealRooms(booking.deal.id, booking.rooms, booking.nights);
+		}
+	}
+	
+	private static void updateAndNotifyUserBooking(Booking booking) {
+		//We mark all the coupons needed as used
+		booking.user =  User.findById(booking.user.id);
+		booking.user.markMyCouponsAsUsed(booking.credits);
+		//inform user by mail 
+		booking.code = booking.isHotusa ? Booking.RESTEL + "-"+booking.code : booking.code;
+		//Send email to user and hotel
+		Mails.hotelBookingConfirmation(booking);
+		Mails.userBookingConfirmation(booking);
+	}
+	
+	private static void saveUnconfirmedBooking(Booking booking, String localizador){
+		Logger.debug("Correct booking: " + localizador);
+		booking.code = localizador;
+		booking.needConfirmation = Boolean.TRUE;
+		booking.update();
+	}
+	
+	private static void updateDealRooms(Long dealId, Integer rooms, int nights){
+		Logger.debug("Deal id: %s ## Rooms: %s ## Nights: %s", dealId, rooms, nights);
+		Deal deal = Deal.findById(dealId);
+		deal.quantity = deal.quantity - rooms;
+		if (deal.quantity == 0){
+			deal.active = Boolean.FALSE;
+		}
+		if (nights > 1){
+			deal.quantityDay2 = deal.quantityDay2 == null ? deal.quantity :deal.quantityDay2 - rooms;
+			if (nights > 2){
+				deal.quantityDay3 =  deal.quantityDay3 == null ? deal.quantity : deal.quantityDay3 - rooms;
+				if (nights > 3){
+					deal.quantityDay4 =  deal.quantityDay4 == null ? deal.quantity : deal.quantityDay4 - rooms;
+					if (nights > 4){
+						deal.quantityDay5 =  deal.quantityDay5 == null ? deal.quantity : deal.quantityDay5 - rooms;
+					}
+				}
+			}
+		}
+		deal.update();
+	}
 }

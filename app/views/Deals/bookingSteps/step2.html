@@ -20,13 +20,13 @@
 											              <span class="add-on"><i class="icon-time"></i></span>
 											              <select class="large" name="booking.nights" id="nightsSelect">
 											                		<option  value="1"> &{'web.bookingForm.select.1'} ${deal.salePriceCents}&euro;</option>
-												                #{if deal.priceDay2 != null }
+												                #{if deal.priceDay2 != null && deal.priceDay2 > 0}
 												                	<option value="2">2 &{'web.bookingForm.select.n'}  <span class="total-price">${deal.salePriceCents + deal.priceDay2}&euro;</span></option>
-												                	#{if deal.priceDay3 != null }
+												                	#{if deal.priceDay3 != null && deal.priceDay3 > 0}
 													                	<option  value="3">3 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3}&euro;</option>
-													                	#{if deal.priceDay4 != null }
+													                	#{if deal.priceDay4 != null && deal.priceDay4 > 0}
 														                	<option  value="4">4 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay4}&euro;</option>
-														                	 #{if deal.priceDay5 != null }
+														                	 #{if deal.priceDay5 != null && deal.priceDay5 > 0}
 															                	<option  value="5">5 &{'web.bookingForm.select.n'} ${deal.salePriceCents + deal.priceDay2 + deal.priceDay3 + deal.priceDay5}&euro;</option>
 															                #{/if}
 														                #{/if}

@@ -71,6 +71,7 @@ public class User extends Model{
     public Boolean isAdmin;
     public Boolean isOwner;
     public Boolean isFacebook;
+   
     
 	@DateTime
     public Date created;
@@ -88,11 +89,13 @@ public class User extends Model{
     public String fbAccessToken;
     public String fbExpires;
     public String referer;
-    //public int credits;
 	public String refererId;
 	public boolean isInvestor;
 	public boolean isEditor;
 	public boolean isNew;
+	public boolean isPartner;
+	@DateTime
+	public Date firstBookingDate;
     
     public User() {
     	super();
@@ -130,27 +133,40 @@ public class User extends Model{
         this.isAdmin = this.isAdmin!=null ? this.isAdmin : Boolean.FALSE;
 		this.isOwner = this.isOwner!=null ? this.isOwner : Boolean.FALSE;
 		this.isFacebook = this.isFacebook!=null ? this.isFacebook : Boolean.FALSE;
-		this.refererId = this.createRefererId();
 		this.locale = Lang.get();
 		this.isNew = true;
+		this.createUniqueRefererId();
     	super.insert();
     	this.createUserCoupons();
 	}
     
 	public void recreateRefererCoupon(){
-		this.refererId = this.createRefererId();
+		this.createRefererId();
 		this.update();
 		this.createUserCoupons();
 	}
 	
-	private String createRefererId() {
+	private void createUniqueRefererId(){
+		if (this.refererId == null){
+			createRefererId();
+		}
+		else{
+			this.refererId += RandomUtils.nextInt(9);
+		}
+		
+		if (User.findByRefererId(this.refererId) != null){
+			createUniqueRefererId();
+		}
+	}
+	
+	private void createRefererId() {
 		String lastName = StringUtils.isBlank(this.lastName) ? "" : this.lastName.trim();
 		lastName = JavaExtensions.slugify(lastName);
 		lastName = UtilsHelper.truncate(lastName, 5);
 		if (lastName.length() < 5){
 			lastName += RandomStringUtils.randomAlphabetic(5 - lastName.length());
 		}
-		return (lastName + RandomUtils.nextInt(99)).toUpperCase();
+		this.refererId = (lastName + RandomUtils.nextInt(99)).toUpperCase();
 	}
 
 	private void createUserCoupons(){
@@ -328,6 +344,12 @@ public class User extends Model{
 							filter("created<", calEnd.getTime()).count();
 		return users;
 	}
+	
+	public static int countNewWebUsersByDate(Calendar calStart, Calendar calEnd) {
+		int users  = User.all().filter("created>", calStart.getTime()).filter("fromWeb", Boolean.TRUE).
+							filter("created<", calEnd.getTime()).count();
+		return users;
+	}
 
 	public int calculateTotalCreditsFromMyCoupons() {
 		List<MyCoupon> coupons = MyCoupon.findActiveByUser(this);
@@ -351,6 +373,15 @@ public class User extends Model{
 				credits +=  coupon.useValidUnused();
 			}
 		}
+	}
+
+	public static int countAllFirstBookingByDate(Date start, Date end) {
+		return allFirstBookingByDate(start, end).count();
+		
+	}
+	
+	public static Query<User> allFirstBookingByDate(Date start, Date end) {
+		return User.all().filter("firstBookingDate>", start).filter("firstBookingDate<", end);
 	}
 
 	/*

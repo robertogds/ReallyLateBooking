@@ -57,6 +57,7 @@ public class Deal extends Model {
 	public Boolean isHotUsa;
 	public Boolean isFake;
 	public Boolean active;
+	public boolean onlyApp;
 	@Required
 	@Index("city_index")
     public City city;
@@ -67,7 +68,6 @@ public class Deal extends Model {
     public User owner;
 	@Index("company_index")
 	public Company company;
-	@Email
 	public String contactEmail;
 	public double discount;
 	public Integer bestPrice;
@@ -173,6 +173,7 @@ public class Deal extends Model {
 	public String bookingLine4;
 	public String bookingLine5;
 	public boolean autoImageUrl;
+	public int points;
 	
 	
 	public Deal(String hotelName, City city) {
@@ -251,13 +252,14 @@ public class Deal extends Model {
 		return hotelName;
 	}
 	
+	
 	/**
 	 * Version 2. Cities can have root cities and zones.
 	 * @param city
 	 * @param noLimits 
 	 * @return all the active deals by city base on current time
 	 */
-	public static Collection<Deal> findActiveDealsByCityV2(City city, Boolean noLimits) {
+	public static Collection<Deal> findActiveDealsByCityV2(City city, Boolean noLimits, Boolean hideAppOnly) {
 		if (city != null){
 			if (!city.isRootCityWithZones()){
 				String root = city.root;
@@ -271,12 +273,12 @@ public class Deal extends Model {
 				case (DateHelper.CITY_OPEN_DAY):
 					LinkedHashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
 					Logger.info("V2. We are all opened");
-					return dealsMapToListWithMax(dealsMap, noLimits);
+					return dealsMapToListWithMax(dealsMap, noLimits, hideAppOnly);
 				case (DateHelper.CITY_OPEN_NIGHT):
 					LinkedHashMap<City, List<Deal>> dealsMapAll = findAllActiveDealsByCityV2(city);
 					Integer hour = DateHelper.getCurrentHour(city.utcOffset);
 					Logger.debug("V2. Is between 0am and 6am. Hour:  " + hour);
-					return findActiveDealsByNight(dealsMapAll, hour, noLimits);
+					return findActiveDealsByNight(dealsMapAll, hour, noLimits, hideAppOnly);
 				default:
 					Logger.error("This never should happen. What hour is it?");
 					return new ArrayList<Deal>();
@@ -294,7 +296,7 @@ public class Deal extends Model {
 	 * @return all the active deals by city base on current time
 	 */
 	@Deprecated
-	public static List<Deal> findActiveDealsByCity(City city, Boolean noLimits){
+	public static List<Deal> findActiveDealsByCity(City city, Boolean noLimits, Boolean hideAppOnly){
 	
 		switch (DateHelper.getCurrentStateByCityHour(city.utcOffset)) {
 			case (DateHelper.CITY_CLOSED):
@@ -310,7 +312,7 @@ public class Deal extends Model {
 				Integer hour = DateHelper.getCurrentHour(city.utcOffset);
 				Logger.debug("Is between 0am and 6am. Hour:  " + hour);
 				List<Deal> activeDeals = findAllActiveDealsByCity(city).fetch();
-				return selectMaxDealsByHour(activeDeals, hour, noLimits);
+				return selectMaxDealsByHour(activeDeals, hour, noLimits, hideAppOnly);
 			default:
 				Logger.error("This never should happen. What hour is it?");
 				return new ArrayList<Deal>();
@@ -375,7 +377,9 @@ public class Deal extends Model {
 	    
 	  //If is active time and price is bigger than before we want to deactivate the deal
 	    City city = City.findById(deal.city.id);
-	    Boolean dealInUse = city != null && DateHelper.isActiveTime(DateHelper.getCurrentHour(city.utcOffset)) && deal.active && deal.salePriceCents != null && price != null;
+	    Boolean dealInUse = city != null 
+	    	&& (DateHelper.isActiveTime(DateHelper.getCurrentHour(city.utcOffset)) || DateHelper.isPricingTime(DateHelper.getCurrentHour(city.utcOffset)) )
+	    	&& deal.active && deal.salePriceCents != null && price != null;
 	    
 	    if (removeIfPriceRaised && dealInUse && day == 0 && deal.bestPrice != null && deal.bestPrice.compareTo(price.intValue()) < 0 ){
 	    	deal.active = false;
@@ -422,6 +426,7 @@ public class Deal extends Model {
 	 * @param lin
 	 * @param day
 	 */
+	//FIXME this is not the correct name for this method. it's used only when the deal is solded out, right?
 	public static void updatePriceByCode(String hotelCode, Float price, String lin, int day){
 	    Deal deal = Deal.findByHotelCode(hotelCode);
 	    Boolean updatePublicPrices = Boolean.TRUE;
@@ -434,11 +439,12 @@ public class Deal extends Model {
 	private void updateHotusaPrice(Float price, Boolean breakfastIncluded, String lin, int day, Boolean updatePublicPrices){
 		Integer roundPrice = 0;
 		if (price != null){
-			roundPrice = roundPrice(price);
+			Float fee = price * new Float(0.1) ;
+			roundPrice = roundPrice(price + fee);
 		}
 		switch (day) {
 		case 0:
-			 //If isFake we dont want to change the price automatically by the cron task
+			 //If isFake we don't want to change the price automatically by the cron task
 		    if (price != null && price > 0 && !this.isFake){
 		    	this.salePriceCents = updatePublicPrices ? roundPrice : this.salePriceCents;
 		    	this.netSalePriceCents = price;
@@ -547,12 +553,12 @@ public class Deal extends Model {
 	/*
 	 * Count methods needed for the control panel.
 	 */
-	public static int countHotelsByCity(City city, Date start, Date end) {
+	public static int countActiveHotelsByCity(City city) {
 		int hotels = Deal.all().filter("city", city).filter("active", Boolean.TRUE).count();
 		return hotels;
 	}
 
-	public static int countActiveDirectHotelsByCity(City city, Date start, Date end) {
+	public static int countActiveDirectHotelsByCity(City city) {
 		int hotels = Deal.all().filter("city", city).filter("active", Boolean.TRUE).filter("isHotUsa", Boolean.FALSE).count();
 		return hotels;
 	}
@@ -571,7 +577,8 @@ public class Deal extends Model {
 	public Boolean dealIsPublished(){
 		City city = City.findByUrl(this.city.root);
 		Boolean noLimits = Boolean.FALSE;
-		Collection<Deal> deals = findActiveDealsByCityV2(city, noLimits);
+		Boolean onlyApp = Boolean.FALSE;
+		Collection<Deal> deals = findActiveDealsByCityV2(city, noLimits, onlyApp);
 		for (Deal deal: deals){
 			if (deal.id.equals(this.id)) return Boolean.TRUE;
 		}
@@ -584,10 +591,10 @@ public class Deal extends Model {
 	 * @param dealsMap
 	 * @return Returns all the active deals in all the zones of a city.
 	 */
-	private static List<Deal> dealsMapToListWithMax(LinkedHashMap<City, List<Deal>> dealsMap, Boolean noLimits) {
+	private static List<Deal> dealsMapToListWithMax(LinkedHashMap<City, List<Deal>> dealsMap, Boolean noLimits, Boolean hideAppOnly) {
 		List<Deal> deals = new ArrayList<Deal>();
 		for(City city: dealsMap.keySet()){
-			List<Deal> zoneDeals = selectMaxDeals(dealsMap.get(city), noLimits);
+			List<Deal> zoneDeals = selectMaxDeals(dealsMap.get(city), noLimits, hideAppOnly);
 			deals.addAll(zoneDeals);
 		}
 		return deals;
@@ -600,12 +607,12 @@ public class Deal extends Model {
 	 * @param hour
 	 * @return Returns all the active deals in all the zones of a city at a given hour.
 	 */
-	private static List<Deal> findActiveDealsByNight(LinkedHashMap<City, List<Deal>> dealsMap, Integer hour, Boolean noLimits){
+	private static List<Deal> findActiveDealsByNight(LinkedHashMap<City, List<Deal>> dealsMap, Integer hour, Boolean noLimits,  Boolean hideAppOnly){
 		List<Deal> activeDeals = new ArrayList<Deal>();
 		Logger.debug("Is between 0am and 6am. Hour:  " + hour);
 		// iterate over zones to limit deals list to MAXDEALS
 		for(City city: dealsMap.keySet()){
-			List<Deal> zoneDeals = selectMaxDealsByHour(dealsMap.get(city), hour, noLimits);
+			List<Deal> zoneDeals = selectMaxDealsByHour(dealsMap.get(city), hour, noLimits, hideAppOnly);
 			activeDeals.addAll(zoneDeals);
 		}
 		return activeDeals;
@@ -616,11 +623,16 @@ public class Deal extends Model {
 	 * @param list
 	 * @return
 	 */
-	private static List<Deal> selectMaxDeals(List<Deal> list, Boolean noLimits) {
+	private static List<Deal> selectMaxDeals(List<Deal> list, Boolean noLimits, Boolean hideAppOnly) {
 		int maxDeals = findMaxDeals(noLimits);
 		List<Deal> zoneDeals = new ArrayList<Deal>();
 		for (Deal deal : list){
-			zoneDeals.add(deal);
+			if (hideAppOnly && deal.onlyApp){
+				Logger.debug("This hotel %s is app only so cant be shown here.", deal.hotelName);
+			}
+			else{
+				zoneDeals.add(deal);
+			}
 			if (zoneDeals.size() == maxDeals){
 				break;
 			}
@@ -638,13 +650,18 @@ public class Deal extends Model {
 	 * @param hour
 	 * @return
 	 */
-	private static List<Deal> selectMaxDealsByHour(List<Deal> list, Integer hour, Boolean noLimits) {
+	private static List<Deal> selectMaxDealsByHour(List<Deal> list, Integer hour, Boolean noLimits, Boolean hideAppOnly) {
 		int maxDeals = findMaxDeals(noLimits);
 		List<Deal> zoneDeals = new ArrayList<Deal>();
 		for (Deal deal : list){
 			// after 24 we check the limitHour
 			if (deal.limitHour != null && deal.limitHour > hour){
-				zoneDeals.add(deal);
+				if (hideAppOnly && deal.onlyApp){
+					Logger.debug("This hotel %s is app only so cant be shown here.", deal.hotelName);
+				}
+				else{
+					zoneDeals.add(deal);
+				}
 				if (zoneDeals.size() == maxDeals){
 					break;
 				}

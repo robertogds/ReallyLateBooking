@@ -94,6 +94,8 @@ public class User extends Model{
 	public boolean isEditor;
 	public boolean isNew;
 	public boolean isPartner;
+	public boolean pendingSurvey;
+	
 	@DateTime
 	public Date firstBookingDate;
     
@@ -331,6 +333,10 @@ public class User extends Model{
     public static User findByToken(String token){
     	return User.all().filter("token", token.trim()).get();
     }
+    
+	public static List<User> findSurveyPending() {
+		return User.all().filter("pendingSurvey", true).fetch();
+	}
 
 	public Boolean checkFacebookUserExists() {
 		if (this.isFacebook != null && this.isFacebook && this.email!= null && User.findByEmail(this.email) != null){
@@ -362,7 +368,7 @@ public class User extends Model{
 		return credits;
 	}
 
-	public void markMyCouponsAsUsed(Integer creditsUsed) {
+	public void markMyCouponsAsUsed(Integer creditsUsed, Integer finalPrice) {
 		List<MyCoupon> coupons = MyCoupon.findActiveByUserOrderByCredits(this);
 		Integer credits = 0;
 		for (MyCoupon coupon : coupons){
@@ -370,7 +376,7 @@ public class User extends Model{
 				break;
 			}
 			else if (!coupon.expiredOrUsed()){
-				credits +=  coupon.useValidUnused();
+				credits +=  coupon.useValidUnused(finalPrice);
 			}
 		}
 	}
@@ -383,6 +389,7 @@ public class User extends Model{
 	public static Query<User> allFirstBookingByDate(Date start, Date end) {
 		return User.all().filter("firstBookingDate>", start).filter("firstBookingDate<", end);
 	}
+
 
 	/*
 	public void updateUserCredits(Integer credits) {

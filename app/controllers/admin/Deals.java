@@ -15,6 +15,7 @@ import models.Company;
 import models.Deal;
 import models.User;
 import play.Logger;
+import play.exceptions.TemplateNotFoundException;
 import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
@@ -26,6 +27,7 @@ import controllers.CRUD.ObjectType;
 @With(Secure.class)
 @CRUD.For(Deal.class)
 public class Deals extends controllers.CRUD {
+	
 	
 	public static void refreshHotUsaPrices(){
 		List<City> cities = City.findActiveCities();

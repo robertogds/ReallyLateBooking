@@ -14,13 +14,13 @@
 	    return true; 
 	}
 	
-	function showResponse${timestamp}(responseText, statusText){
+	function showResponse${timestamp}(response, statusText){
 		${_callback};
-		if(statusText == 'success' && (responseText.status == '200' || responseText.status == '201' || responseText.status == '202')){
-			$('#${_resultDiv}').html(responseText.detail);
+		if(statusText == 'success' && (response.status == '200' || response.status == '201' || response.status == '202')){
+			$('#${_resultDiv}').html(response.detail);
 			$('#${_resultDiv}').fadeIn();
 		}else{
-			$('#${_errorDiv}').html(responseText.detail);
+			$('#${_errorDiv}').html(response.detail);
 			$('#${_errorDiv}').fadeIn();
 		}
 	}
@@ -29,13 +29,19 @@
 		var options = { 
 	        target:        '#${_resultDiv}',   
 	        beforeSubmit:  hidePrevResponse${timestamp}, 
-	        success:       showResponse${timestamp}
+	        success: function(response, textStatus, xhr, form) {
+		        console.log("in ajaxForm success");
+		        showResponse${timestamp}(response, textStatus);
+		    },
+		    error: function(xhr, textStatus, errorThrown) {
+		        console.log("in ajaxForm error");
+		    },
         }
 		
 		$("#frm${timestamp}").ajaxForm(options); 
 	});
 </script> 
 
-<form id="frm${timestamp}" method="POST" action="${_action}">
+<form id="frm${timestamp}" method="POST" action="${_action}" class="${_class}" >
 	#{doBody /}
 </form>

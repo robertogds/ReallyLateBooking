@@ -46,6 +46,8 @@ POST 	/transloadit												Deals.transloadit
 GET     /cron/refreshHotUsaPrices               					Deals.refreshHotUsaPrices
 GET     /cron/movePrices               								Deals.movePrices
 GET     /cron/confirmReservations               					Application.confirmReservations
+GET     /cron/sendSurveyEmails             							Users.sendSurveyEmails
+GET 	/cron/sendRememberPriceEmails								Users.sendRememberPriceEmails
 
 GET 	/admin/showmoveprices										Deals.showMovePrices
 GET 	/admin														module:crudsiena

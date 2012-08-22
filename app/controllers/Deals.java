@@ -105,7 +105,8 @@ public class Deals extends Controller {
 				User user = (User)renderArgs.get("user");
 				user = user!= null ? User.findById(user.id) : null;
 				Boolean noLimits = user!= null && user.isPartner;
-				Collection<Deal> deals = Deal.findActiveDealsByCityV2(cityOrig, noLimits);
+				Boolean hideAppOnly = Boolean.TRUE;
+				Collection<Deal> deals = Deal.findActiveDealsByCityV2(cityOrig, noLimits, hideAppOnly);
 				for (Deal deal: deals){
 					dealsDtos.add(new DealDTO(deal, cityOrig.url));
 				}
@@ -163,7 +164,8 @@ public class Deals extends Controller {
 			}
 			else{
 				Boolean noLimits = Boolean.FALSE;
-				Collection<Deal> deals = Deal.findActiveDealsByCityV2(city, noLimits);
+				Boolean hideAppOnly = Boolean.FALSE;
+				Collection<Deal> deals = Deal.findActiveDealsByCityV2(city, noLimits, hideAppOnly);
 		        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 				for (Deal deal: deals){
 					dealsDtos.add(new DealDTO(deal, city.url));
@@ -192,7 +194,8 @@ public class Deals extends Controller {
 				city.get();
 			}
 			Boolean noLimits = Boolean.FALSE;
-			Collection<Deal> deals = Deal.findActiveDealsByCity(city, noLimits);
+			Boolean hideAppOnly = Boolean.FALSE;
+			Collection<Deal> deals = Deal.findActiveDealsByCity(city, noLimits, hideAppOnly);
 	        Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 			for (Deal deal: deals){
 				deal.fecthCity(); //retrieves city object to not to send just the city id
@@ -221,6 +224,7 @@ public class Deals extends Controller {
 	public static void movePrices(){
 		List<Deal> deals =  Deal.findDealsNotFromHotUsa();
 		for (Deal deal : deals){
+			Logger.error("esto no deberia pasar");
 			movePriceByDeal(deal);
 		}
 		showMovePrices();

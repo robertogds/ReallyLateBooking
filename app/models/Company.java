@@ -48,6 +48,7 @@ public class Company extends Model{
 	@DateTime
     public Date updated;
 	public Integer fee;
+	public String lang;
 	
 
     public Company(String name, String nif, String phone, String lastName, Integer fee) {

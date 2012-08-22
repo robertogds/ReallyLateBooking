@@ -48,6 +48,136 @@
 		 <br/> 
         <div class="objectForm">
         <div id="crudListTable">
+        	<table>
+				<thead>
+					<tr style="font-size: 12px;">
+						<th>
+							Users Reg.
+						</th>
+						<th>
+							Bookings
+						</th>
+						<th>
+							Bookings MGM
+						</th>
+						*{
+						<th>
+							Bookings Newsletter
+						</th>
+						}*
+						<th>
+							Unique buyers
+						</th>
+						<th>
+							Re Buyers
+						</th>
+						<th>
+							2 bookings
+						</th>
+						<th>
+							3 bookings
+						</th>
+						<th>
+							4-5 bookings
+						</th>
+						<th>
+							6-10 bookings
+						</th>
+						<th>
+							10+ bookings
+						</th>
+						<th>
+							Bookings Reg. Today
+						</th>
+						<th>
+							Bookings Reg. 7 days
+						</th>
+						<th>
+							Bookings Reg. 1 month
+						</th>
+						<th>
+							Bookings Reg. 2 month
+						</th>
+						<th>
+							Bookings Reg. 3 month
+						</th>
+						<th>
+							Bookings Reg. 6 month
+						</th>
+						<th>
+							Bookings Reg. 9 month
+						</th>
+						<th>
+							Bookings Reg. 1 year
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+							<td>
+								<label>${data.registered}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookings}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsMGM}</label> 
+							</td>
+							*{
+							<td>
+								<label>${data.allCities.bookingsEmail}</label> 
+							</td>
+							}*
+							<td>
+								<label>${data.allCities.totalusers}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.repeatingUsers}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.twoBookings}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.threeBookings}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.threeFiveBookings}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.sixTenBookings}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.moreTenBookings}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsUsersToday}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsUsersLastWeek}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsUsersLastMonth}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsUsersTwoMonthsAgo}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsUsersThreeMonthsAgo}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsUsersSixMonthsAgo}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsUsersNineMonthsAgo}</label> 
+							</td>
+							<td>
+								<label>${data.allCities.bookingsUsersOneYearAgo}</label> 
+							</td>
+
+						</tr>
+					</tbody>
+				</table>
+				<br>
 			<table>
 				<thead>
 					<tr style="font-size: 12px;">
@@ -65,11 +195,16 @@
 							Bookings per day
 						</th>
 						<th>
-							Sales
+							Gross Sales
 						</th>
 						<th>
-							Comission (-credits)
+							Gross Comission
 						</th>
+						*{
+						<th>
+							Gross Comission Newsletter
+						</th>
+						}*
 						<th>
 							Credits
 						</th>
@@ -91,14 +226,19 @@
 						<th>
 							Bookings MGM
 						</th>
+						*{
 						<th>
-							Users Booking
+							Bookings Newsletter
+						</th>
+						}*
+						<th>
+							Unique buyers
 						</th>
 						<th>
-							Users First Booking
+							buyers First Booking
 						</th>
 						<th>
-							Users Repeat Booking
+							Re Buyers
 						</th>
 						<th>
 							Nights per booking
@@ -137,6 +277,11 @@
 							<td>
 								<label>${data.allCities.totalCommission?.formatCurrency('EUR').raw()}</label> 
 							</td>
+							*{
+							<td>
+								<label>${data.allCities.totalCommissionEmail?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							}*
 							<td>
 								<label>${data.allCities.totalCredits?.formatCurrency('EUR').raw()}</label>
 							</td>
@@ -158,6 +303,11 @@
 							<td>
 								<label>${data.allCities.bookingsMGM}</label> 
 							</td>
+							*{
+							<td>
+								<label>${data.allCities.bookingsEmail}</label> 
+							</td>
+							}*
 							<td>
 								<label>${data.allCities.totalusers}</label> 
 							</td>
@@ -206,6 +356,11 @@
 							<td>
 								<label>${data.stats[key].totalCommission?.formatCurrency('EUR').raw()}</label> 
 							</td>
+							*{
+							<td>
+								<label>${data.stats[key].totalCommissionEmail?.formatCurrency('EUR').raw()}</label> 
+							</td>
+							}*
 							<td>
 								<label>${data.stats[key].totalCredits?.formatCurrency('EUR').raw()}</label> 
 							</td>
@@ -227,6 +382,11 @@
 							</td>
 							<td>
 							</td>
+							*{
+							<td>
+								<label>${data.stats[key].bookingsEmail}</label> 
+							</td>
+							}*
 							<td>
 								<label>${data.stats[key].totalusers}</label> 
 							</td>

@@ -1,8 +1,8 @@
 #{extends 'CRUD/layout.html' /}
 
-<div id="crudList" class="${type.name}">
+<div id="crudList">
 	
-	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2><div id="crudListTable">
+	<h2 id="crudListTitle">&{'crud.list.title', root.name}</h2><div id="crudListTable">
 			<table>
 				<thead>
 					<tr>
@@ -36,7 +36,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				 #{list objects, as:'city'} 
+				 #{list cities, as:'city'} 
 					    <tr class="${city_index % 2 ? 'even' : 'odd'}">
 							<td>
 								<a href="@{admin.Cities.show(city.id)}">
@@ -50,14 +50,8 @@
 								${city.active}
 							</td>
 							%{ 
-								zones = models.City.findCitiesByRoot(city.url);
-								deals = 0;
-								directDeals = 0;
-								for (models.City zone : zones){
-									deals += models.Deal.countActiveHotelsByCity(zone);
-									directDeals += models.Deal.countActiveDirectHotelsByCity(zone);
-								}
-								
+								deals = models.Deal.countActiveHotelsByCity(city);
+								directDeals = models.Deal.countActiveDirectHotelsByCity(city);
 							}%
 							<td #{if (city.active && deals == 0)}
 								    	 		style="color:red;" 
@@ -71,13 +65,7 @@
 							</td>
 							
 							<td>
-								<a href="
-									#{if city.isRootCity()}
-										@{admin.Cities.zones(city.id)}
-									#{/if}
-									#{else}
-										@{admin.Cities.editCityDeals(city.id)}
-									#{/else}">
+								<a href="@{admin.Cities.editCityDeals(city.id)}">
 				   					${city.updated?.format('dd MMMM yyyy - hh:mm')}
 				   				 </a>
 							</td>
@@ -89,18 +77,4 @@
 	
 	
 	
-
-	
-	<div id="crudListPagination">
-	</div>
-	
-	<p id="crudListAdd">
-		<a href="@{blank()}">&{'crud.add', type.modelName}</a>
-	</p>
-		<a href="@{admin.Countries.exportAll}">Export all Countries as CSV </a><br>
-		<a href="@{admin.InfoTexts.exportAll}">Export all InfoTexts as CSV </a><br>
-		
-	<p class="crudListExport"  id="exportAll">
-		<a href="@{admin.Cities.exportAll}">Export all Cities as CSV </a>
-	</p>
 </div>

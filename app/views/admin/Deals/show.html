@@ -59,6 +59,30 @@ $(document).ready(function() {
 		   	 			#{option}please select something...#{/option}
 					#{/select}
 			#{/crud.custom} 
+			
+			#{crud.custom 'roomType'} 
+				<label for="object_roomType">
+		        		Category
+		    		</label>
+					#{select 'object.roomType', value:object.roomType}
+		   	 		 	#{option 'lujo'}Luxury #{/option}
+		   	 		 	#{option 'elegante'}Elegant #{/option}
+		   	 		 	#{option 'confort'}Comfort  #{/option}
+					#{/select}
+			#{/crud.custom} 
+			
+			#{crud.custom 'hotelCategory'} 
+				<label for="object_hotelCategory">
+		        		Hotel Stars
+		    		</label>
+					#{select 'object.hotelCategory', value:object.hotelCategory}
+		   	 		 	#{option '1'}1 star  *#{/option}
+		   	 		 	#{option '2'}2 stars ** #{/option}
+		   	 		 	#{option '3'}3 stars ***  #{/option}
+		   	 		 	#{option '4'}4 stars **** #{/option}
+		   	 		 	#{option '5'}5 stars ***** #{/option}
+					#{/select}
+			#{/crud.custom} 
 		#{/crud.form} 
 		<p class="crudButtons">
 			<input type="submit" name="_save" value="&{'crud.save', type.modelName}" />

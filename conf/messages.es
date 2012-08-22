@@ -110,6 +110,13 @@ mails.friend.newcredits = Tienes nuevos créditos gratis disponibles
 mails.friend.firstbooking.hi = Hola <strong>%s</strong>, tu amigo <strong>%s</strong> acaba de hacer su primera reserva en RLB.
 mails.friend.firstBooking.more = Como tú lo invitaste a RLB, te regalamos %s€ para tu próxima reserva. Invita a más amigos para conseguir más créditos:
 
+mail.booking.survey.title = ¿Cómo fue tu estancia?
+mails.booking.survey.hi = Hola %s
+mails.survey.thanks = Gracias por reservar con RLB! Nos morimos de ganas de saber qué tal fue tu estancia. Si puedes responder a unas rápidas preguntas estaríamos muy agradecidos. Tanto, que te regalamos ¡otros 5€ para tu próxima reserva!
+mails.survey.clic = Haz clic en el link de abajo para empezar la encuesta -- no te llevará más de dos minutos.
+mails.survey.link = http://goo.gl/fuonz
+mails.survey.cheers = Hasta pronto!
+
 extranet.list.title =  Tus Hoteles
 extranet.title = ReallyLateBooking Extranet 
 
@@ -487,8 +494,8 @@ web.cities.florencia= Florencia
 web.cities.lisboa= Lisboa
 web.cities.londres= Londres
 web.cities.madrid= Madrid
-web.cities.milan= Milán 
-web.cities.paris= París
+web.cities.milan= Milan 
+web.cities.paris= Paris
 web.cities.praga= Praga
 web.cities.roma= Roma
 web.cities.valencia= Valencia
@@ -500,11 +507,25 @@ web.cities.granada= Granada
 web.cities.malaga = Málaga
 web.cities.mallorca= Mallorca
 web.cities.salamanca = Salamanca
-web.cities.compostela = Santiago
+web.cities.compostela = Santiago de Compostela
 web.cities.sevilla= Sevilla
 web.cities.vigo= Vigo
 web.cities.valladolid= Valladolid
 web.cities.zaragoza= Zaragoza
+web.cities.alicante=Alicante
+web.cities.avila=Ávila
+web.cities.cadiz=Cadiz
+web.cities.cordoba=Cordoba
+web.cities.costabrava=Costa Brava
+web.cities.cuenca=Cuenca
+web.cities.gijon=Gijón
+web.cities.girona=Girona
+web.cities.marbella=Marbella
+web.cities.donostia=San Sebastián
+web.cities.santander=Santander
+web.cities.segovia=Segovia
+web.cities.tenerife=Tenerife
+web.cities.toledo=Toledo
 
 web.register.correct = Ya eres un latebooker, enhorabuena.
 web.register.incorrect = No hemos podido crear tu usuario. Ya existe una cuenta con este email.
@@ -568,3 +589,7 @@ email.welcome.sharefacebook.img = http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2
 email.welcome.sharetwitter.img = http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/share_twitter_sp.gif
 
 warning.update.iphone = Para utilizar RLB debes actualizar la versión de tu iPhone. En tu iPhone ve a Ajustes > General > Actualización de software
+web.contact.captcha = ¿Eres humano? escribe este texto
+
+fb_lang=es_ES
+download.button.iphone=http://d2f5bmx5jz1oq8.cloudfront.net/web/App_Store_ES_171.png

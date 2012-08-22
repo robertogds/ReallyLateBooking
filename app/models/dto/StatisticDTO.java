@@ -1,5 +1,7 @@
 package models.dto;
 
+import helper.mailchimp.MailChimpHelper;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -52,6 +54,15 @@ public class StatisticDTO {
 	    Collection<Booking> bookings = includePending ?  Booking.findAllBookingsByDate(start, end) : Booking.findAllNonPendingBookingsByDate(start, end);
 	    this.allCities =  new CityData(bookings, start, end);
 	    
+		/*
+		 * MAILCHIMP STATS
+		 * 
+		List<Booking> emailBookings = findBookingsFromSuscribers(bookings);
+		this.allCities.bookingsEmail = emailBookings.size();
+		for (Booking booking : emailBookings){
+			this.allCities.totalCommissionEmail += booking.totalSalePrice - booking.netTotalSalePrice;
+		}
+	    */
 		for (City city : cities){
 			Collection<Booking> bookingsCity= new ArrayList<Booking>();
 			Logger.debug("Adding bookings from city: %s", city.name);
@@ -67,6 +78,59 @@ public class StatisticDTO {
 			}
 			stats.put(city.url, new CityData(bookingsCity, start, end));
 		}
+	}
+	
+
+	private List<Booking> findBookingsFromSuscribers(Collection<Booking> webBookings) {
+		List<String> emailBookings = new ArrayList<String>();
+		for (Booking booking : webBookings){
+			String email = booking.userEmail != null ? booking.userEmail : booking.bookingForEmail;
+			if (email!= null){
+				emailBookings.add(email.toLowerCase().trim());
+			}
+		}
+		List<String> bookers = MailChimpHelper.findBookingsFromSuscribers(emailBookings);
+		List<Booking> bookingsFromEmail = new ArrayList<Booking>();
+		List<String> bookersFound = new ArrayList<String>();
+		for (String email : bookers){
+			if (repeatedEmail(email, bookersFound)){
+				Logger.debug("##Email booking already registered %s", email);
+			}
+			else{
+				bookersFound.add(email);
+				for (Booking booking : webBookings){
+					String bookingEmail = booking.userEmail != null ? booking.userEmail : booking.bookingForEmail;
+					Logger.debug("##Booking email is %s and suscriber email is %s", bookingEmail, email);
+					if (email.trim().equalsIgnoreCase(bookingEmail.trim().toLowerCase())){
+						bookingsFromEmail.add(booking);
+					}
+				}	
+			}
+		}
+		
+		
+		return bookingsFromEmail;
+	}
+
+	private boolean repeatedEmail(String email, List<String> bookersFound) {
+		for (String booking: bookersFound){
+			if (booking.trim().toLowerCase().equalsIgnoreCase(email.trim())){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	//TODO delete this
+	private void createFakeBookings() {
+		Booking booking = Booking.findById(new Long(47));
+		int i = 0;
+		while (i < 60){
+			Booking newBooking  = booking;
+			newBooking.id = null;
+			newBooking.insert();
+		}		
 	}
 	
 }

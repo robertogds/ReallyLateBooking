@@ -137,17 +137,21 @@ public class Users extends controllers.CRUD  {
 	        redirect(request.controller + ".show", SienaModelUtils.keyValue(object));
 	}
 	
-	public static void exportClientsCSV(){
+	public static void exportClientsCSV(int page){
 		ObjectType type = ObjectType.get(getControllerClass());
         notFoundIfNull(type);
-		List<User> objects = User.all().filter("isOwner", Boolean.FALSE).fetch();
+        int limit = 10000;
+        int offset = limit * page;
+		List<User> objects = User.all().filter("isOwner", Boolean.FALSE).offset(offset).fetch(limit);
 		render("admin/export.csv", objects, type);
 	}
 	
-	public static void exportAll() {
+	public static void exportAll(int page) {
 		ObjectType type = ObjectType.get(getControllerClass());
         notFoundIfNull(type);
-        List<User> objects = User.all().fetch();
+        int limit = 10000;
+        int offset = limit * page;
+        List<User> objects = User.all().offset(offset).fetch(limit);
         render("admin/export.csv", objects, type);
     }
 	
@@ -241,7 +245,7 @@ public class Users extends controllers.CRUD  {
 	private static void updateAndNotifyUserBooking(Booking booking) {
 		//We mark all the coupons needed as used
 		booking.user =  User.findById(booking.user.id);
-		booking.user.markMyCouponsAsUsed(booking.credits);
+		booking.user.markMyCouponsAsUsed(booking.credits, booking.finalPrice);
 		//inform user by mail 
 		booking.code = booking.isHotusa ? Booking.RESTEL + "-"+booking.code : booking.code;
 		//Send email to user and hotel

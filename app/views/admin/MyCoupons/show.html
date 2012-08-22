@@ -32,6 +32,15 @@
 
 	</div>
 	
+	#{form @assignToUser()}
+		<p>
+			<input type="text" name="email" value="${email}" />
+			<input type="hidden" name="myCoupon.id" value="${object.id}" />
+			
+			<input type="submit" value="Reassign MyCoupon" />
+		</p>
+	#{/form}
+	
 	#{form @delete(keyVal)}
 		<p class="crudDelete">
 			<input type="submit" value="&{'crud.delete', type.modelName}" />

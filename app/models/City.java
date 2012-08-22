@@ -1,11 +1,13 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import play.Logger;
 import play.data.validation.Required;
 import siena.DateTime;
 import siena.Generator;
@@ -110,6 +112,41 @@ public class City extends Model {
 		return all().filter("root", root).filter("active", Boolean.TRUE).order("position").fetch();
 	}
 	
+	public static List<City> findCitiesByRoot(String root){
+		return all().filter("root", root).order("position").fetch();
+	}
+	
+	
+	/**
+	 * Cities, not zones
+	 * @param order 
+	 * @param orderBy 
+	 * @return
+	 */
+	public static List<City> findAllMainCities(String orderBy, String order) {
+		List<City> cities = new ArrayList<City>();
+		if (StringUtils.isBlank(orderBy)){
+			cities = findAllCities();
+		}
+		else{
+			cities = all().order(getOrderString(orderBy, order)).fetch();
+		}
+		List<City> mainCities = new ArrayList<City>();
+		for (City city: cities){
+			if (city.isRootCity()){
+				Logger.debug("City %s is main",city.name);
+				mainCities.add(city);
+			}
+			else{
+				Logger.debug("City %s is NOT main", city.name);
+			}
+		}
+		return mainCities;
+	}
+	
+	private static String getOrderString(String orderBy, String order){
+		return order.equals("DESC") ? "-" + orderBy : orderBy;
+	}
 	
 	public static void addTestCity(Collection<City> cities) {
 		City city = findByUrl("test");
@@ -131,7 +168,7 @@ public class City extends Model {
 	 * @return
 	 */
 	public boolean isSimpleCity(){
-		return this.root != null && root.equalsIgnoreCase(this.url);
+		return this.root != null && this.root.equalsIgnoreCase(this.url);
 	}
 	
 }

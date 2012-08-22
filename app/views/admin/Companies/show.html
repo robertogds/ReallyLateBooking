@@ -12,15 +12,17 @@
 	#{form action:@save(keyVal), enctype:'multipart/form-data'}
 	   #{crud.form} 
 				
-			#{crud.custom 'user'} 
-				%{ 
-					client = models.User.findById(object.user.id);
-				}%
-		   	 	<label for="object_user">
-		        	User (can't change it from here): 
-		    	</label>
-		    	<input type="text" name="" value="${client?.email}" disabled>
-		   	 		<br>
+			#{crud.custom 'lang'} 
+				<label for="object_city">
+		        		Language
+		    		</label>
+					#{select 'object.lang', value:object.lang }
+		   	 		 	#{option 'es'}Spanish #{/option}
+		   	 		 	#{option 'en'}English #{/option}
+		   	 		 	#{option 'fr'}French  #{/option}
+		   	 		 	#{option 'it'}Italian  #{/option}
+		   	 		 	#{option 'de'}German  #{/option}
+					#{/select}
 			#{/crud.custom} 
 			
 		#{/crud.form} 
@@ -31,14 +33,6 @@
 	#{/form}
 
 	</div>
-	#{form @assignToUser()}
-		<p>
-			<input type="text" name="email" value="${email}" />
-			<input type="hidden" name="booking.id" value="${object.id}" />
-			
-			<input type="submit" value="Reassign booking" />
-		</p>
-	#{/form}
 	
 	#{form @delete(keyVal)}
 		<p class="crudDelete">

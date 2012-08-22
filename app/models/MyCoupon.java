@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import controllers.admin.MyCoupons;
 
 import play.Logger;
+import play.Play;
 
 import models.exceptions.InvalidCouponException;
 import siena.DateTime;
@@ -164,17 +165,19 @@ public class MyCoupon extends Model{
 	 * @return the number of credits remaining
 	 * @throws InvalidCouponException
 	 */
-	public Integer use() throws InvalidCouponException{
+	public Integer use(Integer finalPrice) throws InvalidCouponException{
 		validateExpiration();
 		validateUsed();
-		return this.useValidUnused();
+		return this.useValidUnused(finalPrice);
 	}
 	
-	public Integer useValidUnused(){
+	public Integer useValidUnused(Integer finalPrice){
 		this.used = true;
 		this.usedDate = Calendar.getInstance().getTime();
 		this.update();
-		this.activateCouponToReferal();
+		if (this.isReferer && finalPrice > new Integer(Play.configuration.getProperty("coupons.referal.price.min"))) {
+			this.activateCouponToReferal();
+		}
 		return this.credits;
 	}
 	

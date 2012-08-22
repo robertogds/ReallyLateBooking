@@ -61,12 +61,12 @@ public class BasicTest extends UnitTest {
 	    new Deal("Hotel Catalunya", barcelona, Boolean.TRUE).insert();
 	    
 	    // Retrieve all the hotel with city madrid
-	    int count = Deal.findActiveDealsByCity(madrid, false).size();
+	    int count = Deal.findActiveDealsByCity(madrid, false, false).size();
 	    // Test 
 	    assertEquals(2, count);
 	    
 	    // Retrieve all the hotel with city Barcelona
-	    int countBcn = Deal.findActiveDealsByCity(barcelona, false).size();
+	    int countBcn = Deal.findActiveDealsByCity(barcelona, false, false).size();
 	    // Test 
 	    assertEquals(1, countBcn);
 	}

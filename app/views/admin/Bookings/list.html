@@ -45,8 +45,31 @@
 		<a href="@{blank()}">&{'crud.add', type.modelName}</a>
 	</p>
 	
-	<p class="crudListExport"  id="exportAll">
-		<a href="@{admin.Bookings.exportAll}">Export all Bookings as CSV </a>
+	<p class="crudListExport"  >
+		Export Bookings as CSV
+		%{
+			total = models.Booking.all().count() 
+			pages = total / 1000;
+			for (int i=0; i< pages;  i++){
+		}%
+			<a href="@{admin.Bookings.exportAll(i)}"> Part ${i}</a>
+		%{
+			}
+		}%	
+		
+	</p>
+	<p class="crudListExport"  >
+		Export Paid Bookings as CSV
+		%{
+			total = models.Booking.all().filter("canceled", false).filter("pending", false).count() 
+			pages = total / 1000;
+			for (int i=0; i< pages;  i++){
+		}%
+			<a href="@{admin.Bookings.exportCompleted(i)}"> Part ${i}</a>
+		%{
+			}
+		}%	
+		
 	</p>
 
 </div>

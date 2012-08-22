@@ -130,6 +130,7 @@ public class Booking extends Model {
     	this.deal.isFake = this.deal.isFake != null ? this.deal.isFake : Boolean.FALSE;
     	this.city = City.findById(this.deal.city.id);
     	this.user = User.findById(this.user.id);
+    	this.company = this.deal.company;
     	this.hotelName = this.deal.hotelName;
     	this.priceDay2 = this.deal.priceDay2;
     	this.priceDay3 = this.deal.priceDay3;
@@ -320,6 +321,12 @@ public class Booking extends Model {
 		return bookings;
 	}
 	
+	public static int countBookingsByUser(User user, Date start, Date end) {
+		int bookings = Booking.all().filter("user", user).filter("canceled", Boolean.FALSE)
+    		.filter("checkinDate>", start).filter("checkinDate<", end).count();
+		return bookings;
+	}
+	
 	public static Collection<Booking> findAllBookingsByDate(Date start, Date end) {
 		return Booking.all().filter("canceled", Boolean.FALSE)
 			.filter("checkinDate>", start).filter("checkinDate<", end).fetch();
@@ -333,6 +340,18 @@ public class Booking extends Model {
 	public static Collection<Booking> findAllBookingsByDateAndCity(City city, Date start, Date end) {
 		return Booking.all().filter("city", city).filter("canceled", Boolean.FALSE)
 			.filter("checkinDate>", start).filter("checkinDate<", end).fetch();
+	}
+	
+	public static Integer countAllBookingsByDateAndDeal(Deal deal, Date start, Date end) {
+		return Booking.all().filter("deal", deal).filter("canceled", Boolean.FALSE).filter("pending", Boolean.FALSE)
+			.filter("checkinDate>", start).filter("checkinDate<", end).count();
+	}
+	
+	public static Integer findLastMonthBookingsByDeal(Deal deal) {
+		Calendar now = Calendar.getInstance();
+		Calendar before = Calendar.getInstance();
+		before.add(Calendar.DAY_OF_YEAR, -30);
+		return countAllBookingsByDateAndDeal(deal,  before.getTime(), now.getTime());
 	}
 	
 	public static Collection<Booking> findAllNonPendindBookingsByDateAndCity(City city, Date start, Date end) {

@@ -16,6 +16,19 @@
     <schedule>every day 06:05</schedule>
     <timezone>Europe/Madrid</timezone>
   </cron>
+  
+  <cron>
+    <url>/cron/sendSurveyEmails</url>
+    <description>Send survey eamils to the previous day bookers</description>
+    <schedule>every day 12:00</schedule>
+    <timezone>Europe/Madrid</timezone>
+  </cron>
+  <cron>
+    <url>/cron/sendRememberPriceEmails</url>
+    <description>Send remember email to hotel owners</description>
+    <schedule>every day 09:00</schedule>
+    <timezone>Europe/Madrid</timezone>
+  </cron>
 
 </cronentries>
 

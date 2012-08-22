@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import models.Booking;
+import models.Setting;
+
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
@@ -36,6 +39,7 @@ public final class MailChimpHelper {
 	private static final String BASE_URL = "http://us2.api.mailchimp.com/1.3/?method=";
 	private static final String PING = "ping";
 	private static final String LISTS = "lists";
+	private static final String LISTMEMBERINFO = "listMemberInfo";
 	private static final String TEMPLATES = "templates";
 	private static final String CAMPAIGNS = "campaigns";
 	private static final String DELETE_CAMPAIGN = "campaignDelete";
@@ -156,6 +160,71 @@ public final class MailChimpHelper {
 	}
 	
 	
+	
+	public static List<String> findBookingsFromSuscribers(List<String> webBookingsEmail) {
+		List<List<String>> emailLists = splitEmailList(webBookingsEmail);
+		List<String> suscribers =  new ArrayList<String>();
+		String listId = Setting.findByKey(Setting.MC_LIST_ID).value;
+		for (List<String> emailList: emailLists){
+			suscribers.addAll(findSuscriberEmails(emailList, listId));
+		}
+		
+		return suscribers;
+	}
+	
+	
+	/**
+	 * Returns the emails found on the given list. The result is a Collection of 
+	 * Emails
+	 * 
+	 * @return {@code Collection<String>}
+	 */
+	public static Collection<String> findSuscriberEmails(List<String> webBookingsEmail, String listId) {
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("apikey", APIKEY);
+		paramsMap.put("id", listId);
+		paramsMap.put("email_address", webBookingsEmail);
+		String params = new Gson().toJson(paramsMap);
+		String lists = prepareRequest(LISTMEMBERINFO, params);
+		List<String> suscribers =  new ArrayList<String>();
+		if (lists != null){
+			JsonObject listsJson = new JsonParser().parse(lists).getAsJsonObject();
+			JsonArray arrayLists = listsJson.get("data").getAsJsonArray();
+			for (JsonElement user: arrayLists){
+				String email = user!= null && user.getAsJsonObject().get("email") != null ? 
+						user.getAsJsonObject().get("email").getAsString() : null;
+				if (email != null){
+					suscribers.add(email);
+				}
+			}
+			return suscribers;
+		}
+		return null;
+	}
+
+	
+	
+	private static List<List<String>> splitEmailList(
+			List<String> webBookingsEmail) {
+		List<List<String>> emailLists = new ArrayList<List<String>>();
+		Logger.debug("## Bookings array size before split %s", webBookingsEmail.size());
+		while(webBookingsEmail.size() >= 50){
+			List<String> emails = webBookingsEmail.subList(0, 49);
+			List<String> subList = new ArrayList<String>(emails);
+			emails.clear();
+			Logger.debug("## Sublist Bookings array size  %s", subList.size());
+			Logger.debug("## Bookings array size after split %s", webBookingsEmail.size());
+			emailLists.add(subList);
+		}
+		if (webBookingsEmail.size() > 0){
+			emailLists.add(webBookingsEmail);
+		}
+		Logger.debug("## List of lists size  %s", emailLists.size());
+		
+		return emailLists;
+	}
+
+
 	private static String prepareRequest(String method, String params) {
 		return UrlConnectionHelper.prepareRequest(createUrl(method), params, UrlConnectionHelper.CONTENT_JSON);
 	}

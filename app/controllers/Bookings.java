@@ -211,9 +211,14 @@ public class Bookings extends Controller{
 	
 
 	private static void updateAndNotifyUserBooking(Booking booking) {
+		//set user first booking if needed
+		User user = User.findById(booking.user.id);
+		user.firstBookingDate = user.firstBookingDate == null ? booking.checkinDate : user.firstBookingDate;
+		user.pendingSurvey = true;
+		user.update();
 		//We mark all the coupons needed as used
 		booking.user =  User.findById(booking.user.id);
-		booking.user.markMyCouponsAsUsed(booking.credits);
+		booking.user.markMyCouponsAsUsed(booking.credits, booking.finalPrice);
 		//inform user by mail 
 		booking.code = booking.isHotusa ? Booking.RESTEL + "-"+booking.code : booking.code;
 		//Send email to user and hotel

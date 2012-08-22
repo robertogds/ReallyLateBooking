@@ -42,7 +42,7 @@ public class Users extends Controller {
 		Security.checkConnected();
     }
 	
-	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","loginJson","dashboard","updateAccount","register","loginUser","rememberPasswordEmail"})
+	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","loginJson","dashboard","updateAccount","register","loginUser","rememberPasswordEmail","sendSurveyEmails"})
 	public static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -135,7 +135,7 @@ public class Users extends Controller {
 	    	params.flash(); // add http parameters to the flash scope
 	        validation.keep(); // keep the errors for the next request
 	    }
-		redirect(returnUrl);
+		redirect(returnUrl!= null ? returnUrl : "/");
 	}
 	
 	public static void resetPasswordForm(String code){
@@ -271,5 +271,19 @@ public class Users extends Controller {
 				renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("user.remember.incorrect")));
 			}
 		}
+	}
+	
+	public static void sendSurveyEmails(){
+		List<User> users = User.findSurveyPending();
+		for (User user : users){
+			Mails.bookingSurvey(user);
+			user.pendingSurvey = false;
+			user.update();
+		}
+	}
+	
+	
+	public static void sendRememberPriceEmails(){
+		
 	}
 }

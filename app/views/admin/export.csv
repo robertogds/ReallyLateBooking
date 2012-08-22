@@ -3,7 +3,7 @@
     allFields = currentType.rawFields;
 }%
 
-${ allFields?.join(',') }
+${ allFields?.join('|') }
 			
 %{ objects.eachWithIndex() { object, k -> 
 	values = []
@@ -11,5 +11,5 @@ ${ allFields?.join(',') }
 		values.add(object[field])
 	} 
 }%
-${ values?.join(',') }
+${ values?.join('|') }
 %{ } }%

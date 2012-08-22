@@ -81,6 +81,10 @@ public class Coupons extends Controller {
 		}
 	}
 	
+	public static void couponsExpiringWarning(){
+		//List<MyCoupon> counpons = MyCoupon.
+	}
+	
 	/*** Json API methods ****/
 	public static void listByUser(Long userId){
 		User user = User.findById(userId);

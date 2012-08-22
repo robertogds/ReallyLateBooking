@@ -1,0 +1,20 @@
+&{'mails.booking.survey.hi', user.firstName}
+
+
+	&{'mails.survey.thanks'}
+	 
+	 
+
+	&{'mails.survey.clic'}
+	
+	
+
+	&{'mails.survey.link'}
+	
+	
+
+	&{'mails.survey.cheers'}
+	
+
+			
+&{'mails.rlb.footer'}

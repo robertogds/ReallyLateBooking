@@ -265,16 +265,16 @@ public class CreateCampaignRequest {
 	
 	
 	private String getImageHtml(String hotelName, String link){
-		return "<a href='"+link+"?email=edreams' target='_blank'><img src='"+ hotelName +"'  style='height:auto; max-width:240px;' class='productImage'/></a>";
+		return "<a href='"+link+"?email=edreams&utm_source=edreams&utm_medium=mailsrlb' target='_blank'><img src='"+ hotelName +"'  style='height:auto; max-width:240px;' class='productImage'/></a>";
 	}
 	private String getHotelHtml(String hotelName, String link){
-		return "<a href='"+link+"?email=edreams' target='_blank'><h2>"+ hotelName +"</h2></a>";
+		return "<a href='"+link+"?email=edreams&utm_source=edreams&utm_medium=mailsrlb' target='_blank'><h2>"+ hotelName +"</h2></a>";
 	}
 	private String getButtonHtml(String link){
-		return "<a href='"+link+"?email=edreams' target='_blank'><em>"+ Messages.get("mails.seedeal.link") +"</em></a>";
+		return "<a href='"+link+"?email=edreams&utm_source=edreams&utm_medium=mailsrlb' target='_blank'><em>"+ Messages.get("mails.seedeal.link") +"</em></a>";
 	}
 	private String getSeeMoreLinkHtml(String link){
-		return "<a style='color:#EB4102;' href='"+link+"?email=edreams' alt='see more'>"+ Messages.get("mails.seemore.link")+"</a>";
+		return "<a style='color:#EB4102;' href='"+link+"?email=edreams&utm_source=edreams&utm_medium=mailsrlb' alt='see more'>"+ Messages.get("mails.seemore.link")+"</a>";
 	}
 	
 	

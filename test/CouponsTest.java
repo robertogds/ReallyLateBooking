@@ -58,7 +58,7 @@ public class CouponsTest  extends UnitTest {
 	    try {
 	    	//Bob use its own coupon
 		    MyCoupon myCoupon = coupon.createMyCoupon(bob); 
-		    myCoupon.use();
+		    myCoupon.use(40);
 		} catch (InvalidCouponException e) {
 			error = e;
 			Logger.debug("Error: %s", e.getMessage());
@@ -82,7 +82,7 @@ public class CouponsTest  extends UnitTest {
 		    MyCoupon myCoupon = coupon.createMyCoupon(bob); 
 		    bob.get(); //refresh bob
 		    assertEquals(10, bob.calculateTotalCreditsFromMyCoupons());
-		    myCoupon.use();
+		    myCoupon.use(40);
 		    assertEquals(0, bob.calculateTotalCreditsFromMyCoupons());
 		} catch (InvalidCouponException e) {
 			Logger.debug("Error: %s", e.getMessage());
@@ -102,7 +102,7 @@ public class CouponsTest  extends UnitTest {
 	    Coupon couponBob = Coupon.findByKey(bob.refererId);
 	    MyCoupon myCouponPepe = couponBob.createMyCoupon(pepe);
 	    assertEquals(20, couponBob.credits);
-	    int creditsUsed =  myCouponPepe.use();
+	    int creditsUsed =  myCouponPepe.use(40);
 	    assertEquals(20,creditsUsed);
 	    assertEquals(20, bob.calculateTotalCreditsFromMyCoupons());
 	    assertEquals(couponBob.key, pepe.referer);

@@ -2,6 +2,9 @@ package notifiers;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,7 @@ import com.google.apphosting.api.ApiProxy.ApiDeadlineExceededException;
 
 import models.Booking;
 import models.City;
+import models.Company;
 import models.Deal;
 import models.MyCoupon;
 import models.User;
@@ -81,6 +85,23 @@ public class Mails extends MailServiceFactory {
 	   	  send(message, template, params);
    }
    
+   public static void bookingSurvey(User user) {
+	   String lang = Lang.get(); 
+	   
+	   //We want survey email to be rendered in correct lang
+	   Lang.set(StringUtils.isNotBlank(user.locale) ? user.locale : "es");
+	   
+	      Message message = new Message();
+	   	  message.setSubject(Messages.get("mail.booking.survey.title"));
+	   	  message.setSender(HOLA_MAIL);
+	   	  message.setBcc(SOPORTE_MAIL);
+	   	  message.setTo(user.email);
+	   	  String template = "Mails/bookingSurvey";
+	   	  Map<String, Object> params = new HashMap<String, Object>();
+	   	  params.put("user", user);
+	   	  send(message, template, params);
+	  Lang.set(lang);
+}
    
    public static void userBookingConfirmation(Booking booking) {
    	  Message message = new Message();
@@ -103,24 +124,31 @@ public class Mails extends MailServiceFactory {
    
    public static void hotelBookingConfirmation(Booking booking) {
 	   String lang = Lang.get(); 
-   	  //We want hotels email to be rendered in Spanish
-   	  Lang.set("es");
-   	  
-   	  Message message = new Message();
-   	  message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.hotelName);
-   	  message.setSender(HOLA_MAIL);
-   	  message.setTo(booking.hotelEmail);
-   	  message.setBcc(RESERVAS_MAIL); //easy way to know when a new booking is made
-   	  String template = "Mails/hotelBookingConfirmation";
-   	  Map<String, Object> params = new HashMap<String, Object>();
-   	  params.put("booking", booking);
-   	  send(message, template, params);
-	   	 
+	   Company company = Company.findById(booking.company.id);
+	   //We want hotels email to be rendered in correct lang
+	   Lang.set(company.lang != null ? company.lang : "en");
+
+	   Message message = new Message();
+	   message.setSubject(Messages.get("mail.bookinghotel.subject") + " "  + booking.hotelName);
+	   message.setSender(HOLA_MAIL);
+	   message.setTo(getCollectionEmails(booking.hotelEmail));
+	   message.setBcc(RESERVAS_MAIL); //easy way to know when a new booking is made
+	   String template = "Mails/hotelBookingConfirmation";
+	   Map<String, Object> params = new HashMap<String, Object>();
+	   params.put("booking", booking);
+	   send(message, template, params);
+
 	   //set language to client original language
 	   Lang.set(lang);
    }
    
    
+	private static Collection<String> getCollectionEmails(String hotelEmail) {
+	Collection<String> emails = Arrays.asList(hotelEmail.split(";"));
+	return emails;
+}
+
+
 	public static void friendRegistered(User referer, User friend, MyCoupon refererCoupon) {
 		Message message = new Message();
 		message.setSubject(Messages.get("mail.friend.registered", friend.firstName));

@@ -86,7 +86,6 @@ mails.booking.client.bookPaid = RLB will charge your credit card. You should not
 mails.booking.error.subject = #IMPORTANT# Problem with your booking at %s
 mails.booking.error.hotel = An error has occurred but your booking at %s may be correctly confirmed. Please, reply to this email and send us your phone number and we'll call you.
 
-
 mails.welcome.welcome = welcome to ReallyLateBooking
 mails.welcome.p1 = Book same-day hotel rooms from your mobile phone and get really big discounts.
 mails.welcome.p2 = Why only 3 hotels per city? So we can choose only the best quality hotels and negotiate with them to get you the best deal possible.
@@ -106,6 +105,13 @@ mail.friend.firstbooking = Your friend %s has just booked a room
 mails.friend.newcredits = You have new credits available
 mails.friend.firstbooking.hi = Hi <strong>%s</strong>, your friend <strong>%s</strong> has just booked a room at RLB
 mails.friend.firstBooking.more = So, here you have a gift: %s€ for your next booking. Invite more friends and get more free credits:
+
+mail.booking.survey.title = How was your stay?
+mails.booking.survey.hi = Hi %s,
+mails.survey.thanks = Thanks again for booking a room with RLB! We’re dying to hear what you have to say about your stay. If you could kindly answer these few quick questions, we’d be ever so grateful. So grateful, in fact, that we’ll drop 5€ in credits into your account to use toward your next booking!
+mails.survey.clic = Just click on the link below to begin the survey -- it should only take about two minutes.
+mails.survey.link = http://goo.gl/Rfhm3
+mails.survey.cheers = Cheers!
 
 extranet.list.title =  Your Hotels
 extranet.title = ReallyLateBooking Extranet 
@@ -455,8 +461,8 @@ mailchimp.template.preheader.city = eDreams offers the best hotel deals for toni
 mailchimp.template.preheader.see_correctly=Can't see the email correctly?
 mailchimp.template.preheader.see_browser=See it in the browser
 mailchimp.template.h1_header = Enter the private club ReallyLateBooking now. Exclusive offer for customers of eDreams.
-mailchimp.template.h1_header = <strong>Get 15€ free</strong> for eDreams customers. Register now and write the code <strong>EDREAMSRLB</strong>
-mailchimp.template.header =Hotel in <strong >%s</strong>, tonight up to 70&#37; off.
+mailchimp.template.h1_header = eDreams customers get <strong>extra €15 off</strong> their booking. Just enter the promotional code <strong>EDREAMSRLB</strong>  in the Credits tab of your app
+mailchimp.template.header = Book your hotel in <strong >%s</strong> tonight and save up to 70&#37;.
 mailchimp.template.now = Tonight
 mailchimp.template.testimonials=Testimonials of Latebookers:
 mailchimp.template.testimonials.testimonial_title_1 = I've discovered a new way to travel
@@ -475,7 +481,7 @@ mailchimp.campaign.settings.title= Settings
 
 web.index.cities.h2 = Find great deals on the best hotels in the main European cities:
 web.index.cities.spain.h3 = And in many others cities of Spain:
-web.cities.barcelona = Barcelona
+web.cities.barcelona = Barcelone
 web.cities.berlin = Berlin
 web.cities.bruselas = Brusels
 web.cities.budapest = Budapest
@@ -496,11 +502,25 @@ web.cities.granada= Granada
 web.cities.malaga = Malaga
 web.cities.mallorca= Mallorca
 web.cities.salamanca = Salamanca
-web.cities.compostela = Santiago
+web.cities.compostela = Santiago de Compostela
 web.cities.sevilla= Seville
 web.cities.vigo= Vigo
 web.cities.valladolid= Valladolid
 web.cities.zaragoza= Zaragoza
+web.cities.alicante=Alicante
+web.cities.avila=Avila
+web.cities.cadiz=Cadiz
+web.cities.cordoba=Cordoba
+web.cities.costabrava=Costa Brava
+web.cities.cuenca=Cuenca
+web.cities.gijon=Gijon
+web.cities.girona=Girona
+web.cities.marbella=Marbella
+web.cities.donostia=San Sebastian
+web.cities.santander=Santander
+web.cities.segovia=Segovia
+web.cities.tenerife=Tenerife
+web.cities.toledo=Toledo
 
 web.register.correct = Great, you're already a LateBooker!
 web.register.incorrect = Oops, we couldn't create your account. Theres already an account with this email
@@ -563,3 +583,6 @@ email.welcome.sharefacebook.img = http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2
 email.welcome.sharetwitter.img = http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/share_twitter_en.gif
 
 warning.update.iphone = For using RLB you should update your iPhone. Go to Settings > General > Software Update.
+web.contact.captcha = Are you human? write this text
+fb_lang=en_US
+download.button.iphone=http://d2f5bmx5jz1oq8.cloudfront.net/web/App_Store_171_EN.png

@@ -7,6 +7,8 @@ import models.City;
 import models.Company;
 import models.Deal;
 import models.User;
+import play.data.validation.Email;
+import play.data.validation.Required;
 import play.exceptions.TemplateNotFoundException;
 import play.modules.siena.SienaModelUtils;
 import play.mvc.With;
@@ -29,10 +31,29 @@ public class Bookings extends controllers.CRUD{
 		renderTemplate("admin/Bookings/bookings.csv",bookings);
 	}
 	
-	public static void exportAll() {
+	public static void exportAll(int page) {
+		int limit = 1000;
+        int offset = limit * page;
 		ObjectType type = ObjectType.get(getControllerClass());
         notFoundIfNull(type);
-        List<Booking> bookings = Booking.all().fetch();
+        List<Booking> bookings = Booking.all().offset(offset).fetch(limit);
+        prepareBookings(bookings);
+        List objects = bookings;
+        render("admin/export.csv", objects, type);
+    }
+	
+	public static void exportCompleted(int page) {
+		int limit = 1000;
+        int offset = limit * page;
+		ObjectType type = ObjectType.get(getControllerClass());
+        notFoundIfNull(type);
+        List<Booking> bookings = Booking.all().filter("canceled", false).filter("pending", false).order("checkinDate").offset(offset).fetch(limit);
+        prepareBookings(bookings);
+        List objects = bookings;
+        render("admin/export.csv", objects, type);
+    }
+	
+	private static void prepareBookings( List<Booking> bookings){
 		for (Booking booking: bookings){
 			booking.user = User.findById(booking.user.id);
 			if (booking.company != null){
@@ -45,10 +66,28 @@ public class Bookings extends controllers.CRUD{
 				booking.deal = Deal.findById(booking.deal.id);
 			}
 		}
-        List objects = bookings;
-
-        render("admin/export.csv", objects, type);
-    }
+	}
+	
+	
+	public static void assignToUser(@Required @Email String email, Booking booking){
+		if (!validation.hasErrors()){
+			booking = Booking.findById(booking.id);
+			User user = User.findByEmail(email.trim().toLowerCase());
+			if (user == null){
+				validation.addError("email", "User not found");
+			}
+			if (!validation.hasErrors()){
+				booking.user = user;
+				booking.update();
+				
+				flash.success("Booking reassigned to %s", user.email);
+				redirect("admin.Bookings.list");
+			}
+		}
+		params.flash(); // add http parameters to the flash scope
+        flash.error(validation.errors().toString());
+		redirect("admin.Bookings.show", booking.id);
+	}
 	
 }
 

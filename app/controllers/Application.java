@@ -26,6 +26,7 @@ import play.libs.Images;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
+import ugot.recaptcha.Recaptcha;
 
 import com.google.appengine.repackaged.org.json.JSONObject;
 import com.google.gson.Gson;
@@ -130,8 +131,7 @@ public class Application extends Controller {
     }
     
     public static void contactForm(@Required @Email String email, String name, @Required String message,
-    		String returnUrl,  String code, String randomID){
-    	//validation.equals(code, Cache.get(randomID));
+    		String returnUrl,  String code, @Recaptcha String captcha){
     	if(validation.hasErrors()) {
             params.flash();
             flash.error(Messages.get("web.contact.incorrect"));

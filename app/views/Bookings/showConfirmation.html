@@ -1,0 +1,128 @@
+#{extends 'layout.html' /}
+#{set title: booking.hotelName /}
+
+#{set 'moreScripts'}
+	<script type="text/javascript">
+	var _gaq = _gaq || [];
+	  _gaq.push(['_addTrans',
+	    '${booking.code}',           // order ID - required
+	    'Club RLB',  // affiliation or store name
+	    '${booking.totalSalePrice}'          // total - required
+
+	  ]);
+
+	   // add item might be called for every item in the shopping cart
+	   // where your ecommerce engine loops through each item in the cart and
+	   // prints out _addItem for each
+	  _gaq.push(['_addItem',
+	    '${booking.code}',           // order ID - required
+	    '${booking.code}',           // SKU/code - required
+	    '${booking.hotelName}',        // product name
+	    '${booking.totalSalePrice}',          // unit price - required
+	    '1'               // quantity - required
+	  ]);
+	  _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
+	</script>
+#{/set}
+
+       		<div class="row-fluid">
+	        	<div class="span12 title-black">
+		           <h1>&{'web.dashboard.mybookings.booking.h3', booking.hotelName}</h1>
+		        </div>
+	        </div>
+	        <div class="row-fluid">
+	        	<div class="span12 dashboard">
+				            <div class="row-fluid">
+			<table width="100%" style="color:#F1F1F2;" bgcolor="#0D1E28">
+				<tr>
+					<td colspan="2">
+						<p>&{'mails.booking.hotel.hi'} <strong>${booking.userFirstName}</strong>, &{'mails.booking.client.justbooked'} <strong>${booking.hotelName}</strong></p>
+						<p>&{'mails.booking.client.showreceipt'}</p>
+						<table width="200px" bgcolor="#0098CB">
+							<tr><td style="text-align:center;">
+								<span style="font-size:11px;">&{'mails.booking.code'}</span><br/>
+								<strong style="font-size:16px;">${booking.code}</strong>
+							</td></tr>
+						</table>
+						<br/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="top">
+						<strong style="font-size:14px;margin-bottom:5px; float:left; color:#0098CB;">&{'mails.booking.data'}:</strong>
+						<br/><br/>
+						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
+							<tr>
+								<td style="color:#858C92;">Hotel:</td>
+								<td><strong>${booking.hotelName}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.room'}:</td>
+								<td><strong>Doble</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.checkin'}</td>
+								<td><strong>${booking.checkinDate.format('dd MMMM yyyy') }</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.nights'}:</td>
+								<td><strong>${booking.nights}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.regime'}:</td>
+								#{if booking.breakfastIncluded}
+									<td><strong>&{'mails.booking.regime.breakfast.yes'}</strong></td>
+								#{/if}
+								#{else}
+									<td><strong>&{'mails.booking.regime.breakfast.no'}</strong></td>
+								
+								#{/else}
+								
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.price'}:</td>
+								<td><strong>${booking.totalSalePrice}&euro; &{'mails.booking.tax'}</strong></td>
+							</tr>
+						</table>
+						<br/><br/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="top">
+						<strong style="font-size:14px;margin-bottom:5px; float:left; color:#0098CB;">&{'mails.booking.client.bookPaid'}</strong>
+						<br/><br/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="top">
+						<strong style="font-size:14px; margin-bottom:5px; float:left;color:#0098CB;">&{'mails.booking.hotel.client.data'}:</strong>
+						<br/><br/>
+						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.name'}:</td>
+								<td><strong>${booking.userLastName}, ${booking.userFirstName}</strong></td>
+							</tr>
+							<tr>
+								<td style="color:#858C92;">&{'mails.booking.client.email'}:</td>
+								<td><strong>${booking.userEmail}</strong></td>
+							</tr>
+						</table>
+						<br/><br/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" valign="top">
+						<strong style="font-size:14px; margin-bottom:5px; float:left;color:#0098CB;">&{'mails.booking.hotel.client.map'}:</strong>
+						<br/>
+						<strong>${deal.address}</strong>
+						<br/>
+							<a href="http://maps.google.com/maps?q=${deal.latitude},${deal.longitude}+(${deal.hotelName})&iwloc=A">
+								<img src="http://maps.google.com/maps/api/staticmap?center=${deal.latitude},${deal.longitude}&amp;zoom=13&amp;size=500x300&amp;markers=color:blue|${deal.latitude},${deal.longitude}&amp;sensor=true">
+							</a>
+						<br/><br/>
+					</td>
+				</tr>
+			</table>
+				            </div>
+				</div> <!-- Booking-detail end -->
+	        </div>

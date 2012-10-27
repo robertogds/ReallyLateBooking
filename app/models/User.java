@@ -56,6 +56,7 @@ public class User extends Model{
 	@Required
     @Email
     public String email;
+	public String contactEmail;
 	public String validationCode;
 	public boolean validated;
 	public boolean vip;
@@ -98,6 +99,7 @@ public class User extends Model{
 	
 	@DateTime
 	public Date firstBookingDate;
+
     
     public User() {
     	super();

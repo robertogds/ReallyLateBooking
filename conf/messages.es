@@ -117,6 +117,13 @@ mails.survey.clic = Haz clic en el link de abajo para empezar la encuesta -- no 
 mails.survey.link = http://goo.gl/fuonz
 mails.survey.cheers = Hasta pronto!
 
+mail.owner.remember.subject = ¿Te quedan habitaciones libres para hoy? 
+mails.owner.remember.hi= Buenos días estimado socio,
+mails.owner.remember.h1= Si tienes habitaciones sin vender para esta noche, no lo dudes y actualiza la disponibilidad a través de nuestra extranet. Recuerda que <strong>solo las tres mejores ofertas</strong> en cada ciudad, serán publicadas.
+mails.owner.remember.p1= Para actualizar haz clic en este link: 
+mails.owner.remember.p2= <strong>RECUERDA</strong>: debes actualizar disponibilidad <strong>antes de las 12 pm</strong>. 
+
+
 extranet.list.title =  Tus Hoteles
 extranet.title = ReallyLateBooking Extranet 
 
@@ -294,7 +301,7 @@ web.deal.detail.around.h2=Los alrededores
 web.deal.detail.buy.btn=Reserva ya
 web.deal.detail.soldedout.btn=Agotado
 web.deal.detail.free=¿Lo quieres gratis?
-web.deal.detail.free.hint=Con cada invitación les regalas 20€ para su primera reserva y tú recibes otros 20€
+web.deal.detail.free.hint=Con cada invitación les regalas 10€ para su primera reserva y tú recibes otros 10€
 web.deal.detail.free.invite=Invita a tus amigos
 web.deal.detail.free.getcredits=y consigue créditos para reservar gratis
 web.deal.detail.location.h2=Situación
@@ -531,7 +538,7 @@ web.register.correct = Ya eres un latebooker, enhorabuena.
 web.register.incorrect = No hemos podido crear tu usuario. Ya existe una cuenta con este email.
 
 web.support.title = Atención al cliente
-web.support.hours = L-V de 10:00 a 20:00
+web.support.hours = L-V de 09:00 a 24:00
 
 web.index.remember.modal = He olvidado mi contraseña
 web.index.remember.h3 = He olvidado mi contraseña
@@ -556,27 +563,27 @@ coupon.create.internalerror = Error interno, no hemos podido validar tu cupón, 
 coupon.create.nofound = No tenemos ningún cupón con ese código, ¿lo has escrito bien?
 coupon.create.twice = Solo puedes usar cada cupón una vez, invita a más amigos para conseguir créditos.
 coupon.create.welcome.notnew = Este cupón de bienvenida es sólo para usuarios nuevos y que no han validado antes otro cupón.
-coupon.create.owncoupon = No puedes usar tu propio código. Dáselo a tus amigos y consigue 20€ cuando hagan una reserva.
+coupon.create.owncoupon = No puedes usar tu propio código. Dáselo a tus amigos y consigue 10€ cuando hagan una reserva.
 coupon.create.referer.twice = Este cupón no es acumulable con otro que ya has utilizado. Invita a más amigos para conseguir créditos.
 coupon.create.expired = El cupón ha caducado. Consigue más créditos invitando a tus amigos a RLB.
 web.dashboard.mycoupons.total = Tienes un total de  %s€ de descuento para tu próxima reserva
-web.dashboard.mycoupons.invite = Invita a tus amigos y recibirás 20€ extra por cada amigo que realice una reserva en RLB
+web.dashboard.mycoupons.invite = Invita a tus amigos y recibirás 10€ extra por cada amigo que realice una reserva en RLB
 web.dashboard.mycoupons.new=¿Tienes un código de cupón?
 web.dashboard.mycoupons.new.button= Validar código
 web.dashboard.mycoupons.nocredits =Upps, no tienes ningún crédito.
-web.dashboard.mycoupons.isnew =Te regalamos 10€ para tu primera reserva: <small>Escribe el código <strong>RLB</strong></small>
+web.dashboard.mycoupons.isnew =Te regalamos 5€ para tu primera reserva: <small>Escribe el código <strong>RLB</strong></small>
 web.dashboard.mycoupons.morecredits = ¿Quieres conseguir créditos para reservar habitaciones gratis? 
-web.dashboard.mycoupons.invite =Invita a tus amigos y recibirás 20€ por cada amigo que realice una reserva en RLB
+web.dashboard.mycoupons.invite =Invita a tus amigos y recibirás 10€ por cada amigo que realice una reserva en RLB
 web.dashboard.mycoupons.notused = Sin usar
 web.dashboard.mycoupons.used = Usado
-web.dashboard.mycoupons.invite.theyget = Le daremos 20€ a tus amigos que se registren y canjeen tu código personal.
-web.dashboard.mycoupons.invite.youget = Además te regalamos 20€ cuando realicen su primera reserva.
+web.dashboard.mycoupons.invite.theyget = Le daremos 10€ a tus amigos que se registren y canjeen tu código personal.
+web.dashboard.mycoupons.invite.youget = Además te regalamos 10€ cuando realicen su primera reserva.
 web.dashboard.mycoupons.invite.code = Comparte tu Código personal 
-web.invite.referer.code = ReallyLateBooking, te regalo 20€. Solo tienes que registrarte y validar el cupón: %s
+web.invite.referer.code = ReallyLateBooking, te regalo 10€. Solo tienes que registrarte y validar el cupón: %s
 web.dashboard.mycoupons.invite.facebook = Invitar por Facebook
 web.dashboard.mycoupons.invite.twitter = Invitar por Twitter
 web.dashboard.mycoupons.invite.email = Invitar por Email
-web.invite.referer.twitter = Te regalo 20€ para reservar tu hotel en RLB, usa el código %s
+web.invite.referer.twitter = Te regalo 10€ para reservar tu hotel en RLB, usa el código %s
 web.contact.captcha = ¿Eres humano? escribe este texto
 
 web.index.itunes.btn= Descarga para iPhone

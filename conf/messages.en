@@ -113,6 +113,12 @@ mails.survey.clic = Just click on the link below to begin the survey -- it shoul
 mails.survey.link = http://goo.gl/Rfhm3
 mails.survey.cheers = Cheers!
 
+mail.owner.remember.subject = Do you have any unsold rooms for tonight? 
+mails.owner.remember.hi= Hi,
+mails.owner.remember.h1= If you have unsold rooms for tonight, do not hesitate and update availability via our extranet. Remember that <strong>only the best three deals</strong> in each city will be published.
+mails.owner.remember.p1= To update availability click here: 
+mails.owner.remember.p2= <strong>REMEMBER</strong>: you must update availability <strong>before 12 pm</strong>. 
+
 extranet.list.title =  Your Hotels
 extranet.title = ReallyLateBooking Extranet 
 
@@ -289,7 +295,7 @@ web.deal.detail.around.h2=Nearby
 web.deal.detail.buy.btn=Book now
 web.deal.detail.soldedout.btn=Sold out
 web.deal.detail.free=Do you want it free?
-web.deal.detail.free.hint=With each invite your giving 20€ for their first booking and you get 20€
+web.deal.detail.free.hint=With each invite your giving 10€ for their first booking and you get 10€
 web.deal.detail.free.invite=Invite your friends
 web.deal.detail.free.getcredits=and get credits for booking free
 web.deal.detail.location.h2=Location
@@ -526,7 +532,7 @@ web.register.correct = Great, you're already a LateBooker!
 web.register.incorrect = Oops, we couldn't create your account. Theres already an account with this email
 
 web.support.title = Customer support
-web.support.hours = M-F from 10:00 to 20:00
+web.support.hours = M-F from 09:00 to 24:00
 
 web.index.remember.modal = I forgot my password
 web.index.remember.h3 = I forgot my password
@@ -551,27 +557,27 @@ coupon.create.internalerror = Internal error, we could not validate your coupon,
 coupon.create.nofound = There are no coupon with this code, have you written it right?
 coupon.create.twice = You can only use each coupon once, invite more friends to get credits.
 coupon.create.welcome.notnew = This coupon is only for new users who have not validated other coupon before.
-coupon.create.owncoupon = You can not use your own code. Give it to your friends and get 20€ when they book a room.
+coupon.create.owncoupon = You can not use your own code. Give it to your friends and get 10€ when they book a room.
 coupon.create.referer.twice = This coupon can not be combined with another that you've used. Invite more friends to get credits.
 coupon.create.expired = The coupon has expired. Get more credits by inviting your friends to RLB.
 web.dashboard.mycoupons.total = You have  %s€ off for your next booking
-web.dashboard.mycoupons.invite = Invite your friends and get 20€ for each one of them once they make their first booking
+web.dashboard.mycoupons.invite = Invite your friends and get 10€ for each one of them once they make their first booking
 web.dashboard.mycoupons.new=Do you have a coupon code?
 web.dashboard.mycoupons.new.button= Validate coupon
 web.dashboard.mycoupons.nocredits =Upps, you have no credits
-web.dashboard.mycoupons.isnew =Here you have 10€ for your first booking: <small>Introduce the code <strong>RLB</strong></small>
+web.dashboard.mycoupons.isnew =Here you have 5€ for your first booking: <small>Introduce the code <strong>RLB</strong></small>
 web.dashboard.mycoupons.morecredits = Do you want more free credits?
-web.dashboard.mycoupons.invite = Give your personal code to your friends and get 20€ when they book a room.
+web.dashboard.mycoupons.invite = Give your personal code to your friends and get 10€ when they book a room.
 web.dashboard.mycoupons.notused = OK
 web.dashboard.mycoupons.used = Used
-web.dashboard.mycoupons.invite.theyget = You friends get 20€ when registering and using your personal code.
-web.dashboard.mycoupons.invite.youget = You get 20€ when they book a room the first time.
+web.dashboard.mycoupons.invite.theyget = You friends get 10€ when registering and using your personal code.
+web.dashboard.mycoupons.invite.youget = You get 10€ when they book a room the first time.
 web.dashboard.mycoupons.invite.code = Share your personal code
-web.invite.referer.code = ReallyLateBooking, Here you have 20€. You just have to register and enter this code: %s
+web.invite.referer.code = ReallyLateBooking, Here you have 10€. You just have to register and enter this code: %s
 web.dashboard.mycoupons.invite.facebook = Invite by Facebook
 web.dashboard.mycoupons.invite.twitter = Invite by Twitter
 web.dashboard.mycoupons.invite.email = Invite by Email
-web.invite.referer.twitter = Here you have a gift: 20€ free for a hotel booking at RLB, just enter this code: %s
+web.invite.referer.twitter = Here you have a gift: 10€ free for a hotel booking at RLB, just enter this code: %s
 web.contact.captcha = Are you human? write this text
 
 web.index.itunes.btn= Download for iPhone

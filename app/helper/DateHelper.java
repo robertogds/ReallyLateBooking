@@ -162,7 +162,7 @@ public final class DateHelper {
 		
 		if (Play.mode.isDev() ){
 			Logger.info("City local hour is: " + hour);
-			hour =15;
+			hour = 15;
 		}
 		return hour;
 		

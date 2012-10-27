@@ -1,0 +1,27 @@
+#{extends 'layout.html' /}
+#{set title: 'RLB Mails Preview' /}
+
+<div class="row-fluid">
+	        	<div class="span12 title-black">
+		           <h1>RLB Mails Preview</h1>
+		        </div>
+</div>
+	        <div class="row-fluid">
+	        	<div class="span12 dashboard tabbable">
+	        		<div class="tabs-container">
+	
+						<ul>
+							<li>Welcome <a href="@{admin.Mails.welcome('en')}" target="_blank">en</a> | <a href="@{admin.Mails.welcome('fr')}" target="_blank">fr</a> | <a href="@{admin.Mails.welcome('es')}" target="_blank">es</a></li>
+							<li>Remember Password <a href="@{admin.Mails.rememberPass('en')}" target="_blank">en</a> | <a href="@{admin.Mails.rememberPass('fr')}" target="_blank">fr</a> | <a href="@{admin.Mails.rememberPass('es')}" target="_blank">es</a></li>
+							<li>Booking Survey <a href="@{admin.Mails.bookingSurvey('en')}" target="_blank">en</a> | <a href="@{admin.Mails.bookingSurvey('fr')}" target="_blank">fr</a> | <a href="@{admin.Mails.bookingSurvey('es')}" target="_blank">es</a></li>
+							<li>Hotel remember update prices <a href="@{admin.Mails.rememberPrice('en')}" target="_blank">en</a> | <a href="@{admin.Mails.rememberPrice('fr')}" target="_blank">fr</a> | <a href="@{admin.Mails.rememberPrice('es')}" target="_blank">es</a></li>
+							<li>Friend First Booking <a href="@{admin.Mails.friendFirstBooking('en')}" target="_blank">en</a> | <a href="@{admin.Mails.friendFirstBooking('fr')}" target="_blank">fr</a> | <a href="@{admin.Mails.friendFirstBooking('es')}" target="_blank">es</a></li>
+							<li>Friend Registered <a href="@{admin.Mails.friendRegistered('en')}" target="_blank">en</a> | <a href="@{admin.Mails.friendRegistered('fr')}" target="_blank">fr</a> | <a href="@{admin.Mails.friendRegistered('es')}" target="_blank">es</a></li>
+							<li>Booking Confirmation. Hotel <a href="@{admin.Mails.hotelBookingConfirmation('en')}" target="_blank">en</a> | <a href="@{admin.Mails.hotelBookingConfirmation('fr')}" target="_blank">fr</a> | <a href="@{admin.Mails.hotelBookingConfirmation('es')}" target="_blank">es</a></li>
+							<li>Booking Confirmation. User <a href="@{admin.Mails.userBookingConfirmation('en')}" target="_blank">en</a> | <a href="@{admin.Mails.userBookingConfirmation('fr')}" target="_blank">fr</a> | <a href="@{admin.Mails.userBookingConfirmation('es')}" target="_blank">es</a></li>
+						</ul>
+						
+					</div>
+				</div>
+			</div>
+			

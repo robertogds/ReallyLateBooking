@@ -61,6 +61,7 @@ GET 	/deals/{cityUrl}						    				Deals.iPhoneList(format:'json')
 GET 	/v2/deals/{cityUrl}											Deals.listV2(format:'json')
 GET  	/web/deals/bookingForm/{id}/?								Deals.bookingForm
 GET  	/web/deals/completeBooking/?								Bookings.completeBooking
+GET  	/web/deals/showconfirmation/{id}/?							Bookings.showconfirmation
 GET 	/web/deals/{cityUrl}/?										Deals.list
 GET 	/web/deals/{cityUrl}/{id}/?									Deals.show
 

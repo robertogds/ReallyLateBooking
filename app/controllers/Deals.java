@@ -224,10 +224,8 @@ public class Deals extends Controller {
 	public static void movePrices(){
 		List<Deal> deals =  Deal.findDealsNotFromHotUsa();
 		for (Deal deal : deals){
-			Logger.error("esto no deberia pasar");
 			movePriceByDeal(deal);
 		}
-		showMovePrices();
 	}
 
 	private static void movePriceByDeal(Deal deal) {

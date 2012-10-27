@@ -1,0 +1,18 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                       Application.index
+
+GET     /recaptcha                              Application.index
+GET     /recaptcha/good                         Application.good
+
+GET     /recaptcha_https                        ApplicationHttps.index
+GET     /recaptcha_https/good                   ApplicationHttps.index
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}

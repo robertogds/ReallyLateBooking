@@ -49,12 +49,12 @@ import controllers.oauth.ApiSecurer;
 public class Bookings extends Controller{
 	
 	
-	@Before(only = {"doBooking"})
+	@Before(only = {"doBooking","showConfirmation"})
     static void checkConnected() {
 		Security.checkConnected();
     }
 	
-	@Before(unless = {"doBooking","completeBooking"})
+	@Before(unless = {"doBooking","completeBooking","showConfirmation"})
 	static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -149,11 +149,21 @@ public class Bookings extends Controller{
 		if (AffiliateHelper.fromAffiliate(session)) AffiliateHelper.sendAffiliateBooking(booking, session);
 		//inform user at the web
 		flash.success(Messages.get("web.bookingForm.success"));
-		//send user to his bookings list
-		Users.dashboard();
 		
+		showConfirmation(booking.id);
 	}
 	
+	public static void showConfirmation(Long id){
+		Booking booking = Booking.findById(id);
+		if (booking != null){
+			Deal deal = booking.deal;
+			//Send user to the confirmation booking page
+			render(booking, deal);
+		}
+		else{
+			notFound();
+		}
+	}
 
 	/*** Json API methods ****/
 	public static void listByUser(Long userId){

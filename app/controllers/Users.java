@@ -3,12 +3,15 @@ package controllers;
 import helper.JsonHelper;
 import helper.UAgentInfo;
 
+import java.util.Collection;
 import java.util.List;
 
 import models.Booking;
 import models.City;
 import models.Deal;
+import models.InfoText;
 import models.MyCoupon;
+import models.Setting;
 import models.User;
 import models.dto.StatusMessage;
 import models.dto.UserDTO;
@@ -42,7 +45,7 @@ public class Users extends Controller {
 		Security.checkConnected();
     }
 	
-	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","loginJson","dashboard","updateAccount","register","loginUser","rememberPasswordEmail","sendSurveyEmails"})
+	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","loginJson","dashboard","updateAccount","register","loginUser","rememberPasswordEmail","sendSurveyEmails","sendRememberPriceEmails"})
 	public static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -284,6 +287,9 @@ public class Users extends Controller {
 	
 	
 	public static void sendRememberPriceEmails(){
-		
+		Collection<User> owners = User.getAllOwners();
+		for (User owner : owners){
+			Mails.rememberPrice(owner);
+		}
 	}
 }

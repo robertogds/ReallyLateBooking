@@ -65,6 +65,15 @@ public class Bookings extends Controller{
 		}
 	}
 	
+	@Before(only = {"create"})
+	public static void setCORS() { 
+		Http.Header hd = new Http.Header(); 
+		hd.name = "Access-Control-Allow-Origin"; 
+		hd.values = new ArrayList<String>(); 
+		hd.values.add("*"); 
+		Http.Response.current().headers.put("Access-Control-Allow-Origin",hd); 
+	}
+	
 	public static void doBooking(@Valid Booking booking, @Required Long dealId, @Required String cancelUrl) throws UnsupportedEncodingException{
 		//Assign booking user to the current session user
 		User user = User.findById(Long.valueOf(session.get("userId")));
@@ -110,7 +119,12 @@ public class Bookings extends Controller{
 	
 	public static void completeBooking(String token, String PayerID){
 		Booking booking = Booking.findByPaypalToken(token);
-		User user = User.findById(Long.valueOf(session.get("userId")));
+		User user = null;
+		try {
+			user = User.findById(Long.valueOf(session.get("userId")));
+		} catch (NumberFormatException e) {
+			Logger.error("Can´t format userid from session to Long id", e);
+		}
 		if (booking == null || user == null){
 			Logger.error("Can´t find Booking or User from Paypal with token %s for payerId %s", token, PayerID);
 			String subject = "#WARNING#  Can´t find Booking or User from Paypal with token " + token + " for payerId " + PayerID;

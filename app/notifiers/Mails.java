@@ -87,21 +87,22 @@ public class Mails extends MailServiceFactory {
 	}
 
 	public static void bookingSurvey(User user) {
-		String lang = Lang.get(); 
-
-		//We want survey email to be rendered in correct lang
-		Lang.set(StringUtils.isNotBlank(user.locale) ? user.locale : "es");
-
-		Message message = new Message();
-		message.setSubject(Messages.get("mail.booking.survey.title"));
-		message.setSender(HOLA_MAIL);
-		message.setBcc(SOPORTE_MAIL);
-		message.setTo(user.email);
-		String template = "Mails/bookingSurvey";
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("user", user);
-		send(message, template, params);
-		Lang.set(lang);
+		if (StringUtils.isNotBlank(user.email)){
+			String lang = Lang.get(); 
+			//We want survey email to be rendered in correct lang
+			Lang.set(StringUtils.isNotBlank(user.locale) ? user.locale : "es");
+	
+			Message message = new Message();
+			message.setSubject(Messages.get("mail.booking.survey.title"));
+			message.setSender(HOLA_MAIL);
+			message.setBcc(SOPORTE_MAIL);
+			message.setTo(user.email);
+			String template = "Mails/bookingSurvey";
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("user", user);
+			send(message, template, params);
+			Lang.set(lang);
+		}
 	}
 
 	public static void userBookingConfirmation(Booking booking) {
@@ -271,7 +272,7 @@ public class Mails extends MailServiceFactory {
 
 	public static void contactForm(String email, String name, String text) {
 		Message message = new Message();
-		message.setSubject("Email de contacto desde la web de " + email);
+		message.setSubject("Email de contacto desde el club web de " + email);
 		message.setSender(HOLA_MAIL);
 		message.setTo(SOPORTE_MAIL);
 		String template = "Mails/contactForm";

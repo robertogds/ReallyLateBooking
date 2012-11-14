@@ -59,6 +59,8 @@ GET		/admin/cities/order/{list}									admin.Cities.order(format:'json')
 # Deals
 GET 	/deals/{cityUrl}						    				Deals.iPhoneList(format:'json')
 GET 	/v2/deals/{cityUrl}											Deals.listV2(format:'json')
+OPTIONS 	/v2/deals/{cityUrl}											Deals.listV2(format:'json')
+
 GET  	/web/deals/bookingForm/{id}/?								Deals.bookingForm
 GET  	/web/deals/completeBooking/?								Bookings.completeBooking
 GET  	/web/deals/showconfirmation/{id}/?							Bookings.showconfirmation
@@ -72,10 +74,15 @@ GET 	/cities/dealsbycityid/{cityId} 								Cities.dealsByCityId(format:'json')
 GET 	/cities/{countryUrl}										Cities.cityListByCountry(format:'json')
 GET 	/cities								    					Cities.cityList(format:'json')
 GET 	/v2/cities								    				Cities.cityListAll(format:'json')
+OPTIONS 	/v2/cities								    			Cities.cityListAll(format:'json')
 GET 	/web/cities/?							   					Cities.index
+
+
+
 
 #Countries
 GET 	/countries								    				Countries.countryList(format:'json')
+OPTIONS 	/countries								    				Countries.countryList(format:'json')
 
 
 #Coupons Rest
@@ -86,6 +93,7 @@ POST    /coupon?									       			Coupons.validateCode(format:'json')
 # Bookings Rest
 GET     /user/{userId}/bookings/{token}/{timestamp}/{signature}     Bookings.listByUser(format:'json')
 POST    /booking/{token}/{timestamp}/{signature}         			Bookings.create(format:'json')
+OPTION    /booking/{token}/{timestamp}/{signature}         			Bookings.create(format:'json')
 
 # Users 
 GET		/dashboard/?												Users.dashboard

@@ -130,8 +130,9 @@ public class Application extends Controller {
         redirect("Application.index");
     }
     
-    public static void contactForm(@Required @Email String email, String name, @Required String message,
+    public static void contactForm(@Required @Email String email, @Required String name, @Required String message,
     		String returnUrl,  String code, @Recaptcha String captcha){
+    	Logger.debug("Contact form from %s with captcha %s", email, captcha);
     	if(validation.hasErrors()) {
             params.flash();
             flash.error(Messages.get("web.contact.incorrect"));
@@ -159,12 +160,12 @@ public class Application extends Controller {
     }
     
 	public static void bootstrap(){
-		if (Play.mode.isDev()){
+		//if (Play.mode.isDev()){
 			//Workaround needed because jobs dont work on gae
 			Bootstrap job = new Bootstrap();
 			job.doJob();
 			//End of workaround
-		}
+		//}
 		index(); 
 	}
 	
@@ -277,10 +278,4 @@ public class Application extends Controller {
     	}
     }
     
-    public static void captcha(String id) {
-        Images.Captcha captcha = Images.captcha();
-        String code = captcha.getText("#FF");
-        Cache.set(id, code, "10mn");
-        renderBinary(captcha);
-    }
 }

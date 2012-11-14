@@ -29,12 +29,10 @@ public class InfoText extends Model {
     }
 	
 	public static InfoText findByKey(String key){
-		Logger.debug("InfoTexts: looking for text for key " + key + " with locale " + Lang.get());
     	return InfoText.all().filter("key", key).filter("locale", Lang.get()).get();
 	}
 	
 	public static InfoText findByKeyAndLocale(String key, String locale){
-		Logger.debug("InfoTexts: looking for text for key " + key + " with locale " + locale);
     	return InfoText.all().filter("key", key).filter("locale", locale).get();
     }
     

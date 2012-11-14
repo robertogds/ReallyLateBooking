@@ -16,6 +16,7 @@ import play.Logger;
 import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.With;
 
 @With({I18n.class, LogExceptions.class})
@@ -40,6 +41,14 @@ public class Cities  extends Controller {
 		AffiliateHelper.checkorigin(session, params);
 	}
 	
+	@Before(only = {"cityListAll"})
+	public static void setCORS() { 
+		Http.Header hd = new Http.Header(); 
+		hd.name = "Access-Control-Allow-Origin"; 
+		hd.values = new ArrayList<String>(); 
+		hd.values.add("*"); 
+		Http.Response.current().headers.put("Access-Control-Allow-Origin",hd); 
+	}
 	
 	public static void index() {
 		Collection<City> cities = staticCities();
@@ -120,7 +129,6 @@ public class Cities  extends Controller {
 		for (City city: cities){
 			CityDTO cityDto = new CityDTO(city);
 			citiesDto.add(cityDto);
-			Logger.debug("City name with locale is: " + cityDto.name);
 		}
         return citiesDto;
 	}

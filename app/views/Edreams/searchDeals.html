@@ -1,0 +1,35 @@
+#{extends 'Edreams/layout.html' /}
+	#{set 'pageId'}${city}#{/set}
+		
+	#{set 'header'}
+			<a href="@{Edreams.index()}" data-icon="arrow-l" class="alt ui-btn-left" data-direction="reverse">Back</a>
+			<h2 id="titleSection">Hotels tonight in ${city}</h2>
+	#{/set}
+	
+	
+			<div data-role="content" data-theme="a">
+				<ul data-role="listview" id="hotels">
+					#{list items:deals, as:'deal' }
+						#{if deal_isFirst || zone.id != deal.city.id}
+		        			%{
+					   			zone = deal.city;
+							}%
+							<li data-role="list-divider">${zone.name} </li>
+						#{/if}
+						<li>
+							<div class="category"> ${deal.roomType}</div>
+							<a href="@{Edreams.deal(deal.id)}" class="hotelName"  data-prefetch> 
+								<img src="${deal.mainImageSmall}">
+								<h4 class="hotelName">${deal.hotelName}</h4>
+								
+								<p class="now">${deal.salePriceCents}&euro;
+									<label class="before"> ${deal.priceCents}&euro;</label>
+								</p>
+								<p class="nights">stay 1-5 nights</p>
+							</a>
+						</li>
+					#{/list}
+				</ul>
+			</div>
+			
+

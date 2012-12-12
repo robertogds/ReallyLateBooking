@@ -14,6 +14,7 @@ import play.Logger;
 import play.db.Model;
 import play.libs.WS;
 import play.test.*;
+import services.DealsService;
 import models.*;
 
 public class BasicTest extends UnitTest {
@@ -61,12 +62,12 @@ public class BasicTest extends UnitTest {
 	    new Deal("Hotel Catalunya", barcelona, Boolean.TRUE).insert();
 	    
 	    // Retrieve all the hotel with city madrid
-	    int count = Deal.findActiveDealsByCity(madrid, false, false).size();
+	    int count = DealsService.findActiveDealsByCity(madrid, false, false).size();
 	    // Test 
 	    assertEquals(2, count);
 	    
 	    // Retrieve all the hotel with city Barcelona
-	    int countBcn = Deal.findActiveDealsByCity(barcelona, false, false).size();
+	    int countBcn = DealsService.findActiveDealsByCity(barcelona, false, false).size();
 	    // Test 
 	    assertEquals(1, countBcn);
 	}

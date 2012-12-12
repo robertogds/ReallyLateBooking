@@ -1,0 +1,2 @@
+(function(){var a;a=function(){return function(a,b,c){this.view=Titanium.UI.createView({backgroundImage:"/images/Texture.jpg",borderWidth:0,width:Ti.UI.FILL,height:Ti.UI.SIZE,top:a});this.titleLabel=Titanium.UI.createLabel({text:b,height:Ti.UI.SIZE,top:20,color:"#fff",left:10,font:{fontSize:24,fontWeight:"bold"}});this.textLabel=Titanium.UI.createLabel({text:c+"\n\n",borderWidth:0,top:80,height:Ti.UI.SIZE,color:"#fff",left:10,right:10,font:{fontSize:14,fontWeight:"bold"}});this.view.add(this.titleLabel);
+this.view.add(this.textLabel)}}();root.GenericTextView=a}).call(this);

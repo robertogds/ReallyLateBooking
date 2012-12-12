@@ -18,6 +18,7 @@ import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
+import services.DealsService;
 
 @With({I18n.class, LogExceptions.class})
 public class Cities  extends Controller {
@@ -92,7 +93,7 @@ public class Cities  extends Controller {
 		City city = City.findById(cityId);
 		Boolean noLimits = Boolean.FALSE;
 		Boolean hideAppOnly = Boolean.FALSE;
-		Collection<Deal> deals = Deal.findActiveDealsByCityV2(city, noLimits, hideAppOnly);
+		Collection<Deal> deals = DealsService.findActiveDealsByCityV2(city, noLimits, hideAppOnly);
         Collection<DealDTO> dealsDtos = new ArrayList<DealDTO>();
 		for (Deal deal: deals){
 			dealsDtos.add(new DealDTO(deal, city.url));

@@ -121,12 +121,15 @@ public class Bootstrap extends Job {
 		City madrid = new City("Madrid", "madrid");
 		madrid.active = Boolean.TRUE;
 		madrid.country = spain;
-		madrid.root = "madrid";
 		madrid.mailchimpCode ="MAD";
 		madrid.hotusaCode = "MOLDAVIA";
 		madrid.hotusaProvCode = "MVMOL";
 		madrid.nameEN ="Madrid";
 		madrid.nameFR ="Madrid";
+		madrid.latitude = "40.4711601";
+		madrid.longitude = "-3.871398";
+		madrid.lat = 40.4711601;
+		madrid.lng = -3.871398;
 		madrid.updated = Calendar.getInstance().getTime();
 		madrid.insert();
 		City madridNorth = new City("Madrid Norte", "madrid_north");
@@ -134,6 +137,11 @@ public class Bootstrap extends Job {
 		madridNorth.country = spain;
 		madridNorth.root = "madrid";
 		madridNorth.insert();
+		City madridSouth = new City("Madrid Sur", "madrid_south");
+		madridSouth.active = Boolean.TRUE;
+		madridSouth.country = spain;
+		madridSouth.root = "madrid";
+		madridSouth.insert();
 		City barcelona = new City("Barcelona", "barcelona");
 		barcelona.active = Boolean.TRUE;
 		barcelona.country = spain;
@@ -157,7 +165,7 @@ public class Bootstrap extends Job {
 		prueba.position = 3;
 		prueba.limitHour = 3;
 		prueba.insert();
-		Deal ritz = new Deal("Hotel DORMIRDCINE", madrid, Boolean.TRUE);
+		Deal ritz = new Deal("Hotel DORMIRDCINE", madridNorth, Boolean.TRUE);
 		ritz.address = "castellana 43";
 		ritz.mainImageBig ="madrid/embassy/detalle.jpg";
 		ritz.mainImageSmall = "madrid/embassy/listado.jpg";
@@ -182,7 +190,7 @@ public class Bootstrap extends Job {
 		ritz.position = 2;
 		ritz.limitHour = 3;
 		ritz.insert();
-	    Deal cibeles = new Deal("Vincci Soho", madrid, Boolean.TRUE);
+	    Deal cibeles = new Deal("Vincci Soho", madridSouth, Boolean.TRUE);
 	    cibeles.address = "calle castellana, 43, 28224";
 		cibeles.mainImageBig ="madrid/embassy/detalle.jpg";
 		cibeles.mainImageSmall = "madrid/embassy/listado.jpg";
@@ -234,7 +242,7 @@ public class Bootstrap extends Job {
 	    		"* Este exclusivo barrio del centro de Madrid es tranquilo y silencioso por las noches. Perfecto si no " +
 	    		"quieres que nadie moleste tus horas de sueño.";
 	    cibeles.insert();
-	    Deal sol = new Deal("Hotel Conde Duque", madrid, Boolean.TRUE);
+	    Deal sol = new Deal("Hotel Conde Duque", madridSouth, Boolean.TRUE);
 	    sol.address = "castellana 43";
 		sol.mainImageBig ="madrid/embassy/detalle.jpg";
 		sol.mainImageSmall = "madrid/embassy/listado.jpg";

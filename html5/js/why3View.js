@@ -1,0 +1,1 @@
+(function(){var a,b;root.why3View=Titanium.UI.createView({backgroundColor:"#0d1e28"});b=L("why3TitleShort");a=L("why3Text");a=(new root.GenericTextView(0,b,a)).view;root.why3View.add(a);root.why3Window.add(root.why3View)}).call(this);

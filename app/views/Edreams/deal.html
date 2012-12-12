@@ -1,0 +1,115 @@
+#{extends 'Edreams/layout.html' /}
+	#{set 'pageId'}${deal.id}#{/set}
+		
+	#{set 'header'}
+			<a data-rel="back" href="#" data-icon="arrow-l" data-direction="reverse" class="alt ui-btn-left">Back</a>
+			<h2 id="titleSection" data-theme="b" >${deal.hotelName}</h2>
+			<div data-role="navbar" data-theme="b">
+				<ul>
+					<li><a href="#popupMap" data-rel="popup"  data-prefetch>Map</a></li>
+					<li><a href="@{Edreams.photos(deal.image1, images, deal.id)}" data-prefetch>Photos</a></li>
+				</ul>
+			</div><!-- /navbar -->
+	#{/set}
+
+
+		<div id="dealContent" data-role="content" data-theme="a" class="dealDetail" style="background-image: url('${deal.image10}');background-repeat: no-repeat;background-size: 100% auto;">
+			
+			<div class="dealInfo">
+				<div data-role="collapsible" data-inset="false" data-theme="b" data-mini="true" data-collapsed="false">
+				   <h3>Hotel Info</h3>
+				   <div data-role="collapsible" >
+					   <h3>Deal detail</h3>
+					   <p>${deal.detailText}</p>
+					</div>
+					<div data-role="collapsible" >
+					   <h3>About the hotel</h3>
+					   <p>${deal.hotelText}</p>
+					</div>
+					<div data-role="collapsible" >
+					   <h3>The rooms</h3>
+					   <p>${deal.roomText}</p>
+					</div>
+					<div data-role="collapsible" >
+					   <h3>The food</h3>
+					   <p>${deal.foodDrinkText}</p>
+					</div>
+					<div data-role="collapsible" >
+					   <h3>Around the hotel</h3>
+					   <p>${deal.aroundText}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		#{include 'Edreams/components/bookingFooter.html'/}
+		
+<div data-role="popup" id="popupMap" data-overlay-theme="a" data-theme="a" data-corners="false" data-tolerance="15,15">
+    <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+    <iframe src="@{Edreams.map(deal.id)}" width="480" height="320" seamless></iframe>
+	 
+</div>	
+
+	<script>
+	
+	$( document ).on( "pageinit", function() {
+		function scale( width, height, padding, border ) {
+			var scrWidth = $( window ).width() - 30,
+				scrHeight = $( window ).height() - 30,
+				ifrPadding = 2 * padding,
+				ifrBorder = 2 * border,
+				ifrWidth = width + ifrPadding + ifrBorder,
+				ifrHeight = height + ifrPadding + ifrBorder,
+				h, w;
+
+			if ( ifrWidth < scrWidth && ifrHeight < scrHeight ) {
+				w = ifrWidth;
+				h = ifrHeight;
+			} else if ( ( ifrWidth / scrWidth ) > ( ifrHeight / scrHeight ) ) {
+				w = scrWidth;
+				h = ( scrWidth / ifrWidth ) * ifrHeight;
+			} else {
+				h = scrHeight;
+				w = ( scrHeight / ifrHeight ) * ifrWidth;
+			}
+			
+			return {
+				'width': w - ( ifrPadding + ifrBorder ),
+				'height': h - ( ifrPadding + ifrBorder )
+			};
+		};
+
+		$( ".ui-popup iframe" )
+			.attr( "width", 0 )
+			.attr( "height", "auto" );
+		
+	    $( "#popupMap iframe" )
+	        .attr( "width", 0 )
+	        .attr( "height", 0 );
+			  
+	    $( "#popupMap iframe" ).contents().find( "#map_canvas" )
+	        .css( { "width" : 0, "height" : 0 } );
+		 	     
+	    $( "#popupMap" ).on({
+	        popupbeforeposition: function() {
+	            var size = scale( 480, 320, 0, 1 ),
+	                w = size.width,
+	                h = size.height;
+	
+	            $( "#popupMap iframe" )
+	                .attr( "width", w )
+	                .attr( "height", h );
+						 
+	            $( "#popupMap iframe" ).contents().find( "#map_canvas" )
+	                .css( { "width": w, "height" : h } );
+	        },
+	        popupafterclose: function() {
+	            $( "#popupMap iframe" )
+	                .attr( "width", 0 )
+	                .attr( "height", 0 );
+						 
+	            $( "#popupMap iframe" ).contents().find( "#map_canvas" )
+	                .css( { "width": 0, "height" : 0 } );
+	        }
+	    });
+	});
+	</script>

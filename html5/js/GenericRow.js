@@ -1,0 +1,1 @@
+(function(){var a;a=function(){return function(a){this.label=Titanium.UI.createLabel({width:"100%",height:"100%",text:a,left:8,font:{fontSize:15,fontWeight:"bold"}});this.row=Titanium.UI.createTableViewRow({hasChild:!0,width:"100%",height:44});this.row.add(this.label)}}();root.GenericRow=a}).call(this);

@@ -29,6 +29,7 @@ import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Router;
 import play.mvc.With;
+import services.DealsService;
 import controllers.Check;
 import controllers.Secure;
 import controllers.Security;
@@ -87,7 +88,7 @@ public class Mailchimp extends Controller{
 				Logger.debug("Creating campaing for city %s", city.name);
 				Boolean noLimits = Boolean.FALSE;
 				Boolean hideAppOnly = Boolean.FALSE;
-				List<Deal> deals = Deal.findActiveDealsByCity(city, noLimits, hideAppOnly);
+				List<Deal> deals = DealsService.findActiveDealsByCity(city, noLimits, hideAppOnly);
 				if (deals.size() < 3){
 					citiesErrors.add(city.name);
 				}

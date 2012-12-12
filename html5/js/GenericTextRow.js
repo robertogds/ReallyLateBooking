@@ -1,0 +1,1 @@
+(function(){var a;a=function(){return function(){this.row=Ti.UI.createTableViewRow({hasChild:!1,identionLevel:10,selectionStyle:"none",color:"#fff",backgroundGradient:{type:"linear",colors:[{color:"#07151d",position:0.1},{color:"#0d1e28",position:1}]}})}}();root.GenericTextRow=a}).call(this);

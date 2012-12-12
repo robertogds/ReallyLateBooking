@@ -1,0 +1,207 @@
+
+.ui-mobile [data-role="page"], .ui-mobile [data-role="dialog"], .ui-page {
+}
+
+input{
+	background-color: white !important;
+	}
+
+.ui-field-contain, fieldset.ui-field-contain {
+	border-width: 0 !important;
+	}
+
+.ui-li-divider {
+    height: auto !important;
+}
+
+.ui-header .ui-btn-left, .ui-header .ui-btn-right, .ui-footer .ui-btn-left, .ui-footer .ui-btn-right {
+    top: 95px;
+}
+
+.photos .ui-header .ui-btn-left, .photos .ui-header .ui-btn-right, .photos .ui-footer .ui-btn-left, .photos .ui-footer .ui-btn-right {
+    top: 5px;
+}
+
+form {
+	margin-bottom: 30px;
+}
+	
+.ui-bar-a {
+    background: linear-gradient(#F0F0F0, #DDDDDD) repeat scroll 0 0 #EEEEEE;
+}
+
+#titleSection{
+	background-color: #eeeeee;
+    background: linear-gradient(#F0F0F0, #DDDDDD) repeat scroll 0 0 #EEEEEE !important;	
+    border: 1px solid #B3B3B3;
+    color: #3E3E3E;
+    font-weight: bold;
+    text-shadow: 0 1px 1px #FFFFFF;
+}
+
+#edreamsHeader{
+	background: none repeat scroll 0 0 #00318C;	
+	display: block;
+}
+#edreamsHeader #logoBar{
+	height: 86px;
+	}
+#edreamsHeader #logoBar #logo{	
+	 margin: 2px 0 0 7px;
+}
+	 	
+#navToolbarNav {
+	display: block;
+	float: right;
+	width: 80px;
+	margin: 5px 5px 6px 0;
+}
+
+#navToolbarNav ul {
+    list-style: none outside none;
+    margin: 0;
+	padding: 0;
+}
+
+#navToolbarNav a.nav {
+    margin: 1px 2px 0;
+}
+
+.logoNavToolbar {
+    margin-top: 10px !important;
+}
+.blockLeft {
+    display: block;
+    float: left;
+}
+
+
+#titleSection, .titleSection {
+    clear: both;
+    font-size: 16px;
+    line-height: 40px;
+    margin: 0;
+    padding-left: 15px;
+}
+
+.ui-bar-a {
+    color: black;
+}
+
+#hotels li{
+	height: 80px;
+}
+
+#hotels li.title{
+	text-align: center;	
+	height: auto;
+}
+
+
+#hotels li .hotelName {
+	margin-top: 0;
+	font-size: 15px;
+	padding-bottom: 0;
+}
+
+#hotels li p {
+}
+
+#hotels li div.category {
+    background-color: #FAC318;
+    color: #00318C;
+    float: left;
+    font-size: 14px;
+    font-weight: lighter;
+    height: 17px;
+    margin-left: 1px;
+    margin-top: 63px;
+    text-align: center;
+    width: 80px;
+    
+}
+
+#hotels .ui-li-has-thumb .ui-btn-inner a.ui-link-inherit, #hotels .ui-li-static.ui-li-has-thumb {
+    padding-left: 20px;
+}
+
+#hotels li p.now {
+	color: blue;
+    font-size: 22px;
+    padding-top: 3px;
+}
+
+#hotels li label.before {
+	font-size: 14px;
+	text-decoration:line-through;
+}
+
+#hotels li p.nights{
+	color:grey;
+	margin-bottom: 0;
+}
+
+#hotelsBooking {
+	display: block;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 100%;
+	bottom: 0px;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	border: 0px;
+}
+
+
+.price {
+	color: #00318C;
+	font-size: 30px;
+	text-shadow: none;
+	text-align: left;
+}
+
+.before {
+	color: #00318C;
+	font-size: 18px;
+	text-shadow: none;
+	text-decoration: line-through;
+	line-height: 40px;
+	text-align: center;
+}
+
+.nights{
+	font-size: 12px;
+	color: grey;
+}
+
+.bookingButton {
+	margin-left: 0px !important;
+	margin-right:10px !important;
+	}
+.bookingButton .ui-btn-text{
+	font-size:20px;
+}
+
+#photos{
+	text-align:center;
+	padding: 0;
+}
+
+.ui-footer-fixed {
+	width: 98%;
+}
+
+.dealDetail{
+	padding: 0;
+	}
+.dealInfo{
+	padding: 0 15px;
+	background: white;
+		margin-top: 330px;
+	
+	}
+	
+#popupMap-popup{
+	left:0px !important;
+	}

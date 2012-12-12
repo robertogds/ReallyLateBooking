@@ -35,42 +35,6 @@ public class Deals extends controllers.CRUD {
 		redirect("/admin/deals");
 	}
 	
-	private static void reparePrices(){
-		List<Booking> bookings = Booking.all().fetch();
-		for (Booking booking: bookings){
-			booking.totalSalePrice =  booking.totalSalePrice != null ? booking.totalSalePrice: booking.salePriceCents;
-			if (booking.netTotalSalePrice == null){
-				booking.deal = Deal.findById(booking.deal.id);
-				int price = booking.totalSalePrice != null ? booking.totalSalePrice: booking.salePriceCents;
-				int fee = 12;
-				if (booking.deal != null && booking.deal.isHotUsa){
-					booking.netTotalSalePrice = calculateNetPriceByFee(price, fee);
-				}
-				else{
-					if (booking.company != null){
-						Company company = Company.findById(booking.company.id);
-						if (company != null && company.fee != null){
-							fee = company.fee;
-						}
-					}
-					booking.netTotalSalePrice = calculateNetPriceByFee(price, fee);
-				}
-			}
-			booking.update();
-		}
-	}
-	
-	private static Float calculateNetPriceByFee(Integer price, Integer fee){
-		try {
-			if (price != null) {
-				return new Float(price - (price * fee / 100.0));
-			}
-		} catch (Exception e) {
-			Logger.error("Error calculating net price: %s", e);
-		}
-		return null;
-	}
-	
 	public static void exportAll() {
 		ObjectType type = ObjectType.get(getControllerClass());
         notFoundIfNull(type);

@@ -40,6 +40,8 @@ public class City extends Model {
 	
 	public String latitude;
 	public String longitude;
+	public double lat;
+	public double lng;
 	
 	@Required
 	@Index("country_index")

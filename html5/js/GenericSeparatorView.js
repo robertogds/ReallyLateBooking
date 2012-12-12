@@ -1,0 +1,1 @@
+(function(){var a;a=function(){return function(a){this.view=Titanium.UI.createView({backgroundColor:"#57585b",top:a,height:1})}}();root.GenericSeparatorView=a}).call(this);

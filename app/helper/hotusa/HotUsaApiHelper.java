@@ -40,6 +40,7 @@ import org.w3c.dom.NodeList;
 import play.Logger;
 import play.data.validation.Validation;
 import play.libs.XML;
+import services.DealsService;
 
 import com.google.appengine.api.urlfetch.FetchOptions;
 import com.google.appengine.api.urlfetch.HTTPHeader;
@@ -375,7 +376,7 @@ public final class HotUsaApiHelper {
 				}
 				notAvailableDeals.add(deal);
 				int day = bookingDays -2; //we want to clean all the days after the last day asked for dispo
-				Deal.cleanNextDays(deal.hotelCode, day);
+				DealsService.cleanNextDays(deal.hotelCode, day);
 			}
 		}
 		return notAvailableDeals;
@@ -506,19 +507,19 @@ public final class HotUsaApiHelper {
 				int quantity = 1; //always 1 by now
 				Boolean breakfastIncluded = regime.equals(REGIME_BB) ;
 				Boolean removeIfPriceRaised = overridePrices;
-				Deal.updateDealByCode(hotelCode, quantity, price, breakfastIncluded, lin, day, removeIfPriceRaised);
+				DealsService.updateDealByCode(hotelCode, quantity, price, breakfastIncluded, lin, day, removeIfPriceRaised);
 				if (overridePrices){
-					Deal.updatePricesAllDaysByCode(hotelCode, price);
+					DealsService.updatePricesAllDaysByCode(hotelCode, price);
 				}
 				if (updateBookingHotelCode){
-					Deal.updateBookingHotelCode(hotelCode);
+					DealsService.updateBookingHotelCode(hotelCode);
 				}
 			}
 			// we dont have dispo for current day
 			else {
 				markAsSoldoutForDay(day, hotelCode);
 				//we dont continue retrieving prices for next day
-				Deal.cleanNextDays(hotelCode, day);
+				DealsService.cleanNextDays(hotelCode, day);
 				return;
 			}
 		}
@@ -536,12 +537,12 @@ public final class HotUsaApiHelper {
 			int quantity = 0; 
 			Boolean breakfastIncluded = null;
 			Boolean removeIfPriceRaised = Boolean.FALSE;
-			Deal.updateDealByCode(hotelCode, quantity, price, breakfastIncluded, lin, day, removeIfPriceRaised);
+			DealsService.updateDealByCode(hotelCode, quantity, price, breakfastIncluded, lin, day, removeIfPriceRaised);
 			Logger.debug("Hotel %s is sold out for tonight", hotelCode);
 		}
 		//if is not the first day, we just update price
 		else{
-			Deal.updatePriceByCode(hotelCode, price, lin, day);
+			DealsService.updatePriceByCode(hotelCode, price, lin, day);
 			Logger.debug("Hotel %s is sold out for day: %s" , hotelCode, day);
 			
 		}
@@ -590,7 +591,7 @@ public final class HotUsaApiHelper {
 								int quantity = 1; //always 1 by now
 								Boolean breakfastIncluded = regime.equals("BB") ;
 								Boolean removeIfPriceRaised = Boolean.TRUE;
-								Deal.updateDealByCode(hotelCode, quantity, price, breakfastIncluded, lin, day, removeIfPriceRaised);
+								DealsService.updateDealByCode(hotelCode, quantity, price, breakfastIncluded, lin, day, removeIfPriceRaised);
 							}
 							// we dont have dispo for current day
 							else {
@@ -598,17 +599,17 @@ public final class HotUsaApiHelper {
 								if (day == 0) {
 									int quantity = 0; 
 									Boolean removeIfPriceRaised = Boolean.FALSE;
-									Deal.updateDealByCode(hotelCode, quantity, null, null, lin, day, removeIfPriceRaised);
+									DealsService.updateDealByCode(hotelCode, quantity, null, null, lin, day, removeIfPriceRaised);
 									Logger.debug("Hotel is sold out for tonight: " + hotelCode);
 								}
 								//if is not the first day, we just update price
 								else{
-									Deal.updatePriceByCode(hotelCode, null, lin, day);
+									DealsService.updatePriceByCode(hotelCode, null, lin, day);
 									Logger.debug("Hotel is sold out for tonight: " + hotelCode);
 									
 								}
 								//we dont continue retrieving prices for next day
-								Deal.cleanNextDays(hotelCode, day);
+								DealsService.cleanNextDays(hotelCode, day);
 								i = i + (bookingDays - day);
 								break;
 							}

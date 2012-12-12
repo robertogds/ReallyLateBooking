@@ -1,0 +1,1 @@
+(function(){var a;a=function(){return function(a){this.row=Ti.UI.createTableViewRow({hasChild:!0,height:Ti.UI.SIZE,backgroundGradient:root.bgGradient,city:a});this.row.add(Titanium.UI.createLabel({text:a.name,color:"#fff",font:{fontSize:12,fontWeight:"bold"},left:10,height:30}))}}();root.OtherCityRow=a}).call(this);

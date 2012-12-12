@@ -1,0 +1,1 @@
+(function(){Ti.include("/js/allCitiesView.js")}).call(this);

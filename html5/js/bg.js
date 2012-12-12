@@ -1,0 +1,2 @@
+(function(){var a;Ti.API.info("hello from a background service");a=Titanium.App.iOS.scheduleLocalNotification({alertBody:"Kitchen Sink was put in background",alertAction:"Re-Launch!",userInfo:{hello:"world"},sound:"pop.caf",date:new Date((new Date).getTime()+3E3)});Ti.App.iOS.addEventListener("notification",function(){Ti.API.info("background event received = "+a);return Ti.App.currentService.unregister()});Ti.App.currentService.addEventListener("stop",function(){return Ti.API.info("background service is stopped")});
+Ti.App.currentService.stop()}).call(this);

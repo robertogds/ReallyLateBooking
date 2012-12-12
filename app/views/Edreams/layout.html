@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Edreams Hotels Tonight</title>
+		
+		<link rel="stylesheet" href="@{'/public/edreams/themes/jquery.mobile.pagination.css'}" />
+		<link rel="stylesheet" href="@{'/public/edreams/themes/edreams.min.css'}" />
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile.structure-1.2.0.min.css" />
+		<link rel="stylesheet" href="@{'/public/edreams/themes/custom.css'}" />
+		<link rel="stylesheet" href="@{'/public/edreams/themes/jqm-icon-pack-2.1.2-fa.css'}" />
+
+		
+		<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+		<script src="@{'/public/edreams/js/jquery.mobile.pagination.js'}"></script>
+		#{get 'moreSripts'/}
+		
+		<script>
+			$.mobile.defaultPageTransition = 'slide';
+			$.mobile.loadingMessage = 'Loading';
+			$.mobile.loadingMessageTextVisible = true;
+			$.mobile.page.prototype.options.domCache = true;
+			
+			$.ajaxPrefilter( function(options, originalOptions, jqXHR) {
+				if ( applicationCache &&
+					 applicationCache.status != applicationCache.UNCACHED &&
+					 applicationCache.status != applicationCache.OBSOLETE ) {
+					 // the important bit
+					 options.isLocal = true;
+				}
+			});
+		</script>
+		
+	</head>
+	<body>
+		<div data-role="page" id="#{get 'pageId'/}" data-theme="a" >
+			#{get 'subPages'/}
+			<div data-role="header" data-id="headerNav" data-theme="b" id="edreamsHeader">
+				#{include 'Edreams/components/header.html'/}
+				#{get 'header'/}
+			</div>
+			#{doLayout /}
+		</div>
+		
+		#{get 'morePages'/}
+	</body>
+</html>

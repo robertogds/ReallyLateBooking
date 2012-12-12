@@ -1,0 +1,25 @@
+	#{extends 'Edreams/layout.html' /}
+
+	#{set 'pageId'}dealphotos#{/set}
+		
+	#{set 'header'}
+			<a  href="@{Edreams.deal(deal.id)}" data-icon="arrow-l" class="alt ui-btn-left">Hotel</a>
+			<h2 id="titleSection" data-theme="b">Photos</h2>
+	#{/set}
+	
+		<div data-role="content" data-theme="a" id="photos">
+			<img src="${image}" alt="">
+			<ul data-role="pagination">
+				#{if prevImage != null}
+					<li class="ui-pagination-prev"><a href="@{Edreams.photos(prevImage, images, deal.id)}" data-prefetch>Prev</a></li>
+				#{/if}
+				#{if nextImage != null}
+					<li class="ui-pagination-next"><a href="@{Edreams.photos(nextImage, images, deal.id)}" data-prefetch>Next</a></li>
+				#{/if}
+			</ul>
+		</div>
+		#{include 'Edreams/components/bookingFooter.html'/}	
+			
+		<script>
+			$.mobile.defaultPageTransition = "slide";
+		</script>

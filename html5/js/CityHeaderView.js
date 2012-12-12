@@ -1,0 +1,2 @@
+(function(){var b;b=function(){return function(a){this.view=Titanium.UI.createView({width:Ti.UI.FILL,height:15});a=Titanium.UI.createLabel({width:Ti.UI.FILL,text:a,textAlign:"left",borderWidth:0,height:20,color:"#060426",left:10,font:{fontSize:12,fontWeight:"bold"}});this.view.add(Titanium.UI.createLabel({width:Ti.UI.FILL,backgroundGradient:{type:"linear",colors:[{color:"#c2dbfe",position:0.1},{color:"#e2ecfa",position:1}]},opacity:0.7,color:"#fff",height:25,top:0}));this.view.add(a)}}();root.CityHeaderView=
+b}).call(this);

@@ -1,5 +1,7 @@
 package models.dto;
 
+import helper.UtilsHelper;
+
 import java.util.Collection;
 import java.util.Date;
 
@@ -33,11 +35,11 @@ public class CountryDTO {
 		
 		String lang = Lang.get();
 		//Logger.debug("Filling country info with locale: " + lang);
-		if (lang.equals("es")){
+		if (UtilsHelper.langIsSpanish(lang)){
 			//Logger.debug("Filling country info with Spanish ");
 			this.name = country.name;
 		}
-		else if (lang.equals(Lang.getLocale().FRENCH.getLanguage())){
+		else if (UtilsHelper.langIsFrench(lang)){
 			//Logger.debug("Filling country info with French ");
 			this.name = country.nameFR;
 		}

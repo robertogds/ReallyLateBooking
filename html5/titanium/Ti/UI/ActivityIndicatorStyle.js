@@ -1,0 +1,1 @@
+define(["Ti/_/lang"],function(a){return a.setObject("Ti.UI.ActivityIndicatorStyle",{constants:{BIG:0,BIG_DARK:1,DARK:2,PLAIN:3}})});

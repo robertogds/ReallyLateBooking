@@ -1,0 +1,1 @@
+define(["Ti/_/Layouts/Composite","Ti/_/Layouts/Horizontal","Ti/_/Layouts/Vertical","Ti/_/Layouts/ConstrainingHorizontal","Ti/_/Layouts/ConstrainingVertical"],function(a,b,c,d,e){return{Composite:a,Horizontal:b,Vertical:c,ConstrainingHorizontal:d,ConstrainingVertical:e}});

@@ -1,0 +1,1 @@
+function FirstView(){var a=Ti.UI.createView(),b=Ti.UI.createLabel({color:"#000000",text:String.format(L("welcome"),"Titanium"),height:"auto",width:"auto"});a.add(b);b.addEventListener("click",function(a){alert(a.source.text)});return a}module.exports=FirstView;

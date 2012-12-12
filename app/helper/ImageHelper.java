@@ -1,7 +1,9 @@
 package helper;
 
+import java.util.ArrayList;
+
 import models.Deal;
-import models.dto.DealDTO;
+import models.dto.AbstractDealDTO;
 import play.Logger;
 import play.Play;
 
@@ -13,7 +15,7 @@ import play.Play;
  */
 public final class ImageHelper {
 
-	public static void prepareImagesRoutes(DealDTO deal, boolean autoImageUrl){
+	public static void prepareImagesRoutes(AbstractDealDTO deal, boolean autoImageUrl){
 		//Size of the images for the required system, iphone, ipad , etc.
 		String listSize = Play.configuration.getProperty("img.list_size");
 		String listSizeV2 = Play.configuration.getProperty("img.list_size.v2");
@@ -41,6 +43,54 @@ public final class ImageHelper {
 		//If we dont have listImage, use image10
 		deal.listImage = deal.listImage != null ? deal.listImage : deal.mainImageBig;
 		
+	}
+	
+	/**
+	 * Workaround to move images to list for V3 with backwards compatibility
+	 * @param deal
+	 */
+	public static void imagesToList(AbstractDealDTO deal){
+		deal.images = new ArrayList<String>();
+		if (deal.image1 != null){
+			deal.images.add(deal.image1);
+			deal.image1 = null;
+		}
+		if (deal.image2 != null){
+			deal.images.add(deal.image2);
+			deal.image2 = null;
+		}
+		if (deal.image3 != null){
+			deal.images.add(deal.image3);
+			deal.image3 = null;
+		}
+		if (deal.image4 != null){
+			deal.images.add(deal.image4);
+			deal.image4 = null;
+		}
+		if (deal.image5 != null){
+			deal.images.add(deal.image5);
+			deal.image5 = null;
+		}
+		if (deal.image6 != null){
+			deal.images.add(deal.image6);
+			deal.image6 = null;
+		}
+		if (deal.image7 != null){
+			deal.images.add(deal.image7);
+			deal.image7 = null;
+		}
+		if (deal.image8 != null){
+			deal.images.add(deal.image8);
+			deal.image8 = null;
+		}
+		if (deal.image9 != null){
+			deal.images.add(deal.image9);
+			deal.image9 = null;
+		}
+		if (deal.image10 != null){
+			deal.images.add(deal.image10);
+			deal.image10 = null;
+		}
 	}
     
 	/*

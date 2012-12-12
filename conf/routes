@@ -59,8 +59,6 @@ GET		/admin/cities/order/{list}									admin.Cities.order(format:'json')
 # Deals
 GET 	/deals/{cityUrl}						    				Deals.iPhoneList(format:'json')
 GET 	/v2/deals/{cityUrl}											Deals.listV2(format:'json')
-OPTIONS 	/v2/deals/{cityUrl}											Deals.listV2(format:'json')
-
 GET  	/web/deals/bookingForm/{id}/?								Deals.bookingForm
 GET  	/web/deals/completeBooking/?								Bookings.completeBooking
 GET  	/web/deals/showconfirmation/{id}/?							Bookings.showconfirmation
@@ -74,9 +72,7 @@ GET 	/cities/dealsbycityid/{cityId} 								Cities.dealsByCityId(format:'json')
 GET 	/cities/{countryUrl}										Cities.cityListByCountry(format:'json')
 GET 	/cities								    					Cities.cityList(format:'json')
 GET 	/v2/cities								    				Cities.cityListAll(format:'json')
-OPTIONS 	/v2/cities								    			Cities.cityListAll(format:'json')
 GET 	/web/cities/?							   					Cities.index
-
 
 
 
@@ -126,6 +122,21 @@ GET     /channel.html             	  staticFile:/public/channel.html
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
+# Map html5 app 
+GET     /html5/                        			staticDir:html5
+GET     /images/                        		staticDir:html5/images/
+GET		/icons/									staticDir:html5/icons/
+
+
+# Edreams Lungo Mobile Site
+GET 	/edreams/cities/{lat}/{lng}/{checkin}/{nights}		Edreams.findCityDealsByLatLong(format:'json')
+GET 	/edreams/cities/{name}/{checkin}/{nights}			Edreams.findCityDealsByCityName(format:'json')
+
+# Edreams JQuery Mobile site -- DEPRECATED
+# GET     /edreams/                               Edreams.index
+# GET 	/edreams/search/						Edreams.searchDeals
+# GET 	/edreams/deal/{id}/						Edreams.deal
+# GET 	/edreams/photos							Edreams.photos
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}

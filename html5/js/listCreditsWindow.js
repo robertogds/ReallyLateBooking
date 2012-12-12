@@ -1,0 +1,1 @@
+(function(){Ti.include("/js/creditsTable.js","/js/noCreditsView.js","/js/creditsPullRefresh.js");root.listCreditsWindow.addEventListener("focus",function(){Titanium.App.Properties.hasProperty("user")||Titanium.Facebook.loggedIn?root.showCredits():root.noCreditsView.show();return 1})}).call(this);

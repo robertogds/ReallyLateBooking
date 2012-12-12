@@ -90,11 +90,9 @@ public final class DateHelper {
 	 * @return true if the given date is between the opening and the closing hour of RLB
 	 */
 	public static Boolean isTodayDate(Date date){
-		Calendar cal = Calendar.getInstance();
-		Calendar now = Calendar.getInstance();
-		cal.setTime(date);
-		return cal.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
-		                  cal.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR);
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+		return fmt.format(date).equals(fmt.format(new Date()));
+		
 	}
 	
 	/**

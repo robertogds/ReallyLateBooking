@@ -1,5 +1,10 @@
 package helper;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import play.i18n.Lang;
+
 public final class UtilsHelper {
 	
 	 /**
@@ -17,5 +22,25 @@ public final class UtilsHelper {
 	  if (value != null && value.length() > length)
 	    value = value.substring(0, length);
 	  return value;
+	}
+	
+	public  static Integer roundPrice(Float price){
+		BigDecimal priceRounded = new BigDecimal(price);
+		priceRounded = priceRounded.setScale(0, RoundingMode.DOWN);
+		return price.intValue();
+	}
+	
+	public static Boolean langIsFrench(String lang){
+		if (lang != null && (lang.equalsIgnoreCase("fr")||lang.equals(Lang.getLocale().FRENCH.getLanguage()))){
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+	
+	public static Boolean langIsSpanish(String lang){
+		if (lang != null && (lang.equalsIgnoreCase("es") || lang.equalsIgnoreCase("es_ES"))){
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 }

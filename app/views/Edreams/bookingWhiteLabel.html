@@ -1,0 +1,14 @@
+#{extends 'Edreams/layout.html' /}
+
+	#{set 'pageId'}${city}#{/set}
+		
+	#{set 'header'}
+			<a data-rel="back" href="#" data-icon="arrow-l" data-direction="reverse" class="alt ui-btn-left">Back</a>
+			<h2 id="titleSection" >Hotels in ${city}</h2>
+	#{/set}
+	
+	<iframe id="hotelsBooking" style="height: 653px;width: 100%;" 
+ 		src=" http://www.booking.com/searchresults.html?aid=340488&src=searchresults&latitude=52.3745&longitude=4.8969&order=popularity&ssne=lat%3A+52.3745+long%3A+4.8969&ssne_untouched=lat%3A+52.3745+long%3A+4.8969&error_url=http%3A%2F%2Fwww.booking.com%2Fsearchresults.en-gb.html%3Fsid%3Dff1f2706aa4be675f9398b67bd0cc329%3Bdcid%3D1%3Bcheckin_monthday%3D19%3Bcheckin_year_month%3D2012-11%3Bcheckout_monthday%3D20%3Bcheckout_year_month%3D2012-11%3Bclass_interval%3D1%3Bcsflt%3D%257B%257D%3Binac%3D0%3Blatitude%3D52.3745%3Blongitude%3D4.8969%3Boffset%3D0%3Border%3Dpopularity%3Bradius%3D1%3Bredirected_from_city%3D0%3Bredirected_from_landmark%3D0%3Breview_score_group%3Dempty%3Bscore_min%3D0%3Bsi%3Dai%252Cco%252Cci%252Cre%252Cdi%3Bsrc%3Dsearchresults%3Bss%3Dlat%253A%252052.3745%2520long%253A%25204.8969%3Bss_all%3D0%3Bssb%3Dempty%3Bssne%3Dlat%253A%252052.3745%2520long%253A%25204.8969%3Bssne_untouched%3Dlat%253A%252052.3745%2520long%253A%25204.8969%3B&dcid=1&sid=ff1f2706aa4be675f9398b67bd0cc329&si=ai%2Cco%2Cci%2Cre%2Cdi&ss=${city}&radius=1&checkin_monthday=19&checkin_year_month=2012-11&checkout_monthday=20&checkout_year_month=2012-11&in_a_group=on&org_nr_rooms=1&org_nr_adults=2&org_nr_children=0&group_config=&group_adults=2&group_children=0">
+	</iframe>
+ 
+

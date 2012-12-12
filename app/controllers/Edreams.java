@@ -51,7 +51,7 @@ public class Edreams extends Controller{
 			List<City> cities = City.findActiveCities();
 			City city = GeoHelper.getNearestCity(lat, lng, cities);
 			Logger.debug("City find by coordenates %s and %s is %s", lat, lng, city);
-			renderJSON(DealsService.findTonightDealsByCityV3(city));
+			renderJSON(DealsService.findDealsByCityAndDateV3(city, checkin, nights));
 		}
 	}
 	
@@ -66,69 +66,7 @@ public class Edreams extends Controller{
 		else{
 			City city = City.findByUrl(name.toLowerCase());
 			Logger.debug("City find by name %s  is %s", name, city);
-			renderJSON(DealsService.findTonightDealsByCityV3(city));	
+			renderJSON(DealsService.findDealsByCityAndDateV3(city, checkin, nights));	
 		}
 	}
-
-	
-	/****  JQuery Mobile Version -- DEPRECATED ****/
-	@Deprecated
-	public static void index() {
-		render();
-	}
-	
-	@Deprecated
-	public static void searchDeals(double lat, double lng, String city, int nights, @As("yyyy-MM-dd") Date checkin){
-		Logger.debug("search form with date: %s city: %s nights %s", checkin, city, nights);
-		Collection<DealDTO> deals = DealsService.findDealsByGeoOrCity(lat, lng, city, nights, checkin);
-		if (deals == null || deals.size() == 0){
-			renderTemplate("Edreams/bookingWhiteLabel.html", lat, lng, city, nights, checkin);
-		}
-		else{
-			render(deals, city);
-		}
-	}
-	
-	@Deprecated
-	public static void deal(Long id){
-		Deal hotelDeal = Deal.findById(id);
-		if (hotelDeal == null){
-			notFound();
-		}
-		City city = City.findById(hotelDeal.city.id);
-		DealDTO deal = new DealDTO(hotelDeal, city.root);
-		
-		List<String> images = deal.images;
-		render(deal, images);
-	}
-	
-	@Deprecated
-	public static void photos(String image, List<String> images, Long dealId){
-		Deal deal = Deal.findById(dealId);
-		Logger.debug("Image to show: %s for images list %s ", image, images);
-		String prevImage = null;
-		String nextImage = null;
-		Boolean imageFounded = Boolean.FALSE;
-		for (String photo : images){
-			if (imageFounded){
-				nextImage = photo;
-				break;
-			}
-			if (!StringUtils.equalsIgnoreCase(photo, image)){
-				prevImage = photo;
-			}
-			else{
-				imageFounded = Boolean.TRUE;
-			}
-		}
-		Logger.debug("Image prev: %s and next: %s", prevImage, nextImage);
-		render(image, nextImage, prevImage, images, deal);
-	}
-	
-	@Deprecated
-	public static void map(Long dealId){
-		Deal deal = Deal.findById(dealId);
-		render(deal);
-	}
-
 }

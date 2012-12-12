@@ -1,4 +1,4 @@
-<!-- Indices written at Wed, 12 Dec 2012 11:30:43 CET -->
+<!-- Indices written at Wed, 12 Dec 2012 16:24:15 CET -->
 
 <datastore-indexes>
 
@@ -15,20 +15,14 @@
         <property name="url" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 3 times in query history -->
-    <datastore-index kind="cities" ancestor="false" source="auto">
-        <property name="active" direction="asc"/>
-        <property name="url" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 5 times in query history -->
+    <!-- Used 18 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="root" direction="asc"/>
         <property name="position" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 8 times in query history -->
+    <!-- Used 30 times in query history -->
     <datastore-index kind="deals" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="city" direction="asc"/>
@@ -36,12 +30,18 @@
         <property name="priceCents" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 8 times in query history -->
+    <!-- Used 30 times in query history -->
     <datastore-index kind="deals" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="secondCity" direction="asc"/>
         <property name="position" direction="asc"/>
         <property name="priceCents" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 9 times in query history -->
+    <datastore-index kind="cities" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="url" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

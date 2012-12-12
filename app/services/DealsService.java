@@ -21,12 +21,14 @@ import siena.Query;
 
 import models.City;
 import models.Deal;
+import models.dto.CityRootDTO;
 import models.dto.DealDTO;
 import models.dto.DealDTOV3;
-import models.dto.DealsCityDTO;
+import models.dto.CityZoneDTO;
 
 public final class DealsService {
-	public static final int MAXDEALS = 3;
+	private static final int MAXDEALS = 3;
+	private static final int MAX_NIGHTS = 5;
 	
 	/**
 	 * Version 2. Cities can have root cities and zones.
@@ -298,8 +300,8 @@ public final class DealsService {
 	 * @param hour
 	 * @return Returns a DealsCityDTO with all the active deals in all the zones of a city at a given hour.
 	 */
-	private static List<DealsCityDTO> findCityZonesWithActiveDealsByNight(LinkedHashMap<City, List<Deal>> dealsMap, Integer hour, Boolean noLimits,  Boolean hideAppOnly){
-		List<DealsCityDTO> cityZones = new ArrayList<DealsCityDTO>();
+	private static List<CityZoneDTO> findCityZonesWithActiveDealsByNight(LinkedHashMap<City, List<Deal>> dealsMap, Integer hour, Boolean noLimits,  Boolean hideAppOnly){
+		List<CityZoneDTO> cityZones = new ArrayList<CityZoneDTO>();
 		Logger.debug("Is between 0am and 6am. Hour:  " + hour);
 		// iterate over zones to limit deals list to MAXDEALS
 		for(City city: dealsMap.keySet()){
@@ -309,7 +311,7 @@ public final class DealsService {
 				for (Deal deal: zoneDeals){
 					dealsDtos.add(new DealDTOV3(deal));
 				}
-				DealsCityDTO dealsCity = new DealsCityDTO(city, dealsDtos);
+				CityZoneDTO dealsCity = new CityZoneDTO(city, dealsDtos);
 				cityZones.add(dealsCity);
 			}
 			
@@ -323,8 +325,8 @@ public final class DealsService {
 	 * @param dealsMap
 	 * @return Returns a DealsCityDTO with all the active deals in all the zones of a city.
 	 */
-	private static List<DealsCityDTO> findCityZonesWithActiveDeals(LinkedHashMap<City, List<Deal>> dealsMap, Boolean noLimits, Boolean hideAppOnly) {
-		List<DealsCityDTO> cityZones = new ArrayList<DealsCityDTO>();
+	private static List<CityZoneDTO> findCityZonesWithActiveDeals(LinkedHashMap<City, List<Deal>> dealsMap, Boolean noLimits, Boolean hideAppOnly) {
+		List<CityZoneDTO> cityZones = new ArrayList<CityZoneDTO>();
 		for(City city: dealsMap.keySet()){
 			List<Deal> zoneDeals = selectMaxDeals(dealsMap.get(city), noLimits, hideAppOnly);
 			if (zoneDeals.size() > 0){
@@ -332,7 +334,7 @@ public final class DealsService {
 				for (Deal deal: zoneDeals){
 					dealsDtos.add(new DealDTOV3(deal));
 				}
-				DealsCityDTO dealsCity = new DealsCityDTO(city, dealsDtos);
+				CityZoneDTO dealsCity = new CityZoneDTO(city, dealsDtos);
 				cityZones.add(dealsCity);
 			}
 		}
@@ -392,42 +394,6 @@ public final class DealsService {
 	}
 	
 	
-	/**
-	 * @param lat
-	 * @param lng
-	 * @param cityName
-	 * @param nights
-	 * @param checkin
-	 * @return
-	 */
-	public static Collection<DealDTO> findDealsByGeoOrCity(double lat, double lng,
-			String cityName, int nights, Date checkin) {
-		
-		if (checkin != null && !DateHelper.isTodayDate(checkin)){
-			Logger.debug("Is not a search for today %s", checkin);
-			return null;
-		}
-		City city = findCityFromNameOrGeo(lat, lng, cityName);
-		if (city == null){
-			return null;
-		}
-		cityName = city.name;
-		return findTonightDealsByCity(city);
-	}
-	
-
-	private static City findCityFromNameOrGeo(double lat, double lng, String cityName) {
-		Logger.debug("Is a search for today at city %s", cityName);
-
-		if (StringUtils.isNotBlank(cityName)){
-			return City.findByUrl(cityName);
-		} 
-		else{
-			List<City> cities = City.findActiveCities();
-			return GeoHelper.getNearestCity(lat, lng, cities);
-		}
-	}
-
 	@Deprecated
 	public static Collection<DealDTO> findTonightDealsByCity(City city) {
 		Boolean noLimits = Boolean.TRUE;
@@ -485,11 +451,27 @@ public final class DealsService {
 		deal.update();
 	}
 	
-	public static List<DealsCityDTO> findTonightDealsByCityV3(City city) {
-		Boolean noLimits = Boolean.FALSE;
-		Boolean hideAppOnly = Boolean.TRUE;
-		List<DealsCityDTO> deals = findCityZonesDeals(city, noLimits, hideAppOnly);
-		return deals;		
+	
+	public static CityRootDTO findDealsByCityAndDateV3(City city, Date checkin, int nights) {
+		if (checkin != null && !DateHelper.isTodayDate(checkin)){
+			Logger.debug("Is not a search for today, %s", checkin);
+			return null;
+		}
+		else {
+			return findTonightDealsByCityV3(city, nights);
+		}
+	}
+	
+	public static CityRootDTO findTonightDealsByCityV3(City city, int nights) {
+		if (nights > MAX_NIGHTS){
+			Logger.debug("We don´t have offers for so many nights, %s", nights);
+			return null;
+		}
+		else{
+			Boolean noLimits = Boolean.FALSE;
+			Boolean hideAppOnly = Boolean.TRUE;
+			return findCityZonesDeals(city, noLimits, hideAppOnly);
+		}
 	}
 	
 	
@@ -499,7 +481,7 @@ public final class DealsService {
 	 * @param noLimits 
 	 * @return all the active deals by city base on current time
 	 */
-	public static List<DealsCityDTO> findCityZonesDeals(City city, Boolean noLimits, Boolean hideAppOnly) {
+	public static CityRootDTO findCityZonesDeals(City city, Boolean noLimits, Boolean hideAppOnly) {
 		if (city != null){
 			if (!city.isRootCityWithZones()){
 				String root = city.root;
@@ -508,19 +490,21 @@ public final class DealsService {
 			switch (DateHelper.getCurrentStateByCityHour(city.utcOffset)) {
 				case (DateHelper.CITY_CLOSED):
 					Logger.info("V3. We are closed");
-					return new ArrayList<DealsCityDTO>();
+					return null;
 				case (DateHelper.CITY_OPEN_DAY):
 					LinkedHashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
 					Logger.info("V3. We are all opened");
-					return findCityZonesWithActiveDeals(dealsMap, noLimits, hideAppOnly);
+					List<CityZoneDTO> zones = findCityZonesWithActiveDeals(dealsMap, noLimits, hideAppOnly);
+					return new CityRootDTO(city, zones);
 				case (DateHelper.CITY_OPEN_NIGHT):
 					LinkedHashMap<City, List<Deal>> dealsMapAll = findAllActiveDealsByCityV2(city);
 					Integer hour = DateHelper.getCurrentHour(city.utcOffset);
 					Logger.debug("V3. Is between 0am and 6am. Hour:  " + hour);
-					return findCityZonesWithActiveDealsByNight(dealsMapAll, hour, noLimits, hideAppOnly);
+					List<CityZoneDTO> zonesNight = findCityZonesWithActiveDealsByNight(dealsMapAll, hour, noLimits, hideAppOnly);
+					return new CityRootDTO(city, zonesNight);
 				default:
 					Logger.error("This never should happen. What hour is it?");
-					return new ArrayList<DealsCityDTO>();
+					return null;
 			 }
 		}
 		else{

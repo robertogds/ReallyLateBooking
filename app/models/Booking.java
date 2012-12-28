@@ -114,9 +114,16 @@ public class Booking extends Model {
 	public String exchangeRate;
 	public String paymentStatus;
 
+	public boolean fromWhiteLabel;
+
     public Booking(Deal deal, User user) {
         this.deal = deal;
         this.user = user;
+    }
+    
+    public Booking(Deal deal, User user, Integer nights) {
+        this(deal, user);
+        this.nights = nights;
     }
     
 	@Override
@@ -361,6 +368,23 @@ public class Booking extends Model {
 
 	public static Booking findByPaypalToken(String token) {
 		 return all().filter("paypalToken", token).get();
+	}
+
+	public void saveUnconfirmedBooking(String localizador) {
+		Logger.debug("Correct booking: " + localizador);
+		this.code = localizador;
+		this.needConfirmation = Boolean.TRUE;
+		this.update();
+	}
+
+	public static Booking createBookingForWhiteLabel(Long dealId, User user,
+			int nights) {
+		Deal deal = new Deal();
+		deal.id = dealId;
+		Booking booking = new Booking(deal, user, nights);
+		booking.rooms = 1; //we dont allow more rooms by now
+		booking.fromWhiteLabel = true;
+		return booking;
 	}
 
 }

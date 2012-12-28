@@ -1,28 +1,21 @@
-<!-- Indices written at Wed, 12 Dec 2012 16:24:15 CET -->
+<!-- Indices written at Fri, 28 Dec 2012 21:19:03 CET -->
 
 <datastore-indexes>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="countries" ancestor="false" source="auto">
-        <property name="active" direction="asc"/>
-        <property name="name" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
+    <!-- Used 4 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
-        <property name="country" direction="asc"/>
         <property name="url" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 18 times in query history -->
+    <!-- Used 4 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="root" direction="asc"/>
         <property name="position" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 30 times in query history -->
+    <!-- Used 8 times in query history -->
     <datastore-index kind="deals" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="city" direction="asc"/>
@@ -30,7 +23,7 @@
         <property name="priceCents" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 30 times in query history -->
+    <!-- Used 8 times in query history -->
     <datastore-index kind="deals" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="secondCity" direction="asc"/>
@@ -38,10 +31,11 @@
         <property name="priceCents" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 9 times in query history -->
-    <datastore-index kind="cities" ancestor="false" source="auto">
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="mycoupons" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
-        <property name="url" direction="asc"/>
+        <property name="user" direction="asc"/>
+        <property name="created" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>

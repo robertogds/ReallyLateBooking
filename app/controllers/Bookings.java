@@ -39,6 +39,7 @@ import play.mvc.Catch;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
+import services.BookingServices;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -151,7 +152,7 @@ public class Bookings extends Controller{
 	private static void paymentFromWebCompleted(Booking booking, User user, String token, String payerID) {
 		booking.deal = Deal.findById(booking.deal.id);
 		try {
-			doCompleteReservation(booking);
+			BookingServices.doCompleteReservation(booking, validation);
 		} catch (InvalidBookingCodeException e) {
 			Mails.bookingErrorMail(booking);
 	        flash.error(Messages.get("booking.validation.problem"));
@@ -216,7 +217,7 @@ public class Bookings extends Controller{
 		booking.validateNoCreditCart(); //validate object and fill errors map if exist
 		if (!validation.hasErrors()){ 
 			try {
-				doCompleteReservation(booking);
+				BookingServices.doCompleteReservation(booking, validation);
 			} catch (InvalidBookingCodeException e) {
 				Mails.bookingErrorMail(booking);
 				renderBookingError(booking);
@@ -235,76 +236,26 @@ public class Bookings extends Controller{
 	
 
 	private static void updateAndNotifyUserBooking(Booking booking) {
-		//set user first booking if needed
-		User user = User.findById(booking.user.id);
-		user.firstBookingDate = user.firstBookingDate == null ? booking.checkinDate : user.firstBookingDate;
-		user.pendingSurvey = true;
-		user.update();
-		//We mark all the coupons needed as used
-		booking.user =  User.findById(booking.user.id);
-		booking.user.markMyCouponsAsUsed(booking.credits, booking.finalPrice);
-		//inform user by mail 
+		User.updateJustBooked(booking.user.id, booking.checkinDate);
+		markCouponsAsUsed(booking);
+		//HACK to inform user and hotel tha we booked throught RESTEL
 		booking.code = booking.isHotusa ? Booking.RESTEL + "-"+booking.code : booking.code;
-		//Send email to user and hotel
 		Mails.hotelBookingConfirmation(booking);
 		Mails.userBookingConfirmation(booking);
 	}
-
-	private static void doCompleteReservation(Booking booking) throws InvalidBookingCodeException{
-		if ((booking.deal.isHotUsa != null && booking.deal.isHotUsa) && (booking.deal.isFake == null||!booking.deal.isFake )){ 
-			//If we are booking for more than one nights we need to refresh de lin codes 
-			if (booking.nights > 1){
-				HotUsaApiHelper.refreshAvailability(booking);
-			}
-			String localizador = HotUsaApiHelper.reservation(booking);
-			if (localizador != null){
-				saveUnconfirmedBooking(booking, localizador);
-			}
-			else{
-				validation.addError("rooms", Messages.get("booking.validation.problem"));
-				booking.pending = Boolean.TRUE;
-				booking.update();
-				throw new InvalidBookingCodeException("Localizador from hotusa is null");
-			}
-		}
-		else{
-			updateDealRooms(booking.deal.id, booking.rooms, booking.nights);
-		}
-	}
 	
-	private static void saveUnconfirmedBooking(Booking booking, String localizador){
-		Logger.debug("Correct booking: " + localizador);
-		booking.code = localizador;
-		booking.needConfirmation = Boolean.TRUE;
-		booking.update();
+	private static void markCouponsAsUsed(Booking booking){
+		//We mark all the coupons needed as used
+		booking.user =  User.findById(booking.user.id);
+		booking.user.markMyCouponsAsUsed(booking.credits, booking.finalPrice);
+		
 	}
+
 	
 	private static void renderBookingError(Booking booking){
 		Logger.debug("Invalid booking: " + validation.errors().toString());
 		String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 				new BookingStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), booking));
 		renderJSON(json);
-	}
-	
-	private static void updateDealRooms(Long dealId, Integer rooms, int nights){
-		Logger.debug("Deal id: %s ## Rooms: %s ## Nights: %s", dealId, rooms, nights);
-		Deal deal = Deal.findById(dealId);
-		deal.quantity = deal.quantity - rooms;
-		if (deal.quantity == 0){
-			deal.active = Boolean.FALSE;
-		}
-		if (nights > 1){
-			deal.quantityDay2 = deal.quantityDay2 == null ? deal.quantity :deal.quantityDay2 - rooms;
-			if (nights > 2){
-				deal.quantityDay3 =  deal.quantityDay3 == null ? deal.quantity : deal.quantityDay3 - rooms;
-				if (nights > 3){
-					deal.quantityDay4 =  deal.quantityDay4 == null ? deal.quantity : deal.quantityDay4 - rooms;
-					if (nights > 4){
-						deal.quantityDay5 =  deal.quantityDay5 == null ? deal.quantity : deal.quantityDay5 - rooms;
-					}
-				}
-			}
-		}
-		deal.update();
 	}
 }

@@ -131,6 +131,7 @@ GET		/icons/									staticDir:html5/icons/
 # Edreams Lungo Mobile Site
 GET 	/edreams/cities/{lat}/{lng}/{checkin}/{nights}		Edreams.findCityDealsByLatLong(format:'json')
 GET 	/edreams/cities/{name}/{checkin}/{nights}			Edreams.findCityDealsByCityName(format:'json')
+GET 	/edreams/booking/create/?							Edreams.createBooking
 
 # Edreams JQuery Mobile site -- DEPRECATED
 # GET     /edreams/                               Edreams.index

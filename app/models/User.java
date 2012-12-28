@@ -57,6 +57,7 @@ public class User extends Model{
     @Email
     public String email;
 	public String contactEmail;
+	public String phone;
 	public String validationCode;
 	public boolean validated;
 	public boolean vip;
@@ -100,6 +101,8 @@ public class User extends Model{
 	@DateTime
 	public Date firstBookingDate;
 
+	private Boolean fromWhiteLabel;
+
     
     public User() {
     	super();
@@ -125,6 +128,13 @@ public class User extends Model{
     public User(Long id) {
     	this.id = id;
     }
+
+	public User(String email, String firstName,
+			String lastName, String phone, Boolean fromWhiteLabel) {
+		this(email, "nopassrlb", firstName, lastName);	
+		this.phone = phone;
+		this.fromWhiteLabel = fromWhiteLabel;
+	}
 
 	@Override
 	public void insert() {
@@ -390,6 +400,25 @@ public class User extends Model{
 	
 	public static Query<User> allFirstBookingByDate(Date start, Date end) {
 		return User.all().filter("firstBookingDate>", start).filter("firstBookingDate<", end);
+	}
+
+	public static void updateJustBooked(Long id, Date checkinDate) {
+		//set user first booking if needed
+		User user = User.findById(id);
+		user.firstBookingDate = user.firstBookingDate == null ? checkinDate : user.firstBookingDate;
+		user.pendingSurvey = true;
+		user.update();
+	}
+
+	public static User findOrCreateUserForWhiteLabel(String email, String firstName, String lastName, String phone) {
+		User user = User.findByEmail(email);
+		if (user == null){
+			Boolean fromWhiteLabel = Boolean.TRUE;
+			user = new User(email, firstName, lastName, phone, fromWhiteLabel);
+			user.insert();
+			user.get();
+		}
+		return user;
 	}
 
 

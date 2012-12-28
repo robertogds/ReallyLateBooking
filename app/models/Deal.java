@@ -419,6 +419,28 @@ public class Deal extends Model {
 		return Boolean.FALSE;
 	}
 	
+	public static void updateDealRooms(Long dealId, Integer rooms, int nights){
+		Logger.debug("Deal id: %s ## Rooms: %s ## Nights: %s", dealId, rooms, nights);
+		Deal deal = Deal.findById(dealId);
+		deal.quantity = deal.quantity - rooms;
+		if (deal.quantity == 0){
+			deal.active = Boolean.FALSE;
+		}
+		if (nights > 1){
+			deal.quantityDay2 = deal.quantityDay2 == null ? deal.quantity :deal.quantityDay2 - rooms;
+			if (nights > 2){
+				deal.quantityDay3 =  deal.quantityDay3 == null ? deal.quantity : deal.quantityDay3 - rooms;
+				if (nights > 3){
+					deal.quantityDay4 =  deal.quantityDay4 == null ? deal.quantity : deal.quantityDay4 - rooms;
+					if (nights > 4){
+						deal.quantityDay5 =  deal.quantityDay5 == null ? deal.quantity : deal.quantityDay5 - rooms;
+					}
+				}
+			}
+		}
+		deal.update();
+	}
+	
 }
 
 

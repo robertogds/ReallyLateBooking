@@ -1,1 +1,0 @@
-(function(){var a;a=function(){return function(a,b,c,d,e,f){this.annotation=Titanium.Map.createAnnotation({latitude:b,longitude:c,title:d,subtitle:e,pincolor:Titanium.Map.ANNOTATION_RED,animate:!0,rightView:f,myid:a})}}();root.GenericMapAnnotation=a}).call(this);

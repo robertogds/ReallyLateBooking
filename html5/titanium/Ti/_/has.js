@@ -1,1 +1,0 @@
-define(function(){function e(a){var b=f[a];require.is(b,"Function")&&(b=f[a]=b(g,h,i));return b}var c=require.config,f=c.hasCache||{},g=window,h=g.document,i=h.createElement("div"),d;e.add=function(a,b,c,d){if(void 0===f[a]||d)f[a]=b;return c&&e(a)};for(d in c.has)e.add(d,c.has[d],0,!0);delete c.has;return e});

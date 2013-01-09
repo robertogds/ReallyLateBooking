@@ -1,1 +1,0 @@
-(function(){root.xhrTrack=Titanium.Network.createHTTPClient();root.track=function(a){if(!1!==Titanium.Network.online)return root.xhrTrack.setTimeout(15E3),root.xhrTrack.open("GET","http://reallybooking.com/"+a+".html"),root.xhrTrack.setRequestHeader("Accept-Language",Titanium.Locale.currentLanguage),root.xhrTrack.send()}}).call(this);

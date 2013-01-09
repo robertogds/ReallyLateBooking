@@ -1,1 +1,0 @@
-define(["Ti/_/Evented"],function(a){return declare("Ti.Media.Sound",a,{})});

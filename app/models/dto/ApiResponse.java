@@ -13,11 +13,17 @@ public class ApiResponse {
 		super();
 		this.response = new HashMap<String, Object>();
 		this.json = new HashMap<String, Object>();
-		json.put("response", response);
+		this.json.put("response", response);
+		this.setStatus(OK);
+	}
+	
+	public ApiResponse(String key, String value){
+		this();
+		this.put(key, value);
 	}
 	
 	public void setStatus(String status){
-		response.put("status", "ok");
+		response.put("status", status);
 	}
 	
 	public void setTotal(String total){

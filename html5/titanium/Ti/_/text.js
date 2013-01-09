@@ -1,1 +1,0 @@
-define(function(){var e={};return{dynamic:!0,normalize:function(b,a){var c=b.split("!"),d=c[0];c.shift();return(/^\./.test(d)?a(d):d)+(c.length?"!"+c.join("!"):"")},load:function(b,a,c){b=a.toUrl(b);a=e[b]||a.cache(b);if(!a)if(a=new XMLHttpRequest,a.open("GET",b,!1),a.send(null),200===a.status)a=a.responseText;else throw Error('Failed to load text "'+b+'": '+a.status);c(a)}}});

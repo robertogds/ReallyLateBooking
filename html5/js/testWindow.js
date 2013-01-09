@@ -1,1 +1,0 @@
-(function(){var a;root.testWindow=(new root.GenericWindow("RLB Team")).win;root.testView=Titanium.UI.createView({background:"transparent"});a=Titanium.UI.createImageView({image:"/images/rlb_team.jpg"});root.testView.add(a);root.testWindow.add(root.testView)}).call(this);

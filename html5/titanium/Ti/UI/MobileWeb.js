@@ -1,1 +1,0 @@
-define(["Ti/_/Evented","Ti/_/lang","Ti/UI/MobileWeb/NavigationGroup"],function(a,b,c){return b.setObject("Ti.UI.MobileWeb",a,{createNavigationGroup:function(a){return new c(a)}})});

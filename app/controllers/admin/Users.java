@@ -176,6 +176,14 @@ public class Users extends controllers.CRUD  {
 		redirect("/admin/users");
 	}
 	
+	public static void showUserActionsById(Long id){
+		User user = User.findById(id);
+		if (user != null){
+			showUserActionsByEmail(user.email);
+		}
+		redirect("/admin/users");
+	}
+	
 	public static void addCouponToUser(String key, User user){
 		user = User.findById(user.id);
 		try {

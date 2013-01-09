@@ -1,21 +1,21 @@
-<!-- Indices written at Fri, 28 Dec 2012 21:19:03 CET -->
+<!-- Indices written at Wed, 9 Jan 2013 16:04:16 CET -->
 
 <datastore-indexes>
 
-    <!-- Used 4 times in query history -->
+    <!-- Used 19 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="url" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 4 times in query history -->
+    <!-- Used 19 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="root" direction="asc"/>
         <property name="position" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 8 times in query history -->
+    <!-- Used 38 times in query history -->
     <datastore-index kind="deals" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="city" direction="asc"/>
@@ -23,7 +23,7 @@
         <property name="priceCents" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 8 times in query history -->
+    <!-- Used 38 times in query history -->
     <datastore-index kind="deals" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="secondCity" direction="asc"/>
@@ -31,7 +31,7 @@
         <property name="priceCents" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 2 times in query history -->
+    <!-- Used 1 time in query history -->
     <datastore-index kind="mycoupons" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="user" direction="asc"/>

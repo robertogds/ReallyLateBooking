@@ -51,7 +51,7 @@ public class Company extends Model{
 	public String lang;
 	
 
-    public Company(String name, String nif, String phone, String lastName, Integer fee) {
+    public Company(String name, String nif, String phone, Integer fee) {
         this.name = name;
         this.nif =  nif;
         this.phone = phone;

@@ -1,41 +1,26 @@
 package controllers;
 
-import groovy.lang.IncorrectClosureArgumentsException;
 import helper.AffiliateHelper;
 import helper.JsonHelper;
-import helper.UAgentInfo;
-import helper.bidobido.BidoBidoHelper;
-import helper.hotusa.HotUsaApiHelper;
 import helper.paypal.PaypalHelper;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import models.Booking;
-import models.City;
 import models.Deal;
-import models.MyCoupon;
 import models.User;
 import models.dto.BookingDTO;
 import models.dto.BookingStatusMessage;
 import models.dto.StatusMessage;
 import models.exceptions.InvalidBookingCodeException;
-import models.exceptions.InvalidCouponException;
 import notifiers.Mails;
-
-import org.apache.commons.lang.StringUtils;
-
 import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.i18n.Messages;
 import play.mvc.Before;
-import play.mvc.Catch;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;

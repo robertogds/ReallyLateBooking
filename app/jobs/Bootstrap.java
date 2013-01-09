@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import controllers.InfoTexts;
 import models.City;
+import models.Company;
 import models.Country;
 import models.Deal;
 import models.InfoText;
@@ -21,6 +22,10 @@ public class Bootstrap extends Job {
     	if(User.all().count() == 0) {
             this.initializeUsers();
             Logger.info("The are no user. A root user has been created.");
+        }
+    	if(Company.all().count() == 0) {
+        	this.initializeCompanies();
+        	Logger.info("The are no companies. Some examples have been created.");
         }
         if(Deal.all().count() == 0) {
         	this.initializeDeals();
@@ -68,6 +73,10 @@ public class Bootstrap extends Job {
 		 roberto.update();
 	}
 	
+	private void initializeCompanies() {
+		Company company = new Company("company", "53227777", "616975363", 10);
+		company.insert();
+	}
 
 	private void initializeDeals() {
 		Country spain = new Country("España", "spain");
@@ -164,6 +173,7 @@ public class Bootstrap extends Job {
 		prueba.priceDay2 = 80;
 		prueba.position = 3;
 		prueba.limitHour = 3;
+		prueba.company = Company.all().get();
 		prueba.insert();
 		Deal ritz = new Deal("Hotel DORMIRDCINE", madridNorth, Boolean.TRUE);
 		ritz.address = "castellana 43";
@@ -189,6 +199,7 @@ public class Bootstrap extends Job {
 		ritz.priceDay4 = 110;
 		ritz.position = 2;
 		ritz.limitHour = 3;
+		ritz.company = Company.all().get();
 		ritz.insert();
 	    Deal cibeles = new Deal("Vincci Soho", madridSouth, Boolean.TRUE);
 	    cibeles.address = "calle castellana, 43, 28224";
@@ -206,6 +217,8 @@ public class Bootstrap extends Job {
 		cibeles.contactEmail = "pablo@iipir.com";
 		cibeles.salePriceCents = 145;
 		cibeles.netSalePriceCents = (float) 125.0;
+		cibeles.netPriceDay2 = (float) 65.0;
+		cibeles.netPriceDay3 = (float) 95.0;
 		cibeles.priceCents = 188;
 		cibeles.priceDay2 = 80;
 		cibeles.priceDay3 = 110;
@@ -241,6 +254,8 @@ public class Bootstrap extends Job {
 	    		"Parque del Retiro y de los principales Museos de la capital -Prado, Reina Sofía y Thyssen Bornemiza." +
 	    		"* Este exclusivo barrio del centro de Madrid es tranquilo y silencioso por las noches. Perfecto si no " +
 	    		"quieres que nadie moleste tus horas de sueño.";
+	    cibeles.company = Company.all().get();
+
 	    cibeles.insert();
 	    Deal sol = new Deal("Hotel Conde Duque", madridSouth, Boolean.TRUE);
 	    sol.address = "castellana 43";
@@ -259,6 +274,8 @@ public class Bootstrap extends Job {
 		sol.priceCents = 100;
 		sol.owner = User.findByEmail("pablo@iipir.com");
 		sol.quantity = 10;
+		sol.company = Company.all().get();
+
 	    sol.insert();
 	    Deal catalunya = new Deal("Hotel Barcelo Norte", madridNorth, Boolean.TRUE);
 	    catalunya.address = "calle castellana 43, al norte";
@@ -277,6 +294,8 @@ public class Bootstrap extends Job {
 		catalunya.salePriceCents = 60;
 		catalunya.owner = User.findByEmail("pablo@iipir.com");
 		catalunya.quantity = 10;
+		catalunya.company = Company.all().get();
+
 	    catalunya.insert();		
 	}
     

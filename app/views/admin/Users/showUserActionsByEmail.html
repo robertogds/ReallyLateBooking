@@ -32,7 +32,7 @@
 		        	#{list items:bookings, as:'booking'}
 		        		<tr class=summary>
 				            <td>
-				            	<a  href="@{admin.Bookings.show(booking.id)}" >${booking.checkinDate.format('dd MMMM yyyy')}</a>
+				            	<a  href="@{admin.Bookings.show(booking.id)}" >${booking.checkinDate.format('dd-MM-yyyy')}</a>
 				            </td>
 				            <td>${booking.hotelName}</td>
 				            %{city= models.City.findById(booking.city.id)}%
@@ -120,11 +120,11 @@
 									        		<tr class=summary>
 														<td> 
 															<a href="@{admin.MyCoupons.show(coupon.id)}">
-													  	 		${coupon.created?.format('dd MMMM yyyy')}
+													  	 		${coupon.created?.format('dd-MM-yyyy')}
 													  	 	</a> 
 													  	 </td>
-														<td> ${coupon.expire?.format('dd MMMM yyyy')} </td>
-														<td> ${coupon.usedDate?.format('dd MMMM yyyy')} </td>
+														<td> ${coupon.expire?.format('dd-MM-yyyy')} </td>
+														<td> ${coupon.usedDate?.format('dd-MM-yyyy')} </td>
 														<td> ${coupon.key} </td>
 														<td> ${coupon.title} </td>
 														<td> ${coupon.credits}&euro; </td>
@@ -173,9 +173,9 @@
 			<td>${friend.isFacebook}</td>
 			<td>${friend.fromWeb}</td>
 			<td>${friend.locale}</td>
-			<td>${friend.created?.format('dd MMMM yyyy')}</td>
-			<td>${friend.lastAppLogin?.format('dd MMMM yyyy')}</td>
-			<td>${friend.lastWebLogin?.format('dd MMMM yyyy')}</td>
+			<td>${friend.created?.format('dd-MM-yyyy')}</td>
+			<td>${friend.lastAppLogin?.format('dd-MM-yyyy')}</td>
+			<td>${friend.lastWebLogin?.format('dd-MM-yyyy')}</td>
 		</tr>
 		#{/list}
 	</tbody>

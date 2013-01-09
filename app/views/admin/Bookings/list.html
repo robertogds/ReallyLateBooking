@@ -5,14 +5,14 @@
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
 
 	<div id="crudListTable">
-		#{crud.table fields:['code','user','checkinDate','hotelName', 'finalPrice', 'netTotalSalePrice','credits','fromWeb','payed','invoiced','pending','canceled'] }
+		#{crud.table fields:['code','user','checkinDate','hotelName', 'finalPrice', 'netTotalSalePrice','credits','fromWeb','fromWhiteLabel','pending','canceled'] }
 		   #{crud.custom 'code'}
 		   		<a href="@{admin.Bookings.show(object.id)}">
 				   	${object.code}
 				 </a>
 		   #{/crud.custom}
 		   #{crud.custom 'user'}
-		   	<a href="@{admin.Users.show(object.user?.id)}">
+		   	<a href="@{admin.Users.showUserActionsById(object.user?.id)}">
 		  	 	${models.User.findById(object.user?.id) }
 		  	 </a>
 		   #{/crud.custom}
@@ -21,11 +21,12 @@
 		  	 	${object.hotelName}
 		  	 </a>
 		   #{/crud.custom}
+		   
 			#{crud.custom 'checkinDate'}
-		  	 ${object.checkinDate?.format('dd MMMM yyyy - hh:mm')}
+		  	 ${object.checkinDate?.format('dd-MM-yyyy hh:mm')}
 		   #{/crud.custom}
-		   #{crud.custom 'payed'}
-				   <label style="#{if object.payed} color:green;#{/if}">${object.payed}</label>	
+		   #{crud.custom 'fromWhiteLabel'}
+				   <label style="#{if object.fromWhiteLabel} color:blue;#{/if}">${object.fromWhiteLabel}</label>	
 		   #{/crud.custom}
 		    #{crud.custom 'canceled'}
 				   <label style="#{if object.canceled} color:red;#{/if}">${object.canceled}</label>	

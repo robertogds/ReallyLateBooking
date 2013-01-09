@@ -1,1 +1,0 @@
-(function(){var a;a=function(){return function(a,b,c,d,e){Ti.API.info("Entra con width = "+a);this.view=Titanium.UI.createView({width:a,height:36,left:b,bottom:2,backgroundColor:c,borderRadius:2});this.label=Ti.UI.createLabel({text:e,color:d});this.view.add(this.label)}}();root.GenericAndroidTab=a}).call(this);

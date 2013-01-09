@@ -1,1 +1,0 @@
-define(["Ti/_","Ti/_/Evented","Ti/_/lang"],function(c,d,a){return a.mixProps(a.setObject("Ti.App",d),{constants:require.mix({sessionId:function(){var a=sessionStorage,b=a.getItem("ti:sessionId");b||a.setItem("ti:sessionId",b=c.uuid());return b}},require.config.app),getID:function(){return this.id},getURL:function(){return this.url},getGUID:function(){return this.guid}},!0)});

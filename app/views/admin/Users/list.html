@@ -6,11 +6,23 @@
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
 
 	<div id="crudListTable">
-		#{crud.table fields:['email','refererId','referer','firstName' , 'lastName','isAdmin','isOwner','isFacebook','isNew','fromWeb','locale','created','lastAppLogin','lastWebLogin'] }
+		#{crud.table fields:['email','refererId','referer','firstName' , 'lastName','isAdmin','isOwner','isFacebook','isNew','fromWeb', 'fromWhiteLabel','locale','created','lastAppLogin','lastWebLogin'] }
 		
+		#{crud.custom 'email'}
+		   	<a href="@{admin.Users.showUserActionsById(object.id)}">
+		  	 	${models.User.findById(object.id) }
+		  	 </a>
+		#{/crud.custom}
+		   
 		#{crud.custom 'created'}
-		  	 ${object.created?.format('dd MMMM yyyy - hh:mm')}
+		  	 ${object.created?.format('dd-MM-yyyy')}
 		   #{/crud.custom}
+		#{crud.custom 'lastAppLogin'}
+		  	 ${object.lastAppLogin?.format('dd-MM-yyyy')}
+		#{/crud.custom}
+		#{crud.custom 'lastWebLogin'}
+		  	 ${object.lastWebLogin?.format('dd-MM-yyyy')}
+		#{/crud.custom}
 		  #{/crud.table}
 	</div>
 	

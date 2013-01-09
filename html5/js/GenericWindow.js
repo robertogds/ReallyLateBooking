@@ -1,1 +1,0 @@
-(function(){var a;a=function(){return function(a){this.win=Ti.UI.createWindow({title:a,backgroundColor:"#f4f5f6",barColor:"#e3e4e7"})}}();root.GenericWindow=a}).call(this);

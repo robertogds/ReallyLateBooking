@@ -1,1 +1,0 @@
-(function(){var a;a=function(){return function(a,b,c){this.label=Titanium.UI.createLabel({text:c,width:Ti.UI.FILL,left:b,textAlign:"left",height:Ti.UI.SIZE,top:a,color:"#858C92",font:{fontSize:12}})}}();root.GenericSubtitleLabel=a}).call(this);

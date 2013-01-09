@@ -1,1 +1,0 @@
-(function(){var a;a=function(){return function(a,b,c){this.row=Ti.UI.createTableViewRow({height:107,hasChild:!1,selectionStyle:"none",backgroundColor:"transparent"});root.cell[a.name]=new root.cityCell(this.row,a,0);null!==b&&(root.cell[b.name]=new root.cityCell(this.row,b,107));null!==c&&(root.cell[c.name]=new root.cityCell(this.row,c,214))}}();root.cityRow=a}).call(this);

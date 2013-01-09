@@ -1,1 +1,0 @@
-(function(){var a;a=function(){return function(a,b,c){this.label=Titanium.UI.createLabel({text:c,width:Ti.UI.FILL,textAlign:"left",height:Ti.UI.SIZE,left:b,top:a,color:"#0098CB",font:{fontSize:16,fontWeight:"bold"}})}}();root.GenericBlueTitleLabel=a}).call(this);

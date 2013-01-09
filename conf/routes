@@ -78,8 +78,6 @@ GET 	/web/cities/?							   					Cities.index
 
 #Countries
 GET 	/countries								    				Countries.countryList(format:'json')
-OPTIONS 	/countries								    				Countries.countryList(format:'json')
-
 
 #Coupons Rest
 GET     /user/{userId}/coupons/{token}/{timestamp}/{signature}      Coupons.listByUser(format:'json')
@@ -89,7 +87,6 @@ POST    /coupon?									       			Coupons.validateCode(format:'json')
 # Bookings Rest
 GET     /user/{userId}/bookings/{token}/{timestamp}/{signature}     Bookings.listByUser(format:'json')
 POST    /booking/{token}/{timestamp}/{signature}         			Bookings.create(format:'json')
-OPTION    /booking/{token}/{timestamp}/{signature}         			Bookings.create(format:'json')
 
 # Users 
 GET		/dashboard/?												Users.dashboard
@@ -108,10 +105,6 @@ GET     /info/{key}            										InfoTexts.show(format:'json')
 GET	   	/extranet/?													Owners.index
 GET	   	/extranet/edit/?											Owners.edit
 
-# API REST JSON PARTNERS
-#Countries
-GET 	/api/countries								    			rest.Countries.list(format:'json')
-
 GET     /favicon.ico                  staticFile:/public/images/favicon.ico
 GET     /humans.txt                   staticFile:/public/humans.txt
 GET     /robots.txt                   staticFile:/public/robots.txt
@@ -122,22 +115,15 @@ GET     /channel.html             	  staticFile:/public/channel.html
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
-# Map html5 app 
-GET     /html5/                        			staticDir:html5
-GET     /images/                        		staticDir:html5/images/
-GET		/icons/									staticDir:html5/icons/
+# API REST JSON PARTNERS
+#Countries
+GET 	/api/countries								   	api.Countries.list(format:'json')
+GET 	/api/cities/{lat}/{lng}/{checkin}/{nights}		api.Edreams.findCityDealsByLatLong(format:'json')
+GET 	/api/cities/{name}/{checkin}/{nights}			api.Edreams.findCityDealsByCityName(format:'json')
+GET 	/api/booking/new/?								api.Edreams.createBooking(format:'json')
+GET		/api/booking/openTrx/{amount}					api.Edreams.openTransaction(format: 'json')
 
 
-# Edreams Lungo Mobile Site
-GET 	/edreams/cities/{lat}/{lng}/{checkin}/{nights}		Edreams.findCityDealsByLatLong(format:'json')
-GET 	/edreams/cities/{name}/{checkin}/{nights}			Edreams.findCityDealsByCityName(format:'json')
-GET 	/edreams/booking/create/?							Edreams.createBooking
-
-# Edreams JQuery Mobile site -- DEPRECATED
-# GET     /edreams/                               Edreams.index
-# GET 	/edreams/search/						Edreams.searchDeals
-# GET 	/edreams/deal/{id}/						Edreams.deal
-# GET 	/edreams/photos							Edreams.photos
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}

@@ -1,11 +1,5 @@
 package helper.paypal;
 
-import helper.bidobido.BidoBidoConfig;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
-import play.Logger;
 import play.Play;
 
 public class PaypalConfig {

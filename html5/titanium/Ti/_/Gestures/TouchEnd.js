@@ -1,1 +1,0 @@
-define(["Ti/_/declare","Ti/_/lang","Ti/_/Gestures/GestureRecognizer"],function(b,g,c){return b("Ti._.Gestures.TouchEnd",c,{name:"touchend",processTouchEndEvent:function(f,d){if(!d._isGestureBlocked(this.name))for(var e=f.changedTouches,a=0,b=e.length,c=this.getSourceNode(f,d);a<b;a++)d._handleTouchEvent(this.name,{x:e[a].clientX,y:e[a].clientY,source:c})}})});

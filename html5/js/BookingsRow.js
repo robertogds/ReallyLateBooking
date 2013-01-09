@@ -1,1 +1,0 @@
-(function(){var a;a=function(){return function(a){this.row=Ti.UI.createTableViewRow({hasChild:!0,rightImage:"/images/grey_arrow.png",backgroundGradient:root.bgGradient,booking:a})}}();root.BookingsRow=a}).call(this);

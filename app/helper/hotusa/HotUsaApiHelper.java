@@ -114,7 +114,6 @@ public final class HotUsaApiHelper {
 			Logger.debug("WSRequest: " + wsReq);
 			Document xml = prepareRequest(wsReq);
 			String status = xml.getElementsByTagName("estado").item(0).getTextContent();
-			Logger.debug("Reservation status: " + status);
 			if (status.equals("00")){
 				String localizador = xml.getElementsByTagName("n_localizador").item(0).getTextContent();
 				Logger.debug("Reservation is Ok, localizador: " + localizador);
@@ -179,7 +178,6 @@ public final class HotUsaApiHelper {
 	
 	public static void refreshAvailability(Booking booking) {
 		booking.deal = Deal.findById(booking.deal.id);
-		Logger.debug("### REFRESH hotusa prices for hotel %s for %s nights ", booking.hotelName, booking.nights);
 		List<Deal> deals = new ArrayList<Deal>();
 		deals.add(booking.deal);
 		String wsReq = getPriceByHotelRequest(deals, booking.nights);
@@ -360,7 +358,7 @@ public final class HotUsaApiHelper {
 			Boolean dealFound = Boolean.FALSE;
 			for (String code: dealCodesReceived){
 				if (deal.hotelCode.equalsIgnoreCase(code) || ( deal.hotelCode2 != null && deal.hotelCode2.equalsIgnoreCase(code))){
-					Logger.debug("### Hotel %s found among hotusa response. ", deal.hotelName);
+					//Logger.debug("### Hotel %s found among hotusa response. ", deal.hotelName);
 					dealFound = Boolean.TRUE;
 					break;
 				}
@@ -369,7 +367,7 @@ public final class HotUsaApiHelper {
 			if (!dealFound){
 				//Only if we are asking for a one night only, we want to deactivate the deal
 				if (bookingDays == 1){
-					Logger.debug("### Hotel %s not found among hotusa response. Cant be active.", deal.hotelName);
+					//Logger.debug("### Hotel %s not found among hotusa response. Cant be active.", deal.hotelName);
 					deal.active = Boolean.FALSE;
 					deal.quantity = 0;
 					deal.update();
@@ -385,7 +383,7 @@ public final class HotUsaApiHelper {
 	private static List<Deal> updateHotelPricesByDays(City city, List<Deal> dealsAsked,
 			int bookingDays, Boolean overridePrices, Boolean updateBookingHotelCode) {
 		if (dealsAsked != null && dealsAsked.size() > 0){
-			Logger.debug("### updateHotelPricesByDays for days %s", bookingDays);
+			//Logger.debug("### updateHotelPricesByDays for days %s", bookingDays);
 			String wsReq = getAllHotelsByCityRequest(city, dealsAsked, bookingDays);
 			List<String> dealCodesReceived = parseHotelPricesResponse110(wsReq, bookingDays, overridePrices, updateBookingHotelCode);
 			List<Deal> notAvailableDeals = checkDealsNotReceived(dealsAsked, dealCodesReceived, bookingDays);
@@ -397,7 +395,7 @@ public final class HotUsaApiHelper {
 	}
 
 	private static Deal parseHotelInfoResponse(String wsReq) {
-		Logger.debug("WS Request: " + wsReq);
+		//Logger.debug("WS Request: " + wsReq);
 		Document xml = prepareRequest(wsReq);
 		if (xml != null){
 			if (xml.getElementsByTagName("hotel") != null){
@@ -490,7 +488,7 @@ public final class HotUsaApiHelper {
 	}
 	
 	private static void updateHotelPriceForDay(int day, Element hotelNode, String hotelCode, String acceptedPaymentType, Boolean overridePrices, Boolean updateBookingHotelCode) {
-		Logger.debug("### Hotel %s, day %s, overridePrices %s",  hotelCode, day, overridePrices);
+		//Logger.debug("### Hotel %s, day %s, overridePrices %s",  hotelCode, day, overridePrices);
 		if (hotelNode.getElementsByTagName("lin").item(day) != null){
 			/* lin son Valores compactados de la disponibilidad, 
 			 * que servirán para realizar la reserva. Una lin por noche*/
@@ -524,7 +522,7 @@ public final class HotUsaApiHelper {
 			}
 		}
 		else{
-			Logger.debug("### No hotel for day: " + day);
+			//Logger.debug("### No hotel for day: " + day);
 		}
 		
 	}
@@ -538,12 +536,12 @@ public final class HotUsaApiHelper {
 			Boolean breakfastIncluded = null;
 			Boolean removeIfPriceRaised = Boolean.FALSE;
 			DealsService.updateDealByCode(hotelCode, quantity, price, breakfastIncluded, lin, day, removeIfPriceRaised);
-			Logger.debug("Hotel %s is sold out for tonight", hotelCode);
+			//Logger.debug("Hotel %s is sold out for tonight", hotelCode);
 		}
 		//if is not the first day, we just update price
 		else{
 			DealsService.updatePriceByCode(hotelCode, price, lin, day);
-			Logger.debug("Hotel %s is sold out for day: %s" , hotelCode, day);
+			//Logger.debug("Hotel %s is sold out for day: %s" , hotelCode, day);
 			
 		}
 	}
@@ -561,19 +559,19 @@ public final class HotUsaApiHelper {
 
 
 	private static void parseHotelPricesResponse(String wsReq, int bookingDays){
-		Logger.debug("WSRequest: " + wsReq);
+		//Logger.debug("WSRequest: " + wsReq);
 		Document xml = prepareRequest(wsReq);
 		if (xml != null){
 			if (xml.getElementsByTagName("hot") != null){
 				int hotels = xml.getElementsByTagName("hot").getLength();
-				Logger.debug("Hotels number: " + hotels);
+				//Logger.debug("Hotels number: " + hotels);
 				int i = 0;
 				for (int hotel=0; hotel < hotels; hotel++){
 					String hotelCode = xml.getElementsByTagName("cod").item(hotel).getTextContent();
 					//Si se acepta el pago directo
 					String pdr = xml.getElementsByTagName("pdr").item(hotel).getTextContent();
 					for (int day=0; day < bookingDays ; day++){
-						Logger.debug("### Hotel index : " + i + " day: " + day);
+						//Logger.debug("### Hotel index : " + i + " day: " + day);
 						if (xml.getElementsByTagName("lin").item(i) != null){
 							/* lin son Valores compactados de la disponibilidad, 
 							 * que servirán para realizar la reserva. Una lin por noche*/
@@ -583,10 +581,10 @@ public final class HotUsaApiHelper {
 							String status = linArray[6];
 							String regime = linArray[5];
 							String priceString = linArray[3];
-							Logger.debug("PDR: " + pdr + " status: " + status + " priceString: " +  priceString + " regime:" + regime);	
+							//Logger.debug("PDR: " + pdr + " status: " + status + " priceString: " +  priceString + " regime:" + regime);	
 							//We have dispo so we set price and dispo and continue with next day
 							if (status.equals("OK") && (regime.equals("OB") || regime.equals("RO") || regime.equals("BB")) && pdr.equals("S")){
-								Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString + " breakfast included: " +  regime.equals("BB"));
+								//Logger.debug("Hotel is Ok, code: " + hotelCode + " price: " + priceString + " breakfast included: " +  regime.equals("BB"));
 								Float price = Float.parseFloat(priceString);
 								int quantity = 1; //always 1 by now
 								Boolean breakfastIncluded = regime.equals("BB") ;
@@ -600,12 +598,12 @@ public final class HotUsaApiHelper {
 									int quantity = 0; 
 									Boolean removeIfPriceRaised = Boolean.FALSE;
 									DealsService.updateDealByCode(hotelCode, quantity, null, null, lin, day, removeIfPriceRaised);
-									Logger.debug("Hotel is sold out for tonight: " + hotelCode);
+									//Logger.debug("Hotel is sold out for tonight: " + hotelCode);
 								}
 								//if is not the first day, we just update price
 								else{
 									DealsService.updatePriceByCode(hotelCode, null, lin, day);
-									Logger.debug("Hotel is sold out for tonight: " + hotelCode);
+									//Logger.debug("Hotel is sold out for tonight: " + hotelCode);
 									
 								}
 								//we dont continue retrieving prices for next day
@@ -615,7 +613,7 @@ public final class HotUsaApiHelper {
 							}
 						}
 						else{
-							Logger.debug("### No hotel here: " + i + " day: " + day);
+							//Logger.debug("### No hotel here: " + i + " day: " + day);
 						}
 						i++;
 					}

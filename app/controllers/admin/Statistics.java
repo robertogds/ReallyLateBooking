@@ -14,7 +14,6 @@ import models.User;
 import models.dto.CityData;
 import models.dto.StatisticDTO;
 import models.dto.StatsGraphDTO;
-import play.Logger;
 import play.mvc.Controller;
 import play.mvc.With;
 import controllers.CRUD;
@@ -93,7 +92,6 @@ public class Statistics extends Controller {
 		Calendar now = calStart;
 		List<CityData> dataList = new ArrayList<CityData>();
 		while(true){
-			Logger.debug("Hoy es día: %s", now.toString());
 			Calendar tonight = Calendar.getInstance();
 			tonight.setTime(now.getTime());
 			DateHelper.setLastDayHour(tonight);

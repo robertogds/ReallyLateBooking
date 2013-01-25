@@ -95,7 +95,7 @@ POST	/users/remember 											Users.rememberPassword(format:'json')
 GET     /users/activate/{code}                  					Application.activate
 GET     /user/{id}/{token}/{timestamp}/{signature} 	            	Users.show(format:'json')
 POST    /users               										Users.create(format:'json')
-PUT     /user/{id}/{token}/{timestamp}/{signature}	         		Users.update(format:'json')
+PUT     /user/{id}/{token}/{timestamp}/{signature}	         		Users.update(format:'json') 
 GET 	/users/resetpasswordform/{code}								Users.resetPasswordForm
 
 # Info text
@@ -120,8 +120,8 @@ GET     /public/                                staticDir:public
 GET 	/api/countries								   	api.Countries.list(format:'json')
 GET 	/api/cities/{lat}/{lng}/{checkin}/{nights}		api.Edreams.findCityDealsByLatLong(format:'json')
 GET 	/api/cities/{name}/{checkin}/{nights}			api.Edreams.findCityDealsByCityName(format:'json')
-GET 	/api/booking/new/?								api.Edreams.createBooking(format:'json')
-GET		/api/booking/openTrx/{amount}					api.Edreams.openTransaction(format: 'json')
+POST 	/api/booking/new/								api.Edreams.createBooking(format:'json')
+POST	/api/booking/openTrx/							api.Edreams.openTransaction(format: 'json')
 
 
 

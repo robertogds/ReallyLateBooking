@@ -136,7 +136,6 @@ public class CreateCampaignRequest {
 	
 	public Integer testSegmentOptions(){
 		String response = MailChimpHelper.sendSegmentTest((String)this.options.get(CAMPAIGN_OPTION_LIST_ID), this.segment_opts);
-		Logger.debug("## Segment test respose: %s", response);
 		Integer number = Integer.valueOf(response);
 		return number;
 	}

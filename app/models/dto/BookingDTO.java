@@ -64,6 +64,8 @@ public class BookingDTO {
     @Expose
 	public String bookingForEmail;
     @Expose
+	public String bookingForPhone;
+    @Expose
     public Boolean canceled;
     @Expose
 	public boolean breakfastIncluded;
@@ -98,6 +100,7 @@ public class BookingDTO {
 		this.bookingForEmail = booking.bookingForEmail;
 		this.bookingForFirstName = booking.bookingForFirstName;
 		this.bookingForLastName = booking.bookingForLastName;
+		this.bookingForPhone = booking.bookingForPhone;
 		this.canceled = booking.canceled;
 		this.breakfastIncluded = booking.breakfastIncluded;
 		this.dealAddress = booking.dealAddress;

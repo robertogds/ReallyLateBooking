@@ -22,6 +22,8 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import models.User;
+
 import play.Logger;
 
 
@@ -49,7 +51,7 @@ public final class ZoozHelper {
 			zoozServer = "https://app.zooz.com";
 */
 
-	public static String openTransaction(double amount) throws IOException {
+	public static String openTransaction(double amount, User user) throws IOException {
 
 			// parameters from the client
 			String currencyCode = "EUR";
@@ -63,17 +65,10 @@ public final class ZoozHelper {
 			trxData.append("&currencyCode=").append(currencyCode);
 			
 			// additional parameters
-			trxData.append("&invoice.number=12358FF");
-			trxData.append("&invoice.items(0).name=Mushroom");
-			trxData.append("&invoice.items(0).price=0.35");
-			trxData.append("&invoice.items(0).quantity=2");
-			trxData.append("&invoice.items(0).id=asd-34s2");
-			trxData.append("&invoice.additionalDetails=Hello world");
-			trxData.append("&user.firstName=John");
-			trxData.append("&user.lastName=Doe");
-			trxData.append("&user.phone.countryCode=1");
-			trxData.append("&user.phone.phoneNumber=7188785775");
-			trxData.append("&user.email=test@zooz.com");
+			trxData.append("&user.firstName=" + user.firstName);
+			trxData.append("&user.lastName="+ user.lastName);
+			trxData.append("&user.phone.phoneNumber="+ user.phone);
+			trxData.append("&user.email="+user.email);
 			
 			String responseStr = postToServer(trxData.toString());
 			OpenTrxResponse openTrxResponse = OpenTrxResponse.create(responseStr);

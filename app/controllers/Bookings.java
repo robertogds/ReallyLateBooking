@@ -7,6 +7,7 @@ import helper.paypal.PaypalHelper;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import models.Booking;
 import models.Deal;
@@ -16,7 +17,6 @@ import models.dto.BookingStatusMessage;
 import models.dto.StatusMessage;
 import models.exceptions.InvalidBookingCodeException;
 import notifiers.Mails;
-import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.i18n.Messages;
@@ -34,6 +34,7 @@ import controllers.oauth.ApiSecurer;
 @With({I18n.class, LogExceptions.class})
 public class Bookings extends Controller{
 	
+	private static final Logger log = Logger.getLogger(Bookings.class.getName());
 	
 	@Before(only = {"doBooking","showConfirmation"})
     static void checkConnected() {
@@ -44,7 +45,7 @@ public class Bookings extends Controller{
 	static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
-			Logger.debug("Invalid signature ");
+			log.warning("Invalid signature ");
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 					new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "Invalid api signature. Contact hola@reallylatebooking.com"));
 			renderJSON(json);
@@ -76,13 +77,11 @@ public class Bookings extends Controller{
 		else{
 			params.flash(); // add http parameters to the flash scope
 	        validation.keep(); // keep the errors for the next request
-	        Logger.debug("Errors " + validation.errorsMap().toString());
 	        Deals.bookingForm(dealId);
 		}
 	}
 	
 	private static void tryBooking(Booking booking, String cancelUrl) throws UnsupportedEncodingException{
-		Logger.debug("Valid booking from web");
 		booking.fromWeb = true;
 		booking.pending = true;
 		booking.insert();
@@ -93,7 +92,6 @@ public class Bookings extends Controller{
 			redirect(paypalUrl);
 		}
 		else {
-			Logger.debug("We have more credits than the room cost, so no need to go to paypal");
 			booking.payed = true;
         	booking.canceled = false;
         	booking.pending = false;
@@ -109,10 +107,10 @@ public class Bookings extends Controller{
 		try {
 			user = User.findById(Long.valueOf(session.get("userId")));
 		} catch (NumberFormatException e) {
-			Logger.error("Can´t format userid from session to Long id", e);
+			log.warning("Can´t format userid from session to Long id... " + e);
 		}
 		if (booking == null || user == null){
-			Logger.error("Can´t find Booking or User from Paypal with token %s for payerId %s", token, PayerID);
+			log.severe("Can´t find Booking or User from Paypal with token " + token + " for payerId " + PayerID);
 			String subject = "#WARNING#  Can´t find Booking or User from Paypal with token " + token + " for payerId " + PayerID;
 			String content = " No se le ha hecho cargo en la tarjeta ni se ha reservado el hotel ";
 			Mails.errorMail(subject, content);
@@ -125,7 +123,7 @@ public class Bookings extends Controller{
 				paymentFromWebCompleted(booking, user, token, PayerID);
 			}
 			else{
-				Logger.debug("Can´t make the charge to the credit card");
+				log.warning("Can´t make the charge to the credit card");
 				String subject = "#WARNING#  Intento de compra cancelado de la reserva  " + booking.code;
 				String content = "Puede que lo cancelase el usuario o que fallase. user: "+ user.email + " Token: " + token + " for payerId " + PayerID ;
 				Mails.errorMail(subject, content);
@@ -169,7 +167,6 @@ public class Bookings extends Controller{
 	public static void listByUser(Long userId){
 		User user = User.findById(userId);
 		List<Booking> bookingList = Booking.findByUser(user);
-		Logger.debug("Bookings for user: " + userId + " are : " + bookingList.size());
 		List<BookingDTO> bookingDtoList = new ArrayList<BookingDTO>();
 		for(Booking booking : bookingList){
 			bookingDtoList.add(new BookingDTO(booking));
@@ -181,14 +178,13 @@ public class Bookings extends Controller{
 	
 	public static void create(String json) {
 		String body = json != null ? json : params.get("body");
-		Logger.debug("Create booking " + body);	
 		if (body != null){
 			BookingDTO bookingDto;
 			try {
 				bookingDto = new Gson().fromJson(body, BookingDTO.class);
 				validateAndSave(bookingDto.toBooking());
 			} catch (JsonParseException e) {
-				Logger.error("Error parsing booking json", e);
+				log.warning("Error parsing booking json..." + e);
 				String messageJson = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 						new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", Messages.get("booking.validation.all.required")));
 				renderJSON(messageJson);
@@ -238,7 +234,7 @@ public class Bookings extends Controller{
 
 	
 	private static void renderBookingError(Booking booking){
-		Logger.debug("Invalid booking: " + validation.errors().toString());
+		log.warning("Invalid booking: " + validation.errors().toString());
 		String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 				new BookingStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), booking));
 		renderJSON(json);

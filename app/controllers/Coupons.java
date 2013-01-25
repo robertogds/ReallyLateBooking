@@ -4,6 +4,7 @@ import helper.JsonHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import notifiers.Mails;
 
@@ -25,7 +26,6 @@ import models.dto.CouponStatusMessage;
 import models.dto.MyCouponDTO;
 import models.dto.StatusMessage;
 import models.exceptions.InvalidCouponException;
-import play.Logger;
 import play.data.validation.Required;
 import play.i18n.Lang;
 import play.i18n.Messages;
@@ -37,6 +37,8 @@ import play.mvc.With;
 @With({I18n.class, LogExceptions.class})
 public class Coupons extends Controller {
 	
+	private static final Logger log = Logger.getLogger(Coupons.class.getName());
+	
 	@Before(only = {"validate","validateAjax"})
     static void checkConnected() {
 		Security.checkConnected();
@@ -46,7 +48,6 @@ public class Coupons extends Controller {
 	static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
-			Logger.debug("Invalid signature ");
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 					new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "Invalid api signature. Contact soporte@reallylatebooking.com"));
 			renderJSON(json);
@@ -70,7 +71,6 @@ public class Coupons extends Controller {
 	}
 	
 	public static void validateAjax(@Required String key) {
-		Logger.debug("Create Coupon from code " + key);	
 		MyCoupon myCoupon;
 		try {
 			myCoupon = Coupon.validateAndSave(Long.valueOf(session.get("userId")), key);
@@ -93,13 +93,12 @@ public class Coupons extends Controller {
 		for (MyCoupon coupon: couponList){
 			couponsDtos.add(new MyCouponDTO(coupon));
 		}
-		Logger.debug("Coupons for user: " + userId + " are : " + couponList.size());
 		renderJSON(couponsDtos);
 	}
 	
 	public static void create(String json) {
 		String body = json != null ? json : params.get("body");
-		Logger.debug("Create Coupon %s", body);	
+		log.info("Create Coupon " + body);	
 		if (body != null){
 			MyCoupon myCoupon;
 			try {
@@ -111,7 +110,7 @@ public class Coupons extends Controller {
 					renderCouponError(e.getMessage());
 				}
 			} catch (JsonParseException e) {
-				Logger.error("Error parsing coupon json", e);
+				log.severe("Error parsing coupon json..." + e);
 				renderCouponError(Messages.get("coupon.create.internalerror"));
 			} 
 		}
@@ -120,7 +119,6 @@ public class Coupons extends Controller {
 	
 	
 	private static void renderCouponCreated(MyCoupon myCoupon){
-		Logger.debug("Valid Coupon %s", myCoupon.key);
 		String response = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 				new CouponStatusMessage(Http.StatusCode.CREATED, "CREATED", 
 						Messages.get("coupon.create.correct"), new MyCouponDTO(myCoupon)));

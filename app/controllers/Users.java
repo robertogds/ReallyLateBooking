@@ -5,6 +5,7 @@ import helper.UAgentInfo;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 import models.Booking;
 import models.City;
@@ -20,7 +21,6 @@ import notifiers.Mails;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.i18n.Messages;
@@ -37,11 +37,12 @@ import controllers.oauth.ApiSecurer;
 @With({I18n.class, LogExceptions.class})
 public class Users extends Controller {
 	
+	private static final Logger log = Logger.getLogger(Users.class.getName());
 	public static final String IPHONE_WRONG_VERSION = "5.0.1";
 	
 	@Before(only = {"dashboard", "updateAccount"})
     static void checkConnected() {
-		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
+		log.info("## Accept-languages: " + request.acceptLanguage().toString());
 		Security.checkConnected();
     }
 	
@@ -49,7 +50,7 @@ public class Users extends Controller {
 	public static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
-			Logger.debug("Invalid signature ");
+			log.warning("Invalid signature ");
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 					new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "Invalid api signature. Contact hola@reallylatebooking.com"));
 			renderJSON(json);
@@ -62,9 +63,9 @@ public class Users extends Controller {
 		String userAgent = request.headers.get("user-agent") != null ? request.headers.get("user-agent").value() : "";
 		String accept = request.headers.get("accept")!= null ? request.headers.get("accept").value() : "";
 		UAgentInfo agent = new UAgentInfo(userAgent, accept);
-		Logger.debug(userAgent);
+		log.info(userAgent);
 		if (agent.isIphone && userAgent.contains(IPHONE_WRONG_VERSION)){
-			Logger.debug("Es un iphone " + IPHONE_WRONG_VERSION);
+			log.warning("Es un iphone " + IPHONE_WRONG_VERSION);
 			renderJSON(new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "UPDATE IPHONE", Messages.get("warning.update.iphone")));
 		}
 	}
@@ -75,16 +76,15 @@ public class Users extends Controller {
 		String userAgent = request.headers.get("user-agent") != null ? request.headers.get("user-agent").value() : "";
 		String accept = request.headers.get("accept")!= null ? request.headers.get("accept").value() : "";
 		UAgentInfo agent = new UAgentInfo(userAgent, accept);
-		Logger.debug(userAgent);
+		log.info(userAgent);
 		if (agent.isIphone && userAgent.contains(IPHONE_WRONG_VERSION)){
-			Logger.debug("Es un iphone " + IPHONE_WRONG_VERSION);
+			log.warning("Es un iphone " + IPHONE_WRONG_VERSION);
 			params.put("updateIphone", IPHONE_WRONG_VERSION);
 		}
 	}
 	
 	/** RLB Web Methods **/
 	public static void dashboard(){
-		Logger.debug("SESION: " + session);
 		User user= User.findById(Long.valueOf(session.get("userId")));
 		List<Booking> bookings = Booking.findByUser(user);
 		Integer totalBookings = bookings.size();
@@ -102,7 +102,6 @@ public class Users extends Controller {
 		validation.required("user.firstName",user.firstName);
 		validation.required("user.lastName",user.lastName);
 		validation.required("user.password",user.password);
-		Logger.debug("Update user " + user.email);
 	    User dbUser = User.findById(Long.valueOf(session.get("userId")));
 	    //encryt password
 	    user.password = DigestUtils.md5Hex(user.password);
@@ -115,13 +114,12 @@ public class Users extends Controller {
 	    	flash.error(Messages.get("web.users.updateaccount.error"));
 	    	params.flash(); // add http parameters to the flash scope
 	        validation.keep(); // keep the errors for the next request
-	        Logger.debug("Errors " + validation.errorsMap().toString());
+	        log.info("Errors " + validation.errorsMap().toString());
 	    }
 	    redirect(returnUrl);
 	}
 	
 	public static void rememberPasswordEmail(@Required String email, String returnUrl){
-		Logger.debug("Remember password " + email);	
 		 if (!validation.hasErrors()){
 			 	User user = User.findByEmail(email);
 				if (user != null){
@@ -147,7 +145,6 @@ public class Users extends Controller {
 	}
 	
 	public static void saveNewPassword(@Required String code, @Required String password){
-		Logger.debug("User recovery password code " + code);	
 		if( validation.hasErrors()){
 			flash.error(Messages.get("user.remember.password.incorrect"));
 		}
@@ -189,7 +186,7 @@ public class Users extends Controller {
 	 */
 	public static void create() {
 		String body = params.get("body");
-		Logger.debug("Create user " + body);	
+		log.info("Create user " + body);	
 		if (body != null){
 			User user = new Gson().fromJson(body, User.class);
 			if (user.checkFacebookUserExists()){
@@ -206,7 +203,7 @@ public class Users extends Controller {
 				if (!validation.hasErrors()){
 					user.insert();
 					UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "CREATED", Messages.get("user.create.correct"), user);
-					Logger.debug("User correctly created " + new Gson().toJson(message));	
+					log.info("User correctly created " + new Gson().toJson(message));	
 					if (!user.isFacebook){
 						Mails.welcome(user);
 					}
@@ -220,7 +217,7 @@ public class Users extends Controller {
 				}
 				else{
 					UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), user);
-					Logger.debug("User couldnt be created " + new Gson().toJson(message));	
+					log.info("User couldnt be created " + new Gson().toJson(message));	
 					renderJSON(message);
 				}
 			}
@@ -230,7 +227,6 @@ public class Users extends Controller {
 
 	public static void update(Long id) {
 		String body = params.get("body");
-		Logger.debug("Update user " + body);
 		if (body != null){
 			User user = new Gson().fromJson(body, User.class);
 		    User dbUser = User.findById(id);
@@ -238,12 +234,11 @@ public class Users extends Controller {
 		    if (!validation.hasErrors()){
 			    dbUser.update();
 			    UserStatusMessage message = new UserStatusMessage(Http.StatusCode.OK, "OK", Messages.get("user.update.correct"), dbUser);
-				Logger.debug("User updated " + new Gson().toJson(message));	
 				renderJSON(message);
 		    }
 		    else{
 				UserStatusMessage message = new UserStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), dbUser);
-				Logger.debug("User couldnt be updated " + new Gson().toJson(message));	
+				log.severe("User couldnt be updated " + new Gson().toJson(message));	
 				renderJSON(message);
 			}
 		}
@@ -261,7 +256,6 @@ public class Users extends Controller {
 	
 	public static void rememberPassword(){
 		String body = params.get("body");
-		Logger.debug("Remember password " + body);	
 		if (body != null){
 			User user = new Gson().fromJson(body, User.class);
 			user = User.findByEmail(user.email);

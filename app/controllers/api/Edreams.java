@@ -6,10 +6,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import notifiers.Mails;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
+
+import com.google.gson.Gson;
 
 import models.Booking;
 import models.City;
@@ -26,12 +30,13 @@ import helper.GeoHelper;
 import helper.JsonHelper;
 import helper.paypal.PaypalHelper;
 import helper.zooz.ZoozHelper;
-import play.Logger;
 import play.data.binding.As;
+import play.data.validation.Email;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.i18n.Messages;
 import play.mvc.Before;
+import play.mvc.Catch;
 import play.mvc.Controller;
 import play.mvc.Http;
 import services.BookingServices;
@@ -45,6 +50,8 @@ import siena.embed.Format;
  */
 public class Edreams extends Controller{
 	
+	private static final Logger log = Logger.getLogger(Edreams.class.getName());
+	
 	@Before
 	public static void setCORS() { 
 		Http.Header hd = new Http.Header(); 
@@ -53,6 +60,14 @@ public class Edreams extends Controller{
 		hd.values.add("*"); 
 		Http.Response.current().headers.put("Access-Control-Allow-Origin",hd); 
 	}
+	
+	@Catch(Exception.class)
+    public static void renderInternalError(Throwable throwable) {
+        log.severe("Internal error at Edreams Controller… " + throwable.getStackTrace().toString());
+        Mails.errorMail("##IMPORTANT: Error en White Label Api", throwable.getMessage());
+        ApiResponse response = new ApiResponse(Http.StatusCode.INTERNAL_ERROR, "error", "Error interno. Contacte con atención al cliente, por favor. ");
+		renderJSON(response.json);
+    }
 	
 	/**
 	 * Search for the nearest city and return the active deals
@@ -66,7 +81,7 @@ public class Edreams extends Controller{
 		else{
 			List<City> cities = City.findActiveCities();
 			City city = GeoHelper.getNearestCity(lat, lng, cities);
-			Logger.debug("City find by coordenates %s and %s is %s", lat, lng, city);
+			log.info("City find by coordenates " + lat + ", " + lng + " is " + city);
 			renderJSON(DealsService.findDealsByCityAndDateV3(city, checkin, nights));
 		}
 	}
@@ -81,33 +96,36 @@ public class Edreams extends Controller{
 		}
 		else{
 			City city = City.findByUrl(name.toLowerCase());
-			Logger.debug("City find by name %s  is %s", name, city);
+			log.info("City find by name " + name + " is " + city);
 			renderJSON(DealsService.findDealsByCityAndDateV3(city, checkin, nights));	
 		}
 	}
 	
-	public static void openTransaction(@Required double amount){
+	public static void openTransaction(@Required String amount, @Required String firstName, 
+			@Required String lastName, @Required String phone, @Required @Email String email){
+		log.info("openTransaction: " + email + " amount:" + amount);
 		if(validation.hasErrors()){
-			ApiResponse response = new ApiResponse("error", "Amount parameter is required");
-			response.setStatus(ApiResponse.ERROR);
-			renderJSON(response.json);
+			log.severe("openTransaction: all parameters are required");
+			renderError(Http.StatusCode.BAD_REQUEST,"Reserva cancelada: todos los campos son obligatorios");
 		}
 		else{
 			try {
-				String token = ZoozHelper.openTransaction(amount);
+				User user = User.findOrCreateUserForWhiteLabel(email, firstName, lastName, phone);
+				String token = ZoozHelper.openTransaction(Double.parseDouble(amount), user);
 				ApiResponse response = new ApiResponse("token", token);
 				renderJSON(response.json);
 			} catch (IOException e) {
-				Logger.error("IOException at openTransaction: %s", e);
-				ApiResponse response = new ApiResponse("error", "IOException at openTransaction");
-				response.setStatus(ApiResponse.ERROR);
-				renderJSON(response.json); 
+				log.severe("IOException at openTransaction: " + e);
+				Mails.errorMail("##IMPORTANT: Error en White Label Api: openTransaction", e.getMessage());
+				renderError(Http.StatusCode.INTERNAL_ERROR,"No hemos podido realizar su reserva.");
 			}
 		}
+		
 	}
 	
-	public static void createBooking(@Required String email, @Required String firstName, @Required String lastName, String phone, @Required Long dealId,
-			@Required int nights){
+	public static void createBooking(@Required String email, @Required String firstName, @Required String lastName, 
+			String phone, @Required Long dealId, @Required int nights){
+		
 		if (!validation.hasErrors()){ 
 			User user = User.findOrCreateUserForWhiteLabel(email, firstName, lastName, phone);
 			Booking booking = Booking.createBookingForWhiteLabel(dealId, user, nights);
@@ -119,7 +137,7 @@ public class Edreams extends Controller{
 					BookingServices.doCompleteReservation(booking, validation);
 				} catch (InvalidBookingCodeException e) {
 					Mails.bookingErrorMail(booking);
-					renderBookingError(booking);
+					renderError(Http.StatusCode.INTERNAL_ERROR,validation.errors().toString());
 				}
 		    	User.updateJustBooked(booking.user.id, booking.checkinDate);
 				Mails.hotelBookingConfirmation(booking);
@@ -130,17 +148,15 @@ public class Edreams extends Controller{
 				renderJSON(json);
 			}
 		}
-		Logger.debug("Invalid booking: " + validation.errors().toString());
-		String messageJson = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
-				new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString()));
-		renderJSON(messageJson);
+		
+		log.warning("Invalid booking: " + validation.errors().toString());
+		renderError(Http.StatusCode.INTERNAL_ERROR, validation.errors().toString());
 	}
 	
-	private static void renderBookingError(Booking booking){
-		Logger.debug("Invalid booking: " + validation.errors().toString());
-		String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
-				new BookingStatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", validation.errors().toString(), booking));
-		renderJSON(json);
+	private static void renderError(int status, String error){
+		log.warning("Invalid booking: " + validation.errors().toString());
+        ApiResponse response = new ApiResponse(status, "error", error);
+		renderJSON(response.json);
 	}
 	
 }

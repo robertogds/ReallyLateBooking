@@ -8,7 +8,6 @@ import models.Booking;
 import models.City;
 import models.Company;
 import models.Invoice;
-import play.Logger;
 import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
@@ -21,6 +20,7 @@ import controllers.Security;
 @CRUD.For(Company.class)
 public class Companies extends controllers.CRUD {
 	
+	
 	public static void showCompanyBookings(Long companyId) {
 		Company company = Company.findById(companyId);
         Collection<Booking> bookings = Booking.findByCompany(company);
@@ -30,7 +30,6 @@ public class Companies extends controllers.CRUD {
 	public static void createInvoice(Long companyId) {
 		Company company = Company.findById(companyId);
         Collection<Booking> bookings = Booking.findUninvoicedByCompany(company);
-        Logger.debug("Creating invoice for " + companyId + " name:" + company.name + " Total Bookings: " + bookings.size());
         Invoice invoice = new Invoice(company);
         invoice.insert();
         invoice.assignBookings(bookings);

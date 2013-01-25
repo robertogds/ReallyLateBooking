@@ -12,11 +12,11 @@
         #{form @updateStatistics()}
 			#{select 'dayStart', items:1..31, value:data.dayStart,  id:'daySelect' /}
 			#{select 'monthStart', items:1..12, value:data.monthStart,  id:'monthSelect' /}
-			#{select 'yearStart', items:2011..2012, value:data.yearStart,  id:'yearSelect' /}
+			#{select 'yearStart', items:2011..2013, value:data.yearStart,  id:'yearSelect' /}
 			
 			#{select 'dayEnd', items:1..31, value:data.dayEnd,  id:'daySelect' /}
 			#{select 'monthEnd', items:1..12, value:data.monthEnd,  id:'monthSelect' /}
-			#{select 'yearEnd', items:2011..2012, value:data.yearEnd,  id:'yearSelect' /}
+			#{select 'yearEnd', items:2011..2013, value:data.yearEnd,  id:'yearSelect' /}
 			<input type="hidden" name="notIncludePending" value="${notIncludePending}">
 			<input type="submit" value="Refresh" />
 		#{/form}
@@ -25,10 +25,10 @@
 		#{form @exportStatistics()}
 			#{select 'dayStart', items:1..31, value:data.dayStart,  id:'daySelect' /}
 			#{select 'monthStart', items:1..12, value:data.monthStart,  id:'monthSelect' /}
-			#{select 'yearStart', items:2011..2012, value:data.yearStart,  id:'yearSelect' /}
+			#{select 'yearStart', items:2011..2013, value:data.yearStart,  id:'yearSelect' /}
 			#{select 'dayEnd', items:1..31, value:data.dayEnd,  id:'daySelect' /}
 			#{select 'monthEnd', items:1..12, value:data.monthEnd,  id:'monthSelect' /}
-			#{select 'yearEnd', items:2011..2012, value:data.yearEnd,  id:'yearSelect' /}
+			#{select 'yearEnd', items:2011..2013, value:data.yearEnd,  id:'yearSelect' /}
 			<input type="submit" value="Export to CSV" />
 		#{/form}
 		</div>
@@ -37,11 +37,11 @@
 		 #{form @exportStatisticsByDays()}
 			#{select 'dayStart', items:1..31, value:data.dayStart,  id:'daySelect' /}
 			#{select 'monthStart', items:1..12, value:data.monthStart,  id:'monthSelect' /}
-			#{select 'yearStart', items:2011..2012, value:data.yearStart,  id:'yearSelect' /}
+			#{select 'yearStart', items:2011..2013, value:data.yearStart,  id:'yearSelect' /}
 			
 			#{select 'dayEnd', items:1..31, value:data.dayEnd,  id:'daySelect' /}
 			#{select 'monthEnd', items:1..12, value:data.monthEnd,  id:'monthSelect' /}
-			#{select 'yearEnd', items:2011..2012, value:data.yearEnd,  id:'yearSelect' /}
+			#{select 'yearEnd', items:2011..2013, value:data.yearEnd,  id:'yearSelect' /}
 			<input type="submit" value="Export by day to CSV" />
 		#{/form}
 		</div>

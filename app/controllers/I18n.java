@@ -5,9 +5,7 @@ import play.mvc.Before;
 import play.mvc.Controller;
 
 public class I18n extends Controller{
-	
-	
-	
+
 	@Before
     static void checkLang() throws Throwable {
         // Authent

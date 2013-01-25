@@ -21,7 +21,6 @@ import models.dto.DealDTO;
 
 import org.apache.commons.lang.StringUtils;
 
-import play.Logger;
 import play.data.validation.Email;
 import play.data.validation.Required;
 import play.i18n.Lang;
@@ -85,7 +84,6 @@ public class Mailchimp extends Controller{
  		
 		for (City city: cities){
 			if (city.isSimpleCity()){
-				Logger.debug("Creating campaing for city %s", city.name);
 				Boolean noLimits = Boolean.FALSE;
 				Boolean hideAppOnly = Boolean.FALSE;
 				List<Deal> deals = DealsService.findActiveDealsByCity(city, noLimits, hideAppOnly);
@@ -153,12 +151,10 @@ public class Mailchimp extends Controller{
 			Integer emailsNumber = campaign.testSegmentOptions();
 			if (emailsNumber > 0){
 				String id = MailChimpHelper.campaignCreate(campaign);
-				Logger.debug("## SENDING TEST WITH ID %s ###", id);
 				sendTestEmail(id);
 			}
 			else{
 				flash.error("No se ha creado la campaña porque o bien algún dato es erróneo o ningún email cumple las condiciones.");
-				Logger.error("No se ha creado la campaña porque o bien algún dato es erróneo o ningún email cumple las condiciones.");
 			}
 	}
 

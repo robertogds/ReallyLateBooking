@@ -18,7 +18,6 @@ import notifiers.Mails;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import play.Logger;
 import play.data.binding.Binder;
 import play.data.validation.Email;
 import play.data.validation.Required;
@@ -72,11 +71,8 @@ public class Users extends controllers.CRUD  {
 	        notFoundIfNull(object);
 	        String oldPass = object.password;
 	        Binder.bind(object, "object", params.all());
-	        Logger.debug("Password param %s", oldPass);
-	        Logger.debug("Password bd %s", object.password);
 	        //Override the password with the MD5 value
 	        if(!oldPass.equalsIgnoreCase(object.password)){
-	        	Logger.debug("No son iguales");
 	        	object.password = DigestUtils.md5Hex(object.password);
 	        }
 	        
@@ -110,10 +106,8 @@ public class Users extends controllers.CRUD  {
 	        User object = (User)constructor.newInstance();
 	        
 	        Binder.bind(object, "object", params.all());
-	        Logger.debug("Pass:" + object.password);
 	        //Override the password with the MD5 value
 	        object.password = DigestUtils.md5Hex(object.password);
-	        Logger.debug("Pass:" + object.password);
 	        
 	        validation.valid(object);
 	        if (Validation.hasErrors()) {
@@ -163,11 +157,9 @@ public class Users extends controllers.CRUD  {
 				List<Booking> bookings = Booking.findAllByUser(user);
 				List<User> friends = new ArrayList<User>();
 				List<MyCoupon> friendsCoupons = MyCoupon.findByKey(user.refererId);
-				Logger.debug("Cupones encontrados: %s", friendsCoupons.size());
 				for (MyCoupon myCoupon: friendsCoupons){
 					friends.add(User.findById(myCoupon.user.id));
 				}
-				Logger.debug("Amigos encontrados: %s", friends.size());
 				int credits = user.calculateTotalCreditsFromMyCoupons();
 				List<City> cities = City.findActiveCities();
 				render(user, coupons, bookings, friends, credits, cities);
@@ -220,7 +212,6 @@ public class Users extends controllers.CRUD  {
 		else{
 			params.flash(); // add http parameters to the flash scope
 	        validation.keep(); // keep the errors for the next request
-	        Logger.debug("Errors " + validation.errorsMap().toString());
 		}
 		showUserActionsByEmail(user.email);
 	}
@@ -262,14 +253,12 @@ public class Users extends controllers.CRUD  {
 	}
 	
 	private static void saveUnconfirmedBooking(Booking booking, String localizador){
-		Logger.debug("Correct booking: " + localizador);
 		booking.code = localizador;
 		booking.needConfirmation = Boolean.TRUE;
 		booking.update();
 	}
 	
 	private static void updateDealRooms(Long dealId, Integer rooms, int nights){
-		Logger.debug("Deal id: %s ## Rooms: %s ## Nights: %s", dealId, rooms, nights);
 		Deal deal = Deal.findById(dealId);
 		deal.quantity = deal.quantity - rooms;
 		if (deal.quantity == 0){

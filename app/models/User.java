@@ -416,8 +416,16 @@ public class User extends Model{
 			Boolean fromWhiteLabel = Boolean.TRUE;
 			user = new User(email, firstName, lastName, phone, fromWhiteLabel);
 			user.insert();
-			user.get();
+			
 		}
+		else{
+			user.firstName = firstName;
+			user.lastName = lastName;
+			user.phone = phone;
+			user.update();
+		}
+		user.get();
+		Logger.debug("findOrCreateUserForWhiteLabel: %s ", user);
 		return user;
 	}
 

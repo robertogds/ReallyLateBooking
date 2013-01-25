@@ -14,7 +14,7 @@ import models.Deal;
 import models.User;
 import models.dto.CouponStatusMessage;
 import models.dto.MyCouponDTO;
-import play.Logger;
+import java.util.logging.Logger;
 import play.data.binding.As;
 import play.exceptions.TemplateNotFoundException;
 import play.i18n.Messages;
@@ -31,6 +31,8 @@ import controllers.CRUD.ObjectType;
 @With(Secure.class)
 @CRUD.For(City.class)
 public class Cities extends controllers.CRUD {
+	
+	private static final Logger log = Logger.getLogger(Cities.class.getName());
 	
 	/*
 	 * Override list method from CRUD 
@@ -76,8 +78,6 @@ public class Cities extends controllers.CRUD {
 	}
 	
 	public static String order(String list) {
-		Logger.debug("Longitud del array %s", list);
-		
 		return "Lista de deals actualizada correctamente";
 	}
 	

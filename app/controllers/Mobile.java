@@ -1,6 +1,5 @@
 package controllers;
 
-import play.*;
 import play.exceptions.UnexpectedException;
 import play.i18n.Messages;
 import play.mvc.*;
@@ -30,20 +29,12 @@ import models.dto.UserStatusMessage;
 
 public class Mobile extends Controller {
 	
-	@Before
-	public static void before(){
-		Logger.debug("### Accept-language: " + request.acceptLanguage().toString());
-		if(!Security.isConnected()) {
-		}
-	}
-	
 	public static void main() { 
 		//Workaround needed because jobs dont work on gae
 		Bootstrap job = new Bootstrap();
 		job.doJob();
 		//End of workaround
 		Collection<City> cities = City.findActiveCities();
-		Logger.debug("Number of cities: " + cities.size());
 		render(cities);
 	}
 	

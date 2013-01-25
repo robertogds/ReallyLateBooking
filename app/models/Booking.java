@@ -47,6 +47,7 @@ public class Booking extends Model {
     public String userFirstName;
 	public String userLastName;
     public String userEmail;
+	public String userPhone;
     @DateTime
     public Date checkinDate;
 	@Required
@@ -63,6 +64,7 @@ public class Booking extends Model {
     public String bookingForFirstName;
 	public String bookingForLastName;
 	public String bookingForEmail;
+	public String bookingForPhone;
     public boolean breakfastIncluded;
 	public boolean fromWeb;
 	public boolean isHotusa;
@@ -116,6 +118,10 @@ public class Booking extends Model {
 
 	public boolean fromWhiteLabel;
 
+
+
+	
+
     public Booking(Deal deal, User user) {
         this.deal = deal;
         this.user = user;
@@ -167,6 +173,7 @@ public class Booking extends Model {
     	this.userEmail = this.bookingForFriend ? this.bookingForEmail : this.user.email;
     	this.userFirstName = this.bookingForFriend ? this.bookingForFirstName :this.user.firstName;
     	this.userLastName =this.bookingForFriend ? this.bookingForLastName : this.user.lastName;
+    	this.userPhone = this.bookingForFriend ? this.bookingForPhone : this.user.phone;
      	super.insert();
 	}
 	
@@ -382,6 +389,10 @@ public class Booking extends Model {
 		Deal deal = new Deal();
 		deal.id = dealId;
 		Booking booking = new Booking(deal, user, nights);
+		booking.bookingForEmail = user.email;
+		booking.bookingForFirstName = user.firstName;
+		booking.bookingForLastName = user.lastName;
+		booking.bookingForPhone = user.phone;
 		booking.rooms = 1; //we dont allow more rooms by now
 		booking.fromWhiteLabel = true;
 		return booking;

@@ -1,14 +1,17 @@
 package controllers;
 
+import java.util.logging.Logger;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 
-import play.Logger;
 import play.mvc.With;
 import play.mvc.Scope.Session;
 import models.*;
 
 public class Security extends Secure.Security {
+	
+	private static final Logger log = Logger.getLogger(Security.class.getName());
 	public static final String ADMIN_ROLE = "admin";
 	public static final String INVESTOR_ROLE = "investor";
 	public static final String EDITOR_ROLE = "editor";
@@ -24,7 +27,7 @@ public class Security extends Secure.Security {
 	}
 	
 	static boolean check(String profile) {
-		Logger.debug("User connected: " + connected());
+		log.info("User connected: " + connected());
 		User user = User.findByEmail(connected());
 	    if(ADMIN_ROLE.equals(profile)) {
 	        return user != null && user.isAdmin;

@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import notifiers.Mails;
 
@@ -15,7 +16,6 @@ import models.City;
 import models.Company;
 import models.Deal;
 import models.User;
-import play.Logger;
 import play.data.validation.Required;
 import play.i18n.Messages;
 import play.mvc.Before;
@@ -27,9 +27,11 @@ import play.mvc.With;
 @With({LogExceptions.class, Secure.class})
 public class Owners extends Controller{
 	
+	private static final Logger log = Logger.getLogger(Owners.class.getName());
+	
 	@Catch(Exception.class)
     public static void logIllegalState(Throwable throwable) {
-        Logger.error("Internal error %s…", throwable);
+        log.severe("Internal error …" + throwable);
         throwable.printStackTrace();
         User user = User.findByEmail(Security.connected());
         Mails.errorMail("#EXTRANET ERROR# User:" + user.firstName + " email: "+ user.email, throwable.toString());
@@ -44,7 +46,7 @@ public class Owners extends Controller{
 	} 
 	
 	public static void edit(Long id) {
-		Logger.debug("Update deal " + id);
+		log.info("Update deal " + id);
 		User user = User.findByEmail(Security.connected());
 		Deal deal = Deal.findById(id);
 		if (deal != null && deal.owner != null && deal.owner.equals(user)){
@@ -83,7 +85,7 @@ public class Owners extends Controller{
 	    	flash.error(Messages.get("web.extranet.updatedeal.incorrect"));
             params.flash();
             validation.keep(); // keep the errors for the next request
-	        Logger.debug("Errors " + validation.errorsMap().toString());
+	        log.info("Errors " + validation.errorsMap().toString());
 	    }
 	    else{
 		     Deal deal = Deal.findById(id);

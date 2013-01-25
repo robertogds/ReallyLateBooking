@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.security.SignatureException;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.logging.Logger;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -17,7 +18,6 @@ import models.dto.StatusMessage;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 
-import play.Logger;
 import play.libs.Codec;
 import play.mvc.Http;
 import play.mvc.Http.Request;
@@ -33,19 +33,19 @@ import siena.sdb.ws.Base64;
  */
 public class ApiSecurer {
 	
+	private static final Logger log = Logger.getLogger(ApiSecurer.class.getName());
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	
 	public static Boolean checkApiSignature(Request request){
-		Logger.debug("### HEADERS : " + request.headers.toString());
+		log.info("## HEADERS : " + request.headers.toString());
 		String token = request.params.get("token");
 		String signature = request.params.get("signature");
 		Long timestamp = request.params.get("timestamp") != null ? Long.decode(request.params.get("timestamp")) : null;
-		Logger.debug("### Token # signature # timestamp : " + token + "#" + signature + "#" + timestamp);
+		log.info("## Token # signature # timestamp : " + token + "#" + signature + "#" + timestamp);
 		Boolean correct = Boolean.FALSE;
 		if (token != null && signature!= null && timestamp != null){
 			String baseUrl = request.url;
 			baseUrl = StringUtils.remove(baseUrl, "/"+signature);
-			Logger.debug("Checking signature: " + baseUrl+"#");
 			correct = ApiSecurer.validateMessage(baseUrl, signature, timestamp, token);
 		}
 		return correct;
@@ -64,17 +64,16 @@ public class ApiSecurer {
     	
     	User user = User.findByToken(key);
     	if (user == null){
-    		Logger.debug("User not found with token: " + key);
+    		log.info("User not found with token: " + key);
     		return Boolean.FALSE;
     	}
     	if (!checkValidTimestamp(timestamp)){
     		return Boolean.FALSE;
     	}
     	
-    	Logger.debug("APISECURER validate url: " + baseUrl);
+    	log.info("APISECURER validate url: " + baseUrl);
     	String signed = calculateMD5(baseUrl, user.secret);
-    	
-    	Logger.debug("URL SIGNED: " + signed);
+    	log.info("URL SIGNED: " + signed);
     	
     	return signedMessage.equals(signed);
     }
@@ -85,7 +84,7 @@ public class ApiSecurer {
     	//we add 10 hours 
     	long seconds = miliseconds + 64000000;
     	
-    	Logger.debug("Timestamp now: " + seconds + " timestamp iphone:" + timestamp);
+    	log.info("Timestamp now: " + seconds + " timestamp iphone:" + timestamp);
     	if (seconds > timestamp){
     		return Boolean.TRUE;
     	}

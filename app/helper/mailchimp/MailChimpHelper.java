@@ -134,7 +134,6 @@ public final class MailChimpHelper {
 		paramsMap.put("apikey", APIKEY);
 		paramsMap.put("cid", campaignId);
 		String params = new Gson().toJson(paramsMap);
-		Logger.debug("############# ENVIO DE LA CAMPAÑA ##########");
 		return prepareRequest(CAMPAIGN_SEND, params) ;
 	}
 	
@@ -145,7 +144,6 @@ public final class MailChimpHelper {
 		paramsMap.put("cid", campaignId);
 		paramsMap.put("test_emails", emails);
 		String params = new Gson().toJson(paramsMap);
-		Logger.debug("############# ENVIO DEL TEST DE LA CAMPAÑA ##########");
 		return prepareRequest(CAMPAIGN_SEND_TEST, params) ;
 	}
 	
@@ -155,7 +153,6 @@ public final class MailChimpHelper {
 		paramsMap.put("list_id", listId);
 		paramsMap.put("options", segments);
 		String params = new Gson().toJson(paramsMap);
-		Logger.debug("############# ENVIO DEL TEST DE LOS SEGMENTS ##########");
 		return prepareRequest(CAMPAIGN_SEGMENT_TEST, params) ;
 	}
 	
@@ -207,20 +204,15 @@ public final class MailChimpHelper {
 	private static List<List<String>> splitEmailList(
 			List<String> webBookingsEmail) {
 		List<List<String>> emailLists = new ArrayList<List<String>>();
-		Logger.debug("## Bookings array size before split %s", webBookingsEmail.size());
 		while(webBookingsEmail.size() >= 50){
 			List<String> emails = webBookingsEmail.subList(0, 49);
 			List<String> subList = new ArrayList<String>(emails);
 			emails.clear();
-			Logger.debug("## Sublist Bookings array size  %s", subList.size());
-			Logger.debug("## Bookings array size after split %s", webBookingsEmail.size());
 			emailLists.add(subList);
 		}
 		if (webBookingsEmail.size() > 0){
 			emailLists.add(webBookingsEmail);
 		}
-		Logger.debug("## List of lists size  %s", emailLists.size());
-		
 		return emailLists;
 	}
 

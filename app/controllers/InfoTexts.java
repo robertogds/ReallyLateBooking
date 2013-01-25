@@ -1,7 +1,6 @@
 package controllers;
 
 import models.InfoText;
-import play.Logger;
 import play.i18n.Lang;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -13,11 +12,6 @@ public class InfoTexts extends Controller {
 	public static final String DEAL_DETAIL_TEXT = "deal_detail_text";
 	public static final String MAILCHIMP_SUBJECT = "mc_subject";
 
-	
-	@Before
-	public static void checkLanguage(){
-		Logger.debug("### Accept-language: " + request.acceptLanguage().toString());
-	}
 	
 	public static void show(String key){
 		InfoText infoText = findByKey(key);

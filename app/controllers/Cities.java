@@ -12,7 +12,6 @@ import models.Deal;
 import models.User;
 import models.dto.CityDTO;
 import models.dto.DealDTO;
-import play.Logger;
 import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -26,7 +25,6 @@ public class Cities  extends Controller {
 	
 	@Before(only = {"index"})
     static void checkConnected() {
-		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
 		Security.checkConnected();
     }
 	

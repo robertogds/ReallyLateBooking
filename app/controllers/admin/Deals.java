@@ -14,7 +14,6 @@ import models.City;
 import models.Company;
 import models.Deal;
 import models.User;
-import play.Logger;
 import play.exceptions.TemplateNotFoundException;
 import play.mvc.With;
 import controllers.CRUD;

@@ -7,6 +7,7 @@ import helper.hotusa.HotUsaApiHelper;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 import jobs.Bootstrap;
 import models.Booking;
@@ -15,7 +16,6 @@ import models.Deal;
 import models.MyCoupon;
 import models.User;
 import notifiers.Mails;
-import play.Logger;
 import play.Play;
 import play.cache.Cache;
 import play.data.validation.Email;
@@ -38,18 +38,13 @@ import com.google.gson.JsonParser;
 @With({I18n.class, LogExceptions.class})
 public class Application extends Controller {
 	
-	@Before(only = {"login", "authenticate","register"})
-    static void verifySSL(){
-  //      if (request.secure == false && Play.mode.isProd()){
-  //          redirect("https://" + request.host + request.url); 
-   //     }
-    }
+	private static final Logger log = Logger.getLogger(Application.class.getName());
 	
 	@Before(only = {"index"})
 	static void checkorigin() throws Throwable{
+		log.info("CheckOrigin Before Index");
 		AffiliateHelper.checkorigin(session, params);
 	}
-	
 
 	@Before(only={"index"})
 	public static void mobileDetection(){
@@ -57,7 +52,7 @@ public class Application extends Controller {
 		String userAgent = request.headers.get("user-agent") != null ? request.headers.get("user-agent").value() : "";
 		String accept = request.headers.get("accept")!= null ? request.headers.get("accept").value() : "";
 		UAgentInfo agent = new UAgentInfo(userAgent, accept);
-		Logger.debug("User-Agent: %s isIphone: %s isAndroid: %s", userAgent, agent.isIphone, agent.isIphone);
+		log.info("User-Agent: "+ userAgent +" isIphone: "+agent.isIphone+" isAndroid: " + agent.isIphone);
 		if (agent.isIphone || agent.isAndroidPhone){
 			mobile();
 		}
@@ -89,7 +84,6 @@ public class Application extends Controller {
     	username = username  != null ? username.trim().toLowerCase() : username;
     	returnUrl = returnUrl != null ? returnUrl : "/";
 		if (!validation.hasErrors() && validation.email(username).ok){
-			Logger.debug("##  User register is correct %s", username); 
 			boolean isAdmin = false;
 			boolean validated = true;
 			User user = new User(username, password, firstName, lastName,  isAdmin,  validated);
@@ -100,11 +94,9 @@ public class Application extends Controller {
 				Mails.welcome(user);
 				flash.success(Messages.get("web.register.correct"));
 				login(username, password);
-				Logger.debug("##  User has validate correctly and now redirect to %s", returnUrl); 
 		        redirect(returnUrl);
 			}
 		}
-		Logger.debug("##  User register hasErrors %s", username); 
 		flash.error(Messages.get("web.register.incorrect"));
 		redirect(returnUrl);
 	}
@@ -132,7 +124,6 @@ public class Application extends Controller {
     
     public static void contactForm(@Required @Email String email, @Required String name, @Required String message,
     		String returnUrl,  String code, @Recaptcha String captcha){
-    	Logger.debug("Contact form from %s with captcha %s", email, captcha);
     	if(validation.hasErrors()) {
             params.flash();
             flash.error(Messages.get("web.contact.incorrect"));
@@ -174,7 +165,6 @@ public class Application extends Controller {
 		String userAgent = request.headers.get("user-agent") != null ? request.headers.get("user-agent").value() : "";
 		String accept = request.headers.get("accept")!= null ? request.headers.get("accept").value() : "";
 		UAgentInfo agent = new UAgentInfo(userAgent, accept);
-		Logger.debug("User-Agent: %s isIphone: %s isAndroid: %s", userAgent, agent.isIphone, agent.isIphone);
 		if (agent.isIphone){
 			redirect(Messages.get("itunes.url"));
 		}
@@ -185,7 +175,6 @@ public class Application extends Controller {
 	}
 	
 	public static void activate(String code){
-		Logger.debug("##### Validatind user with code: " + code);
 		User user = User.all().filter("validationCode", code).get();
 		if (user != null){
 			user.validated = true;
@@ -201,7 +190,7 @@ public class Application extends Controller {
 		for(Booking booking : bookings){
 			String localizador = HotUsaApiHelper.confirmation(booking.code);
 			if (localizador != null){
-				Logger.info("Confirmation correctly received: " + localizador);
+				log.info("Confirmation correctly received: " + localizador);
 				booking.code = localizador;
 				booking.needConfirmation = Boolean.FALSE;
 				booking.update();
@@ -212,7 +201,7 @@ public class Application extends Controller {
 				String subject = "#ERROR# Hotusa dio error al confirmar la reserva " + booking.code;
 				String content = "Hotel: " + booking.hotelName + " User: " + booking.userEmail;
 				Mails.errorMail(subject, content);
-				Logger.error("DANGER: Confirmation not received but User thinks its confirmed");
+				log.severe("DANGER: Confirmation not received but User thinks its confirmed");
 			}
 		}
 	}
@@ -220,9 +209,7 @@ public class Application extends Controller {
 	public static void pruebas(){
 		//User user = User.all().fetch().get(0);
 		Collection<Booking> bookings = Booking.all().order("checkinDate").fetch();
-		Logger.debug("Total bookings %s", bookings.size());
 		for(Booking booking: bookings){
-			Logger.debug("Booking date %s booking code %s", booking.checkinDate, booking.code);
 			User user =  User.findById(booking.user.id);
 			
 			if (user.firstBookingDate == null){
@@ -237,16 +224,12 @@ public class Application extends Controller {
 				bookingCal.setTime(booking.checkinDate);
 				
 				if (bookingCal.before(firstBookingCal)){
-					Logger.debug("bookingCal %s is before first booking %s", bookingCal.getTime(), firstBookingCal.getTime());
 					user.firstBookingDate = booking.checkinDate;
 					user.update();
 				}
 				else{
-					Logger.debug("bookingCal %s is NOT before first booking %s", bookingCal.getTime(), firstBookingCal.getTime());
 				}
 			}
-			
-			
 		}
 		//renderTemplate("Mails/welcomeV2.html", user);
 	}
@@ -272,7 +255,6 @@ public class Application extends Controller {
     private static void connectUser(String username){
     	// Mark user as connected
         User user = User.findByEmail(username);
-        Logger.debug("User founded by email : "+ username + " user: " + user.email);
     	if (user!= null){
     		user.createUserSession();
     	}

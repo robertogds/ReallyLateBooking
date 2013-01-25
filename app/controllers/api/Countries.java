@@ -25,7 +25,7 @@ public class Countries  extends Controller {
 		}
 		
 		ApiResponse response = new ApiResponse();
-		response.setStatus(ApiResponse.OK);
+		response.setStatus(Http.StatusCode.OK);
 		response.setTotal(String.valueOf(countries.size()));
 		response.put("countries", countriesDto);
         renderJSON(response.json);

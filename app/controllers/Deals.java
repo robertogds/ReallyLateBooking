@@ -16,7 +16,6 @@ import models.*;
 import models.dto.CityDTO;
 import models.dto.DealDTO;
 import models.dto.StatusMessage;
-import play.*;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.mvc.Before;
@@ -30,7 +29,6 @@ public class Deals extends Controller {
 	
 	@Before(only = {"show","list","bookingForm"})
     static void checkConnected() {
-		Logger.debug("## Accept-languages: " + request.acceptLanguage().toString());
 		if (params._contains("email")){
 			//If user is already logged in we dont care about coming from an email
 			if (Security.connectedUserExists()){
@@ -145,12 +143,9 @@ public class Deals extends Controller {
 		JsonObject results = response.getAsJsonObject("results");
 		//Logger.debug("Transloadit Results: %s",  results.toString());
 		JsonArray images = results.getAsJsonArray("compress");
-		Logger.debug("Transloadit compress: %s",  images.toString());
 		for (JsonElement image: images){
 			JsonObject imageObject = image.getAsJsonObject();
 			String name = imageObject.get("name").getAsString();
-			String url = imageObject.get("url").getAsString();
-			Logger.debug("### name:%s url:%s", name, url);
 			deal.addImage(city +"/"+ hotel +"/" + name);
 		} 
 		deal.update();

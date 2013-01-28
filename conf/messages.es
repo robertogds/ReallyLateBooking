@@ -586,6 +586,9 @@ web.dashboard.mycoupons.invite.email = Invitar por Email
 web.invite.referer.twitter = Te regalo 10€ para reservar tu hotel en RLB, usa el código %s
 web.contact.captcha = ¿Eres humano? escribe este texto
 
+extranet.list.partners.title = Tus comisiones
+web.dashboard.mybookings.table.fee = Comisión
+
 web.index.itunes.btn= Descarga para iPhone
 web.index.android.btn= Descarga para Android
 

@@ -42,6 +42,8 @@ public class Booking extends Model {
 	public String code;
     @Index("user_index")
     public User user;
+    @Index("partner_index")
+    public Partner partner;
     public String hotelName;
     public String hotelEmail;
     public String userFirstName;
@@ -385,7 +387,7 @@ public class Booking extends Model {
 	}
 
 	public static Booking createBookingForWhiteLabel(Long dealId, User user,
-			int nights) {
+			int nights, String partnerId) {
 		Deal deal = new Deal();
 		deal.id = dealId;
 		Booking booking = new Booking(deal, user, nights);
@@ -395,7 +397,13 @@ public class Booking extends Model {
 		booking.bookingForPhone = user.phone;
 		booking.rooms = 1; //we dont allow more rooms by now
 		booking.fromWhiteLabel = true;
+		Partner partner = Partner.findByPartnerId(partnerId);
+		booking.partner = partner;
 		return booking;
+	}
+
+	public static Collection<Booking> findAllBookingsByPartner(Partner partner) {
+		return Booking.all().filter("partner", partner).order("checkinDate").fetch();
 	}
 
 }

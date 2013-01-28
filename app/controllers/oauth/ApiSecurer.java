@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import models.Partner;
 import models.User;
 import models.dto.StatusMessage;
 
@@ -49,6 +50,14 @@ public class ApiSecurer {
 			correct = ApiSecurer.validateMessage(baseUrl, signature, timestamp, token);
 		}
 		return correct;
+	}
+	
+	
+	public static Boolean checkPartnerSignature(Request request){
+		log.info("## HEADERS : " + request.headers.toString());
+		String partnerId = request.params.get("partnerId");
+		Partner partner = Partner.findByPartnerId(partnerId);
+		return partner != null && partner.active;
 	}
 	
 	

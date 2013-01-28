@@ -32,6 +32,7 @@ public class CityDTO {
 	public boolean hasZones;
 	public boolean isRoot;
 	public String country;
+	public boolean isGetaway;
 	
 	public CityDTO(City city){
 		this.id = city.id;
@@ -46,6 +47,7 @@ public class CityDTO {
 		this.country = city.country.nameEN;
 		this.isRoot = city.isRootCity();
 		this.hasZones = city.isRootCityWithZones();
+		this.isGetaway = city.isGetaway;
 		
 		String lang = Lang.get();
 		if (lang != null){

@@ -35,6 +35,8 @@ public class City extends Model {
 	@Required
 	public String url;
 	public boolean active;
+	public boolean isGetaway;
+
 	@DateTime
 	public Date updated;
 	

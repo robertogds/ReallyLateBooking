@@ -27,6 +27,7 @@ import models.Company;
 import models.Deal;
 import models.InfoText;
 import models.MyCoupon;
+import models.Partner;
 import models.User;
 import play.Logger;
 import play.exceptions.MailException;
@@ -120,6 +121,10 @@ public class Mails extends MailServiceFactory {
 			params.put("booking", booking);
 			Deal deal = Deal.findById(booking.deal.id);
 			params.put("deal", deal);
+			if (booking.partner != null) {
+				Partner partner = Partner.findById(booking.partner.id);
+				params.put("partner", partner);
+			}
 			Logger.debug("Message to: " + message.getHtmlBody() + " to: " + message.getTo());
 			send(message, template, params); 
 		}
@@ -140,6 +145,10 @@ public class Mails extends MailServiceFactory {
 		String template = "Mails/hotelBookingConfirmation";
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("booking", booking);
+		if (booking.partner != null) {
+			Partner partner = Partner.findById(booking.partner.id);
+			params.put("partner", partner);
+		}
 		send(message, template, params);
 
 		//set language to client original language

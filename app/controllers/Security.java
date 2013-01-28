@@ -16,6 +16,7 @@ public class Security extends Secure.Security {
 	public static final String INVESTOR_ROLE = "investor";
 	public static final String EDITOR_ROLE = "editor";
 	public static final String OWNER_ROLE = "owner";
+	public static final String PARTNER_ROLE = "partner";
 	
 	static boolean authenticate(String username, String password) {
 	    return User.connect(username, DigestUtils.md5Hex(password)) != null;
@@ -40,6 +41,9 @@ public class Security extends Secure.Security {
 	    }
 	    else if(EDITOR_ROLE.equals(profile)) {
 		    return user != null && (user.isAdmin || user.isEditor);
+	    }
+	    else if(PARTNER_ROLE.equals(profile)) {
+		    return user != null && (user.isAdmin || user.isPartner);
 	    }
 	    
 	    return user != null;

@@ -1,22 +1,21 @@
-<html>
-<body>
+<html style="margin: 0;padding: 0;">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta charset="utf-8">
 </head>
-<style>
-	html, body { margin:0; padding:0;}
-</style>
-<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#0D1E28">
-	<tr><td>
-	<table width="450px">
+<body style="margin: 0;padding: 0;">
+	<div id="wrapper" style="padding: 10px;max-width: 500px;color: #596366;font-family: arial, sans-serif;font-size: 12px;">
+		<!-- HEADER -->
+		#{if partner != null}
+		<img src="${partner.logo}" style="width: 100%; max-width: 226px; margin-bottom: 20px; margin-left: 25px;" />
+		#{/if}
+		<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/rlb_logo_mail.gif" alt="ReallyLateBooking" 
+			title="ReallyLateBooking" id="rlb_top_logo" 
+			style="width: 100%; margin-bottom: 20px; max-height: 40px; #{if partner != null}max-width: 186px;#{/if}#{else}max-width: 226px;#{/else}">
+	
+	<table width="100%" style="font-family:arial, sans-serif; color:#596366; font-size:12px;">
 	<tr>
 		<td style="padding:5px;">
-			<img src="@@{'/public/images/logo_top.gif'}" width="309" height="40"/>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding:5px;">
-			<table width="100%" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;">
+			<table width="100%" style="font-family:arial, sans-serif; color:#596366; font-size:12px;">
 				<tr>
 					<td colspan="2">
 						<h1 style="font-size:16px; color:#0098CB;">&{'mails.booking.client.title'}</h1>
@@ -35,7 +34,7 @@
 					<td colspan="2" valign="top">
 						<strong style="font-size:14px;margin-bottom:5px; float:left; color:#0098CB;">&{'mails.booking.data'}:</strong>
 						<br/><br/>
-						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
+						<table width="300px" style="font-family:arial, sans-serif; color:#596366; font-size:12px;" cellpadding="0" cellspacing="0" >
 							<tr>
 								<td style="color:#858C92;">Hotel:</td>
 								<td><strong>${booking.hotelName}</strong></td>
@@ -81,7 +80,7 @@
 					<td colspan="2" valign="top">
 						<strong style="font-size:14px; margin-bottom:5px; float:left;color:#0098CB;">&{'mails.booking.hotel.client.data'}:</strong>
 						<br/><br/>
-						<table width="300px" style="font-family:arial, sans-serif; color:#F1F1F2; font-size:12px;" cellpadding="0" cellspacing="0" >
+						<table width="300px" style="font-family:arial, sans-serif; color:#596366; font-size:12px;" cellpadding="0" cellspacing="0" >
 							<tr>
 								<td style="color:#858C92;">&{'mails.booking.client.name'}:</td>
 								<td><strong>${booking.userLastName}, ${booking.userFirstName}</strong></td>
@@ -109,27 +108,47 @@
 			</table>
 		</td>
 	</tr>
-	<tr>
-		<td style="padding:5px; font-family:arial, sans-serif; color:#F1F1F2; color:#ffffff; font-size:12px;">
+	</table>
+				<!-- FOOTER -->
+		<div class="signature" style="margin-bottom: 20px;">
 			<p>&{'mails.booking.client.thanks'}</p>
 
-			<p>&{'mails.booking.client.social'} <a href="http://www.facebook.com/ReallyLateBooking" style="color:#0098CB;">Facebook</a>, <a href="http://twitter.com/#!/rlatebooking/" style="color:#0098CB;">Twitter</a>.</p>
-
-			<img src="@@{'/public/images/logo_small.gif'}" style="margin-top:3px;" width="166" height="22"/><br/>
-			<strong style="padding-left:2px;">&{'mails.rlb.booking.department'}</strong><br/>
-			<span style="padding-left:2px;">&{'mails.rlb.booking.department.phone'}</span><br/>
-			<a href="http://www.reallylatebooking.com" style="color:#0098CB; padding-left:2px;" >reallylatebooking.com</a><br/>
-			
-		</td>
-	</tr>
-	<tr>
-		<td style="font-family:arial, sans-serif; padding:20px 5px;; font-size:11px; color:#ccc;">
+			<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/rlb_logo_mail_footer.gif" alt="ReallyLateBooking" title="ReallyLateBooking" id="rlb_footer_logo" style="width: 136px;height: 16px;">
+			<p style="color: #596366;font-size: 12px;margin: 0 0 10px 0;clear: both;">
+				<span class="department" style="color: #0C1924;font-weight: bold;margin: 0;display: block;">&{'mails.rlb.booking.department'}</span>
+				<span class="telephone" style="color: #596366;font-weight: bold;margin: 0;display: block;">&{'mails.rlb.booking.department.phone'}</span>
+				<span class="site_url" style="color: #0C1924;font-weight: bold;margin: 0;display: block;">
+					<a href="http://www.reallylatebooking.com" style="color: #045976;text-decoration: none;">www.reallylatebooking.com</a>
+				</span>
+		</p></div>
+		<p class="small" style="color: #596366;font-size: 10px;margin: 0 0 10px 0;clear: both;">
+			&{'mails.booking.client.social'} <a href="http://www.facebook.com/ReallyLateBooking" style="color: #045976;text-decoration: none;">Facebook</a>, <a href="http://twitter.com/#!/rlatebooking/" style="color: #045976;text-decoration: none;">Twitter</a>.
+		</p>
+		<div class="small_banner_group" style="float: left;margin-right: 3px;">
+			<a href="&{'itunes.url'}" title="Download iPhone App" style="color: #045976;text-decoration: none;">
+				<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/mail_appStore.gif" class="small_banner" style="border: 0;width: 108px;height: 37px;">
+			</a>
+			<a href="&{'android.play.url'}" title="Download Android App" style="color: #045976;text-decoration: none;">
+				<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/mail_android.gif" class="small_banner" style="border: 0;width: 108px;height: 37px;">
+			</a>
+		</div>
+		<div class="small_banner_group" style="float: left;margin-right: 3px;">
+			<a href="http://www.facebook.com/ReallyLateBooking" title="Follow us on Facebook" style="color: #045976;text-decoration: none;">
+				<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/mail_facebook.gif" class="small_banner" style="border: 0;width: 108px;height: 37px;">
+			</a>
+			<a href="http://twitter.com/#!/rlatebooking/" title="Follow us on Twitter" style="color: #045976;text-decoration: none;">
+				<img src="http://d2f5bmx5jz1oq8.cloudfront.net/emails/v2/mail_twitter.gif" class="small_banner" style="border: 0;width: 108px;height: 37px;">
+			</a>
+		</div>
+		
+		<p class="small powerBy" style="color: #8D989A;font-size: 10px;margin: 0 0 10px 0;clear: both;padding: 20px 0;">
+			<span class="textLogo">
+				<em class="really" style="font-style: normal;color: #5A6366;">Really</em><em class="late" style="font-style: normal;color: #0098CB;">Late</em><em class="booking" style="font-style: normal;color: #0C1924;">Booking</em>
+			</span>
 			&{'mails.rlb.footer'}
-		</td>
-	</tr>
-	</table>
-	</td></tr>
-</table>
+		</p>
+	</div>	
+
 </body>
 </html>
 

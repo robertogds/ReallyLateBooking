@@ -23,7 +23,7 @@ import play.mvc.Catch;
 import play.mvc.Controller;
 import play.mvc.With;
 
-@Check("owner")
+@Check(Security.OWNER_ROLE)
 @With({LogExceptions.class, Secure.class})
 public class Owners extends Controller{
 	

@@ -17,6 +17,7 @@ public class CityZoneDTO {
 	public boolean hasZones;
 	public boolean isRoot;
 	public List<DealDTOV3> deals;
+	public boolean isGetaway;
 	
 	public CityZoneDTO(City city, List<DealDTOV3> deals){
 		this.id = city.id;
@@ -24,6 +25,7 @@ public class CityZoneDTO {
 		this.url = city.url;
 		this.latitude = city.latitude;
 		this.longitude = city.longitude;
+		this.isGetaway = city.isGetaway;
 		this.isRoot = city.isRootCity();
 		this.hasZones = city.isRootCityWithZones();
 		this.deals = deals;

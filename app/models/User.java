@@ -34,6 +34,7 @@ import play.templates.JavaExtensions;
 import siena.DateTime;
 import siena.Generator;
 import siena.Id;
+import siena.Index;
 import siena.Model;
 import siena.Query;
 import siena.Table;
@@ -48,33 +49,34 @@ import controllers.Security;
 public class User extends Model{
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
-	
-	//Facebook id
-	public String fbid;
-   
 	@CrudUnique
 	@Required
     @Email
     public String email;
-	public String contactEmail;
-	public String phone;
-	public String validationCode;
-	public boolean validated;
-	public boolean vip;
-	public boolean fromWeb;
-	
 	@Required
     @Password
     public String password;
-	public String resetCode;
-    
+	public String contactEmail;
+	public String phone;
     public String firstName;
     public String lastName;
     public Boolean isAdmin;
     public Boolean isOwner;
     public Boolean isFacebook;
-   
-    
+	public boolean isInvestor;
+	public boolean isEditor;
+	public boolean isPartner;
+	@Index("user_partner_index")
+	public Partner partner;
+    public String referer;
+	public String refererId;
+	public boolean vip;
+	public boolean fromWeb;
+	public String validationCode;
+	public boolean validated;
+	//Facebook id
+	public String fbid;
+	public String resetCode;
 	@DateTime
     public Date created;
 	@DateTime
@@ -90,19 +92,11 @@ public class User extends Model{
     public String locale;
     public String fbAccessToken;
     public String fbExpires;
-    public String referer;
-	public String refererId;
-	public boolean isInvestor;
-	public boolean isEditor;
-	public boolean isNew;
-	public boolean isPartner;
 	public boolean pendingSurvey;
-	
 	@DateTime
 	public Date firstBookingDate;
-
-	private Boolean fromWhiteLabel;
-
+	public Boolean fromWhiteLabel;
+	public boolean isNew;
     
     public User() {
     	super();

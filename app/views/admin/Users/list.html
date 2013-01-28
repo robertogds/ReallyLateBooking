@@ -6,7 +6,7 @@
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
 
 	<div id="crudListTable">
-		#{crud.table fields:['email','refererId','referer','firstName' , 'lastName','isAdmin','isOwner','isFacebook','isNew','fromWeb', 'fromWhiteLabel','locale','created','lastAppLogin','lastWebLogin'] }
+		#{crud.table fields:['email','refererId','referer','firstName' , 'lastName','isAdmin','isOwner','partner', 'isFacebook','isNew','fromWeb', 'fromWhiteLabel','locale','created','lastAppLogin','lastWebLogin'] }
 		
 		#{crud.custom 'email'}
 		   	<a href="@{admin.Users.showUserActionsById(object.id)}">

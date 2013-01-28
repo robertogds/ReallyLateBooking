@@ -580,6 +580,9 @@ web.dashboard.mycoupons.invite.email = Invite by Email
 web.invite.referer.twitter = Here you have a gift: 10€ free for a hotel booking at RLB, just enter this code: %s
 web.contact.captcha = Are you human? write this text
 
+extranet.list.partners.title = Your comissions
+web.dashboard.mybookings.table.fee = Fee
+
 web.index.itunes.btn= Download for iPhone
 web.index.android.btn= Download for Android
 itunes.url = http://itunes.apple.com/gb/app/reallylatebooking-las-mejores/id448918487?mt

@@ -5,6 +5,7 @@ import models.Booking;
 import models.Deal;
 import models.InfoText;
 import models.MyCoupon;
+import models.Partner;
 import models.User;
 import play.i18n.Lang;
 import play.mvc.Before;
@@ -72,12 +73,30 @@ public class Mails extends Controller {
 		renderTemplate("Mails/hotelBookingConfirmation.html", booking);
 	}
 	
+	public static void hotelBookingConfirmationPartners(String lang, String partnerId){
+		Booking booking = Booking.all().get();
+		Partner partner = Partner.findByPartnerId(partnerId);
+		Lang.set(lang);
+		renderTemplate("Mails/hotelBookingConfirmation.html", booking, partner);
+	}
+	
 	public static void userBookingConfirmation(String lang){
 		Booking booking = Booking.all().get();
 		Deal deal = Deal.findById(booking.deal.id);
 		Lang.set(lang);
 		renderTemplate("Mails/userBookingConfirmation.html", booking, deal);
 	}
+	
+	public static void userBookingConfirmationPartners(String lang, String partnerId){
+		Booking booking = Booking.all().get();
+		Deal deal = Deal.findById(booking.deal.id);
+		Partner partner = Partner.findByPartnerId(partnerId);
+		Lang.set(lang);
+		renderTemplate("Mails/userBookingConfirmation.html", booking, deal, partner);
+	}
+	
+	
+	
 	
 }
 

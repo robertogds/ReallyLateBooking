@@ -115,13 +115,16 @@ GET     /channel.html             	  staticFile:/public/channel.html
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
+#Api Partners dashboard
+GET     /partners/?								admin.PartnerBookings.index
+
 # API REST JSON PARTNERS
 #Countries
-GET 	/api/countries								   	api.Countries.list(format:'json')
-GET 	/api/cities/{lat}/{lng}/{checkin}/{nights}		api.Edreams.findCityDealsByLatLong(format:'json')
-GET 	/api/cities/{name}/{checkin}/{nights}			api.Edreams.findCityDealsByCityName(format:'json')
-POST 	/api/booking/new/								api.Edreams.createBooking(format:'json')
-POST	/api/booking/openTrx/							api.Edreams.openTransaction(format: 'json')
+GET 	/api/{<[0-9]+>partnerId}/countries								   	api.Countries.list(format:'json')
+GET 	/api/{<[0-9]+>partnerId}/cities/{lat}/{lng}/{checkin}/{nights}		api.Edreams.findCityDealsByLatLong(format:'json')
+GET 	/api/{<[0-9]+>partnerId}/cities/{name}/{checkin}/{nights}			api.Edreams.findCityDealsByCityName(format:'json')
+POST 	/api/{<[0-9]+>partnerId}/booking/new/								api.Edreams.createBooking(format:'json')
+POST	/api/{<[0-9]+>partnerId}/booking/openTrx/							api.Edreams.openTransaction(format: 'json')
 
 
 

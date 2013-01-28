@@ -15,6 +15,8 @@ import org.apache.commons.lang.Validate;
 
 import com.google.gson.Gson;
 
+import controllers.oauth.ApiSecurer;
+
 import models.Booking;
 import models.City;
 import models.Deal;
@@ -59,6 +61,17 @@ public class Edreams extends Controller{
 		hd.values = new ArrayList<String>(); 
 		hd.values.add("*"); 
 		Http.Response.current().headers.put("Access-Control-Allow-Origin",hd); 
+	}
+
+	@Before
+	public static void checkSignature(){
+		Boolean correct = ApiSecurer.checkPartnerSignature(request);
+		if (!correct){
+			log.warning("Invalid signature ");
+			Mails.errorMail("##WARNING: Invalid api signature", request.toString());
+			ApiResponse response = new ApiResponse(Http.StatusCode.BAD_REQUEST, "ERROR", "Invalid api signature. Contact soporte@reallylatebooking.com");
+			renderJSON(response.json);
+		}
 	}
 	
 	@Catch(Exception.class)
@@ -117,18 +130,18 @@ public class Edreams extends Controller{
 			} catch (IOException e) {
 				log.severe("IOException at openTransaction: " + e);
 				Mails.errorMail("##IMPORTANT: Error en White Label Api: openTransaction", e.getMessage());
-				renderError(Http.StatusCode.INTERNAL_ERROR,"No hemos podido realizar su reserva.");
+				renderError(Http.StatusCode.INTERNAL_ERROR, "No hemos podido realizar su reserva.");
 			}
 		}
 		
 	}
 	
 	public static void createBooking(@Required String email, @Required String firstName, @Required String lastName, 
-			String phone, @Required Long dealId, @Required int nights){
+			String phone, @Required Long dealId, @Required int nights, @Required String partnerId){
 		
 		if (!validation.hasErrors()){ 
 			User user = User.findOrCreateUserForWhiteLabel(email, firstName, lastName, phone);
-			Booking booking = Booking.createBookingForWhiteLabel(dealId, user, nights);
+			Booking booking = Booking.createBookingForWhiteLabel(dealId, user, nights, partnerId);
 			booking.validateNoCreditCart(); //Custom validation
 			if (!validation.hasErrors()){ 
 				booking.insert();

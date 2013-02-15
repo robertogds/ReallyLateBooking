@@ -59,7 +59,11 @@ public class Company extends Model{
         this.updated = Calendar.getInstance().getTime();
     }
     
-    public static Company findByName(String name){
+    public Company(Long companyId) {
+		this.id = companyId;
+	}
+
+	public static Company findByName(String name){
     	return Company.all().filter("name", name.trim().toLowerCase()).get();
     }
     

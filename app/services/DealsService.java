@@ -325,7 +325,7 @@ public final class DealsService {
 	 * @param dealsMap
 	 * @return Returns a DealsCityDTO with all the active deals in all the zones of a city.
 	 */
-	private static List<CityZoneDTO> findCityZonesWithActiveDeals(LinkedHashMap<City, List<Deal>> dealsMap, Boolean noLimits, Boolean hideAppOnly) {
+	private static List<CityZoneDTO> findCityZonesWithActiveDealsV3(LinkedHashMap<City, List<Deal>> dealsMap, Boolean noLimits, Boolean hideAppOnly) {
 		List<CityZoneDTO> cityZones = new ArrayList<CityZoneDTO>();
 		for(City city: dealsMap.keySet()){
 			List<Deal> zoneDeals = selectMaxDeals(dealsMap.get(city), noLimits, hideAppOnly);
@@ -470,7 +470,7 @@ public final class DealsService {
 		else{
 			Boolean noLimits = Boolean.FALSE;
 			Boolean hideAppOnly = Boolean.TRUE;
-			return findCityZonesDeals(city, noLimits, hideAppOnly);
+			return findCityZonesDealsV3(city, noLimits, hideAppOnly);
 		}
 	}
 	
@@ -481,7 +481,7 @@ public final class DealsService {
 	 * @param noLimits 
 	 * @return all the active deals by city base on current time
 	 */
-	public static CityRootDTO findCityZonesDeals(City city, Boolean noLimits, Boolean hideAppOnly) {
+	public static CityRootDTO findCityZonesDealsV3(City city, Boolean noLimits, Boolean hideAppOnly) {
 		if (city != null){
 			if (!city.isRootCityWithZones()){
 				String root = city.root;
@@ -494,7 +494,7 @@ public final class DealsService {
 				case (DateHelper.CITY_OPEN_DAY):
 					LinkedHashMap<City, List<Deal>> dealsMap = findAllActiveDealsByCityV2(city);
 					log.info("V3. We are all opened");
-					List<CityZoneDTO> zones = findCityZonesWithActiveDeals(dealsMap, noLimits, hideAppOnly);
+					List<CityZoneDTO> zones = findCityZonesWithActiveDealsV3(dealsMap, noLimits, hideAppOnly);
 					return new CityRootDTO(city, zones);
 				case (DateHelper.CITY_OPEN_NIGHT):
 					LinkedHashMap<City, List<Deal>> dealsMapAll = findAllActiveDealsByCityV2(city);

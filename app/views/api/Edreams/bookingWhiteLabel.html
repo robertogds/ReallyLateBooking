@@ -1,0 +1,12 @@
+#{extends 'api/Edreams/layout.html' /}
+
+	#{set 'pageId'}${city}#{/set}
+
+	#{set 'header'}
+			<a data-rel="back" href="#" data-icon="arrow-l" data-direction="reverse" class="alt ui-btn-left">Back</a>
+			<h2 id="titleSection" >Hotels in ${city}</h2>
+	#{/set}
+	
+	<iframe id="hotelsBooking" width="100%" 
+			src="${url}" scrolling="no" seamless>
+	</iframe>

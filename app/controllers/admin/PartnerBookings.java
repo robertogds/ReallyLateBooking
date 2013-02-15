@@ -21,7 +21,7 @@ import controllers.Secure;
 import controllers.Security;
 
 @Check(Security.PARTNER_ROLE)
-@With({LogExceptions.class, Secure.class})
+@With({Secure.class})
 public class PartnerBookings extends Controller{
 	
 	private static final Logger log = Logger.getLogger(PartnerBookings.class.getName());

@@ -32,7 +32,7 @@ public class Companies extends controllers.CRUD {
         Collection<Booking> bookings = Booking.findUninvoicedByCompany(company);
         Invoice invoice = new Invoice(company);
         invoice.insert();
-        invoice.assignBookings(bookings);
+        //invoice.assignBookings(bookings);
         render(company, bookings, invoice);
 	}
 	

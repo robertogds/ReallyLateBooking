@@ -67,13 +67,21 @@
 								<td><strong>${booking.totalSalePrice}&euro; &{'mails.booking.tax'}</strong></td>
 							</tr>
 						</table>
-						<br/><br/>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2" valign="top">
 						<strong style="font-size:14px;margin-bottom:5px; float:left; color:#0098CB;">&{'mails.booking.client.bookPaid'}</strong>
 						<br/><br/>
+					</td>
+				</tr>
+								<tr>
+					<td colspan="2" valign="top">
+						<strong style="font-size:16px;margin-bottom:5px; float:left; color:#0098CB;">&{'mails.booking.client.invoice'}</strong>
+						<span class="site_url" style="color: #0C1924;font-weight: bold;margin: 0;display: block;line-height:16px;padding-top:2px; ">
+							<a href="${play.configuration.getProperty("application.baseUrl")}users/bookings/invoice/${booking.id}/${booking.user.token}" style="color: #045976; padding-left:6px;">&{'mails.booking.client.invoice.download'}</a>
+						</span>
+						<br/>
 					</td>
 				</tr>
 				<tr>

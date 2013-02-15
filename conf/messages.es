@@ -18,6 +18,10 @@ user.firstName = Nombre
 user.lastName = Apellidos
 user.email = Email
 user.password = Contraseña
+user.phone = Teléfono
+user.nif = NIF/CIF
+user.address = Dirección
+user.company = Razón Social
 
 user.login.correct = El usuario está logado
 user.login.incorrect = Usuario o contraseña incorrecta
@@ -80,9 +84,11 @@ mails.booking.client.justbooked =  has hecho una reserva en
 mails.booking.client.showreceipt = Ense&ntilde;a tu reserva en la aplicación móvil o este email en la recepción del hotel
 mails.booking.client.thanks = Muchas gracias por confiar en nosotros para tus reservas de última hora. Esperamos que disfrutes la estancia y vuelvas a visitarnos pronto.
 mails.booking.client.social = Para estar al día de todas nuestras ofertas y las nuevas ciudades abre la aplicación en tu móvil con frecuencia, y visita nuestras paginas en  
-mails.booking.client.bookPaid = RLB realizará el cargo en tu tarjeta de crédito. No debes hacer ningún pago en el hotel.
+mails.booking.client.bookPaid = Tu reserva está pagada, no debes hacer ningún pago en el hotel.
 mails.booking.error.subject = #IMPORTANTE# Problema con tu reserva en %s
 mails.booking.error.hotel = Ha ocurrido un error al realizar tu reserva en %s, por favor, contesta a este email con tu número de teléfono y nosotros te llamaremos para confirmar el estado de tu reserva.
+mails.booking.client.invoice = ¿Necesitas factura?
+mails.booking.client.invoice.download = Descargar Factura
 
 mails.welcome.welcome = bienvenido a ReallyLateBooking
 mails.welcome.p1 = Reserva hotel <strong style="color: #0C1924;">ESTA NOCHE con un descuento de hasta un 70&#37;</strong>  sobre el precio habitual.
@@ -156,7 +162,7 @@ invoice = Factura
 
 invoice.amount_due = Adeudo Total
 invoice.date = Fecha
-invoice.description = Reserva
+invoice.description = Concepto
 invoice.cost = Coste
 invoice.commission = Comisión
 invoice.price = Precio
@@ -169,6 +175,10 @@ invoice.tax= IVA
 invoice.terms = Términos
 invoice.add_row = Añadir linea de factura 
 invoice.banktransfer=Por transferencia bancaria al número de cuenta IBAN: 0049 6109 62 2116345761. 
+invoice.taxFee = Impuesto
+invoice.feeCost = Gastos de gestión
+invoice.paid = Forma de pago: Pagado
+invoice.print= Imprimir o guardar como PDF
 
 city.notfound =Ciudad no encontrada
 deal.detailText.breakast.yes= * Desayuno  incluído.
@@ -585,6 +595,8 @@ web.dashboard.mycoupons.invite.twitter = Invitar por Twitter
 web.dashboard.mycoupons.invite.email = Invitar por Email
 web.invite.referer.twitter = Te regalo 10€ para reservar tu hotel en RLB, usa el código %s
 web.contact.captcha = ¿Eres humano? escribe este texto
+web.users.bookings.showinvoice.notfound = No hemos encontrado la reserva. Contacta con nosotros.
+web.users.bookings.showinvoice.updateinfo = Actualiza tus datos de facturación para que podamos generar la factura.
 
 extranet.list.partners.title = Tus comisiones
 web.dashboard.mybookings.table.fee = Comisión

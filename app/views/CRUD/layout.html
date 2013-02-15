@@ -73,7 +73,12 @@
 		#{/if}
 		#{if flash.error || error}
 			<div class="crudFlash flashError">
-				${error ?: flash.error}
+				#{ifErrors}
+	   				<h1>Oops…</h1>
+					   #{errors}
+					       <li>${error}</li>
+					   #{/errors}
+				#{/ifErrors}
 			</div>
 		#{/if}
 		

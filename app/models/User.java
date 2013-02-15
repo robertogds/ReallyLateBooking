@@ -60,6 +60,9 @@ public class User extends Model{
 	public String phone;
     public String firstName;
     public String lastName;
+    public String nif;
+    public String address;
+	public String company;
     public Boolean isAdmin;
     public Boolean isOwner;
     public Boolean isFacebook;
@@ -97,6 +100,7 @@ public class User extends Model{
 	public Date firstBookingDate;
 	public Boolean fromWhiteLabel;
 	public boolean isNew;
+	
     
     public User() {
     	super();
@@ -264,7 +268,6 @@ public class User extends Model{
 	}
 	
 	public void createUserSession(){
-    	Logger.debug("User session: " + Session.current().toString());
     	Session.current().put("username", this.email);
     	Session.current().put("firstName", this.firstName);
     	Session.current().put("lastName", this.lastName);
@@ -314,8 +317,11 @@ public class User extends Model{
 		this.password = user.password.trim().isEmpty() ? this.password : user.password.trim();
 		this.firstName = user.firstName.trim().isEmpty() ? this.firstName : user.firstName.trim();
 		this.lastName = user.lastName.trim().isEmpty() ? this.lastName : user.lastName.trim();
+		this.phone = StringUtils.isBlank(user.phone) ? this.phone : user.phone.trim();
+		this.address = StringUtils.isBlank(user.address) ? this.address : user.address.trim();
+		this.nif = StringUtils.isBlank(user.nif) ? this.nif : user.nif.trim();
+		this.company = StringUtils.isBlank(user.company) ? this.company : user.company.trim();
 	}
-
 
 	public void validate() {
 		validateEmail();

@@ -18,6 +18,10 @@
 		   	 		#{select 'object.city.id', items:cities, valueProperty:'id', labelProperty:'name', value:object?.city?.id }
 		   	 		 	#{option}please select something...#{/option}
 					#{/select}
+					#{ifError 'object.city'}
+							<span class="error">#{error 'object.city'/}</span>
+					#{/ifError}
+					
 				#{/crud.custom} 
 			#{crud.custom 'owner'} 
 	   	 	<label for="object_owner">
@@ -27,10 +31,13 @@
 					    owners = models.User.getAllOwners();
 					}%
 					
-		   	 		#{select 'object.owner.id', items:owners, valueProperty:'id', labelProperty:'firstName', value:object?.owner?.id }
+		   	 		#{select 'object.owner.id', items:owners, valueProperty:'id', labelProperty:'object.owner.name', value:object?.owner?.id }
 		   	 			#{option}please select something...#{/option}
 					#{/select}
-		   	 		
+					
+		   	 		#{ifError 'object.owner'}
+							<span class="error">#{error 'object.owner'/}</span>
+					#{/ifError}
 			#{/crud.custom} 
 			#{crud.custom 'company'} 
 	   	 	<label for="object_company">

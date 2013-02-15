@@ -7,6 +7,7 @@ import models.Booking;
 import models.Company;
 import models.InfoText;
 import models.Invoice;
+import models.User;
 import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
@@ -21,9 +22,9 @@ public class Invoices  extends controllers.CRUD {
 	
 	public static void showInvoice(Long invoiceId) {
 		Invoice invoice = Invoice.findById(invoiceId);
-		Company company = Company.findById(invoice.company.id);
-        Collection<Booking> bookings = Booking.findByInvoice(invoice);
-        renderTemplate("admin/Companies/createInvoice.html",company, bookings, invoice);
+		User user= invoice.user;
+		user.get();
+        renderTemplate("Users/showBookingInvoice.html", user, invoice);
 	}
 	
 	public static void exportAll() {

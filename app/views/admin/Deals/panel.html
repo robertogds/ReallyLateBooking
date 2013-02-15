@@ -1,0 +1,116 @@
+#{set active:'deals'/}
+#{set activeSub:'deals'/}
+
+#{extends 'admin/layoutResponsive.html' /}
+		  
+		 #{include 'admin/Deals/rightColumn.html'/}
+		  
+		
+        <div class="span10">
+        	<table class="table table-bordered table-hover">
+        		<thead>
+	                <tr>
+	                	<th>
+							Updated
+						</th>
+	                	<th>
+							Hotel
+						</th>
+						<th >
+							Rooms
+						</th>
+						<th>
+							Public
+						</th>
+						<th >
+							BAR
+						</th>
+						<th>
+							Discount
+						</th>
+						<th >
+							Day1
+						</th>
+						<th >
+							Day2
+						</th>
+						<th >
+							Day3
+						</th>
+						<th >
+							Day4
+						</th>
+						<th >
+							Day5
+						</th>
+						<th >
+							Position
+						</th>
+						<th>
+							Agreement
+						</th>
+						<th >
+							Breakfast
+						</th>
+						<th >
+							Limit Hour
+						</th>
+	                </tr>
+              	</thead>
+              	<tbody>
+	        		#{list items:deals, as:'deal'}
+	          			<tr class="#{if deal.active} success #{/if}">
+	          				<td> 
+	          					${deal.updated?.format('dd-MM-yy hh:mm')}
+	          				</td>
+		    				<td>
+		    					<a href="@{admin.Deals.show(deal.id)}">
+				   					${deal.hotelName}
+				   				 </a>
+				   			</td>
+		    				<td>
+		    					${deal.quantity}
+		    				</td>
+		    				<td>
+		    					${deal.priceCents}&euro;
+		    				</td>
+		    				<td>
+		    					${deal.bestPrice}&euro;
+		    				</td>
+		    				<td>
+		    					${deal.discount}%
+		    				</td>
+		    				<td>
+		    					${deal.salePriceCents}&euro; <br/> ${deal.netSalePriceCents}&euro;
+		    				</td>
+		    				<td>
+		    					${deal.priceDay2}&euro; <br/> ${deal.netPriceDay2}&euro;
+		    				</td>
+		    				<td>
+		    					${deal.priceDay3}&euro; <br/> ${deal.netPriceDay2}&euro;
+		    				
+		    				</td>
+		    				<td>
+		    					${deal.priceDay4}&euro; <br/> ${deal.netPriceDay2}&euro;
+		    				</td>
+		    				<td>
+		    					${deal.priceDay5}&euro; <br/> ${deal.netPriceDay2}&euro;
+		    				</td>
+		    				<td>
+		    					${deal.position}
+		    				</td>
+		    				<td>
+		    					#{if deal.isHotUsa} HOTUSA #{/if}#{else} DIRECT #{/else}
+		    				</td>
+		    				<td>
+		    					#{if deal.breakfastIncluded} AD #{/if}#{else} NOT #{/else}
+		    				</td>
+		    				<td>
+		    					${deal.limitHour}
+		    				</td>
+	  					</tr>
+	          		#{/list}
+          		</tbody>
+			</table>
+          	
+        </div><!--/span-->

@@ -20,7 +20,7 @@
   <cron>
     <url>/cron/sendSurveyEmails</url>
     <description>Send survey emails to the previous day bookers</description>
-    <schedule>every day 12:00</schedule>
+    <schedule>every day 11:00</schedule>
     <timezone>Europe/Madrid</timezone>
   </cron>
   <cron>

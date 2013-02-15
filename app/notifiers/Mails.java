@@ -108,6 +108,7 @@ public class Mails extends MailServiceFactory {
 
 	public static void userBookingConfirmation(Booking booking) {
 		if (StringUtils.isNotBlank(booking.userEmail)){
+			booking.user.get();
 			Message message = new Message();
 			message.setSubject(Messages.get("mail.bookinguser.subject") + " "  + booking.hotelName);
 			message.setSender(HOLA_MAIL);

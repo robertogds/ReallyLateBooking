@@ -29,6 +29,7 @@ public class DealDTOV3 extends AbstractDealDTO{
     
 	public DealDTOV3(Deal deal) {
 		super(deal);
+		this.textToHtml();
 		ImageHelper.imagesToList(this);
 	}
 

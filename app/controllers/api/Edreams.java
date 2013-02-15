@@ -82,6 +82,12 @@ public class Edreams extends Controller{
 		renderJSON(response.json);
     }
 	
+	public static void bookingWhiteLabel(String bookingUrl){
+		String city = "ciudad";
+		log.warning(bookingUrl);
+		render(bookingUrl, city);
+	}
+	
 	/**
 	 * Search for the nearest city and return the active deals
 	 * @param lat
@@ -154,6 +160,7 @@ public class Edreams extends Controller{
 				}
 		    	User.updateJustBooked(booking.user.id, booking.checkinDate);
 				Mails.hotelBookingConfirmation(booking);
+				Mails.userBookingConfirmation(booking);
 				
 				String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 						new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", 

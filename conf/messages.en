@@ -18,6 +18,10 @@ user.firstName = Name
 user.lastName = Last Name
 user.email = Email
 user.password = Password
+user.phone = Phone
+user.nif = NIF/CIF
+user.address = Address
+user.company = Company name
 
 user.login.correct = User is logged
 user.login.incorrect = Username or password incorrect
@@ -85,6 +89,8 @@ mails.booking.client.social = If you dont want to loose any of our deals, visit 
 mails.booking.client.bookPaid = RLB will charge your credit card. You should not make any payment at the hotel.
 mails.booking.error.subject = #IMPORTANT# Problem with your booking at %s
 mails.booking.error.hotel = An error has occurred but your booking at %s may be correctly confirmed. Please, reply to this email and send us your phone number and we'll call you.
+mails.booking.client.invoice = Do you need an invoice?
+mails.booking.client.invoice.download = Download invoice
 
 mails.welcome.welcome = welcome to ReallyLateBooking
 mails.welcome.p1 = Book same-day hotel rooms from your mobile phone and get really big discounts.
@@ -151,7 +157,7 @@ error.correct = Please, fix the erros
 invoice = Invoice
 invoice.amount_due = Amount due
 invoice.date = Date
-invoice.description = Booking
+invoice.description = Description
 invoice.cost = Cost
 invoice.commission = Commission
 invoice.price = Price
@@ -164,6 +170,11 @@ invoice.tax= tax
 invoice.terms = Terms
 invoice.add_row = Add invoice line
 invoice.banktransfer=Bank transfer to IBAN: 0049 6109 62 2116345761. 
+invoice.taxFee = Taxes
+invoice.feeCost = Commission
+invoice.paid = Paid via ReallyLateBooking app
+invoice.print= Print or save as PDF
+
 
 city.notfound = City not found
 deal.detailText.breakast.yes= * Breakfast  included.
@@ -579,6 +590,10 @@ web.dashboard.mycoupons.invite.twitter = Invite by Twitter
 web.dashboard.mycoupons.invite.email = Invite by Email
 web.invite.referer.twitter = Here you have a gift: 10€ free for a hotel booking at RLB, just enter this code: %s
 web.contact.captcha = Are you human? write this text
+web.users.bookings.showinvoice.notfound = We couldn't find the booking. Contact us, please.
+web.users.bookings.showinvoice.updateinfo = Update your personal info in order to create the invoice.
+
+
 
 extranet.list.partners.title = Your comissions
 web.dashboard.mybookings.table.fee = Fee

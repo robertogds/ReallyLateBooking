@@ -82,6 +82,7 @@ public class Mails extends Controller {
 	
 	public static void userBookingConfirmation(String lang){
 		Booking booking = Booking.all().get();
+		booking.user.get();
 		Deal deal = Deal.findById(booking.deal.id);
 		Lang.set(lang);
 		renderTemplate("Mails/userBookingConfirmation.html", booking, deal);
@@ -89,6 +90,7 @@ public class Mails extends Controller {
 	
 	public static void userBookingConfirmationPartners(String lang, String partnerId){
 		Booking booking = Booking.all().get();
+		booking.user.get();
 		Deal deal = Deal.findById(booking.deal.id);
 		Partner partner = Partner.findByPartnerId(partnerId);
 		Lang.set(lang);

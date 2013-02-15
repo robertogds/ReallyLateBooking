@@ -23,7 +23,7 @@ public class I18n extends Controller{
     }
 	
 	public static void changeLang(String lang, String redirectUrl){
-		redirectUrl = redirectUrl.replaceFirst("(/es|/fr|/en)","/" + lang);
+		redirectUrl = redirectUrl != null ? redirectUrl.replaceFirst("(/es|/fr|/en)","/" + lang) : "/";
 		redirect(redirectUrl);
 	}
 	

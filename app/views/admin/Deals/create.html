@@ -1,0 +1,150 @@
+#{set active:'deals'/}
+#{set activeSub:'createDeal'/}
+#{extends 'admin/layoutResponsive.html' /}
+		  
+		 #{include 'admin/Deals/rightColumn.html'/}
+		  
+		
+        <div class="span10">
+        	<div class="">
+        		#{form @admin.Deals.create(), class:'form-horizontal'}
+        			<div class="control-group #{ifError 'deal.hotelName'}warning#{/ifError}">
+					  <label class="control-label" for="hotelName">Hotel name</label>
+					  <div class="controls">
+					    <input type="text" id="hotelName" name="deal.hotelName" required>
+					  </div>
+					</div>
+					<div class="control-group">
+					  <label class="control-label" for="hotelCode">Hotusa codes</label>
+					  <div class="controls">
+					    <input type="text" id="hotelCode" name="deal.hotelCode" class="inline span1">
+					    <input type="text" id="hotelCode2" name="deal.hotelCode2" class="inline span1">
+					    
+					  </div>
+					 </div>
+					<div class="control-group">
+					  <label class="control-label" for="trivago">Trivago code</label>
+					  <div class="controls">
+					    <input type="text" id="trivago" name="deal.trivagoCode" class="span1">
+					  </div>
+					</div>
+					<div class="control-group">
+					<label class="control-label" >Configuration</label>
+					<div class="controls">
+					<label class="checkbox inline">
+					  <input type="checkbox"  name="deal.isHotUsa"> Hotusa
+					</label>
+					<label class="checkbox inline">
+					  <input type="checkbox"  name="deal.onlyApp"> OnlyApp
+					</label>
+					<label class="checkbox inline">
+					  <input type="checkbox"  name="deal.isFake"> Fake
+					</label>
+					<label class="checkbox inline">
+					  <input type="checkbox"  name="deal.active"> Active
+					</label>
+					<label class="checkbox inline">
+					  <input type="checkbox"  name="deal.isBreakfastIncluded"> BreakfastIncluded
+					</label>
+					</div>
+					</div>
+					
+					<div class="control-group #{ifError 'deal.city'}warning#{/ifError}">
+					<label class="control-label" >City</label>
+						<div class="controls">
+						  %{
+							    cities = models.City.findAllCities();
+							}%
+							
+				   	 		#{select 'deal.city.id', items:cities, valueProperty:'id', labelProperty:'name', value:deal?.city?.id, class:'inline'}
+				   	 		 	#{option}Select a city...#{/option}
+							#{/select}
+					
+							#{select 'deal.secondCity.id', items:cities, valueProperty:'id', labelProperty:'name', value:deal?.secondCity?.id, class:'inline'}
+				   	 		 	#{option}Select a second city...#{/option}
+							#{/select}
+			           </div>
+			       </div>
+			       <div class="control-group #{ifError 'deal.owner'}warning#{/ifError}">
+					<label class="control-label" >Extranet Owner</label>
+						<div class="controls">
+							%{
+							    owners = models.User.getAllOwners();
+							}%
+							
+				   	 		#{select 'deal.owner.id', items:owners, valueProperty:'id', labelProperty:'deal.owner.name', value:deal?.owner?.id }
+				   	 			#{option}Select an owner#{/option}
+							#{/select}
+						</div>
+					</div>
+			       <div class="control-group #{ifError 'deal.company'}warning#{/ifError}">
+					<label class="control-label" >Company</label>
+						<div class="controls">
+							 %{
+							    companies = models.Company.getAllCompanies();
+							 }%
+							
+				   	 		#{select 'deal.company.id', items:companies, valueProperty:'id', labelProperty:'name', value:deal?.company?.id }
+				   	 			#{option}Select a company#{/option}
+							#{/select}
+						</div>
+					</div>
+			       <div class="control-group #{ifError 'deal.contactEmail'}warning#{/ifError}">
+					  <label class="control-label" for="contactEmail">Contact emails</label>
+					  <div class="controls">
+					    <input type="text" id="contactEmail" name="deal.contactEmail" required>
+					    <span class="help-inline">Booking notification emails: "a@email.com; b@email.com"</span>
+					  </div>
+					</div>
+					<div class="control-group #{ifError 'deal.limitHour'}warning#{/ifError}">
+					  <label class="control-label" for="contactEmail">Limit hour</label>
+					  <div class="controls">
+					    <input type="number" id="contactEmail" name="deal.contactEmail" class="span1" required min="0" max="6">
+					    <span class="help-inline">Limit offer hour: normal is 3. Write 0 for midnight</span>
+					  </div>
+					</div>
+					<div class="control-group #{ifError 'deal.hotelCategory'}warning#{/ifError}">
+					  <label class="control-label" for="category">Hotel Stars</label>
+					  <div class="controls">
+					    <input type="number" id="category" name="deal.hotelCategory" class="span1" min="1" max="5">
+					    <span class="help-inline">Hotel category: from 1 to 5 stars.</span>
+					  </div>
+					</div>
+					<div class="control-group #{ifError 'deal.roomType'}warning#{/ifError}">
+					  <label class="control-label" for="category">Hotel Category</label>
+					  <div class="controls">
+					    #{select 'deal.roomType', class:'inline span2'}
+			   	 		 	#{option 'lujo'}Luxury #{/option}
+			   	 		 	#{option 'elegante'}Elegant #{/option}
+			   	 		 	#{option 'confort'}Comfort  #{/option}
+						#{/select}
+						<span class="help-inline">Optional text, ie.: "chic", "design"...</span>
+						<input type="text" name="deal.roomTypeText" class="span1 inline">
+					    
+					  </div>
+					</div>
+					<div class="control-group #{ifError 'deal.hotelAddres'}warning#{/ifError}">
+					  <label class="control-label" for="deal.hotelAddres">Hotel address</label>
+					  <div class="controls">
+					    <input type="text" id="deal.hotelAddres" name="deal.deal.hotelAddres" class="input-xxlarge" required>
+					  </div>
+					</div>
+					<div class="control-group  #{ifError 'deal.latitude'}warning#{/ifError}">
+					  <label class="control-label" >Location lat, long</label>
+					  <div class="controls">
+					    <input type="text"  name="deal.latitude" class="inline span2" placeholder="latitude" required>
+					    <input type="text"  name="deal.longitude" class="inline span2" placeholder="longitude" required>
+					  </div>
+					 </div>
+					
+			       
+			       
+			      
+			       	    			
+			    
+				  <button type="submit" class="btn">Search</button>
+				#{/form}
+          	</div>
+          
+        	
+        </div><!--/span-->

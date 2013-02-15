@@ -7,6 +7,8 @@
 * { margin: 0; padding: 0; }
 body { font: 14px/1.4 Georgia, serif; }
 #page-wrap { width: 800px; margin: 0 auto; }
+#printButton { width: 100%; height: 40px; text-align: center;  background-color: orange;}
+#printButton input { font-size: 26px; margin-top: 10px;}
 
 textarea { border: 0; font: 14px Georgia, Serif; overflow: hidden; resize: none; }
 table { border-collapse: collapse; }
@@ -14,7 +16,7 @@ table td, table th { border: 1px solid black; padding: 5px; }
 
 #header { height: 15px; width: 100%; margin: 20px 0; background: #222; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
 
-#address { width: 300px; height: 150px; float: left; }
+#address { width: 300px; height: 100px; float: left; }
 #customer { overflow: hidden;}
 
 #logo { text-align: right; float: right; position: relative; margin-top: 25px; border: 1px solid #fff; max-width: 540px; max-height: 100px; overflow: hidden; }

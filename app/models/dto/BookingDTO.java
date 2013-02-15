@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 import models.Booking;
+import models.City;
 import models.Deal;
 import models.User;
 import play.Logger;
@@ -75,6 +76,10 @@ public class BookingDTO {
 	public boolean payed;
     @Expose
 	public Integer credits;
+    @Expose
+	public String city;
+    @Expose
+	public Integer hotelCategory;
 
     
 	public BookingDTO(Booking booking) {
@@ -110,6 +115,10 @@ public class BookingDTO {
 		this.checkinDate = booking.checkinDate!= null ? 
 					DateFormat.getDateInstance(DateFormat.MEDIUM, Lang.getLocale()).format(booking.checkinDate):
 					"";
+		City city = City.findById(booking.city.id);
+		this.city = city.name;
+		Deal deal = Deal.findById(this.dealId);
+		this.hotelCategory = deal.hotelCategory;
 	}
     
 	public BookingDTO() {

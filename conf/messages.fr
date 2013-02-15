@@ -18,6 +18,10 @@ user.firstName = Prénom
 user.lastName = Nom
 user.email = Email
 user.password = Mot de passe
+user.phone = Phone
+user.nif = NIF/CIF
+user.address = Address
+user.company = Company name
 
 user.login.correct = L'utilisateur est connecté
 user.login.incorrect = Nom d'utilisateur ou mot de passe incorrect
@@ -40,7 +44,8 @@ booking.validation.creditcardexpiry = La date d'expiration doit être à l'aveni
 booking.validation.cvc = Code CVC est invalide
 booking.validation.all.required = Tous les champs sont obligatoires
 booking.validation.problem = Ups, une erreur s'est produite, mais votre réservation peut être confirmée correctement. S'il vous plaît, envoyez-nous votre numéro de téléphone à soporte@reallylatebooking.com et nous vous appellerons.
-
+mails.booking.client.invoice = Do you need an invoice?
+mails.booking.client.invoice.download = Download invoice
 
 mail.welcome.subject = Bienvenue
 mail.remember.subject = Récupération de mot de passe
@@ -150,7 +155,7 @@ error.correct = Please, fix the errors
 invoice = Invoice
 invoice.amount_due = Amount due
 invoice.date = Date
-invoice.description = Booking
+invoice.description = Description
 invoice.cost = Cost
 invoice.commission = Commission
 invoice.price = Price
@@ -163,6 +168,11 @@ invoice.tax= tax
 invoice.terms = Terms
 invoice.add_row = Add invoice line
 invoice.banktransfer=Bank transfer to IBAN: 0049 6109 62 2116345761. 
+invoice.taxFee = Taxes
+invoice.feeCost = Commission
+invoice.paid = Paid via ReallyLateBooking app
+invoice.print= Print or save as PDF
+
 
 city.notfound = Ville pas trouvé
 deal.detailText.breakast.yes= * Petit déjeuner inclus.
@@ -586,6 +596,8 @@ web.dashboard.mycoupons.invite.twitter = Invitez via Twitter
 web.dashboard.mycoupons.invite.email = Invitez via Email
 web.invite.referer.twitter = Je vous offre 10€ pour réserver votre hôtel avec RLB, utilisez le code %s
 web.contact.captcha = Etes-vous humain? écrit ce texte
+web.users.bookings.showinvoice.notfound = We couldn't find the booking. Contact us, please.
+web.users.bookings.showinvoice.updateinfo = Update your personal info in order to create the invoice.
 
 extranet.list.partners.title = Your comissions
 web.dashboard.mybookings.table.fee = Fee

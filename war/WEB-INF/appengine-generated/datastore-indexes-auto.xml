@@ -1,4 +1,23 @@
-<!-- Indices written at Mon, 28 Jan 2013 18:04:15 CET -->
+<!-- Indices written at Fri, 15 Feb 2013 13:10:34 CET -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 7 times in query history -->
+    <datastore-index kind="deals" ancestor="false" source="auto">
+        <property name="city" direction="asc"/>
+        <property name="hotelName" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="deals" ancestor="false" source="auto">
+        <property name="company" direction="asc"/>
+        <property name="hotelName" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="users" ancestor="false" source="auto">
+        <property name="isOwner" direction="asc"/>
+        <property name="firstName" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

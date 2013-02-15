@@ -97,6 +97,7 @@ GET     /user/{id}/{token}/{timestamp}/{signature} 	            	Users.show(form
 POST    /users               										Users.create(format:'json')
 PUT     /user/{id}/{token}/{timestamp}/{signature}	         		Users.update(format:'json') 
 GET 	/users/resetpasswordform/{code}								Users.resetPasswordForm
+GET 	/users/bookings/invoice/{bookingId}/{token}					Users.showBookingInvoice
 
 # Info text
 GET     /info/{key}            										InfoTexts.show(format:'json')
@@ -117,16 +118,21 @@ GET     /public/                                staticDir:public
 
 #Api Partners dashboard
 GET     /partners/?								admin.PartnerBookings.index
+GET     /panel/?								admin.Application.index
+GET		/panel/deals/search/?					admin.Deals.searchForm
+POST	/panel/deals/search/results/?			admin.Deals.search
+GET 	/panel/deals/createForm/?				admin.Deals.createForm
+POST	/panel/deals/create/?					admin.Deals.create
 
 # API REST JSON PARTNERS
+POST 	/api/{<[0-9]+>partnerId}/bookingWhiteLabel							api.Edreams.bookingWhiteLabel
+
 #Countries
 GET 	/api/{<[0-9]+>partnerId}/countries								   	api.Countries.list(format:'json')
 GET 	/api/{<[0-9]+>partnerId}/cities/{lat}/{lng}/{checkin}/{nights}		api.Edreams.findCityDealsByLatLong(format:'json')
 GET 	/api/{<[0-9]+>partnerId}/cities/{name}/{checkin}/{nights}			api.Edreams.findCityDealsByCityName(format:'json')
 POST 	/api/{<[0-9]+>partnerId}/booking/new/								api.Edreams.createBooking(format:'json')
 POST	/api/{<[0-9]+>partnerId}/booking/openTrx/							api.Edreams.openTransaction(format: 'json')
-
-
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}

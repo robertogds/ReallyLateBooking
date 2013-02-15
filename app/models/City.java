@@ -71,6 +71,10 @@ public class City extends Model {
 		this.url = url;
 	}
 	
+	public City(Long id) {
+		this.id = id;
+	}
+
 	public static Query<City> all() {
     	return Model.all(City.class);
     }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Edreams Hotels</title>
+
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile.structure-1.2.0.min.css" />
+		<link rel="stylesheet" href="@{'/public/edreams/themes/custom.css'}" />
+
+	</head>
+	<body>
+		<div data-role="page" id="#{get 'pageId'/}" data-theme="a" >
+			#{get 'subPages'/}
+			<div data-role="header" data-id="headerNav" data-theme="b" id="edreamsHeader">
+				 <div id="logoBar">
+					<a target="_top" href="http://m.edreams.es/mobile/main.jsp">	
+						<h1 id="logo" class="blockLeft logoNavToolbar">
+								<img alt="eDreams viajamos contigo" title="eDreams viajamos contigo" src="@{'/public/edreams/themes/images/logo_ES.png'}">
+						</h1>
+					</a>
+					<nav id="navToolbarNav">
+						<ul>
+							<li class="blockLeft"><a target="_top" href="http://m.edreams.es/faqs/" accesskey="h" title="Ayuda" class="navigationNavHelpButton nav"><img alt="Ayuda" title="Ayuda" src="@{'/public/edreams/themes/images/help.png'}"></a></li>
+							<li class="blockLeft"><a target="_top" href="http://m.edreams.es/mobile/main.jsp" accesskey="l" title="Ir a la home" class="navigationNavHomeButton nav"><img alt="Ir a la home" title="Ir a la home" src="@{'/public/edreams/themes/images/home.png'}"></a></li>
+				            <li class="blockLeft"><a target="_top" href="http://m.edreams.es/vuelos/" accesskey="f" title="Buscar Vuelo" class="navigationNavHomeButton nav"><img alt="Buscar Vuelo" title="Buscar Vuelo" src="@{'/public/edreams/themes/images/flights.png'}"></a></li>
+							<li class="blockLeft"><a target="_top" href="tel:902887107" accesskey="l" title="Atención al cliente" class="navigationNavCallButton nav"><img alt="Atenci—n al cliente" title="Atenci—n al cliente" src="@{'/public/edreams/themes/images/call.png'}"></a></li>
+						</ul>
+					</nav>
+				</div>
+				#{get 'header'/}
+			</div>
+			#{doLayout /}
+		</div>
+	</body>
+</html>

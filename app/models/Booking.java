@@ -406,4 +406,8 @@ public class Booking extends Model {
 		return Booking.all().filter("partner", partner).order("checkinDate").fetch();
 	}
 
+	public static Booking findByIdAndUser(Long bookingId, User user) {
+		return Booking.all().filter("id", bookingId).filter("user", user).get();
+	}
+
 }

@@ -1,0 +1,20 @@
+        <div class="span2">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Deals</li>
+              <li class="#{if activeSub == 'deals'}active#{/if}"><a href="@{admin.Deals.index()}">Last updated</a></li>
+              <li class="#{if activeSub == 'publish'}active#{/if}"><a href="@{admin.Cities.list()}">Publish today deals</a></li>
+              <li class="#{if activeSub == 'searchDeals'}active#{/if}"><a href="@{admin.Deals.searchForm()}">Search</a></li>
+              <li class="#{if activeSub == 'createDeal'}active#{/if}"><a href="@{admin.Deals.createForm()}">Create new</a></li>
+              <li class="nav-header">Cities</li>
+              <li class="#{if activeSub == 'searchCities'}active#{/if}"><a href="@{admin.Cities.list()}">Search</a></li>
+              <li class="#{if activeSub == 'createCity'}active#{/if}"><a href="@{admin.Cities.blank()}">Create new</a></li>
+              <li class="nav-header">Country</li>
+              <li class="#{if activeSub == 'searchCountry'}active#{/if}"><a href="@{admin.Countries.list()}">Search</a></li>
+              <li class="#{if activeSub == 'createCountry'}active#{/if}"><a href="@{admin.Countries.blank()}">Create new</a></li>
+              <li class="nav-header">Company</li>
+              <li class="#{if activeSub == 'searchCompany'}active#{/if}"><a href="@{admin.Companies.list()}">Search</a></li>
+              <li class="#{if activeSub == 'createCompany'}active#{/if}"><a href="@{admin.Companies.blank()}">Create new</a></li>
+            </ul>
+          </div><!--/.well -->
+       </div><!--/span-->

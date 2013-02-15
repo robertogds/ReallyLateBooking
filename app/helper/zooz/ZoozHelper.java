@@ -37,10 +37,11 @@ public final class ZoozHelper {
 	private static final long serialVersionUID = 3570259871387669173L;
 	
 	//Unique ID as registered on the ZooZ developer portal
-	private static final String bundleId = "com.reallylatebooking.html5";
-			
+	private static final String bundleId = "es.edreams.m.hotels";
+		
+	//TODO move to config in backoffice
 	//The app key for this registered app
-	private static final String appKey = "499f4dd0-d1cb-4dbd-b80d-aeaf8f7e5c9a";
+	private static final String appKey = "f52a398c-9bb7-4e6b-91ac-5cae047ec976";
 	
 	private static final String zoozServer = "https://sandbox.zooz.co";
 

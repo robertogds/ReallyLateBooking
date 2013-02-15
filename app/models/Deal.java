@@ -23,6 +23,8 @@ import notifiers.Mails;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.appengine.api.search.ExpressionParser.num_return;
+
 import controllers.CRUD.Hidden;
 
 import play.Logger;
@@ -50,7 +52,6 @@ import siena.Table;
 public class Deal extends Model {
 	@Id(Generator.AUTO_INCREMENT)
     public Long id;
-	@Required
 	public String hotelName;	
 	public String hotelCode;
 	public String hotelCode2;
@@ -59,7 +60,6 @@ public class Deal extends Model {
 	public Boolean isFake;
 	public Boolean active;
 	public boolean onlyApp;
-	@Required
 	@Index("city_index")
     public City city;
 	@Index("second_city_index")
@@ -152,9 +152,7 @@ public class Deal extends Model {
 	@MaxSize(10000)
 	public String aroundTextFR;
 
-	@Required
     public String mainImageBig;
-	@Required
     public String mainImageSmall;
 	public String listImage;
 	public String image1;
@@ -225,6 +223,10 @@ public class Deal extends Model {
 	
 	public static List<Deal> findSecondCityActiveByCityOrderPositionPrice(City city) {
 		return all().filter("secondCity", city).filter("active", Boolean.TRUE).order("position").order("-priceCents").fetch();
+	}
+	
+	public static List<Deal> findLastCreatedDeals() {
+		return Deal.all().order("-updated").fetch(10);	
 	}
 	
 	public static List<Deal> findAllActiveDealsByCityId(Long cityId){
@@ -439,6 +441,31 @@ public class Deal extends Model {
 			}
 		}
 		deal.update();
+	}
+
+	public static List<Deal> findByHotelName(String hotelName, Long cityId,
+			Long companyId) {
+		Logger.debug("findByHotelName: %s ", hotelName);
+		Query<Deal> query = Deal.all().filter("hotelName", hotelName);
+		if (cityId != null){
+			Logger.debug("findByHotelName: city %s ", cityId);
+			City city = new City(cityId);
+			query = query.filter("city", city);
+		}
+		if (companyId != null){
+			Logger.debug("findByHotelName: comnpany %s", companyId);
+			Company company = new Company(companyId);
+			query = query.filter("company", company);
+		}
+		return query.order("hotelName").fetch();
+	}
+
+	public static List<Deal> findByCompanyOrderByName(Company company) {
+		return Deal.all().filter("company", company).order("hotelName").fetch();
+	}
+
+	public static List<Deal> findByCityOrderByName(City city) {
+		return Deal.all().filter("city", city).order("hotelName").fetch();
 	}
 	
 }

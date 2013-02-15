@@ -1,0 +1,88 @@
+#{set active:'deals'/}
+#{set activeSub:'searchDeals'/}
+#{extends 'admin/layoutResponsive.html' /}
+		  
+		 #{include 'admin/Deals/rightColumn.html'/}
+		  
+		
+        <div class="span10">
+        	<div class="">
+        		#{form @admin.Deals.search(), class:'form-search'}
+				  <input type="text" name="hotelName" class="input-medium search-query" placeholder="Hotel name">
+				  <select name="cityId">
+				  	<option value="">Any city</option>
+	              	#{list items:cities, as:'city' }
+	                	<option value="${city.id}">${city.name}</option>
+	                #{/list}
+	              </select>
+	              <select  name="companyId">
+	              	<option value="">Any company</option>
+	              	#{list items:companies, as:'company' }
+	                	<option value="${company.id}">${company.name}</option>
+	                #{/list}
+	              </select>
+				  <button type="submit" class="btn">Search</button>
+				#{/form}
+          	</div>
+          
+        	<table class="table table-bordered table-hover">
+        		<thead>
+	                <tr>
+	                	<th>
+							Hotel
+						</th>
+						<th>
+							City
+						</th>
+						<th>
+							Company
+						</th>
+						<th>
+							Owner
+						</th>
+	                	<th>
+							Updated
+						</th>
+	                </tr>
+              	</thead>
+              	<tbody>
+	        		#{list items:deals, as:'deal'}
+	          			<tr class="#{if deal.active} success #{/if}">
+	          				<td>
+		    					<a href="@{admin.Deals.show(deal.id)}">
+				   					${deal.hotelName}
+				   				 </a>
+				   			</td>
+				   			<td>
+				   				%{
+		  							city = models.City.findById(deal.city?.id)
+		  						}%
+		    					<a href="@{admin.Cities.show(city.id)}">
+				   					${city.name}
+				   				 </a>
+				   			</td>
+				   			<td>
+				   				%{
+		  							company = models.Company.findById(deal.company?.id)
+		  						}%
+		    					<a href="@{admin.Companies.show(company.id)}">
+				   					${company.name}
+				   				 </a>
+				   			</td>
+				   			<td>
+				   				%{
+		  							owner = models.User.findById(deal.owner?.id)
+		  						}%
+		    					<a href="@{admin.Users.show(owner.id)}">
+				   					${owner.firstName} ${owner.lastName}
+				   				 </a>
+				   			</td>
+	          				<td> 
+	          					${deal.updated?.format('dd-MM-yy hh:mm')}
+	          				</td>
+	  					</tr>
+	          		#{/list}
+          		</tbody>
+			</table>
+          	
+        </div><!--/span-->

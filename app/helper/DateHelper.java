@@ -213,6 +213,11 @@ public final class DateHelper {
 		    daysBetween++;  
 		  }  
 		  return daysBetween;  
+	}
+
+	public static int getYear() {
+		Calendar calendar =  Calendar.getInstance();
+		return calendar.get(Calendar.YEAR);
 	}  
 	
 }

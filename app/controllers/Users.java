@@ -9,8 +9,10 @@ import java.util.logging.Logger;
 
 import models.Booking;
 import models.City;
+import models.Company;
 import models.Deal;
 import models.InfoText;
+import models.Invoice;
 import models.MyCoupon;
 import models.Setting;
 import models.User;
@@ -20,6 +22,7 @@ import models.dto.UserStatusMessage;
 import notifiers.Mails;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 
 import play.data.validation.Required;
 import play.data.validation.Valid;
@@ -46,7 +49,10 @@ public class Users extends Controller {
 		Security.checkConnected();
     }
 	
-	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login","loginJson","dashboard","updateAccount","register","loginUser","rememberPasswordEmail","sendSurveyEmails","sendRememberPriceEmails"})
+	@Before(unless = {"create", "resetPasswordForm","saveNewPassword","rememberPassword","login",
+			"loginJson","dashboard","updateAccount","register","loginUser",
+			"rememberPasswordEmail","sendSurveyEmails","sendRememberPriceEmails",
+			"showBookingInvoice"})
 	public static void checkSignature(){
 		Boolean correct = ApiSecurer.checkApiSignature(request);
 		if (!correct){
@@ -54,6 +60,18 @@ public class Users extends Controller {
 			String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
 					new StatusMessage(Http.StatusCode.INTERNAL_ERROR, "ERROR", "Invalid api signature. Contact hola@reallylatebooking.com"));
 			renderJSON(json);
+		}
+	}
+	
+	@Before(only= {"showBookingInvoice"})
+	public static void loginFromEmail(){
+		String token = params.get("token");
+		User user = StringUtils.isBlank(token) ? null : User.findByToken(token);
+		if (user!= null){
+    		user.createUserSession();
+    	}
+		else{
+			Security.checkConnected();
 		}
 	}
 	
@@ -94,21 +112,48 @@ public class Users extends Controller {
 		}
 		List<MyCoupon> coupons = MyCoupon.findActiveByUser(user);
 		Integer totalCoupons = coupons.size();
-		render(user, bookings, totalBookings, coupons, totalCoupons);
+		log.warning("booking id 1:" + params.get("bookingId"));
+		String bookingId = params.get("bookingId");
+		render(user, bookings, totalBookings, coupons, totalCoupons, bookingId);
 	}
 	
-	public static void updateAccount(User user, String returnUrl) {
+	public static void showBookingInvoice(Long bookingId, String token){
+		log.warning("booking id 0:" + params.get("bookingId"));
+		User user= User.findById(Long.valueOf(session.get("userId")));
+		Booking booking = Booking.findByIdAndUser(bookingId, user);
+		if (booking == null){
+			flash.error(Messages.get("web.users.bookings.showinvoice.notfound"));
+			dashboard();
+		}
+		else{
+			if (StringUtils.isBlank(user.nif)) {
+				flash.error(Messages.get("web.users.bookings.showinvoice.updateinfo"));
+				redirect("/dashboard?bookingId="+bookingId + "#profile");
+			}
+			Invoice invoice = Invoice.findOrCreateUserInvoice(booking, user);
+			render(user, invoice);
+		}
+	}
+	
+
+	public static void updateAccount(User user, String returnUrl, Long bookingId) {
 		validation.email("user.email",user.email);
 		validation.required("user.firstName",user.firstName);
 		validation.required("user.lastName",user.lastName);
 		validation.required("user.password",user.password);
 	    User dbUser = User.findById(Long.valueOf(session.get("userId")));
-	    //encryt password
-	    user.password = DigestUtils.md5Hex(user.password);
+	    //encryt password if user changed it
+	    user.password = StringUtils.equalsIgnoreCase(user.password, dbUser.password)? dbUser.password: DigestUtils.md5Hex(user.password) ;
 	    dbUser.updateDetails(user);
 	    if (!validation.hasErrors()){
 		    dbUser.update();
-		    flash.success(Messages.get("web.users.updateaccount.success"));
+		    if (bookingId == null){
+		    	flash.success(Messages.get("web.users.updateaccount.success"));
+		    }
+		    else{
+		    	//come from creating invoice, redirect
+		    	showBookingInvoice(bookingId, user.token);
+		    }
 	    }
 	    else{
 	    	flash.error(Messages.get("web.users.updateaccount.error"));

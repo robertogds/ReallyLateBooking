@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+	
+	<title>&{'invoice'} ${invoice.code} ${invoice.created.format('dd MMMM yyyy')}</title>
+	
+	<link rel='stylesheet' type='text/css' href="@{'/public/stylesheets/invoice/style.css'}" />
+	<link rel='stylesheet' type='text/css' media="print" href="@{'/public/stylesheets/invoice/print.css'}" />
+</head>
+
+<body>
+	<div id="printButton"><input type="button" value="&{'invoice.print'}" onclick="window.print();" /></div>
+	<div id="page-wrap">
+
+		<div id="header">&{'invoice'}</div>
+		
+		<div id="identity">
+		
+			<div id="address" >
+			<p>IIPIR SOFTWARE DEVELOPMENT S.L. </p>
+			<p>NIF: B86233368 </p>
+			<p>Santa Catalina, 11, 28220, Majadahonda</p>
+			</div>
+            <div>
+              <img src="@{'/public/images/logo_top.gif'}" alt="logo" />
+            </div>
+		</div>
+
+		<div style="clear:both"></div>
+		
+		<div id="customer">
+			<textarea id="customer-title">
+${invoice.userName} 
+NIF/CIF: ${invoice.userNif}
+${invoice.userAddress}
+			</textarea>
+
+            <table id="meta">
+                <tr>
+                    <td class="meta-head">&{'invoice'} #</td>
+                    <td>${invoice.code}</td>
+                </tr>
+                <tr>
+                    <td class="meta-head">&{'invoice.date'}</td>
+                    <td>${invoice.checkinDate.format('dd MMMM yyyy')}</td>
+                </tr>
+                <tr>
+                    <td class="meta-head">&{'invoice.amount_paid'}</td>
+                    <td><div class="due">${invoice.total}</div></td>
+                </tr>
+            </table>
+		</div>
+		
+		<table id="items">
+		
+		  <tr>
+		      <th>&{'invoice.description'}</th>
+		      <th>&{'invoice.taxFee'}</th>
+		      <th>&{'invoice.tax'}</th>
+		      <th>&{'invoice.cost'}</th>
+		  </tr>
+		  <tr class="item-row">
+		      <td>&{'invoice.booking', invoice.hotelName, invoice.nights, invoice.bookingCode}</td>
+		      <td>IVA 8% hotel</td>
+		      <td>${invoice.hotelTax}€</td>
+		      <td>${invoice.hotelTotal}€</td>
+		  </tr>	 
+		  <tr class="item-row">
+		      <td>&{'invoice.feeCost'}</td>
+		      <td>IVA 21%</td>
+		      <td>${invoice.feeTax}€</td>
+		      <td>${invoice.fee}€</td>
+		  </tr>	  
+
+		  <tr>
+		      <td colspan="2" class="blank"> </td>
+		      <td colspan="2" class="total-line">&{'invoice.subtotal'}</td>
+		      <td class="total-value"><div id="subtotal">${invoice.subTotal} €</div></td>
+		  </tr>
+		  
+		  <tr>
+		      <td colspan="2" class="blank"> </td>
+		      <td colspan="2" class="total-line">&{'invoice.tax'}</td>
+		      <td class="total-value"><div id="tax">${invoice.feeTax} €</div></td>
+		  </tr>
+		  <tr>
+
+		      <td colspan="2" class="blank"> </td>
+		      <td colspan="2" class="total-line">&{'invoice.total'}</td>
+		      <td class="total-value"><div id="total">${invoice.total} €</div></td>
+		  </tr>
+		
+		</table>
+		
+		<div id="terms">
+		  <h5>&{'invoice.terms'}</h5>
+		  &{'invoice.paid'} 
+		</div>
+	
+	</div>
+	
+</body>
+
+</html>

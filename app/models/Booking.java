@@ -410,4 +410,10 @@ public class Booking extends Model {
 		return Booking.all().filter("id", bookingId).filter("user", user).get();
 	}
 
+	public static Booking findPendingBooking(Deal deal, User user,
+			Partner partner) {
+		return Booking.all().filter("deal", deal).filter("pending", Boolean.TRUE)
+			.filter("user", user).filter("partner", partner).get();
+	}
+
 }

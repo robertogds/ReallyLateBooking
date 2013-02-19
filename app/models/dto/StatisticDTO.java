@@ -51,7 +51,8 @@ public class StatisticDTO {
 	    this.registeredApp = this.registered - this.registeredWeb;
 	    this.stats = new LinkedHashMap<String, CityData>(); 
 	    
-	    Collection<Booking> bookings = includePending ?  Booking.findAllBookingsByDate(start, end) : Booking.findAllNonPendingBookingsByDate(start, end);
+	    //Collection<Booking> bookings = includePending ?  Booking.findAllBookingsByDate(start, end) : Booking.findAllNonPendingBookingsByDate(start, end);
+	    Collection<Booking> bookings = Booking.findAllNonPendingBookingsByDate(start, end);
 	    this.allCities =  new CityData(bookings, start, end);
 	    
 		/*

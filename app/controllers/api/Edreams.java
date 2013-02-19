@@ -20,6 +20,7 @@ import controllers.oauth.ApiSecurer;
 import models.Booking;
 import models.City;
 import models.Deal;
+import models.Partner;
 import models.User;
 import models.dto.ApiResponse;
 import models.dto.BookingStatusMessage;
@@ -121,7 +122,8 @@ public class Edreams extends Controller{
 	}
 	
 	public static void openTransaction(@Required String amount, @Required String firstName, 
-			@Required String lastName, @Required String phone, @Required @Email String email){
+			@Required String lastName, @Required String phone, @Required @Email String email, @Required Long dealId, 
+			@Required int nights, @Required String partnerId){
 		log.info("openTransaction: " + email + " amount:" + amount);
 		if(validation.hasErrors()){
 			log.severe("openTransaction: all parameters are required");
@@ -130,6 +132,9 @@ public class Edreams extends Controller{
 		else{
 			try {
 				User user = User.findOrCreateUserForWhiteLabel(email, firstName, lastName, phone);
+				Booking booking = Booking.createBookingForWhiteLabel(dealId, user, nights, partnerId);
+				booking.pending = Boolean.TRUE;
+				booking.insert();
 				String token = ZoozHelper.openTransaction(Double.parseDouble(amount), user);
 				ApiResponse response = new ApiResponse("token", token);
 				renderJSON(response.json);
@@ -147,25 +152,32 @@ public class Edreams extends Controller{
 		
 		if (!validation.hasErrors()){ 
 			User user = User.findOrCreateUserForWhiteLabel(email, firstName, lastName, phone);
-			Booking booking = Booking.createBookingForWhiteLabel(dealId, user, nights, partnerId);
-			booking.validateNoCreditCart(); //Custom validation
-			if (!validation.hasErrors()){ 
-				booking.insert();
-		    	booking.get();
-				try {
-					BookingServices.doCompleteReservation(booking, validation);
-				} catch (InvalidBookingCodeException e) {
-					Mails.bookingErrorMail(booking);
-					renderError(Http.StatusCode.INTERNAL_ERROR,validation.errors().toString());
+			Deal deal = Deal.findById(dealId);
+			Partner partner = Partner.findByPartnerId(partnerId);
+			Booking booking = Booking.findPendingBooking(deal, user, partner);
+			if (booking != null){
+				booking.validateNoCreditCart(); //Custom validation
+				if (!validation.hasErrors()){ 
+					booking.pending = Boolean.FALSE;
+			    	booking.update();
+					try {
+						BookingServices.doCompleteReservation(booking, validation);
+					} catch (InvalidBookingCodeException e) {
+						Mails.bookingErrorMail(booking);
+						renderError(Http.StatusCode.INTERNAL_ERROR,validation.errors().toString());
+					}
+			    	User.updateJustBooked(booking.user.id, booking.checkinDate);
+					Mails.hotelBookingConfirmation(booking);
+					Mails.userBookingConfirmation(booking);
+					
+					String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
+							new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", 
+									Messages.get("booking.create.correct"), booking));
+					renderJSON(json);
 				}
-		    	User.updateJustBooked(booking.user.id, booking.checkinDate);
-				Mails.hotelBookingConfirmation(booking);
-				Mails.userBookingConfirmation(booking);
-				
-				String json = JsonHelper.jsonExcludeFieldsWithoutExposeAnnotation(
-						new BookingStatusMessage(Http.StatusCode.CREATED, "CREATED", 
-								Messages.get("booking.create.correct"), booking));
-				renderJSON(json);
+			}
+			else{
+				log.warning("couldn't find booking with for user " + user.email);
 			}
 		}
 		

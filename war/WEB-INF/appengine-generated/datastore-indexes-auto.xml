@@ -1,4 +1,4 @@
-<!-- Indices written at Tue, 19 Feb 2013 15:00:29 CET -->
+<!-- Indices written at Tue, 19 Feb 2013 23:12:21 CET -->
 
 <datastore-indexes>
 
@@ -14,19 +14,19 @@
         <property name="hotelName" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 180 times in query history -->
+    <!-- Used 186 times in query history -->
     <datastore-index kind="users" ancestor="false" source="auto">
         <property name="isOwner" direction="asc"/>
         <property name="firstName" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 42 times in query history -->
+    <!-- Used 113 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="root" direction="asc"/>
         <property name="position" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 3 times in query history -->
+    <!-- Used 7 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="url" direction="asc"/>
@@ -44,7 +44,7 @@
         <property name="checkinDate" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 74 times in query history -->
+    <!-- Used 75 times in query history -->
     <datastore-index kind="mycoupons" ancestor="false" source="auto">
         <property name="isReferer" direction="asc"/>
         <property name="used" direction="asc"/>
@@ -58,11 +58,34 @@
         <property name="checkinDate" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 69 times in query history -->
+    <!-- Used 74 times in query history -->
     <datastore-index kind="cities" ancestor="false" source="auto">
         <property name="active" direction="asc"/>
         <property name="root" direction="asc"/>
         <property name="position" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 8 times in query history -->
+    <datastore-index kind="deals" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="city" direction="asc"/>
+        <property name="position" direction="asc"/>
+        <property name="priceCents" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 8 times in query history -->
+    <datastore-index kind="deals" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="secondCity" direction="asc"/>
+        <property name="position" direction="asc"/>
+        <property name="priceCents" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="mycoupons" ancestor="false" source="auto">
+        <property name="active" direction="asc"/>
+        <property name="user" direction="asc"/>
+        <property name="created" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>

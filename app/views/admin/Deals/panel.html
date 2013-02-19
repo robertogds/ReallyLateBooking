@@ -2,10 +2,7 @@
 #{set activeSub:'deals'/}
 
 #{extends 'admin/layoutResponsive.html' /}
-		  
-		 #{include 'admin/Deals/rightColumn.html'/}
-		  
-		
+#{include 'admin/Deals/navColumn.html'/}	  
         <div class="span10">
         	<table class="table table-bordered table-hover">
         		<thead>
@@ -64,7 +61,7 @@
 	          					${deal.updated?.format('dd-MM-yy hh:mm')}
 	          				</td>
 		    				<td>
-		    					<a href="@{admin.Deals.show(deal.id)}">
+		    					<a href="@{admin.Deals.createForm(deal.id)}">
 				   					${deal.hotelName}
 				   				 </a>
 				   			</td>

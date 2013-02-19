@@ -16,6 +16,7 @@ import models.*;
 import models.dto.CityDTO;
 import models.dto.DealDTO;
 import models.dto.StatusMessage;
+import play.Logger;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.mvc.Before;
@@ -146,7 +147,10 @@ public class Deals extends Controller {
 		for (JsonElement image: images){
 			JsonObject imageObject = image.getAsJsonObject();
 			String name = imageObject.get("name").getAsString();
-			deal.addImage(city +"/"+ hotel +"/" + name);
+			JsonObject meta = imageObject.getAsJsonObject("meta");
+			int width = meta.get("width").getAsInt();
+			int height = meta.get("height").getAsInt();
+			deal.addImage(city +"/"+ hotel +"/" + name, width, height);
 		} 
 		deal.update();
 		redirect(redirectUrl);

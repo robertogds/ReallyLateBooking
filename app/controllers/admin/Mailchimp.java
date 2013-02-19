@@ -17,6 +17,7 @@ import models.City;
 import models.Deal;
 import models.InfoText;
 import models.Setting;
+import models.User;
 import models.dto.DealDTO;
 
 import org.apache.commons.lang.StringUtils;

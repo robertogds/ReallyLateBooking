@@ -5,26 +5,21 @@ import helper.hotusa.HotUsaApiHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import models.Booking;
 import models.City;
 import models.Company;
 import models.Deal;
 import models.User;
+import models.dto.AbstractDealDTO;
+
+import org.apache.commons.lang.StringUtils;
+
 import play.Logger;
-import play.exceptions.TemplateNotFoundException;
+import play.data.validation.Valid;
 import play.mvc.With;
 import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
 import controllers.Security;
-import controllers.CRUD.ObjectType;
 
 @Check(Security.EDITOR_ROLE)
 @With(Secure.class)
@@ -32,14 +27,12 @@ import controllers.CRUD.ObjectType;
 public class Deals extends controllers.CRUD {
 	
 	public static void panel(){
-		User user = User.findById(Long.valueOf(session.get("userId")));
 		List<Deal> deals = Deal.findLastCreatedDeals();
-		render(user, deals);
+		render(deals);
 	}
 	
 	public static void search(String hotelName, Long cityId, Long companyId){
 		Logger.debug("Buscando: %s, %s, %s", hotelName, cityId, companyId);
-		User user = User.findById(Long.valueOf(session.get("userId")));
 		List<City> cities = City.all().fetch();
 		List<Company> companies = Company.all().fetch();
 		List<Deal> deals = new ArrayList<Deal>();
@@ -54,25 +47,83 @@ public class Deals extends controllers.CRUD {
 			Company company = new Company(companyId);
 			deals = Deal.findByCompanyOrderByName(company);
 		}
-		render(user, deals, cities, companies);
+		render(deals, cities, companies);
 	}
 	
 	public static void searchForm(){
-		User user = User.findById(Long.valueOf(session.get("userId")));
 		List<City> cities = City.all().fetch();
 		List<Company> companies = Company.all().fetch();
 		List<Deal> deals = new ArrayList<Deal>();
-		renderTemplate("admin/Deals/search.html", user, deals, cities, companies);
+		renderTemplate("admin/Deals/search.html", deals, cities, companies);
 	}
 	
-	public static void create(Deal deal){
-		User user = User.findById(Long.valueOf(session.get("userId")));
-		render(deal, user);
+	public static void create(@Valid Deal deal){
+		Logger.debug("creando deal: %s", deal.hotelName);
+		if (!validation.hasErrors()){
+			if (deal.id != null){
+				Deal dealDB = Deal.findById(deal.id);
+				dealDB.updateFromDeal(deal);
+				dealDB.update();
+				createForm(deal.id);
+			}
+			else{
+				deal.insert();
+				createForm(deal.id);
+			}
+		}
+		else{
+			params.flash();
+			render(deal);
+		}
 	}
 	
-	public static void createForm(){
-		User user = User.findById(Long.valueOf(session.get("userId")));
-		renderTemplate("admin/Deals/create.html", user);
+	public static void createForm(Long id){
+		if (id != null){
+			Deal deal = Deal.findById(id);
+			AbstractDealDTO dealDTO = new AbstractDealDTO(deal);
+			renderTemplate("admin/Deals/create.html", deal, dealDTO);
+		}
+		else{
+			renderTemplate("admin/Deals/create.html");
+		}
+	}
+	
+	public static void deleteImage(Long id, int image){
+		Deal deal = Deal.findById(id);
+		switch (image) {
+			case 1:
+				deal.image1 = null;
+				break;
+			case 2:
+				deal.image2 = null;
+				break;
+			case 3:
+				deal.image3 = null;
+				break;
+			case 4:
+				deal.image4 = null;
+				break;
+			case 5:
+				deal.image5 = null;
+				break;
+			case 6:
+				deal.image6 = null;
+				break;
+			case 7:
+				deal.image7 = null;
+				break;
+			case 8:
+				deal.image8 = null;
+				break;
+			case 9:
+				deal.image9 = null;
+				break;
+			case 10:
+				deal.image10 = null;
+				break;
+		}
+		deal.update();
+		createForm(id);
 	}
 	
 	public static void listCities(String orderBy, String order){

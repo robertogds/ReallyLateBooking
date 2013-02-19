@@ -1,6 +1,6 @@
  <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
 	<application>rlb-pro</application>
-	<version>17</version>
+	<version>18</version>
 	<ssl-enabled>true</ssl-enabled>
 	<threadsafe>true</threadsafe>
 	<system-properties>

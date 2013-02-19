@@ -43,7 +43,7 @@ public final class ZoozHelper {
 	//The app key for this registered app
 	private static final String appKey = "f52a398c-9bb7-4e6b-91ac-5cae047ec976";
 	
-	private static final String zoozServer = "https://sandbox.zooz.co";
+	private static final String zoozServer = "https://app.zooz.com";
 
 
 /*		if (isSandbox)

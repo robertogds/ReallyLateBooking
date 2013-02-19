@@ -9,8 +9,9 @@
     <meta name="author" content="Pablo Pazos Rey">
 
     <!-- Le styles -->
-    <link href="@{'/public/admin/css/bootstrap.css'}" rel="stylesheet">
     <link href="@{'/public/admin/css/rlb.css'}" rel="stylesheet">
+    <link href="@{'/public/admin/css/bootstrap.css'}" rel="stylesheet">
+    
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -19,7 +20,7 @@
 
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.ico'}">
-
+	 
   </head>
 
   <body>
@@ -35,15 +36,16 @@
           <a class="brand" href="@{admin.Application.index()}">ReallyLateBooking</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
-             Logged in as <a href="#" class="navbar-link">${user.firstName}</a> | <a href="@{Application.logout()}">&{'web.logout'}</a>
+             Logged in as <a href="#" class="navbar-link">${session.get('username')}</a> | <a href="@{Application.logout()}">&{'web.logout'}</a>
             </p>
             <ul class="nav">
               <li class="#{if active == 'home'}active#{/if}"><a href="@{admin.Application.index()}">Home</a></li>
               <li class="#{if active == 'deals'}active#{/if}"><a href="@{admin.Deals.panel()}">Deals</a></li>
-              <li class="#{if active == 'bookings'}active#{/if}"><a href="#about">Bookings</a></li>
-              <li class="#{if active == 'users'}active#{/if}"><a href="@{admin.Users.index()}">Users</a></li>
-              <li class="#{if active == 'coupons'}active#{/if}"><a href="#about">Coupons</a></li>
-              <li class="#{if active == 'partners'}active#{/if}"><a href="#about">Partners</a></li>
+              <li class="#{if active == 'bookings'}active#{/if}"><a href="@{admin.Bookings.list()}">Bookings</a></li>
+              <li class="#{if active == 'users'}active#{/if}"><a href="@{admin.Users.list()}">Users</a></li>
+              <li class="#{if active == 'coupons'}active#{/if}"><a href="@{admin.Coupons.list()}">Coupons</a></li>
+              <li class="#{if active == 'partners'}active#{/if}"><a href="@{admin.Partners.list()}">Partners</a></li>
+              <li class="#{if active == 'mailchimp'}active#{/if}"><a href="@{admin.Mailchimp.index()}">Mailchimp</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -68,8 +70,8 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="@{'/public/admin/js/bootstrap.min.js'}"></script>
-
-
+	#{get 'moreScripts' /}
   </body>
 </html>

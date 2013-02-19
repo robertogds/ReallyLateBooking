@@ -1,50 +1,70 @@
 #{set active:'deals'/}
 #{set activeSub:'createDeal'/}
+#{set 'moreScripts'}
+<script src="//assets.transloadit.com/js/jquery.transloadit2.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#imageForm').transloadit({
+       wait: true,
+       fields: true
+    });
+  });
+</script>
+#{/set}
+
 #{extends 'admin/layoutResponsive.html' /}
+#{include 'admin/Deals/navColumn.html'/}
 		  
-		 #{include 'admin/Deals/rightColumn.html'/}
-		  
-		
         <div class="span10">
+        	<div class="page-header">
+		  <h1>Hotel Information <small>create or update text and photos</small></h1>
+		</div>
+        	 #{ifErrors}
+		        <div class="alert alert-error">
+              		<button type="button" class="close" data-dismiss="alert">×</button>
+              		<strong>Oh snap!</strong> Change a few things up and try submitting again.
+            	</div>
+		    #{/ifErrors}
+     
         	<div class="">
         		#{form @admin.Deals.create(), class:'form-horizontal'}
         			<div class="control-group #{ifError 'deal.hotelName'}warning#{/ifError}">
 					  <label class="control-label" for="hotelName">Hotel name</label>
 					  <div class="controls">
-					    <input type="text" id="hotelName" name="deal.hotelName" required>
+					    <input type="text" id="hotelName" name="deal.hotelName" value="${deal?.hotelName}" required>
 					  </div>
 					</div>
 					<div class="control-group">
 					  <label class="control-label" for="hotelCode">Hotusa codes</label>
 					  <div class="controls">
-					    <input type="text" id="hotelCode" name="deal.hotelCode" class="inline span1">
-					    <input type="text" id="hotelCode2" name="deal.hotelCode2" class="inline span1">
+					    <input type="text" id="hotelCode" name="deal.hotelCode" value="${deal?.hotelCode}" class="inline span1">
+					    <input type="text" id="hotelCode2" name="deal.hotelCode2" value="${deal?.hotelCode2}" class="inline span1">
 					    
 					  </div>
 					 </div>
 					<div class="control-group">
 					  <label class="control-label" for="trivago">Trivago code</label>
 					  <div class="controls">
-					    <input type="text" id="trivago" name="deal.trivagoCode" class="span1">
+					    <input type="text" id="trivago" name="deal.trivagoCode" value="${deal?.trivagoCode}" class="span1">
 					  </div>
 					</div>
 					<div class="control-group">
 					<label class="control-label" >Configuration</label>
 					<div class="controls">
 					<label class="checkbox inline">
-					  <input type="checkbox"  name="deal.isHotUsa"> Hotusa
+					  <input type="checkbox"  name="deal.isHotUsa" value="${deal?.isHotUsa}" #{if deal?.isHotUsa}checked#{/if}> Hotusa
 					</label>
 					<label class="checkbox inline">
-					  <input type="checkbox"  name="deal.onlyApp"> OnlyApp
+					  <input type="checkbox"  name="deal.onlyApp" value="${deal?.onlyApp}" #{if deal?.onlyApp}checked#{/if}> OnlyApp
 					</label>
 					<label class="checkbox inline">
-					  <input type="checkbox"  name="deal.isFake"> Fake
+					  <input type="checkbox"  name="deal.isFake" value="${deal?.isFake}" #{if deal?.isFake}checked#{/if}> Fake
 					</label>
 					<label class="checkbox inline">
-					  <input type="checkbox"  name="deal.active"> Active
+					  <input type="checkbox"  name="deal.active" value="${deal?.active}" #{if deal?.active}checked#{/if}> Active
 					</label>
 					<label class="checkbox inline">
-					  <input type="checkbox"  name="deal.isBreakfastIncluded"> BreakfastIncluded
+					  <input type="checkbox"  name="deal.breakfastIncluded" value="${deal?.breakfastIncluded}" #{if deal?.breakfastIncluded}checked#{/if}> BreakfastIncluded
 					</label>
 					</div>
 					</div>
@@ -92,59 +112,221 @@
 			       <div class="control-group #{ifError 'deal.contactEmail'}warning#{/ifError}">
 					  <label class="control-label" for="contactEmail">Contact emails</label>
 					  <div class="controls">
-					    <input type="text" id="contactEmail" name="deal.contactEmail" required>
+					    <input type="text" id="contactEmail" name="deal.contactEmail"  value="${deal?.contactEmail}" required>
 					    <span class="help-inline">Booking notification emails: "a@email.com; b@email.com"</span>
 					  </div>
 					</div>
 					<div class="control-group #{ifError 'deal.limitHour'}warning#{/ifError}">
 					  <label class="control-label" for="contactEmail">Limit hour</label>
 					  <div class="controls">
-					    <input type="number" id="contactEmail" name="deal.contactEmail" class="span1" required min="0" max="6">
+					    <input type="number" name="deal.limitHour"  value="${deal?.limitHour}" class="span1" required min="0" max="6">
 					    <span class="help-inline">Limit offer hour: normal is 3. Write 0 for midnight</span>
 					  </div>
 					</div>
 					<div class="control-group #{ifError 'deal.hotelCategory'}warning#{/ifError}">
 					  <label class="control-label" for="category">Hotel Stars</label>
 					  <div class="controls">
-					    <input type="number" id="category" name="deal.hotelCategory" class="span1" min="1" max="5">
+					    <input type="number" id="category" name="deal.hotelCategory"  value="${deal?.hotelCategory}" class="span1" min="1" max="5">
 					    <span class="help-inline">Hotel category: from 1 to 5 stars.</span>
 					  </div>
 					</div>
 					<div class="control-group #{ifError 'deal.roomType'}warning#{/ifError}">
 					  <label class="control-label" for="category">Hotel Category</label>
 					  <div class="controls">
-					    #{select 'deal.roomType', class:'inline span2'}
+					    #{select 'deal.roomType', class:'inline span2', value:deal?.roomType}
 			   	 		 	#{option 'lujo'}Luxury #{/option}
 			   	 		 	#{option 'elegante'}Elegant #{/option}
 			   	 		 	#{option 'confort'}Comfort  #{/option}
 						#{/select}
 						<span class="help-inline">Optional text, ie.: "chic", "design"...</span>
-						<input type="text" name="deal.roomTypeText" class="span1 inline">
-					    
+						<input type="text" name="deal.roomTypeText" class="span1 inline"  value="${deal?.roomTypeText}">
 					  </div>
 					</div>
-					<div class="control-group #{ifError 'deal.hotelAddres'}warning#{/ifError}">
-					  <label class="control-label" for="deal.hotelAddres">Hotel address</label>
+					<div class="control-group #{ifError 'deal.address'}warning#{/ifError}">
+					  <label class="control-label" for="deal.address">Hotel address</label>
 					  <div class="controls">
-					    <input type="text" id="deal.hotelAddres" name="deal.deal.hotelAddres" class="input-xxlarge" required>
+					    <input type="text" id="dealAddress" name="deal.address"  value="${deal?.address}" class="input-xxlarge" required>
 					  </div>
 					</div>
 					<div class="control-group  #{ifError 'deal.latitude'}warning#{/ifError}">
 					  <label class="control-label" >Location lat, long</label>
 					  <div class="controls">
-					    <input type="text"  name="deal.latitude" class="inline span2" placeholder="latitude" required>
-					    <input type="text"  name="deal.longitude" class="inline span2" placeholder="longitude" required>
+					    <input type="text"  name="deal.latitude" class="inline span2"  value="${deal?.latitude}" placeholder="latitude" required>
+					    <input type="text"  name="deal.longitude" class="inline span2"  value="${deal?.longitude}" placeholder="longitude" required>
 					  </div>
 					 </div>
-					
-			       
-			       
-			      
-			       	    			
-			    
-				  <button type="submit" class="btn">Search</button>
+					 
+					 <div class="control-group  #{ifError 'deal.detailText'}warning#{/ifError}">
+					  <label class="control-label" >Conditions and details. Leave empty if default (ES, EN, FR)</label>
+					  <div class="controls">
+					    <textarea rows="4" name="deal.detailText" class="inline" placeholder="Spanish" >${deal?.detailText}</textarea>
+					    <textarea rows="4"  name="deal.detailTextEN"  class="inline" placeholder="English" >${deal?.detailTextEN}</textarea>
+					    <textarea rows="4"  name="deal.detailTextFR"  class="inline" placeholder="French" >${deal?.detailTextFR}</textarea>
+					  </div>
+					 </div>
+					<div class="control-group  #{ifError 'deal.hotelText'}warning#{/ifError}">
+					  <label class="control-label" >Hotel details (ES,EN,FR)</label>
+					  <div class="controls">
+					    <textarea rows="4" name="deal.hotelText" class="inline" placeholder="Spanish" required>${deal?.hotelText}</textarea>
+					    <textarea rows="4"  name="deal.hotelTextEN" class="inline" placeholder="English" required>${deal?.hotelTextEN}</textarea>
+					    <textarea rows="4"  name="deal.hotelTextFR" class="inline" placeholder="French" required>${deal?.hotelTextFR}</textarea>
+					  </div>
+					 </div>
+			       <div class="control-group  #{ifError 'deal.roomText'}warning#{/ifError}">
+					  <label class="control-label" >Room details (ES,EN,FR)</label>
+					  <div class="controls">
+					    <textarea rows="4" name="deal.roomText" class="inline" placeholder="Spanish" required>${deal?.roomText}</textarea>
+					    <textarea rows="4"  name="deal.roomTextEN" class="inline" placeholder="English" required>${deal?.roomTextEN}</textarea>
+					    <textarea rows="4"  name="deal.roomTextFR" class="inline" placeholder="French" required>${deal?.roomTextFR}</textarea>
+					  </div>
+					 </div>
+					 <div class="control-group  #{ifError 'deal.foodDrinkText'}warning#{/ifError}">
+					  <label class="control-label" >Food & drink (ES,EN,FR)</label>
+					  <div class="controls">
+					    <textarea rows="4" name="deal.foodDrinkText" class="inline" placeholder="Spanish" required>${deal?.foodDrinkText}</textarea>
+					    <textarea rows="4"  name="deal.foodDrinkTextEN" class="inline" placeholder="English" required>${deal?.foodDrinkTextEN}</textarea>
+					    <textarea rows="4"  name="deal.foodDrinkTextFR" class="inline" placeholder="French" required>${deal?.foodDrinkTextFR}</textarea>
+					  </div>
+					 </div>
+					 <div class="control-group  #{ifError 'deal.aroundText'}warning#{/ifError}">
+					  <label class="control-label" >Around info (ES,EN,FR)</label>
+					  <div class="controls">
+					    <textarea rows="4" name="deal.aroundText" class="inline" placeholder="Spanish" required>${deal?.aroundText}</textarea>
+					    <textarea rows="4"  name="deal.aroundTextEN" class="inline" placeholder="English" required>${deal?.aroundTextEN}</textarea>
+					    <textarea rows="4"  name="deal.aroundTextFR" class="inline" placeholder="French" required>${deal?.aroundTextFR}</textarea>
+					  </div>
+					 </div>
+			       	 
+			      <input type="hidden" name="deal.id" value="${deal?.id}" >
+				  <button type="submit" class="btn btn-primary btn-large">#{if deal?.id == null}Create deal#{/if}#{else}Save changes#{/else}</button>
 				#{/form}
           	</div>
-          
+          #{if deal?.id != null}
+						<h2>Hotel Photos</h2>
+						
+			<ul class="thumbnails">
+			<li>
+              <div class="thumbnail">
+                <img alt="832x300" style="width: 832px; height: 300px;" src="${dealDTO?.listImage}">
+                <div class="caption">
+                    <h3>Hotels list photo in web. <small>Size: 832x300. Upload a new photo to delete this one</small></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="320x120" style="width: 320px; height: 120px;" src="${dealDTO?.mainImageBig}">
+                <div class="caption">
+                    <h3>Hotels list photo in apps. <small>Size: 320x120. Upload a new photo to delete this one</small></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="140x110" style="width: 140px; height: 110px;" src="${dealDTO?.mainImageSmall}">
+                <div class="caption">
+                    <h3>Hotels list photo in old apps. <small>Size: 140x110. Upload a new photo to delete</small></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="320x330" style="width: 320px; height: 330px;" src="${dealDTO?.image10}">
+                <div class="caption">
+                    <h3>Hotel detail photo. <small>Size: 320x330.</small> <a href="@{admin.Deals.deleteImage(deal.id, 10)}" class="btn btn-primary btn-danger">Delete image</a></h3>
+                 </div>
+              </div>
+            </li>
+             <li>
+              <div class="thumbnail">
+                <img alt="320x400" style="width: 320px; height: 400px;" src="${dealDTO?.image1}">
+                <div class="caption">
+                    <h3>Hotel photo gallery 1. <small>Size: 320x400.</small> <a href="@{admin.Deals.deleteImage(deal.id, 1)}" class="btn btn-primary btn-danger">Delete image</a></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="320x400" style="width: 320px; height: 400px;" src="${dealDTO?.image2}">
+                <div class="caption">
+                    <h3>Hotel photo gallery 2. <small>Size: 320x400.</small> <a href="@{admin.Deals.deleteImage(deal.id, 2)}" class="btn btn-primary btn-danger">Delete image</a></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="320x400" style="width: 320px; height: 400px;" src="${dealDTO?.image3}">
+                <div class="caption">
+                    <h3>Hotel photo gallery 3. <small>Size: 320x400.</small> <a href="@{admin.Deals.deleteImage(deal.id, 3)}" class="btn btn-primary btn-danger">Delete image</a></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="320x400" style="width: 320px; height: 400px;" src="${dealDTO?.image4}">
+                <div class="caption">
+                    <h3>Hotel photo gallery 4. <small>Size: 320x400.</small> <a href="@{admin.Deals.deleteImage(deal.id, 4)}" class="btn btn-primary btn-danger">Delete image</a></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="320x400" style="width: 320px; height: 400px;" src="${dealDTO?.image5}">
+                <div class="caption">
+                    <h3>Hotel photo gallery 5. <small>Size: 320x400.</small> <a href="@{admin.Deals.deleteImage(deal.id, 5)}" class="btn btn-primary btn-danger">Delete image</a></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="320x400" style="width: 320px; height: 400px;" src="${dealDTO?.image6}">
+                <div class="caption">
+                    <h3>Hotel photo gallery 6. <small>Size: 320x400.</small> <a href="@{admin.Deals.deleteImage(deal.id, 6)}" class="btn btn-primary btn-danger">Delete image</a></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="320x400" style="width: 320px; height: 400px;" src="${dealDTO?.image7}">
+                <div class="caption">
+                    <h3>Hotel photo gallery 7. <small>Size: 320x400.</small> <a href="@{admin.Deals.deleteImage(deal.id, 7)}" class="btn btn-primary btn-danger">Delete image</a></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="320x400" style="width: 320px; height: 400px;" src="${dealDTO?.image8}">
+                <div class="caption">
+                    <h3>Hotel photo gallery 8. <small>Size: 320x400.</small> <a href="@{admin.Deals.deleteImage(deal.id, 8)}" class="btn btn-primary btn-danger">Delete image</a></h3>
+                 </div>
+              </div>
+            </li>
+            <li>
+              <div class="thumbnail">
+                <img alt="320x400" style="width: 320px; height: 400px;" src="${dealDTO?.image9}">
+                <div class="caption">
+                    <h3>Hotel photo gallery 9. <small>Size: 320x400.</small> <a href="@{admin.Deals.deleteImage(deal.id, 9)}" class="btn btn-primary btn-danger">Delete image</a></h3>
+                 </div>
+              </div>
+            </li>
+          </ul>
+			       		%{
+						  	city = models.City.findById(deal.city?.id)
+						 }%
+						<form id="imageForm"  action="http://api2.transloadit.com/assemblies" enctype="multipart/form-data" method="POST">
+									<input type="hidden" name="params" value="{&quot;auth&quot;:{&quot;key&quot;:&quot;24ec1ca3d9224f3aa74d3c7f1ba78a5a&quot;},&quot;template_id&quot;:&quot;ffaae1063bfd4587baf51e8d91324ad5&quot;,&quot;redirect_url&quot;:&quot;@@{Deals.transloadit()}&quot;}" />
+									<input type="hidden" name="dealId" value="${deal.id}"/>
+									<input type="hidden" name="hotel" value="${deal.hotelName?.slugify()}"/>
+									<input type="hidden" name="city" value="${city?.url?.slugify()}"/>
+									<input type="hidden" name="redirectUrl" value="${request.url}"/>
+									<div class="control-group" >
+									  <div class="controls">
+										<input type="file" name="my_file" multiple="multiple" class="inline"/>
+										<input type="submit" class="btn inline" value="Upload" >
+									  </div>
+									</div>
+									
+						</form>
+			       	 #{/if}
         	
         </div><!--/span-->

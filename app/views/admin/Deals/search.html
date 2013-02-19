@@ -1,14 +1,12 @@
 #{set active:'deals'/}
 #{set activeSub:'searchDeals'/}
 #{extends 'admin/layoutResponsive.html' /}
-		  
-		 #{include 'admin/Deals/rightColumn.html'/}
-		  
-		
+#{include 'admin/Deals/navColumn.html'/}		  
         <div class="span10">
         	<div class="">
         		#{form @admin.Deals.search(), class:'form-search'}
-				  <input type="text" name="hotelName" class="input-medium search-query" placeholder="Hotel name">
+				  <input type="text" name="hotelName" placeholder="Hotel name" class="input-medium search-query" autocomplete="off" data-provide="typeahead" data-items="10"
+				  	 data-source="[#{list items:deals, as:'deal'}&quot;${deal.hotelName}&quot;${deal_isLast ?'':','}#{/list}]">
 				  <select name="cityId">
 				  	<option value="">Any city</option>
 	              	#{list items:cities, as:'city' }

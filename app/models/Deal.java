@@ -35,6 +35,7 @@ import play.data.validation.MaxSize;
 import play.data.validation.Min;
 import play.data.validation.Required;
 import play.libs.Mail;
+import play.mvc.Scope.Flash;
 import services.DealsService;
 import siena.DateTime;
 import siena.Generator;
@@ -72,11 +73,8 @@ public class Deal extends Model {
 	public String contactEmail;
 	public double discount;
 	public Integer bestPrice;
-	@Required
 	public Integer salePriceCents;
-	@Required
 	public Float netSalePriceCents;
-	@Required
 	@Min(0)
 	public Integer priceCents;
 	@Min(0)
@@ -95,7 +93,6 @@ public class Deal extends Model {
 	public Float netPriceDay4;
 	@Min(0)
 	public Float netPriceDay5;
-	@Required
 	@Min(0)
 	public Integer quantity;
 	@Min(0)
@@ -322,38 +319,49 @@ public class Deal extends Model {
 		return null;
 	}
 
-	public void addImage(String image) {
-		if (StringUtils.isBlank(this.image1)){
-			this.image1 = image;
+	public void addImage(String image, int width, int height) {
+		Logger.debug("deal.adImage: %s, %s, %s", image, width, height);
+		if (width == 832 && height == 300){
+			this.listImage = image;
 		}
-		else if (StringUtils.isBlank(this.image2)){
-			this.image2 = image;
+		else if (width == 320 && height == 120){
+			this.mainImageBig = image;
 		}
-		else if (StringUtils.isBlank(this.image3)){
-			this.image3 = image;
+		else if (width == 140 && height == 110){
+			this.mainImageSmall = image;
 		}
-		else if (StringUtils.isBlank(this.image4)){
-			this.image4 = image;
-		}
-		else if (StringUtils.isBlank(this.image5)){
-			this.image5 = image;
-		}
-		else if (StringUtils.isBlank(this.image6)){
-			this.image6 = image;
-		}
-		else if (StringUtils.isBlank(this.image7)){
-			this.image7 = image;
-		}
-		else if (StringUtils.isBlank(this.image8)){
-			this.image8 = image;
-		}
-		else if (StringUtils.isBlank(this.image9)){
-			this.image9 = image;
-		}
-		else if (StringUtils.isBlank(this.image10)){
+		else if (width == 320 && height == 330){
 			this.image10 = image;
 		}
-		
+		else if (width == 320 && height == 400){
+			if (StringUtils.isBlank(this.image1)){
+				this.image1 = image;
+			}
+			else if (StringUtils.isBlank(this.image2)){
+				this.image2 = image;
+			}
+			else if (StringUtils.isBlank(this.image3)){
+				this.image3 = image;
+			}
+			else if (StringUtils.isBlank(this.image4)){
+				this.image4 = image;
+			}
+			else if (StringUtils.isBlank(this.image5)){
+				this.image5 = image;
+			}
+			else if (StringUtils.isBlank(this.image6)){
+				this.image6 = image;
+			}
+			else if (StringUtils.isBlank(this.image7)){
+				this.image7 = image;
+			}
+			else if (StringUtils.isBlank(this.image8)){
+				this.image8 = image;
+			}
+			else if (StringUtils.isBlank(this.image9)){
+				this.image9 = image;
+			}
+		}
 	}
 	
 	public void fecthCity(){
@@ -466,6 +474,46 @@ public class Deal extends Model {
 
 	public static List<Deal> findByCityOrderByName(City city) {
 		return Deal.all().filter("city", city).order("hotelName").fetch();
+	}
+	
+	public void updateFromDeal(Deal deal){
+		this.hotelName = deal.hotelName;
+		this.hotelCode = deal.hotelCode;
+		this.hotelCode2 = deal.hotelCode2;
+		this.trivagoCode = deal.trivagoCode;
+		this.isHotUsa = deal.isHotUsa;
+		this.onlyApp = deal.onlyApp;
+		this.isFake = deal.isFake;
+		this.active = deal.active;
+		this.breakfastIncluded = deal.breakfastIncluded;
+		this.city = deal.city;
+		this.secondCity = deal.secondCity;
+		this.owner = deal.owner;
+		this.contactEmail = deal.contactEmail;
+		this.limitHour = deal.limitHour;
+		this.hotelCategory = deal.hotelCategory;
+		this.roomType = deal.roomType;
+		this.roomTypeText = deal.roomTypeText;
+		this.address = deal.address;
+		this.latitude = deal.latitude;
+		this.longitude = deal.longitude;
+		this.detailText = deal.detailText;
+		this.hotelText = deal.hotelText;
+		this.roomText = deal.roomText;
+		this.aroundText = deal.aroundText;
+		this.foodDrinkText = deal.foodDrinkText;
+		this.detailTextEN = deal.detailTextEN;
+		this.hotelTextEN = deal.hotelTextEN;
+		this.roomTextEN = deal.roomTextEN;
+		this.aroundTextEN = deal.aroundTextEN;
+		this.foodDrinkTextEN = deal.foodDrinkTextEN;
+		this.detailTextFR = deal.detailTextFR;
+		this.hotelTextFR = deal.hotelTextFR;
+		this.roomTextFR = deal.roomTextFR;
+		this.aroundTextFR = deal.aroundTextFR;
+		this.foodDrinkTextFR = deal.foodDrinkTextFR;
+		this.customDetailText = StringUtils.isNotBlank(this.detailText);
+		this.updated = new Date();
 	}
 	
 }

@@ -2,7 +2,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Deals</li>
-              <li class="#{if activeSub == 'deals'}active#{/if}"><a href="@{admin.Deals.index()}">Last updated</a></li>
+              <li class="#{if activeSub == 'deals'}active#{/if}"><a href="@{admin.Deals.panel()}">Last updated</a></li>
               <li class="#{if activeSub == 'publish'}active#{/if}"><a href="@{admin.Cities.list()}">Publish today deals</a></li>
               <li class="#{if activeSub == 'searchDeals'}active#{/if}"><a href="@{admin.Deals.searchForm()}">Search</a></li>
               <li class="#{if activeSub == 'createDeal'}active#{/if}"><a href="@{admin.Deals.createForm()}">Create new</a></li>

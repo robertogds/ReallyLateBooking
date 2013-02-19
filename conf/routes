@@ -5,7 +5,6 @@
 # Import Secure routes
 *       /                                       module:secure
 
-
 ###  i18n ROUTES ###
  
  # Home page
@@ -121,6 +120,7 @@ GET     /partners/?								admin.PartnerBookings.index
 GET     /panel/?								admin.Application.index
 GET		/panel/deals/search/?					admin.Deals.searchForm
 POST	/panel/deals/search/results/?			admin.Deals.search
+GET 	/panel/deals/show/{id}					admin.Deals.createForm
 GET 	/panel/deals/createForm/?				admin.Deals.createForm
 POST	/panel/deals/create/?					admin.Deals.create
 

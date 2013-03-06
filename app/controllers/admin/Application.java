@@ -27,8 +27,7 @@ public class Application extends Controller{
 	private static final Logger log = Logger.getLogger(Application.class.getName());
 	
 	public static void index() { 
-		User user = User.findById(Long.valueOf(session.get("userId")));
-		render(user);
+		render();
 	} 
 	
 }

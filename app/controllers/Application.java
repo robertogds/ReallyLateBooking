@@ -132,7 +132,7 @@ public class Application extends Controller {
         	Mails.contactForm(email, name, message);
         	flash.success(Messages.get("web.contact.correct"));
         }
-    	redirect(returnUrl);
+    	redirect(returnUrl!=null? returnUrl : "/");
     }
     
     public static void hotelsForm(@Required @Email String email, @Required String hotelName, 
@@ -147,7 +147,7 @@ public class Application extends Controller {
         	Mails.hotelForm(email, name, hotelName,  phone ,message);
         	flash.success(Messages.get("web.contact.correct"));
         }
-    	redirect(returnUrl);
+    	redirect(returnUrl!=null? returnUrl : "/");
     }
     
 	public static void bootstrap(){

@@ -17,8 +17,8 @@ public final class DateHelper {
 	public static final int CITY_OPEN_DAY = 1;
 	public static final int CITY_OPEN_NIGHT = 2;
 	
-	public static final int PRICING_START_HOUR = 10;
-	public static final int OPEN_HOUR = 12;
+	public static final int PRICING_START_HOUR = 9;
+	public static final int OPEN_HOUR = 11;
 	public static final int CLOSE_HOUR = 6;
 	public static final int DAY_END_HOUR = 24;
 	public static final int DAY_START_HOUR = 0;
@@ -159,8 +159,8 @@ public final class DateHelper {
 		hour = hour == 25 ? 1 : hour;
 		
 		if (Play.mode.isDev() ){
-			Logger.info("City local hour is: " + hour);
-			hour = 15;
+			//Logger.info("City local hour is: " + hour);
+			//hour = 10;
 		}
 		return hour;
 		

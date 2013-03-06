@@ -20,7 +20,12 @@
 
     <!-- Fav and touch icons -->
     <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.ico'}">
-	 
+    
+        <!-- Le javascript
+    ================================================== -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="@{'/public/admin/js/bootstrap.min.js'}"></script>
+	
   </head>
 
   <body>
@@ -46,17 +51,42 @@
               <li class="#{if active == 'coupons'}active#{/if}"><a href="@{admin.Coupons.list()}">Coupons</a></li>
               <li class="#{if active == 'partners'}active#{/if}"><a href="@{admin.Partners.list()}">Partners</a></li>
               <li class="#{if active == 'mailchimp'}active#{/if}"><a href="@{admin.Mailchimp.index()}">Mailchimp</a></li>
+              <li>
+              <div class="btn-group">
+                <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"> Export data <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a href="@{admin.Countries.exportAll}">Export all Countries as CSV </a></li>
+                  <li><a href="@{admin.Cities.exportAll}">Export all Cities as CSV </a></li>
+                  <li><a href="@{admin.InfoTexts.exportAll}">Export all InfoTexts as CSV </a></li>
+                  <li class="divider"></li>
+                  <li><a href="@{admin.deals.fixHotusa}">Reparar Hoteles Hotusa</a></li>
+                  <li><a href="@{admin.deals.openBefore}">Adelantar apertura una hora</a></li>
+                  <li><a href="@{admin.deals.openLater}">Retrasar apertura una hora</a></li>
+                </ul>
+              </div>
+              </li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
-					            
-
+	
     <div class="container-fluid">
+    	      	#{if flash.success}
+      		<div class="alert alert-success">
+              		<button type="button" class="close" data-dismiss="alert">×</button>
+              		<strong>Great!</strong> ${flash.success}
+            </div>
+		#{/if}
+		#{if flash.error || error}
+			<div class="alert alert-error">
+              		<button type="button" class="close" data-dismiss="alert">×</button>
+              		<strong>Oh snap!</strong> ${error ?: flash.error}
+            </div>
+		#{/if}
       <div class="row-fluid">
+
       	#{doLayout /}
-      	
       </div><!--/row-->
 
       <hr>
@@ -67,11 +97,6 @@
 
     </div><!--/.fluid-container-->
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="@{'/public/admin/js/bootstrap.min.js'}"></script>
-	#{get 'moreScripts' /}
+    #{get 'moreScripts' /}
   </body>
 </html>

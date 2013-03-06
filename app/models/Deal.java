@@ -170,6 +170,7 @@ public class Deal extends Model {
 	public String bookingLine5;
 	public boolean autoImageUrl;
 	public int points;
+	public String uuid;
 	
 	
 	public Deal(String hotelName, City city) {
@@ -209,6 +210,15 @@ public class Deal extends Model {
 	public static List<Deal> findByCity(City city) {
         return all().filter("city", city).order("-updated").order("position").fetch();
     }
+	
+	public static Collection<Deal> findByCityInGetARoom(City city) {
+		Collection<Deal> deals = all().filter("city", city).fetch();
+		Collection<Deal> dealsInGetARoom = new ArrayList<Deal>();
+		for (Deal deal : deals) {
+			if (StringUtils.isNotBlank(deal.uuid)) dealsInGetARoom.add(deal);
+		}
+		return dealsInGetARoom;
+	}
 	
 	public static List<Deal> findActiveByCityOrderDiscountAndPrice(City city) {
         return all().filter("city", city).filter("active", Boolean.TRUE).order("-salePriceCents").order("-discount").fetch();
@@ -481,14 +491,16 @@ public class Deal extends Model {
 		this.hotelCode = deal.hotelCode;
 		this.hotelCode2 = deal.hotelCode2;
 		this.trivagoCode = deal.trivagoCode;
-		this.isHotUsa = deal.isHotUsa;
+		this.isHotUsa = deal.isHotUsa != null ? deal.isHotUsa : Boolean.FALSE;
 		this.onlyApp = deal.onlyApp;
-		this.isFake = deal.isFake;
-		this.active = deal.active;
-		this.breakfastIncluded = deal.breakfastIncluded;
+		Logger.debug("Deal is active %s", deal.active);
+		this.isFake = deal.isFake != null ? deal.isFake : Boolean.FALSE;
+		this.active = deal.active != null ? deal.active : Boolean.FALSE;
+		this.breakfastIncluded = deal.breakfastIncluded != null ? deal.breakfastIncluded : Boolean.FALSE;
 		this.city = deal.city;
 		this.secondCity = deal.secondCity;
 		this.owner = deal.owner;
+		this.company = deal.company;
 		this.contactEmail = deal.contactEmail;
 		this.limitHour = deal.limitHour;
 		this.hotelCategory = deal.hotelCategory;
@@ -516,6 +528,15 @@ public class Deal extends Model {
 		this.updated = new Date();
 	}
 	
+	
+	/**
+	 * Check if deal is ready to be published
+	 * @return true if the updated time is today
+	 */
+	 public boolean updatedToday(){
+		return this.updated!= null && DateHelper.isTodayDate(this.updated);
+	}
+
 }
 
 

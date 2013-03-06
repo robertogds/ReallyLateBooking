@@ -1,14 +1,19 @@
 package models;
 
+import helper.DateHelper;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import models.dto.DealDTO;
+
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import play.data.validation.Required;
+import services.DealsService;
 import siena.DateTime;
 import siena.Generator;
 import siena.Id;
@@ -102,7 +107,7 @@ public class City extends Model {
 	}
 	
 	public static List<City> findAllCities() {
-		List<City> cities = all().order("url").fetch();
+		List<City> cities = all().order("name").fetch();
 		return cities;
 	}
 
@@ -179,4 +184,22 @@ public class City extends Model {
 		return this.root != null && this.root.equalsIgnoreCase(this.url);
 	}
 	
+	
+	/**
+	 * Check if city is ready to be published
+	 * @return true if the updated time is today
+	 */
+	 public boolean isCityReady(){
+		return this.updated!= null && DateHelper.isTodayDate(this.updated);
+	}
+	 
+	 public boolean isCityOpen(){
+		int hour = DateHelper.getCurrentHour(this.utcOffset);
+		return DateHelper.isActiveTime(hour);
+	 }
+	 
+	 public Date timeToOpen(){
+		int hour = DateHelper.getCurrentHour(this.utcOffset);
+		return DateHelper.getTimeToOpen(hour);
+	 }
 }

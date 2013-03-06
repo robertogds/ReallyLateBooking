@@ -1,7 +1,10 @@
 package controllers.admin;
 
+import helper.DateHelper;
 import helper.JsonHelper;
+import helper.getaroom.GetaroomApi;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -13,6 +16,7 @@ import models.City;
 import models.Deal;
 import models.User;
 import models.dto.CouponStatusMessage;
+import models.dto.DealDTO;
 import models.dto.MyCouponDTO;
 import java.util.logging.Logger;
 import play.data.binding.As;
@@ -21,6 +25,7 @@ import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Http;
 import play.mvc.With;
+import services.DealsService;
 import controllers.CRUD;
 import controllers.Check;
 import controllers.Secure;
@@ -59,9 +64,9 @@ public class Cities extends controllers.CRUD {
 	
 	public static void editCityDeals(Long cityId) {
 		City city = City.findById(cityId);
-		//List<City> cities = City.findCitiesByRoot(city.url);
+		List<City> cities = City.findAllMainCities(null, null);
 		Collection<Deal> deals = Deal.findByCity(city);
-        render(city, deals);
+        render(city, deals, cities);
 	}
 	
 	
@@ -82,8 +87,9 @@ public class Cities extends controllers.CRUD {
 	}
 	
 	public static void updateDeal(Long id, Integer quantity, Integer priceCents, Integer bestPrice, Integer salePriceCents, 
-			Integer priceDay2, Integer priceDay3, Integer priceDay4, Integer priceDay5, 
-			Integer position, Boolean active, Boolean isHotUsa, Boolean isFake, Integer limitHour,
+			Integer priceDay2, Integer priceDay3, Integer priceDay4, Integer priceDay5, Float netSalePriceCents, 
+			Float netPriceDay2, Float netPriceDay3, Float netPriceDay4, Float netPriceDay5, 
+			Integer position, Boolean active, Integer limitHour,
 			Long cityId, String trivagoCode, Integer points) {
 	    Deal deal;
 	    // Retrieve post
@@ -97,10 +103,13 @@ public class Cities extends controllers.CRUD {
 	    deal.priceDay3 = priceDay3;
 	    deal.priceDay4 = priceDay4;
 	    deal.priceDay5 = priceDay5;
+	    deal.netSalePriceCents = netSalePriceCents;
+	    deal.netPriceDay2 = netPriceDay2;
+	    deal.netPriceDay3 = netPriceDay3;
+	    deal.netPriceDay4 = netPriceDay4;
+	    deal.netPriceDay5 = netPriceDay5;
 	    deal.position = position;
 	    deal.active = active != null ? active : Boolean.FALSE;
-	    deal.isHotUsa = isHotUsa != null ? isHotUsa : Boolean.FALSE;
-	    deal.isFake = isFake != null ? isFake : Boolean.FALSE;
 	    deal.limitHour = limitHour;
 	    deal.trivagoCode = trivagoCode;
 	    deal.points = points;
@@ -124,6 +133,14 @@ public class Cities extends controllers.CRUD {
 	    deal.update();
 
 	    renderJSON(deal);
+	}
+	
+	public static void updateDealGetARoomCode(Long id, String uuid){
+		log.info("Updating deal get a room: " + id + " uuid: " + uuid);
+		Deal deal = Deal.findById(id);
+		deal.uuid = uuid.trim();
+		deal.update();
+		renderJSON(deal);
 	}
 	
 	
@@ -151,6 +168,52 @@ public class Cities extends controllers.CRUD {
 
         render("admin/export.csv", objects, type);
     }
+	
+	public static void changeOpenHour(Long cityId, int hours){
+		City city = City.findById(cityId);
+		city.utcOffset = city.utcOffset - hours;
+		city.update();
+		list(0, null, null, null, null, null);
+	}
+	
+	public static void close(Long cityId){
+		City city = City.findById(cityId);
+		List<City> cities = City.findActiveCitiesByRoot(city.url);
+		List<Deal> deals = new ArrayList<Deal>();
+		for (City location: cities) {
+			deals.addAll(Deal.findActiveByCityOrderPositionPrice(location));
+			deals.addAll(Deal.findSecondCityActiveByCityOrderPositionPrice(location));
+		}
+		for (Deal deal: deals){
+			deal.active = Boolean.FALSE;
+			deal.update();
+		}
+		list(0, null, null, null, null, null);
+	}
+	
+	public static void seeGetaroomHotels(Long cityId) throws UnsupportedEncodingException{
+		City city = City.findById(cityId);
+		List<City> cities = City.findCitiesByRoot(city.url);
+		List<Deal> deals = new ArrayList<Deal>();
+		for (City location: cities) {
+			deals.addAll(Deal.findByCity(location));
+		}
+		List<Deal> dealsGAR =  GetaroomApi.getHotelsByCity(city.name, DateHelper.getTodayDate(), DateHelper.getFutureDay(1));
+		int total = dealsGAR.size();
+		render(deals, dealsGAR, city, total);
+	}
+	
+	public static void refreshBARAll(Long cityId){
+		City city = City.findById(cityId);
+		Collection<Deal> deals = Deal.findByCityInGetARoom(city);		
+		HashMap<String, Integer> dealPrices = GetaroomApi.getBestPriceByUuids(deals, DateHelper.getTodayDate(), DateHelper.getFutureDay(1));
+		for (Deal deal : deals){
+			deal.bestPrice = dealPrices.get(deal.uuid);
+			deal.update();
+		}
+		
+		Cities.editCityDeals(cityId);
+	}
 	
 }
 

@@ -1,28 +1,71 @@
 #{set active:'deals'/}
 #{set activeSub:'searchDeals'/}
 #{extends 'admin/layoutResponsive.html' /}
-#{include 'admin/Deals/navColumn.html'/}		  
+#{include 'admin/Deals/navColumn.html'/}		
+
+#{set 'moreScripts' }
+<script>
+$('#citySelect').typeahead({
+    source: function(query, process) {
+        objects = [];
+        map = {};
+        var data = [
+        	#{list items:cities, as:'city'}
+            	{"id":${city.id},"label":"${city.name.noAccents()}"}${city_isLast ?'':','}
+            #{/list}
+        ];
+        $.each(data, function(i, object) {
+            map[object.label] = object;
+            objects.push(object.label);
+        });
+        process(objects);
+    },
+    updater: function(item) {
+        $('#citySelectId').val(map[item].id);
+        return item;
+    }
+}); 
+
+$('#companySelect').typeahead({
+    source: function(query, process) {
+        objects = [];
+        map = {};
+        var data = [
+        	#{list items:companies, as:'company'}
+            	{"id":${company.id},"label":"${company.name.noAccents()}"}${company_isLast ?'':','}
+            #{/list}
+        ];
+        $.each(data, function(i, object) {
+            map[object.label] = object;
+            objects.push(object.label);
+        });
+        process(objects);
+    },
+    updater: function(item) {
+        $('#companySelectId').val(map[item].id);
+        return item;
+    }
+}); 
+</script> 
+#{/set}
+
         <div class="span10">
         	<div class="">
         		#{form @admin.Deals.search(), class:'form-search'}
 				  <input type="text" name="hotelName" placeholder="Hotel name" class="input-medium search-query" autocomplete="off" data-provide="typeahead" data-items="10"
 				  	 data-source="[#{list items:deals, as:'deal'}&quot;${deal.hotelName}&quot;${deal_isLast ?'':','}#{/list}]">
-				  <select name="cityId">
-				  	<option value="">Any city</option>
-	              	#{list items:cities, as:'city' }
-	                	<option value="${city.id}">${city.name}</option>
-	                #{/list}
-	              </select>
-	              <select  name="companyId">
-	              	<option value="">Any company</option>
-	              	#{list items:companies, as:'company' }
-	                	<option value="${company.id}">${company.name}</option>
-	                #{/list}
-	              </select>
+				  	 
+				  <input id="citySelect" type="text" placeholder="City" class="input-medium" autocomplete="off"  data-items="20">
+				  <input id="citySelectId" type="hidden" name="cityId">		
+				  
+				  <input id="companySelect" type="text" placeholder="Company" class="input-medium" autocomplete="off"  data-items="20">
+				  <input id="companySelectId" type="hidden" name="companyId">			 
+				  	 
 				  <button type="submit" class="btn">Search</button>
 				#{/form}
           	</div>
-          
+
+
         	<table class="table table-bordered table-hover">
         		<thead>
 	                <tr>
@@ -47,7 +90,7 @@
 	        		#{list items:deals, as:'deal'}
 	          			<tr class="#{if deal.active} success #{/if}">
 	          				<td>
-		    					<a href="@{admin.Deals.show(deal.id)}">
+		    					<a href="@{admin.Deals.createForm(deal.id)}">
 				   					${deal.hotelName}
 				   				 </a>
 				   			</td>

@@ -1,0 +1,104 @@
+#{set active:'deals'/}
+#{set activeSub:'publish'/}
+#{extends 'admin/layoutResponsive.html' /}
+#{include 'admin/Deals/navColumn.html'/}
+<script src="@{'/public/js/jquery.form.js'}"></script>
+
+<script>
+		function dealChanged(response){
+			var deal = response;
+			$("#deal_"+deal.id).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+		}
+		$(function() {
+	   		$('input').change(function(){
+	   			var form = $(this).get(0).form;
+	   			$(form).trigger('submit');
+	   		});
+	   	});
+</script>	
+
+<div class="span10">
+	
+	<div class="page-header">
+		 <h2>Hotels from GetARoom at ${city.name} <small>Set the GetARoom code to our hotels so we can get prices</small></h2>
+	</div>
+	<div id="alert-success"></div>
+	<div id="alert-error"></div>
+	<div class="row-fluid">
+ 	 <div class="span5">
+ 	 	<h3>ReallyLateBooking hotels</h3>
+ 	 	<table class="table table-bordered table-hover" >
+				<thead>
+					<tr>
+						<th>
+							Hotel Name
+						</th>
+						<th>
+							Price
+						</th>
+						<th>
+							GetARoom code
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				 #{list deals, as:'deal'} 
+					    <tr class="" id="deal_${deal.id}">
+							<td>
+								<a href="@{admin.Deals.createForm(deal.id)}">
+				   					${deal.hotelName}
+				   				 </a>
+							</td>
+							<td>${deal.salePriceCents}&euro;</td>
+							<td>
+								#{remote.form action:@updateDealGetARoomCode(deal.id) , resultDiv:'alert-success', errorDiv:'alert-error', callback:'dealChanged(response)'}
+									#{field 'uuid'}
+								        <input type="text" name="${field.name}" 
+				           					 value="${deal.uuid}" class="input-xlarge" placeholder="GetARoom code"/>
+							        #{/field}
+								#{/remote.form}
+							</td>
+					  	</tr>
+				#{/list}
+			</tbody>
+		</table>
+ 	 </div>
+  	 <div class="span7">
+  	 	<h3>GetARoom hotels <small>${total} found with availability for tonight</small></h3>
+  	 	<table class="table table-bordered table-hover" >
+				<thead>
+					<tr>
+						<th>
+							Hotel Name
+						</th>
+						<th>Code</th>
+						<th>Price</th>
+						<th>Url</th>
+					</tr>
+				</thead>
+				<tbody>
+				 #{list dealsGAR, as:'deal'} 
+					    <tr class="">
+							<td>
+				   				${deal.hotelName}
+							</td>
+							<td>
+								${deal.hotelCode}
+							</td>
+							<td>
+								${deal.bookingHotelCode}&euro;
+							</td>
+							<td>
+								<a href="${deal.bookingLine}">
+				   					View
+				   				 </a>
+							</td>
+					  	</tr>
+				#{/list}
+			</tbody>
+		</table>
+  	 </div>
+	</div>
+			
+	
+</div>

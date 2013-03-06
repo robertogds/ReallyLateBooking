@@ -130,8 +130,8 @@ public class Users extends Controller {
 				flash.error(Messages.get("web.users.bookings.showinvoice.updateinfo"));
 				redirect("/dashboard?bookingId="+bookingId + "#profile");
 			}
-			Invoice invoice = Invoice.findOrCreateUserInvoice(booking, user);
-			render(user, invoice);
+			Invoice invoice = Invoice.findOrCreateUserInvoice(booking);
+			render(invoice);
 		}
 	}
 	

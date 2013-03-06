@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -16,8 +17,17 @@ import java.net.URLEncoder;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 
+import com.google.appengine.api.urlfetch.FetchOptions;
+import com.google.appengine.api.urlfetch.HTTPMethod;
+import com.google.appengine.api.urlfetch.HTTPRequest;
+import com.google.appengine.api.urlfetch.HTTPResponse;
+import com.google.appengine.api.urlfetch.URLFetchService;
+import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
+
 import play.Logger;
 import play.libs.XML;
+import com.google.appengine.api.urlfetch.FetchOptions.Builder.*;
+import com.google.appengine.repackaged.org.apache.http.HttpRequest;
 
 public final class UrlConnectionHelper {
 	private static final String ENCODING =  "ISO-8859-1";
@@ -79,6 +89,31 @@ public final class UrlConnectionHelper {
 		
 	}
 	
+	public static String doSecureGetIgnoreCertificate(String url){
+		try {
+			URL parsedUrl = new URL(url);
+			
+			FetchOptions options = FetchOptions.Builder.doNotValidateCertificate().setDeadline(60.0);
+			HTTPRequest request =  new HTTPRequest(parsedUrl, HTTPMethod.GET, options);
+			URLFetchService service = URLFetchServiceFactory.getURLFetchService();
+			try {
+				HTTPResponse response = service.fetch(request);
+				if (response.getResponseCode() == HttpURLConnection.HTTP_OK) {
+		        	String responseAsString =  new String(response.getContent());
+		        	Logger.debug("responseAsString: " + responseAsString);
+		    		return responseAsString;
+		        } 
+				
+			} catch (IOException e) {
+				Logger.error("IOException: " + e);
+			}
+			
+		} catch (MalformedURLException e) {
+			Logger.error("MalformedURLException: " + e);
+		}
+		
+		return null;
+	}
 	
 	public static String doGet(String url){
 		 try {
@@ -93,9 +128,22 @@ public final class UrlConnectionHelper {
 		    
 	        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 	        	String response = convertStreamToString(connection.getInputStream());
-	        	Logger.debug("response code: " + response);
+	        	Logger.debug("response: " + response);
 	    		return response;
-	        } else {
+	        } 
+	        else if (connection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP || connection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
+	        	String location = connection.getHeaderField("location");
+	        	connection.disconnect();
+	        	URL redirectUrl = new URL(location);
+	        	connection = (HttpURLConnection) redirectUrl.openConnection();
+	        	connection.connect();  
+	        	String response = convertStreamToString(connection.getInputStream());
+	        	Logger.debug(" redirect response code: %s", connection.getResponseCode());
+	        	Logger.debug("response: " + response );
+	    		return response;
+	        }
+	        else{
+	        	Logger.error("Error receiving response, responseCode: %s", connection.getResponseCode());
 	            throw new Exception();
 	        }
 	    } catch (Exception e) {

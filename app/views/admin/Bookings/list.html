@@ -5,7 +5,7 @@
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
 
 	<div id="crudListTable">
-		#{crud.table fields:['code','user','checkinDate','hotelName', 'finalPrice', 'netTotalSalePrice','credits','fromWeb','fromWhiteLabel','pending','canceled'] }
+		#{crud.table fields:['code','user','checkinDate','hotelName', 'finalPrice', 'netTotalSalePrice','credits','fromWeb','fromWhiteLabel','pending','canceled','invoice'] }
 		   #{crud.custom 'code'}
 		   		<a href="@{admin.Bookings.show(object.id)}">
 				   	${object.code}
@@ -33,6 +33,17 @@
 		   #{/crud.custom}
 		    #{crud.custom 'pending'}
 				   <label style="#{if object.pending} color:red;#{/if}">${object.pending}</label>	
+		   #{/crud.custom}
+		   #{crud.custom 'invoice'}
+				   <a href="@{Users.showBookingInvoice(object.id, object.user.id)}">
+		  	 			#{if object.invoice?.id != null} 
+		  	 				%{object.invoice.get()}%
+		  	 				Show ${object.invoice?.code}
+		  	 			#{/if}
+		  	 			#{else}
+		  	 				Create invoice
+		  	 			#{/else}
+		  	 	  </a>
 		   #{/crud.custom}
 	
    		#{/crud.table}

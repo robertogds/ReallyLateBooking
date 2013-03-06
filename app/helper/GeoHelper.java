@@ -31,8 +31,7 @@ public  class GeoHelper {
 	/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 	/*::                                                                         :*/
 	/*::  This routine calculates the distance between two points (given the     :*/
-	/*::  latitude/longitude of those points). It is being used to calculate     :*/
-	/*::  the distance between two locations using GeoDataSource (TM) prodducts  :*/
+	/*::  latitude/longitude of those points).   								 :*/
 	/*::                                                                         :*/
 	/*::  Definitions:                                                           :*/
 	/*::    South latitudes are negative, east longitudes are positive           :*/
@@ -44,15 +43,6 @@ public  class GeoHelper {
 	/*::           where: 'M' is statute miles                                   :*/
 	/*::                  'K' is kilometers (default)                            :*/
 	/*::                  'N' is nautical miles                                  :*/
-	/*::  Worldwide cities and other features databases with latitude longitude  :*/
-	/*::  are available at http://www.geodatasource.com                          :*/
-	/*::                                                                         :*/
-	/*::  For enquiries, please contact sales@geodatasource.com                  :*/
-	/*::                                                                         :*/
-	/*::  Official Web site: http://www.geodatasource.com                        :*/
-	/*::                                                                         :*/
-	/*::           GeoDataSource.com (C) All Rights Reserved 2012                :*/
-	/*::                                                                         :*/
 	/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
 	private static double distance(double lat1, double lon1, double lat2, double lon2) {

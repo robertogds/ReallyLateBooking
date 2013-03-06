@@ -16,16 +16,15 @@ $(document).ready(function() {
 #{include 'admin/Deals/navColumn.html'/}
 		  
         <div class="span10">
-        	<div class="page-header">
+       	<div class="page-header">
 		  <h1>Hotel Information <small>create or update text and photos</small></h1>
 		</div>
-        	 #{ifErrors}
+ 			#{ifErrors}
 		        <div class="alert alert-error">
               		<button type="button" class="close" data-dismiss="alert">×</button>
               		<strong>Oh snap!</strong> Change a few things up and try submitting again.
             	</div>
-		    #{/ifErrors}
-     
+		    #{/ifErrors}     
         	<div class="">
         		#{form @admin.Deals.create(), class:'form-horizontal'}
         			<div class="control-group #{ifError 'deal.hotelName'}warning#{/ifError}">
@@ -52,19 +51,24 @@ $(document).ready(function() {
 					<label class="control-label" >Configuration</label>
 					<div class="controls">
 					<label class="checkbox inline">
-					  <input type="checkbox"  name="deal.isHotUsa" value="${deal?.isHotUsa}" #{if deal?.isHotUsa}checked#{/if}> Hotusa
+					  <input type="checkbox"  name="deal.isHotUsa" #{if deal?.isHotUsa}checked#{/if}> Hotusa
+					  <input type="hidden" name="deal.isHotUsa" value="false" />
 					</label>
 					<label class="checkbox inline">
-					  <input type="checkbox"  name="deal.onlyApp" value="${deal?.onlyApp}" #{if deal?.onlyApp}checked#{/if}> OnlyApp
+					  <input type="checkbox"  name="deal.onlyApp"  #{if deal?.onlyApp}checked#{/if}> OnlyApp
+					  <input type="hidden" name="deal.onlyApp" value="false" />
 					</label>
 					<label class="checkbox inline">
-					  <input type="checkbox"  name="deal.isFake" value="${deal?.isFake}" #{if deal?.isFake}checked#{/if}> Fake
+					  <input type="checkbox"  name="deal.isFake"  #{if deal?.isFake}checked#{/if}> Fake
+					  <input type="hidden" name="deal.isFake" value="false" />
 					</label>
 					<label class="checkbox inline">
-					  <input type="checkbox"  name="deal.active" value="${deal?.active}" #{if deal?.active}checked#{/if}> Active
+					  <input type="checkbox"  name="deal.active"  #{if deal?.active}checked#{/if}> Active
+					  <input type="hidden" name="deal.active" value="false" />
 					</label>
 					<label class="checkbox inline">
-					  <input type="checkbox"  name="deal.breakfastIncluded" value="${deal?.breakfastIncluded}" #{if deal?.breakfastIncluded}checked#{/if}> BreakfastIncluded
+					  <input type="checkbox"  name="deal.breakfastIncluded"  #{if deal?.breakfastIncluded}checked#{/if}> BreakfastIncluded
+					  <input type="hidden" name="deal.breakfastIncluded" value="false" />
 					</label>
 					</div>
 					</div>
@@ -92,7 +96,7 @@ $(document).ready(function() {
 							    owners = models.User.getAllOwners();
 							}%
 							
-				   	 		#{select 'deal.owner.id', items:owners, valueProperty:'id', labelProperty:'deal.owner.name', value:deal?.owner?.id }
+				   	 		#{select 'deal.owner.id', items:owners, valueProperty:'id', labelProperty:'firstName', value:deal?.owner?.id }
 				   	 			#{option}Select an owner#{/option}
 							#{/select}
 						</div>

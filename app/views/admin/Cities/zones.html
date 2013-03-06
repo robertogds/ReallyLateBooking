@@ -1,9 +1,14 @@
-#{extends 'CRUD/layout.html' /}
+#{set active:'deals'/}
+#{set activeSub:'publish'/}
+#{extends 'admin/layoutResponsive.html' /}
+#{include 'admin/Deals/navColumn.html'/}
 
-<div id="crudList">
+<div class="span10">
 	
-	<h2 id="crudListTitle">&{'crud.list.title', root.name}</h2><div id="crudListTable">
-			<table>
+	<div class="page-header">
+		 <h2>&{'crud.list.title', root.name} zones</h2>
+	</div>
+			<table class="table table-bordered table-hover" >
 				<thead>
 					<tr>
 						<th>
@@ -65,16 +70,16 @@
 							</td>
 							
 							<td>
-								<a href="@{admin.Cities.editCityDeals(city.id)}">
 				   					${city.updated?.format('dd MMMM yyyy - hh:mm')}
+							</td>
+							<td>
+								<a href="@{admin.Cities.editCityDeals(city.id)}">
+				   					View and publish deals
 				   				 </a>
 							</td>
 					  	</tr>
 				#{/list}
 	</tbody>
 	</table>
-	</div>
-	
-	
 	
 </div>

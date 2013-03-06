@@ -363,12 +363,13 @@ public class Booking extends Model {
 			.filter("checkinDate>", start).filter("checkinDate<", end).count();
 	}
 	
-	public static Integer findLastMonthBookingsByDeal(Deal deal) {
+	public static Integer findLastBookingsByDeal(Deal deal, int days) {
 		Calendar now = Calendar.getInstance();
 		Calendar before = Calendar.getInstance();
-		before.add(Calendar.DAY_OF_YEAR, -30);
+		before.add(Calendar.DAY_OF_YEAR, -days);
 		return countAllBookingsByDateAndDeal(deal,  before.getTime(), now.getTime());
 	}
+	
 	
 	public static Collection<Booking> findAllNonPendindBookingsByDateAndCity(City city, Date start, Date end) {
 		return Booking.all().filter("city", city).filter("canceled", Boolean.FALSE).filter("pending", Boolean.FALSE)
@@ -407,7 +408,12 @@ public class Booking extends Model {
 	}
 
 	public static Booking findByIdAndUser(Long bookingId, User user) {
-		return Booking.all().filter("id", bookingId).filter("user", user).get();
+		if (user.isAdmin){
+			return Booking.all().filter("id", bookingId).get();
+		}
+		else{
+			return Booking.all().filter("id", bookingId).filter("user", user).get();
+		}
 	}
 
 	public static Booking findPendingBooking(Deal deal, User user,

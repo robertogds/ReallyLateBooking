@@ -1,9 +1,15 @@
-#{extends 'CRUD/layout.html' /}
+#{set active:'deals'/}
+#{set activeSub:'publish'/}
+#{extends 'admin/layoutResponsive.html' /}
+#{include 'admin/Deals/navColumn.html'/}
 
-<div id="crudList" class="${type.name}">
+<div  class="span10">
 	
-	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2><div id="crudListTable">
-			<table>
+	<div class="page-header">
+		  <h1>Publish Today Deals <small>view and update published deals by city</small></h1>
+	</div>
+	<div >
+			<table class="table table-bordered table-hover">
 				<thead>
 					<tr>
 						<th>
@@ -12,21 +18,18 @@
 						</a>
 						</th>
 						<th>
-							<a class="${orderBy == 'url' ? (order == 'DESC' ? 'crudSortedDesc' : 'crudSortedAsc') : ''}" href="@{list().remove('page').add('search', params.search).add('orderBy', 'url').add('order', (orderBy == 'url' && order == 'ASC' ? 'DESC' : 'ASC')).add('fields', currentFields?.join(','))}">
-							URL
-							</a>
-							
-						</th>
-						<th>
 							<a class="${orderBy == 'active' ? (order == 'DESC' ? 'crudSortedDesc' : 'crudSortedAsc') : ''}" href="@{list().remove('page').add('search', params.search).add('orderBy', 'active').add('order', (orderBy == 'active' && order == 'ASC' ? 'DESC' : 'ASC')).add('fields', currentFields?.join(','))}">
 							Active
 							</a>
 						</th>
 						<th>
-							Deals Active
+							Time to open
 						</th>
 						<th>
-							Direct Deals Active
+							Published
+						</th>
+						<th>
+							Published direct
 						</th>
 						<th>
 							<a class="${orderBy == 'updated' ? (order == 'DESC' ? 'crudSortedDesc' : 'crudSortedAsc') : ''}" href="@{list().remove('page').add('search', params.search).add('orderBy', 'updated').add('order', (orderBy == 'updated' && order == 'ASC' ? 'DESC' : 'ASC')).add('fields', currentFields?.join(','))}">
@@ -37,17 +40,28 @@
 				</thead>
 				<tbody>
 				 #{list objects, as:'city'} 
-					    <tr class="${city_index % 2 ? 'even' : 'odd'}">
+					    <tr>
 							<td>
 								<a href="@{admin.Cities.show(city.id)}">
 								 ${city.name}
 								 </a>
 							</td>
 							<td>
-								 ${city.url}
+								#{if city.active}
+			           				<i class="icon-ok"></i>
+			           			#{/if}
 							</td>
 							<td>
-								${city.active}
+								#{if city.isCityOpen()}
+			           				0
+			           			#{/if}
+			           			#{else}
+			           				${city.timeToOpen()?.format('HH:mm')}
+			           			#{/else}
+			           			<div class="btn-group pull-right">
+								  	<a href="@{admin.Cities.changeOpenHour(city.id, 1)}" class="btn btn-mini"><i class="icon-plus-sign"></i></a>
+					                <a href="@{admin.Cities.changeOpenHour(city.id, -1)}"" class="btn btn-mini"><i class="icon-minus-sign"></i></a>
+								</div>
 							</td>
 							%{ 
 								zones = models.City.findCitiesByRoot(city.url);
@@ -71,36 +85,28 @@
 							</td>
 							
 							<td>
-								<a href="
+								${city.updated?.format('dd MMMM yyyy - hh:mm')}
+							</td>
+							<td>
+								  <a class="" 
+								  	href="
 									#{if city.isRootCity()}
 										@{admin.Cities.zones(city.id)}
 									#{/if}
 									#{else}
 										@{admin.Cities.editCityDeals(city.id)}
 									#{/else}">
-				   					${city.updated?.format('dd MMMM yyyy - hh:mm')}
-				   				 </a>
+				   						Publish deals
+				   				  </a>
+				   				  <div class="pull-right">
+				   				  <a href="@{admin.Cities.close(city.id)}" class="btn btn-danger btn-mini">Close city</a>
+								  <a href="@{admin.Cities.seeGetaroomHotels(city.id)}" class="">Add hotels from GetaRoom</a>
+								  </div>
+		
 							</td>
 					  	</tr>
 				#{/list}
 	</tbody>
 	</table>
 	</div>
-	
-	
-	
-
-	
-	<div id="crudListPagination">
-	</div>
-	
-	<p id="crudListAdd">
-		<a href="@{blank()}">&{'crud.add', type.modelName}</a>
-	</p>
-		<a href="@{admin.Countries.exportAll}">Export all Countries as CSV </a><br>
-		<a href="@{admin.InfoTexts.exportAll}">Export all InfoTexts as CSV </a><br>
-		
-	<p class="crudListExport"  id="exportAll">
-		<a href="@{admin.Cities.exportAll}">Export all Cities as CSV </a>
-	</p>
 </div>

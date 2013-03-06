@@ -1,5 +1,7 @@
 package controllers.admin;
 
+import helper.DateHelper;
+import helper.getaroom.GetaroomApi;
 import helper.hotusa.HotUsaApiHelper;
 
 import java.util.ArrayList;
@@ -33,8 +35,8 @@ public class Deals extends controllers.CRUD {
 	
 	public static void search(String hotelName, Long cityId, Long companyId){
 		Logger.debug("Buscando: %s, %s, %s", hotelName, cityId, companyId);
-		List<City> cities = City.all().fetch();
-		List<Company> companies = Company.all().fetch();
+		List<City> cities = City.findAllCities();
+		List<Company> companies = Company.all().order("name").fetch();
 		List<Deal> deals = new ArrayList<Deal>();
 		if (StringUtils.isNotBlank(hotelName)){
 			deals = Deal.findByHotelName(hotelName, cityId, companyId);
@@ -58,12 +60,13 @@ public class Deals extends controllers.CRUD {
 	}
 	
 	public static void create(@Valid Deal deal){
-		Logger.debug("creando deal: %s", deal.hotelName);
+		Logger.debug("creando deal: %s, desayuno %s", deal.hotelName, deal.breakfastIncluded);
 		if (!validation.hasErrors()){
 			if (deal.id != null){
 				Deal dealDB = Deal.findById(deal.id);
 				dealDB.updateFromDeal(deal);
 				dealDB.update();
+				flash.success("Deal %s correctly updated", dealDB.hotelName);
 				createForm(deal.id);
 			}
 			else{
@@ -160,6 +163,48 @@ public class Deals extends controllers.CRUD {
 	public static void createHotusaHotel(String hotelCode){
 		Deal deal = HotUsaApiHelper.getHotelInfo(hotelCode);
 		redirect("/admin/deals/%s", deal.id);
+	}
+	
+	public static void fixHotusa(){
+		Company hotusa = Company.findById(new Long(435001));
+		List<Deal> deals = Deal.findByCompanyOrderByName(hotusa);
+		for (Deal deal: deals){
+			deal.isHotUsa = Boolean.TRUE;
+			deal.update();
+		}
+		flash.success("All Hotusa hotels fixed");
+		panel();
+	}
+	
+	public static void openBefore(){
+		List<City> cities = City.findAllCities();
+		for ( City city: cities){
+			city.utcOffset = city.utcOffset + 1;
+			city.update();
+		}
+		flash.success("All cities now open one hour before");
+		panel();
+	}
+	
+	public static void openLater(){
+		List<City> cities = City.findAllCities();
+		for ( City city: cities){
+			city.utcOffset = city.utcOffset -1;
+			city.update();
+		}
+		flash.success("All cities now open one hour later");
+		panel();
+	}
+	
+	public static void refreshBAR(Long dealId, Long cityId){
+		Deal deal = Deal.findById(dealId);
+		Integer price = GetaroomApi.getBestPriceByUuid(deal.uuid, DateHelper.getTodayDate(), DateHelper.getFutureDay(1));
+		Logger.debug("Price from getaroom %s", price);
+		if (price != null){
+			deal.bestPrice = price;
+			deal.update();
+		}
+		Cities.editCityDeals(cityId);
 	}
 	
 	

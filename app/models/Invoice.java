@@ -77,7 +77,9 @@ public class Invoice extends Model {
         this.created = Calendar.getInstance().getTime();
     }
     
-    public Invoice(Booking booking, User user) {
+    public Invoice(Booking booking) {
+    	User user = booking.user;
+    	user.get();
     	Company company = Company.findById(booking.company.id);
         this.company = company;
         this.user = user;
@@ -87,20 +89,21 @@ public class Invoice extends Model {
         this.created = Calendar.getInstance().getTime();
     }
     
-    private static Invoice createUserInvoice(Booking booking, User user){
-    	Invoice invoice = new Invoice(booking, user);
+    private static Invoice createUserInvoice(Booking booking){
+    	
+    	Invoice invoice = new Invoice(booking);
     	invoice.insert();
     	invoice.assignBooking(booking);
     	invoice.update();
     	return invoice;
     }
     
-	public static Invoice findOrCreateUserInvoice(Booking booking, User user) {
+	public static Invoice findOrCreateUserInvoice(Booking booking) {
 		Invoice invoice = Invoice.findByBooking(booking);
 		if (invoice != null) {
 			return invoice;
 		}
-		return createUserInvoice(booking, user);
+		return createUserInvoice(booking);
 	}
     
 

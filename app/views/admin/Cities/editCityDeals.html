@@ -1,15 +1,8 @@
-#{extends 'CRUD/layout.html' /}
-<style>
-	#info {
-		display: block;
-		padding: 10px;
-		margin-bottom: 20px;
-		border: 1px solid 
-		#333;
-		background-color: 
-		#EFEFEF;
-	}
-</style>
+#{set active:'deals'/}
+#{extends 'admin/layoutResponsive.html' /}
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/js/jquery.form.js'}"></script>
+
 <script>
 		function dealChanged(response){
 			var deal = response;
@@ -23,268 +16,261 @@
 		    }
 			$("#discount_"+deal.id).html(discount + "%");
 		}
-</script>		
-<div id="crudShow">
+</script>	
+	
+<div>
+<div class="pagination pagination-centered">
+  <ul>
+  	<li><a href="@{admin.Cities.list()}"><strong>All cities</strong></a></li>
+  	#{list cities, as:'cityB'} 
+		<li class="#{if city.url == cityB.url || city.root == cityB.url}active #{/if}" >
+			<a  
+			#{if cityB.isRootCity()}
+				href="@{admin.Cities.zones(cityB.id)}"
+			#{/if}
+			#{else}
+				href="@{admin.Cities.editCityDeals(cityB.id)}"
+			#{/else}">
+				 <abbr title="${cityB.name}" class="#{if cityB.isCityReady()} text-success #{/if}">
+				 %{
+				 name = cityB.name;
+				 if ( name != null && name.length() > 5)
+    				name = cityB.name[0..5];
+				 }%
+				 ${name}
+				 </abbr>
+			</a>
+		</li>
+    #{/list}
+  </ul>
+</div>
 
-        <h2 id="crudShowTitle">&{'crud.show.title', city.name}</h2>
-        
-        <div class="objectForm">
-        
-        <div id="crudListTable">
-        	<div id="alert-success"></div>
-			<div id="alert-error"></div>
-			<table>
+	<div class="page-header">
+		  <h1>${city.name} <small>view and update published deals for tonight</small>
+			<a href="@{admin.Cities.autoOrderDeals(city.id)}" class="btn btn-small btn-primary" data-toggle="tooltip" data-original-title="Ordena todos los deals ACTIVOS de mayor a menor precio y de mayor a menor descuento en caso de precios iguales">Auto order deals</a>
+ </h1>
+	</div>
+	<div id="alert-success"></div>
+	<div id="alert-error"></div>
+	<div class="bs-docs-example">
+
+			<table class="table table-condensed table-hover" id="dealsTable">
 				<thead>
 					<tr>
-						<th width="7%">
+						<th >
 							Hotel
 						</th>
-						<th width="3%">
+						<th >
 							Rooms
 						</th>
-						<th width="4%">
+						<th >
 							Public Price
 						</th>
-						<th width="4%">
-							BAR Price
+						<th >
+							BAR <a href="#" class="btn btn-mini"><i class="icon-refresh"></i> </a>
 						</th>
-						<th width="4%">
+						<th >
+							Breakfast
+						</th>
+						<th >
 							Discount
 						</th>
-						<th width="5%">
-							Day1: Price / NetPrice
+						<th >
+							Day 1
 						</th>
-						<th width="5%">
-							Day2: Price / NetPrice
+						<th >
+							Day 2
 						</th>
-						<th width="5%">
-							Day3: Price / NetPrice
+						<th >
+							Day 3
 						</th>
-						<th width="5%">
-							Day4: Price / NetPrice
+						<th >
+							Day 4
 						</th>
-						<th width="5%">
-							Day5: Price / NetPrice
+						<th >
+							Day 5
 						</th>
-						<th width="5%">
+						<th >
+							Hotusa
+						</th>
+						<th >
 							Position
 						</th>
-						<th width="5%">
-							Active
-						</th>
-						<th width="5%">
-							Is HotUsa
-						</th>
-						<th width="5%">
-							Breakfast Included
-						</th>
-						<th width="5%">
+						<th >
 							Limit Hour
 						</th>
-						<th width="8%">
-							Updated
-						</th>
-						<th width="5%">
-						</th>
-						<th width="5%">
-							Trivago Code
-						</th>
-						<th width="5%">
-							Trivago Points
+						<th>
+							Trivago
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 				 #{list deals, as:'deal'} 
-				 	%{
-				 	//	if (zone == null || zone.id != deal.city.id){
-				 	//		newCity = true;
-				 	//		zone= models.City.findById(deal.city.id)
-				 	//	}
-				 	//	else{
-				 	//		newCity = false;
-				 	//		zone = deal.city;
-				 	//	}
-				 	}%
-				 	
-				 		 #{if newCity}<tr><td><h4>${zone.name}</h4></td>
-				 		 					<td>${zone.updated?.format('dd-MM hh:mm')}</td>
-				 		 			</tr>#{/if}
-					    <tr class="${deal_index % 2 ? 'even' : 'odd'}"  id="deal_${deal.id}"
-					    	#{if (!deal.image3?.trim())}
-					    	 style="border-color: red;border-style: solid;" 
-					    	#{/if}
-					    	#{else}
-					    		#{if deal.company == null} style="border-color: orange;border-style: solid;" #{/if}
-					    	#{/else}	
-					    	>
+					    <tr class="${!deal.image3?.trim() || deal.company == null ? 'error' : ''} #{if !deal.updatedToday()}hide notReady#{/if}"  id="deal_${deal.id}">
 					    #{remote.form action:@updateDeal(deal.id) , resultDiv:'alert-success', errorDiv:'alert-error', callback:'dealChanged(response)'}
-					    	 #{ifErrors}
-					        <p class="error">
-					            Please correct these errors.
-					        </p>
-					    	#{/ifErrors}
 							<td>
-								 <a href="@{admin.Deals.show(deal.id)}">
+								 <a href="@{admin.Deals.createForm(deal.id)}">
 				   					${deal.hotelName}
 				   				 </a>
-							</td>
-							<td>
-								#{field 'quantity'}
-							        <input  #{if (deal.quantity == 0)}
-								    	 		style="color:red;border-color: red;border-style: solid;" 
-								    		#{/if} 
-							        
-							        	type="text" name="${field.name}" size="2"
-							            value="${deal.quantity}" class="${field.errorClass}" />
+				   				 <br>
+								 <span class="label label-info">Active</span>
+								  #{field 'active'}
+			           				<input type="checkbox" name="${field.name}"
+		            					class="${field.errorClass}" #{if deal.active} checked="true" #{/if}/>
 						        #{/field}
 							</td>
 							<td >
-								#{field 'priceCents'}
-							        <input #{if (deal.priceCents <= deal.salePriceCents)}
-								    	 		style="color:red;border-color: red;border-style: solid;" 
-								    		#{/if}
-					    		 
-							        	type="text" name="${field.name}" size="3"
-			           					 value="${deal.priceCents}" class="${field.errorClass}" />
+								<div class="control-group ${deal.quantity == 0 ? 'error' : 'success'}">
+								#{field 'quantity'}
+							        <input type="number" name="${field.name}" class="input-mini"
+							            value="${deal.quantity}"  required min="0" />
 						        #{/field}
+						        <br/>
+						        	${deal.updated?.format('dd/MM/yy hh:mm')}
+						        </div>
 							</td>
 							<td>
-								#{field 'bestPrice'}
-							        <input  #{if (deal.bestPrice <= deal.salePriceCents)}
-								    	 		style="color:red;border-color: red;border-style: solid;" 
-								    		#{/if}
-							        	type="text" name="${field.name}" size="3"
-			           					 value="${deal.bestPrice}" class="${field.errorClass}" />
+								<div class="control-group ${deal.priceCents <= deal.salePriceCents ? 'error' : 'success'}">
+								#{field 'priceCents'}
+							        <input type="text" name="${field.name}" class="input-mini"
+			           					 value="${deal.priceCents}"  required min="0"/>
 						        #{/field}
+						        </div>
+							</td>
+							<td>
+								<div class="control-group ${deal.bestPrice <= deal.salePriceCents ? 'error' : 'success'}">
+								#{field 'bestPrice'}
+							        <input type="text" name="${field.name}" class="input-mini"
+			           					 value="${deal.bestPrice}"  />
+						        #{/field}
+						        #{if deal.uuid != null && deal.uuid != ""}
+						        	<a href="@{admin.Deals.refreshBAR(deal.id, city.id)}" class="btn btn-mini"><i class="icon-refresh"></i> </a>
+						        #{/if}
+						        <br />
+						        <a href="http://www.trivago.es/${city.root}-12345/hotel/${city.root}-${deal.trivagoCode}/precios" target="_blank">Compare</a>
+						
+						        </div>
+						                
+							</td>
+							<td style="text-align:center;">
+								#{if deal.breakfastIncluded}
+			           				<i class="icon-ok"></i>
+			           			#{/if}
+	
 							</td>
 							<td>
 			           				<label id="discount_${deal.id}">${deal.discount}%</label>
 							</td>
 							<td>
+								<div class="control-group ${deal.salePriceCents == 0 || !(deal.netSalePriceCents > 0) ? 'error' : ''} ${deal.salePriceCents <= deal.netSalePriceCents ? 'warning' : ''}">
 								#{field 'salePriceCents'}
-							        <input type="text" name="${field.name}"  size="5"
-			           					 value="${deal.salePriceCents}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}"  
+			           					 value="${deal.salePriceCents}" class="input-mini"/>
 						        #{/field}
+						        
 						        <br />
 						        #{field 'netSalePriceCents'}
-							        <input type="text" name="${field.name}" disabled="disabled" size="5"
-			           					 value="${deal.netSalePriceCents}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}"  
+			           					 value="${deal.netSalePriceCents}" class="input-mini" />
 						        #{/field}
+						        </div>
 							</td>
 							<td>
+								<div class="control-group ${deal.priceDay2 == 0 || !(deal.netPriceDay2 > 0) ? 'error' : ''} ${deal.priceDay2 <= deal.netPriceDay2? 'warning' : ''}">
+								
 								#{field 'priceDay2'}
-							        <input type="text" name="${field.name}"  size="5" 
-			           					 value="${deal.priceDay2}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}" 
+			           					 value="${deal.priceDay2}" class="input-mini" />
 						        #{/field}
 						        <br />
 						        #{field 'netPriceDay2'}
-							        <input type="text" name="${field.name}"  size="5"  disabled="disabled"
-			           					 value="${deal.netPriceDay2}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}"  
+			           					 value="${deal.netPriceDay2}" class="input-mini"/>
 						        #{/field}
+						        </div>
 							</td>
 							<td>
+								<div class="control-group ${deal.priceDay3 == 0 || !(deal.netPriceDay3 > 0) ? 'error' : ''} ${deal.priceDay3 <= deal.netPriceDay3? 'warning' : ''}">
 								#{field 'priceDay3'}
-							        <input type="text" name="${field.name}"  size="5" 
-			           					 value="${deal.priceDay3}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}"  
+			           					 value="${deal.priceDay3}" class="input-mini"/>
 						        #{/field}
 						        <br />
 						        #{field 'netPriceDay3'}
-							        <input type="text" name="${field.name}"  size="5"  disabled="disabled"
-			           					 value="${deal.netPriceDay3}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}"  
+			           					 value="${deal.netPriceDay3}" class="input-mini" />
 						        #{/field}
+						        </div>
 							</td>
 							<td>
+								<div class="control-group ${deal.priceDay4 == 0 || !(deal.netPriceDay4 > 0) ? 'error' : ''} ${deal.priceDay4 <= deal.netPriceDay4? 'warning' : ''}">
 								#{field 'priceDay4'}
-							        <input type="text" name="${field.name}"  size="5"
-			           					 value="${deal.priceDay4}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}"  
+			           					 value="${deal.priceDay4}" class="input-mini" />
 						        #{/field}
 						        <br />
 						        #{field 'netPriceDay4'}
-							        <input type="text" name="${field.name}"  size="5"  disabled="disabled"
-			           					 value="${deal.netPriceDay4}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}"   
+			           					 value="${deal.netPriceDay4}" class="input-mini" />
 						        #{/field}
+						        </div>
 							</td>
 							<td>
+								<div class="control-group ${deal.priceDay5 == 0 || !(deal.netPriceDay5> 0) ? 'error' : ''} ${deal.priceDay5 <= deal.netPriceDay5? 'warning' : ''}">
 								#{field 'priceDay5'}
-							        <input type="text" name="${field.name}"  size="5"
-			           					 value="${deal.priceDay5}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}"  
+			           					 value="${deal.priceDay5}" class="input-mini" />
 						        #{/field}
 						        <br />
 						        #{field 'netPriceDay5'}
-							        <input type="text" name="${field.name}"  size="5"  disabled="disabled"
-			           					 value="${deal.netPriceDay5}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}"   
+			           					 value="${deal.netPriceDay5}" class="input-mini" />
+						        #{/field}
+						        </div>
+							</td>
+							<td>
+								#{if deal.isHotUsa}
+			           				<i class="icon-ok"></i>
+			           			#{/if}
+							</td>
+							<td>
+								#{field 'position'}
+							        <input type="number" name="${field.name}" 
+			           					 value="${deal.position}" class="input-mini" />
 						        #{/field}
 							</td>
 							
 							<td>
-								#{field 'position'}
-							        <input type="text" name="${field.name}"  size="2"
-			           					 value="${deal.position}" class="${field.errorClass}" />
-						        #{/field}
-							</td>
-							<td>
-								#{field 'active'}
-			           				<input type="checkbox" name="${field.name}"
-		            					class="${field.errorClass}" #{if deal.active} checked="true" #{/if}/>
-						        #{/field}
-							</td>
-							<td>
-								#{field 'isHotUsa'}
-			           				<input type="checkbox" name="${field.name}"
-		            					class="${field.errorClass}" #{if deal.isHotUsa} checked="true" #{/if}/>
-						        #{/field}
-							</td>
-							<td>
-			           				<label>${deal.breakfastIncluded}</label>
-							</td>
-							<td>
 								#{field 'limitHour'}
-							        <input type="text" name="${field.name}"  size="2"
-			           					 value="${deal.limitHour}" class="${field.errorClass}" />
+							        <input type="number" name="${field.name}" 
+			           					 value="${deal.limitHour}" class="input-mini" />
 						        #{/field}
-							</td>
-							<td>
-								${deal.updated?.format('dd MMMM yyyy - hh:mm')}
-							</td>
-							<td>
-								<a href="http://www.trivago.es/${city.root}-12345/hotel/${city.root}-${deal.trivagoCode}/precios" target="_blank">Trivago</a>
 							</td>
 							<td>
 								#{field 'trivagoCode'}
-							        <input type="text" name="${field.name}"  size="6"
-			           					 value="${deal.trivagoCode}" class="${field.errorClass}" />
+							        <input type="text" name="${field.name}" 
+			           					 value="${deal.trivagoCode}" class="input-mini" placeholder="code"/>
+						        #{/field}
+						        <br>
+						        #{field 'points'}
+							        <input type="text" name="${field.name}" 
+			           					 value="${deal.points}" class="input-mini" placeholder="points"/>
 						        #{/field}
 							</td>
-							<td>
-								#{field 'points'}
-							        <input type="text" name="${field.name}"  size="6"
-			           					 value="${deal.points}" class="${field.errorClass}" />
-						        #{/field}
-						        <input type="hidden" value="${city.id}" name="cityId" />
-							</td>
+							 <input type="hidden" value="${city.id}" name="cityId" />
 							#{/remote.form}
 					  	</tr>
 				#{/list}
 	</tbody>
 	</table>
+	<a href="#" id="showHideAllDeals" class="btn" >Show all deals</a>
 	</div>
-</div>
-	<div>
 
- <p class="crudListExport"  id="exportAll">
-	<a href="@{admin.Cities.autoOrderDeals(city.id)}">Auto order Deals</a>
- </p>
- <h2 id="crudShowTitle">Hotels Preview</h2>	
-    <div id="info">Ordena los hoteles arrastrando y soltando en la posicion que quieras</div> 
-     <h2>${city.name}</h2> 
+ 	<h2 id="crudShowTitle">Hotels Preview <small>Set the published hotels order with drag&drop</small></h2>	
     #{remote.form action:@updateAll(city.id) , resultDiv:'alert-success', errorDiv:'alert-error'}
-	 		<table style="width: 800px;">
+	 		<table class="table table-condensed table-hover">
 				<thead>
 					<tr>
-						<th>
-							Ordenar
-						</th>
 						<th>
 							Position
 						</th>
@@ -297,79 +283,65 @@
 						<th>
 							Discount
 						</th>
-						
 						<th>
-							Bookings Last 30 days
+							Bookings 30 days
+						</th>
+						<th>
+							Bookings 60 days
 						</th>
 						<th>
 							Valuation
 						</th>
 						<th>
-							Is Hotusa
+							Hotusa
 						</th>
 						<th>
 							Room Type
-						</th>
-						<th>
-							Room Type Text
 						</th>
 					</tr>
 				</thead>
 				<tbody id="list_${city.url}">
 	  #{list models.Deal.findAllActiveDealsByCityId(city.id), as:'deal'}
-	  			<tr id="list_${deal.id}" class="${deal_index % 2 ? 'even' : 'odd'}"  
-					    	#{if !deal.image3?.trim() || deal.quantity == 0}
-					    	 style="border-color: red;border-style: solid;" 
-					    	#{/if}
-					    	#{else}
-					    		#{if deal.company == null} style="border-color: orange;border-style: solid;" #{/if}
-					    	#{/else}	
-					    	>
-					    	<td>
-					    		<img src="@{'/public/img/arrow.png'}" alt="move" width="16" height="16" class="handle" /> 
-					    	</td>
-					    	<td>
-					    		<span id="position_label">${deal.position}</span>
-								<input class="position" type="hidden" name="dealIds" value="${deal.id}" size="3"/>
+	  			<tr id="list_${deal.id}" class="${!deal.image3?.trim() || deal.company == null || deal.quantity == 0 ? 'error' : ''}" >
+					    	<td class="handle">
+					    		<span id="position_label" >${deal.position}</span>
+								<input class="position" type="hidden" name="dealIds" value="${deal.id}" size="3" />
 							</td>
-							<td>
+							<td class="handle">
 								 <a href="@{admin.Deals.show(deal.id)}">
 				   					${deal.hotelName}
 				   				 </a>
 							</td>
-							<td>
+							<td class="handle">
 								${deal.salePriceCents}&euro;
 							</td>
-							<td>
+							<td class="handle">
 								${deal.discount}%
 							</td>
-														<td>
-								%{bookings = models.Booking.findLastMonthBookingsByDeal(deal)}%
+							<td class="handle">
+								%{bookings = models.Booking.findLastBookingsByDeal(deal, 30)}%
 								${bookings}
 							</td>
-							<td>
+							<td class="handle">
+								%{bookings = models.Booking.findLastBookingsByDeal(deal, 60)}%
+								${bookings}
+							</td>
+							<td class="handle">
 								${deal.points}
 							</td>
-							<td>
-								${deal.isHotUsa}
+							<td class="handle">
+								#{if deal.isHotUsa}
+			           				<i class="icon-ok"></i>
+			           			#{/if}
 							</td>
-							<td>
+							<td class="handle">
 								${deal.roomType}
 							</td>
-							<td>
-								${deal.roomTypeText} 
-							</td>
-							
 				</tr>
 	  	#{/list}
 	  			</tbody>
 	  			</table>
 		#{/remote.form}
-	 <br/>
-	  	<p> <span style="border-color: red;border-style: solid;" > Rojo:</span> NO ACTIVAR -> faltan fotos del hotel, no hay dispo o el precio anterior es mayor al actual</p>
-	  	<p> <span style="border-color: orange;border-style: solid;" > Naranja:</span> falta la company, si recibe reservas se crean sin company y no se pueden facturar.</p>
-		<p>Auto order Deals: ordena todos los deals ACTIVOS de mayor a menor precio y de mayor a menor descuento en caso de precios iguales </p>
-	</div>
 </div>
 
 <script>
@@ -389,12 +361,23 @@
 		
 	   	$(function() {
 	   		startSortable("list_${city.url}");
-	   		
 	   		$('input').change(function(){
 	   			var form = $(this).get(0).form;
 	   			$(form).trigger('submit');
 	   		});
 	   		
+	   		var showAll = false;
+	   		$('#showHideAllDeals').click(function(){
+	   			if (showAll){
+	   				$('#dealsTable tbody').children('tr.notReady').addClass('hide');
+	   				$('#showHideAllDeals').text('Show all deals');
+	   			}
+	   			else{
+	   				$('#dealsTable tbody').children('tr.notReady').removeClass('hide');
+	   				$('#showHideAllDeals').text('Hide not ready for today deals');
+	   			}
+	   			showAll = !showAll;
+	   		});
 	   	});
 	   	
 	</script>

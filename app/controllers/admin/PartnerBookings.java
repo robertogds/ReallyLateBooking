@@ -38,6 +38,7 @@ public class PartnerBookings extends Controller{
 		User user = User.findById(Long.valueOf(session.get("userId")));
 		if (user.isAdmin){
 			List<Partner> partners = Partner.all().fetch(); 
+			//TODO add all bookings from partners
 			render(user, partners);
 		} 
 		else{

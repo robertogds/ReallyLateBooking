@@ -28,7 +28,7 @@ import models.dto.StatusMessage;
 import models.dto.UserDTO;
 import models.dto.UserStatusMessage;
 
-public class ApplicationTest extends FunctionalTest {
+public class ApiTest extends FunctionalTest {
 
 	String userJson = "{\"email\":\"bob@gmail.com\",\"password\":\"5ebe2294ecd0e0f08eab7690d2a6ee69\"}";
 	String userJsonB = "{\"email\":\"bob@gmaasil.com\",\"password\":\"incorrect\"}";
@@ -47,13 +47,6 @@ public class ApplicationTest extends FunctionalTest {
 		}
 	}
 	
-    @Test
-    public void testThatIndexPageWorks() {
-        Response response = GET("/");
-        assertIsOk(response);
-        assertContentType("text/html", response);
-        assertCharset("utf-8", response);
-    }
     
     @Test
 	public void getDealListForIphone(){

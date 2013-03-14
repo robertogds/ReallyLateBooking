@@ -125,14 +125,12 @@ GET 	/panel/deals/createForm/?				admin.Deals.createForm
 POST	/panel/deals/create/?					admin.Deals.create
 
 # API REST JSON PARTNERS
-POST 	/api/{<[0-9]+>partnerId}/bookingWhiteLabel							api.Edreams.bookingWhiteLabel
-
-#Countries
-GET 	/api/{<[0-9]+>partnerId}/countries								   	api.Countries.list(format:'json')
-GET 	/api/{<[0-9]+>partnerId}/cities/{lat}/{lng}/{checkin}/{nights}		api.Edreams.findCityDealsByLatLong(format:'json')
-GET 	/api/{<[0-9]+>partnerId}/cities/{name}/{checkin}/{nights}			api.Edreams.findCityDealsByCityName(format:'json')
-POST 	/api/{<[0-9]+>partnerId}/booking/new/								api.Edreams.createBooking(format:'json')
-POST	/api/{<[0-9]+>partnerId}/booking/openTrx/							api.Edreams.openTransaction(format: 'json')
+GET 	/api/{<[a-z0-9]+>user_key}/countries								api.Countries.list(format:'json')
+GET 	/api/{<[a-z0-9]+>user_key}/cities/{lat}/{lng}/{checkin}/{nights}    api.Deals.findCityDealsByLatLong(format:'json')
+GET 	/api/{<[a-z0-9]+>user_key}/cities/{name}/{checkin}/{nights}			api.Deals.findCityDealsByCityName(format:'json')
+GET 	/api/{<[a-z0-9]+>user_key}/cities									api.Cities.list(format:'json')
+POST 	/api/{<[a-z0-9]+>user_key}/booking/new/								api.Bookings.completeBooking(format:'json')
+POST	/api/{<[a-z0-9]+>user_key}/booking/openTrx/							api.Bookings.openTransaction(format: 'json')
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}

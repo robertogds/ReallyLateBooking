@@ -15,6 +15,7 @@ import org.apache.commons.lang.Validate;
 
 import com.google.gson.Gson;
 
+import controllers.ThreeScale;
 import controllers.oauth.ApiSecurer;
 
 import models.Booking;
@@ -42,88 +43,22 @@ import play.mvc.Before;
 import play.mvc.Catch;
 import play.mvc.Controller;
 import play.mvc.Http;
+import play.mvc.With;
 import services.BookingServices;
 import services.DealsService;
 import siena.embed.Format;
 
 /**
- * Controller for the methods required by the eDreams white label app
- * @author pablopr
- *
+ * Controller for the methods required by the API
  */
-public class Edreams extends Controller{
+@With(ThreeScale.class)
+public class Bookings extends Controller{
 	
-	private static final Logger log = Logger.getLogger(Edreams.class.getName());
-	
-	@Before
-	public static void setCORS() { 
-		Http.Header hd = new Http.Header(); 
-		hd.name = "Access-Control-Allow-Origin"; 
-		hd.values = new ArrayList<String>(); 
-		hd.values.add("*"); 
-		Http.Response.current().headers.put("Access-Control-Allow-Origin",hd); 
-	}
-
-	@Before
-	public static void checkSignature(){
-		Boolean correct = ApiSecurer.checkPartnerSignature(request);
-		if (!correct){
-			log.warning("Invalid signature ");
-			Mails.errorMail("##WARNING: Invalid api signature", request.toString());
-			ApiResponse response = new ApiResponse(Http.StatusCode.BAD_REQUEST, "ERROR", "Invalid api signature. Contact soporte@reallylatebooking.com");
-			renderJSON(response.json);
-		}
-	}
-	
-	@Catch(Exception.class)
-    public static void renderInternalError(Throwable throwable) {
-        log.severe("Internal error at Edreams Controller… " + throwable.getStackTrace().toString());
-        Mails.errorMail("##IMPORTANT: Error en White Label Api", throwable.getMessage());
-        ApiResponse response = new ApiResponse(Http.StatusCode.INTERNAL_ERROR, "error", "Error interno. Contacte con atención al cliente, por favor. ");
-		renderJSON(response.json);
-    }
-	
-	public static void bookingWhiteLabel(String bookingUrl){
-		String city = "ciudad";
-		log.warning(bookingUrl);
-		render(bookingUrl, city);
-	}
-	
-	/**
-	 * Search for the nearest city and return the active deals
-	 * @param lat
-	 * @param lng
-	 */
-	public static void findCityDealsByLatLong(@Required  double lat, @Required  double lng, @Required @As("yyyy-MM-dd") Date checkin, @Required int nights){
-		if(validation.hasErrors()){
-			renderJSON(null);
-		}
-		else{
-			List<City> cities = City.findActiveCities();
-			City city = GeoHelper.getNearestCity(lat, lng, cities);
-			log.info("City find by coordenates " + lat + ", " + lng + " is " + city);
-			renderJSON(DealsService.findDealsByCityAndDateV3(city, checkin, nights));
-		}
-	}
-	
-	/**
-	 * Search for a city by name and return the active deals
-	 * @param name
-	 */
-	public static void findCityDealsByCityName(@Required String name, @Required @As("yyyy-MM-dd") Date checkin, @Required int nights){
-		if(validation.hasErrors()){
-			renderJSON(null);
-		}
-		else{
-			City city = City.findByUrl(name.toLowerCase());
-			log.info("City find by name " + name + " is " + city);
-			renderJSON(DealsService.findDealsByCityAndDateV3(city, checkin, nights));	
-		}
-	}
+	private static final Logger log = Logger.getLogger(Bookings.class.getName());
 	
 	public static void openTransaction(@Required String amount, @Required String firstName, 
 			@Required String lastName, @Required String phone, @Required @Email String email, @Required Long dealId, 
-			@Required int nights, @Required String partnerId){
+			@Required int nights){
 		log.info("openTransaction: " + email + " amount:" + amount);
 		if(validation.hasErrors()){
 			log.severe("openTransaction: all parameters are required");
@@ -131,6 +66,7 @@ public class Edreams extends Controller{
 		}
 		else{
 			try {
+				String partnerId = request.params.get("user_key");
 				User user = User.findOrCreateUserForWhiteLabel(email, firstName, lastName, phone);
 				Booking booking = Booking.createBookingForWhiteLabel(dealId, user, nights, partnerId);
 				booking.pending = Boolean.TRUE;
@@ -147,12 +83,13 @@ public class Edreams extends Controller{
 		
 	}
 	
-	public static void createBooking(@Required String email, @Required String firstName, @Required String lastName, 
-			String phone, @Required Long dealId, @Required int nights, @Required String partnerId){
+	public static void completeBooking(@Required String email, @Required String firstName, @Required String lastName, 
+			String phone, @Required Long dealId, @Required int nights){
 		
 		if (!validation.hasErrors()){ 
 			User user = User.findOrCreateUserForWhiteLabel(email, firstName, lastName, phone);
 			Deal deal = Deal.findById(dealId);
+			String partnerId = request.params.get("user_key");
 			Partner partner = Partner.findByPartnerId(partnerId);
 			Booking booking = Booking.findPendingBooking(deal, user, partner);
 			if (booking != null){

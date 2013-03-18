@@ -44,8 +44,8 @@ public class Mails extends MailServiceFactory {
 	private static final String PRECIOS_MAIL = "precios@reallylatebooking.com";
 	private static final String ALTAS_MAIL = "altas@reallylatebooking.com";
 	private static final String RESERVAS_MAIL = "reservas@reallylatebooking.com";
-	private static final String HOLA_MAIL = "RLB <hola@reallylatebooking.com>";
-	private static final String SOPORTE_MAIL = "RLB <soporte@reallylatebooking.com>";
+	private static final String HOLA_MAIL = "hola@reallylatebooking.com";
+	private static final String SOPORTE_MAIL = "soporte@reallylatebooking.com";
 
 	public static void welcome(User user) {
 		Message message = new Message();

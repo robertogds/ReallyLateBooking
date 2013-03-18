@@ -22,6 +22,7 @@ import models.dto.DealDTO;
 
 import org.apache.commons.lang.StringUtils;
 
+import play.Logger;
 import play.data.validation.Email;
 import play.data.validation.Required;
 import play.i18n.Lang;
@@ -184,6 +185,24 @@ public class Mailchimp extends Controller{
 	
 	public static void sendCampaign(@Required String campaignId){
 		MailChimpHelper.sendCampaign(campaignId);
+		index();
+	}
+	
+	public static void sendCampaigns(@Required String campaignsList){
+		String[] ids = StringUtils.split(campaignsList, ",");
+		for (String idAsString : ids ){
+			MailChimpHelper.sendCampaign(idAsString);
+		}
+		index();
+	}
+	public static void sendTestCampaigns(@Required String campaignsList){
+		Collection<String> emails = new ArrayList<String>();
+		emails.add("hola@reallylatebooking.com");
+		String[] ids = StringUtils.split(campaignsList, ",");
+		for (String idAsString : ids ){
+			Logger.debug("Cmapign id: %s", idAsString);
+			MailChimpHelper.sendCampaignTest(idAsString, emails);
+		}
 		index();
 	}
 }

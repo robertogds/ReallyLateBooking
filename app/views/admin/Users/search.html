@@ -1,0 +1,61 @@
+#{set active:'users'/}
+#{set activeSub:'searchUser'/}
+#{extends 'admin/layoutResponsive.html' /}
+#{include 'admin/Users/navColumn.html'/}		
+
+        <div class="span10">
+        	<div class="">
+        		#{form @admin.Users.search(), class:'form-search'}
+				  <input type="text" name="email" placeholder="User email" class="input-medium search-query">
+				  <input type="text" name="firstName" placeholder="User first name" class="input-medium search-query">
+				  <input type="text" name="lastName" placeholder="User last name" class="input-medium search-query">
+				  	 
+				  <button type="submit" class="btn">Search</button>
+				#{/form}
+          	</div>
+
+			<table class="table table-bordered table-hover" >
+				<thead>
+					<tr>
+						<th class="blue header">email</th>
+						<th class="blue header">refererId</th>
+						<th class="blue header">firstName</th>
+						<th class="blue header">lastName</th>
+						<th class="blue header">Facebook</th>
+						<th class="blue header">from Web</th>
+						<th class="blue header">locale</th>
+						<th class="blue header">created</th>
+						<th class="blue header">lastAppLogin</th>
+						<th class="blue header">lastWebLogin</th>
+					</tr>
+				</thead>
+				<tbody id="couponsBody">
+					#{list items:users, as:'user'}
+					<tr class=summary>
+						<td>
+							<a href="@{admin.Users.showUserActionsById(user.id)}">
+								${user.email} 
+							</a>
+						</td>
+						<td>${user.refererId}</td>
+						<td>${user.firstName}</td>
+						<td>${user.lastName}</td>
+						<td>
+							#{if user.isFacebook}
+			           				<i class="icon-ok"></i>
+			           			#{/if}
+						</td>
+						<td>#{if user.fromWeb}
+			           				<i class="icon-ok"></i>
+			           			#{/if}</td>
+						<td>${user.locale}</td>
+						<td>${user.created?.format('dd-MM-yyyy')}</td>
+						<td>${user.lastAppLogin?.format('dd-MM-yyyy')}</td>
+						<td>${user.lastWebLogin?.format('dd-MM-yyyy')}</td>
+					</tr>
+					#{/list}
+				</tbody>
+			</table>
+        	
+          	
+        </div><!--/span-->

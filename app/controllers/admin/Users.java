@@ -8,6 +8,7 @@ import java.util.List;
 
 import models.Booking;
 import models.City;
+import models.Company;
 import models.Coupon;
 import models.Deal;
 import models.MyCoupon;
@@ -17,7 +18,9 @@ import models.exceptions.InvalidCouponException;
 import notifiers.Mails;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 
+import play.Logger;
 import play.data.binding.Binder;
 import play.data.validation.Email;
 import play.data.validation.Required;
@@ -37,6 +40,32 @@ import controllers.CRUD.ObjectType;
 @With(Secure.class)
 @CRUD.For(User.class)
 public class Users extends controllers.CRUD  {
+	
+	public static void panel(){
+		List<User> usersTonight = User.findSurveyPending();
+		List<User> lastRegistered = User.findLastRegistered(10);
+		List<User> lastLogin = User.findLastAppLogin(10);
+		render(usersTonight, lastRegistered, lastLogin);
+	}
+	
+	public static void search(String email, String firstName, String lastName){
+		List<User> users = new ArrayList<User>();
+		if (StringUtils.isNotBlank(email)){
+			User user = User.findByEmail(email);
+			if (user != null) users.add(user);
+		}
+		else if (StringUtils.isNotBlank(firstName)){
+			users = User.findByFirstName(firstName);
+		}
+		else if (StringUtils.isNotBlank(lastName)){
+			users = User.findByLastName(lastName);
+		}
+		render(users);
+	}
+	
+	public static void searchForm(){
+		renderTemplate("admin/Users/search.html");
+	}
 	
 	/*
 	 * Override list method from CRUD 

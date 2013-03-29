@@ -1,0 +1,136 @@
+#{set active:'users'/}
+#{set activeSub:'users'/}
+
+#{extends 'admin/layoutResponsive.html' /}
+#{include 'admin/Users/navColumn.html'/}	  
+        <div class="span10">
+        	
+        	<h3>Users who booked today</h3>
+			<table class="table table-bordered table-hover" >
+				<thead>
+					<tr>
+						<th class="blue header">email</th>
+						<th class="blue header">refererId</th>
+						<th class="blue header">firstName</th>
+						<th class="blue header">lastName</th>
+						<th class="blue header">Facebook</th>
+						<th class="blue header">from Web</th>
+						<th class="blue header">locale</th>
+						<th class="blue header">created</th>
+						<th class="blue header">lastAppLogin</th>
+						<th class="blue header">lastWebLogin</th>
+					</tr>
+				</thead>
+				<tbody id="couponsBody">
+					#{list items:usersTonight, as:'user'}
+					<tr class=summary>
+						<td>
+							<a href="@{admin.Users.showUserActionsById(user.id)}">
+								${user.email} 
+							</a>
+						</td>
+						<td>${user.refererId}</td>
+						<td>${user.firstName}</td>
+						<td>${user.lastName}</td>
+						<td>
+							#{if user.isFacebook}
+			           				<i class="icon-ok"></i>
+			           			#{/if}
+						</td>
+						<td>#{if user.fromWeb}
+			           				<i class="icon-ok"></i>
+			           			#{/if}</td>
+						<td>${user.locale}</td>
+						<td>${user.created?.format('dd-MM-yyyy')}</td>
+						<td>${user.lastAppLogin?.format('dd-MM-yyyy')}</td>
+						<td>${user.lastWebLogin?.format('dd-MM-yyyy')}</td>
+					</tr>
+					#{/list}
+				</tbody>
+			</table>
+			
+			<h3>Last users registered</h3>
+			<table class="table table-bordered table-hover" >
+				<thead>
+					<tr>
+						<th class="blue header">email</th>
+						<th class="blue header">refererId</th>
+						<th class="blue header">firstName</th>
+						<th class="blue header">lastName</th>
+						<th class="blue header">isFacebook</th>
+						<th class="blue header">fromWeb</th>
+						<th class="blue header">locale</th>
+						<th class="blue header">created</th>
+						<th class="blue header">lastAppLogin</th>
+						<th class="blue header">lastWebLogin</th>
+					</tr>
+				</thead>
+				<tbody id="couponsBody">
+					#{list items:lastRegistered, as:'user'}
+					<tr class=summary>
+						<td>
+							<a href="@{admin.Users.showUserActionsById(user.id)}">
+								${user.email} 
+							</a>
+						</td>
+						<td>${user.refererId}</td>
+						<td>${user.firstName}</td>
+						<td>${user.lastName}</td>
+						<td>#{if user.isFacebook}
+			           				<i class="icon-ok"></i>
+			           			#{/if}</td>
+						<td>#{if user.fromWeb}
+			           				<i class="icon-ok"></i>
+			           			#{/if}</td>
+						<td>${user.locale}</td>
+						<td>${user.created?.format('dd-MM-yyyy')}</td>
+						<td>${user.lastAppLogin?.format('dd-MM-yyyy')}</td>
+						<td>${user.lastWebLogin?.format('dd-MM-yyyy')}</td>
+					</tr>
+					#{/list}
+				</tbody>
+			</table>
+			
+			<h3>Last users logged in</h3>
+			<table class="table table-bordered table-hover" >
+				<thead>
+					<tr>
+						<th class="blue header">email</th>
+						<th class="blue header">refererId</th>
+						<th class="blue header">firstName</th>
+						<th class="blue header">lastName</th>
+						<th class="blue header">isFacebook</th>
+						<th class="blue header">fromWeb</th>
+						<th class="blue header">locale</th>
+						<th class="blue header">created</th>
+						<th class="blue header">lastAppLogin</th>
+						<th class="blue header">lastWebLogin</th>
+					</tr>
+				</thead>
+				<tbody id="couponsBody">
+					#{list items:lastLogin, as:'user'}
+					<tr class=summary>
+						<td>
+							<a href="@{admin.Users.showUserActionsById(user.id)}">
+								${user.email} 
+							</a>
+						</td>
+						<td>${user.refererId}</td>
+						<td>${user.firstName}</td>
+						<td>${user.lastName}</td>
+						<td>#{if user.isFacebook}
+			           				<i class="icon-ok"></i>
+			           			#{/if}</td>
+						<td>#{if user.fromWeb}
+			           				<i class="icon-ok"></i>
+			           			#{/if}</td>
+						<td>${user.locale}</td>
+						<td>${user.created?.format('dd-MM-yyyy')}</td>
+						<td>${user.lastAppLogin?.format('dd-MM-yyyy')}</td>
+						<td>${user.lastWebLogin?.format('dd-MM-yyyy')}</td>
+					</tr>
+					#{/list}
+				</tbody>
+			</table>
+          	
+       </div><!--/span-->

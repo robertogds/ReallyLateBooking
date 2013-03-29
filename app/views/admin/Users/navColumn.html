@@ -1,0 +1,9 @@
+        <div class="span2">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Users</li>
+              <li class="#{if activeSub == 'users'}active#{/if}"><a href="@{admin.Users.panel()}">Last users</a></li>
+              <li class="#{if activeSub == 'searchUser'}active#{/if}"><a href="@{admin.Users.searchForm()}">Search</a></li>
+            </ul>
+          </div><!--/.well -->
+       </div><!--/span-->

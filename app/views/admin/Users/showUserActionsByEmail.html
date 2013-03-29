@@ -1,20 +1,20 @@
-#{extends 'CRUD/layout.html' /}
+#{set active:'users'/}
+#{set activeSub:'searchUser'/}
+
+#{extends 'admin/layoutResponsive.html' /}
+#{include 'admin/Users/navColumn.html'/}
 
 #{set 'moreScripts'}
 	#{remote.select observed:'#citiesSelect', target:'.dealSelect', url:@Cities.dealsByCityId(), value:'id', label:'hotelName'/}
 #{/set}
 
-<div id="crudList">
+<div class="span10">
 	
-	<h2 id="crudListTitle">Actions From user ${user.firstName} ${user.lastName}, ${user.email} - ${user.refererId} </h2>
-	
-	<p>	
-		<a href="@{admin.Users.show(user.id)}">
+	<h2 id="crudListTitle">${user.firstName} ${user.lastName}, ${user.email} - ${user.refererId} <small><a href="@{admin.Users.show(user.id)}">
 		  	 	Edit ${user.email}
-		 </a>
-	</p>
+		 </a></small></h2>
 	
-	<h3>Bookings</h3>
+					<h3>Bookings</h3>
 			<table class="table table-bordered" id="bookings">
 		        <thead>
 		          <tr>
@@ -53,33 +53,21 @@
 		         </tbody>
 		     </table>
 		     
-		     <div class="edit-hotel">
-#{form @createBooking()}
-  				<div class="row-fluid">
-  					<div class="span5">
-		<fieldset>
-					<legend>Crear una reserva</legend>
-    								<div class="control-group #{ifError 'cityId'} error #{/ifError}">
-    								<label for="firstName">Ciudad</label>
-				<div class="controls">
+		     <div class="">
+		     	<h4>New Booking</h4>
+				#{form @createBooking(), class:'form-inline'}
+					
+    			<label for="firstName">City</label>
 	              <select id="citiesSelect" name="cityId">
 	              	#{list items:cities, as:'city' }
 	                	<option value="${city.id}">${city.name}</option>
 	                #{/list}
 	              </select>
-	            </div>
-            </div>
       
-    		<div class="control-group #{ifError 'deal1Id'} error #{/ifError}">
-    			<label for="dealId">Hotel</label>
-				<div class="controls">
+    			  <label for="dealId">Hotel</label>
 				 	<select id="dealId" name="dealId" class="dealSelect">
 	              </select>
-	            </div>
-            </div>
-            <div class="control-group #{ifError 'deal1Id'} error #{/ifError}">
     			<label for="nights">Noches</label>
-				<div class="controls">
 				 	<select id="nights" name="nights" >
 				 		<option value="1">1</option>
 				 		<option value="2">2</option>
@@ -87,19 +75,10 @@
 				 		<option value="4">4</option>
 				 		<option value="5">5</option>
 	              </select>
-	            </div>
-            </div>
-        </fieldset>
-         </div>  
-       <input type="hidden" name="user.id" value="${user.id}">
-     </div>  
-        <div class="row-fluid"> 
-			<div class="actions span8">
-				<input class="btn btn-primary btn-large" type="submit" id="signin" value="Hacer Reserva" />
-			</div>
-		</div>
-#{/form}
-</div>
+       			  <input type="hidden" name="user.id" value="${user.id}">
+				  <input class="btn btn-primary" type="submit" id="signin" value="Hacer Reserva" />
+				#{/form}
+				</div>
 		  
 		<h3>Coupons</h3>
 			<table class="table table-bordered" id="coupons">
@@ -141,7 +120,7 @@
 		<label>Add coupon to user</label>
    		<input type="text" name="key" value="code">
    		<input type="hidden" name="user.id" value="${user.id}">
-   		<input type="submit" value="Validate" />
+   		<input  class="btn btn-primary" type="submit" value="Validate" />
    	#{/form}
 		
 			<h3>Friends</h3>

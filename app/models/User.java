@@ -429,6 +429,22 @@ public class User extends Model{
 		return user;
 	}
 
+	public static List<User> findLastRegistered(int max) {
+		return all().order("-created").fetch(max);
+	}
+	
+	public static List<User> findLastAppLogin(int max) {
+		return all().order("-lastAppLogin").fetch(max);
+	}
+
+	public static List<User> findByFirstName(String firstName) {
+		return all().filter("firstName", firstName).fetch();
+	}
+	
+	public static List<User> findByLastName(String lastName) {
+		return all().filter("firstName", lastName).fetch();
+	}
+
 
 	/*
 	public void updateUserCredits(Integer credits) {
